@@ -1,0 +1,67 @@
+{
+  "name": "approval-system",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@craco/craco": "^6.4.3",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.1",
+    "@types/node": "^16.11.36",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "antd": "^4.21.3",
+    "craco-less": "^2.0.0",
+    "inquirer": "^8.2.4",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-router-dom": "6",
+    "react-scripts": "5.0.1",
+    "sass": "^1.52.3",
+    "sass-loader": "^13.0.0",
+    "typescript": "^4.6.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow yarn",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "commit": "esmo cli/git/commit/index.ts",
+    "push": "esmo cli/git/push/index.ts",
+    "lint": "esmo cli/lint/eslint.ts",
+    "format": "esmo cli/lint/prettier.ts",
+    "prepare": "husky install"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "chalk": "^5.0.1",
+    "eslint": "^8.16.0",
+    "eslint-plugin-react": "^7.30.0",
+    "esno": "^0.14.1",
+    "husky": "^8.0.1",
+    "prettier": "^2.6.2"
+  }
+}

@@ -1,0 +1,64 @@
+.header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+  color: white;
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    .logo {
+      width: 38px;
+      height: 38px;
+      background-image: url(https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg);
+      background-position: center;
+      background-size: contain;
+    }
+    .logo-name {
+      color: white;
+      margin-left: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .control-wrap {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    .control-item {
+      width: 38px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .user-wrap {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 12px;
+      .user-img {
+        width: 30px;
+        height: 30px;
+        background-image: url(https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png);
+        background-position: center;
+        background-size: contain;
+      }
+      .username {
+        width: 100px;
+        padding-left: 12px;
+        color: white;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+.site-layout-background {
+  background: #fff;
+}
