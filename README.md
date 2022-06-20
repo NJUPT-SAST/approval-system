@@ -6,25 +6,25 @@
 
 - Node >= 16 (低于 16 版本会有不可预知问题,运行项目前应先升级 node 版本)
 - Yarn >= 1 <2 (本项目依赖安装暂时仅支持 yarn, 注意不要使用 yarn2.x)
-- VSCode（使用前请安装Eslint和Prettier - Code formatter扩展）
+- VSCode（使用前请安装 Eslint 和 Prettier - Code formatter 扩展）
 
 #### 需要掌握的技能
 
 - React 的基本语法, 主要的 hooks
 - Ts 基础知识，如基本的变量声明、泛型
 - sass 基础知识
-- 数据管理Recoil 的基本使用
-- 发送网络请求axios的基本使用
+- 数据管理 Recoil 的基本使用
+- 发送网络请求 axios 的基本使用
 
 ## 代码提交
 
 #### commit
 
-本项目中`git commit`命令会被拦截，应使用`yarn commit`进行提交。在根目录执行`yarn commit`根据提示信息填写便可，同时该命令内置了`git add .`命令，因此执行前不再需要手动执行`git add .`（执行一遍也不会出错）。
+本项目中 `git commit`命令会被拦截，应使用 `yarn commit`进行提交。在根目录执行 `yarn commit`根据提示信息填写便可，同时该命令内置了 `git add .`命令，因此执行前不再需要手动执行 `git add .`（执行一遍也不会出错）。
 
 #### push
 
-同样`git push`命令也会被拦截，需要使用`yarn push`命令进行代码提交。`yarn push`内置了发版流程，根据提示进行操作即可。同时还会在提交代码前将开发分支与远程 master 分支进行合并，保证代码是最新的。
+同样 `git push`命令也会被拦截，需要使用 `yarn push`命令进行代码提交。会在提交代码前将开发分支与远程 master 分支进行合并，保证代码是最新的。
 
 ## 代码结构
 
@@ -74,8 +74,3 @@ src/
             ├── index.tsx
             └── index.scss
 ```
-
-
-
-
-
