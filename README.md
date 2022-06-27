@@ -70,7 +70,7 @@ src/
     └── example2
         ├── index.tsx
         ├── index.scss
-        └── ChildComponent    // 在必要时，可以设置页面的子组件，但是页面的子组件应当只可由其对应父级页面使用
-            ├── index.tsx
-            └── index.scss
+        └── components    // 在必要时，可以设置页面的子组件，但是页面的子组件应当只可由其对应父级页面使用
+            ├── Component1.tsx
+            └── Component2.tsx
 ```
