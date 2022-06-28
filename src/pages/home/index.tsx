@@ -1,14 +1,39 @@
 import { ExportOutlined, QuestionCircleOutlined, SearchOutlined, BellOutlined } from '@ant-design/icons'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Layout } from 'antd'
-import React, { useState } from 'react'
-import UnLoginMenu from './components/UnLoginMenu'
+import React, { useEffect, useState } from 'react'
+import userStateStore from '../../store/userState'
+import { useRecoilState } from 'recoil'
+import menuMap from './components/menu'
 import './index.scss'
 
 const { Header, Content, Sider } = Layout
 
 const Home = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [navigation, setNavigation] = useState('/')
   const [collapsed, setCollapsed] = useState(false)
+  const [userState, setUserState] = useRecoilState(userStateStore)
+  const Menu = menuMap.get(userState)
+  useEffect(() => {
+    const match = location?.pathname
+    const matchArray = match.split('/')
+    console.log(matchArray)
+    match ? setNavigation('/' + matchArray[1]) : setNavigation('')
+  }, [location])
+
+  const handleClickMenuItem = (e: { key: string }) => {
+    navigate(e.key)
+    setNavigation(e.key)
+  }
+
+  const logout = () => {
+    setUserState('offline')
+    localStorage.setItem('userState', 'offline')
+    setNavigation('/')
+    navigate('/')
+  }
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header className="header">
@@ -32,7 +57,7 @@ const Home = () => {
               <div className="user-img"></div>
               <div className="username">Teacher Gu</div>
             </div>
-            <div className="control-item">
+            <div className="control-item" onClick={logout}>
               <ExportOutlined
                 style={{
                   fontSize: '24px',
@@ -50,12 +75,13 @@ const Home = () => {
           width={200}
           className="site-layout-background"
         >
-          <UnLoginMenu></UnLoginMenu>
+          {<Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>}
         </Sider>
         <Layout>
           <Content
             className="site-layout-background"
             style={{
+              borderLeft: '1px solid rgba(0,0,0,0.1)',
               margin: 0,
               minHeight: 280,
             }}

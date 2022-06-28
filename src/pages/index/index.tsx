@@ -1,15 +1,38 @@
 import React from 'react'
 import { Layout, Col, Row } from 'antd'
+import { useRecoilState } from 'recoil'
+import userStateStore from '../../store/userState'
 import LoginForm from './components/LoginForm'
 import './index.scss'
 
 const { Header, Content } = Layout
 
 function Index() {
+  const [userState, setUserState] = useRecoilState(userStateStore)
   const onFinish = (values: any) => {
     console.log('Received values of form: ', values)
+    switch (values.username) {
+      case 'admin':
+        setUserState('admin')
+        localStorage.setItem('userState', 'admin')
+        break
+      case 'approver':
+        setUserState('approver')
+        localStorage.setItem('userState', 'admin')
+        break
+      case 'user':
+        setUserState('user')
+        localStorage.setItem('userState', 'admin')
+        break
+      case 'judge':
+        setUserState('judge')
+        localStorage.setItem('userState', 'admin')
+        break
+      default:
+        break
+    }
   }
-
+  console.log(userState)
   return (
     <Layout style={{ height: '100%' }}>
       <div className="welcome-wrap">
@@ -38,11 +61,11 @@ function Index() {
           <Col span={16}></Col>
           <Col span={8}>
             <div className="login-wrap">
-              <LoginForm></LoginForm>
+              {userState === 'offline' ? <LoginForm finishCb={onFinish}></LoginForm> : <p>已经登陆</p>}
             </div>
           </Col>
         </Row>
-        <Row style={{ height: '50%' }}>
+        <Row style={{ height: '50%' }} gutter={[24, 16]}>
           <Col span={16}> </Col>
           <Col span={8}> </Col>
         </Row>
