@@ -1,18 +1,19 @@
 import React from 'react'
 import type { RouteObject } from 'react-router-dom'
+import Account from '../pages/account'
+import Activity from '../pages/activity'
 import Home from '../pages/home'
-import Index from '../pages/index'
-import Team from '../pages/team'
-import Apply from '../pages/apply'
+import Inbox from '../pages/inbox'
 import NoMatch from '../pages/noMatch'
 const user: RouteObject[] = [
   {
     path: '/',
     element: <Home />,
     children: [
-      { index: true, element: <Index /> },
-      { path: 'team', element: <Team /> },
-      { path: 'apply', element: <Apply /> },
+      // { index: true, element: <Index /> },
+      { path: 'account', index: true, element: <Account /> },
+      { path: 'activity', element: <Activity /> },
+      { path: 'inbox', element: <Inbox /> },
       { path: '*', element: <NoMatch /> },
     ],
   },

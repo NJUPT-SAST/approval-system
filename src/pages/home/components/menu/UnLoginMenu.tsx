@@ -7,10 +7,10 @@ function UnLoginMenu(props: any) {
       mode="inline"
       onClick={props.handleClickMenuItem}
       selectedKeys={[props.navigation]}
-      defaultSelectedKeys={['/']}
+      defaultSelectedKeys={['/activity']}
     >
-      <Menu.Item key="/" icon={<DashboardOutlined />}>
-        首页
+      <Menu.Item key="/activity" icon={<DashboardOutlined />}>
+        活动广场
       </Menu.Item>
     </Menu>
   )

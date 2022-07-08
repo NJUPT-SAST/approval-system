@@ -12,14 +12,13 @@ const { Header, Content, Sider } = Layout
 const Home = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const [navigation, setNavigation] = useState('/')
+  const [navigation, setNavigation] = useState('/activity')
   const [collapsed, setCollapsed] = useState(false)
   const [userState, setUserState] = useRecoilState(userStateStore)
   const Menu = menuMap.get(userState)
   useEffect(() => {
     const match = location?.pathname
     const matchArray = match.split('/')
-    console.log(matchArray)
     match ? setNavigation('/' + matchArray[1]) : setNavigation('')
   }, [location])
 
@@ -31,8 +30,8 @@ const Home = () => {
   const logout = () => {
     setUserState('offline')
     localStorage.setItem('userState', 'offline')
-    setNavigation('/')
-    navigate('/')
+    setNavigation('/activity')
+    navigate('/activity')
   }
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -75,7 +74,7 @@ const Home = () => {
           width={200}
           className="site-layout-background"
         >
-          {<Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>}
+          <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
         </Sider>
         <Layout>
           <Content

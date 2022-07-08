@@ -8,16 +8,16 @@ function UserMenu(props: any) {
       mode="inline"
       onClick={props.handleClickMenuItem}
       selectedKeys={[props.navigation]}
-      defaultSelectedKeys={['/']}
+      defaultSelectedKeys={['/account']}
     >
-      <Menu.Item key="/" icon={<DashboardOutlined />}>
-        首页
+      <Menu.Item key="/account" icon={<DashboardOutlined />}>
+        我的账号
       </Menu.Item>
-      <Menu.Item key="/team" icon={<DashboardOutlined />}>
-        团队管理
+      <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
+        收件箱
       </Menu.Item>
-      <Menu.Item key="/apply" icon={<DashboardOutlined />}>
-        报名中心
+      <Menu.Item key="/activity" icon={<DashboardOutlined />}>
+        活动广场
       </Menu.Item>
     </Menu>
   )

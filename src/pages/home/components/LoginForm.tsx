@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Form, Input } from 'antd'
+import { Button, Checkbox, Divider, Form, Input } from 'antd'
 import React from 'react'
 
 interface loginFormProp {
@@ -8,6 +8,8 @@ interface loginFormProp {
 function LoginForm(props: loginFormProp) {
   return (
     <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={props.finishCb}>
+      <p>Login</p>
+      <Divider></Divider>
       <Form.Item name="username" rules={[{ required: true, message: 'Please input your Username!' }]}>
         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
       </Form.Item>

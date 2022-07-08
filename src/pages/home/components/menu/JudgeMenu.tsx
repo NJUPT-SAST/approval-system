@@ -8,13 +8,16 @@ function JudgeMenu(props: any) {
       mode="inline"
       onClick={props.handleClickMenuItem}
       selectedKeys={[props.navigation]}
-      defaultSelectedKeys={['/']}
+      defaultSelectedKeys={['/account']}
     >
-      <Menu.Item key="/" icon={<DashboardOutlined />}>
+      <Menu.Item key="/account" icon={<DashboardOutlined />}>
         首页
       </Menu.Item>
-      <Menu.Item key="/score" icon={<DashboardOutlined />}>
-        评分中心
+      <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
+        收件箱
+      </Menu.Item>
+      <Menu.Item key="/review" icon={<DashboardOutlined />}>
+        活动评审
       </Menu.Item>
     </Menu>
   )

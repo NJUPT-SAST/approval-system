@@ -1,17 +1,19 @@
 import React from 'react'
 import type { RouteObject } from 'react-router-dom'
 import Home from '../pages/home'
-import Index from '../pages/index'
+import Account from '../pages/account'
+import Inbox from '../pages/inbox'
+import Review from '../pages/review'
 import NoMatch from '../pages/noMatch'
-import Approve from '../pages/approve'
 
 const approver: RouteObject[] = [
   {
     path: '/',
     element: <Home />,
     children: [
-      { index: true, element: <Index /> },
-      { path: 'approve', element: <Approve /> },
+      { path: 'account', index: true, element: <Account /> },
+      { path: 'inbox', element: <Inbox /> },
+      { path: 'review', element: <Review /> },
       { path: '*', element: <NoMatch /> },
     ],
   },

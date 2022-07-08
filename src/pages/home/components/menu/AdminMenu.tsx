@@ -8,19 +8,19 @@ function AdminMenu(props: any) {
       mode="inline"
       onClick={props.handleClickMenuItem}
       selectedKeys={[props.navigation]}
-      defaultSelectedKeys={['/']}
+      defaultSelectedKeys={['/account']}
     >
-      <Menu.Item key="/" icon={<DashboardOutlined />}>
-        首页
+      <Menu.Item key="/account" icon={<DashboardOutlined />}>
+        我的账号
       </Menu.Item>
-      <Menu.Item key="/news" icon={<DashboardOutlined />}>
-        新闻管理
+      <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
+        收件箱
       </Menu.Item>
       <Menu.Item key="/activity" icon={<DashboardOutlined />}>
-        活动管理
+        活动广场
       </Menu.Item>
-      <Menu.Item key="/review" icon={<DashboardOutlined />}>
-        评分管理
+      <Menu.Item key="/manage" icon={<DashboardOutlined />}>
+        活动管理
       </Menu.Item>
     </Menu>
   )
