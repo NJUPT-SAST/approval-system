@@ -12,7 +12,8 @@ const admin: RouteObject[] = [
     path: '/',
     element: <Home />,
     children: [
-      { path: 'account', index: true, element: <Account /> },
+      { index: true, element: <Account /> },
+      { path: 'account', element: <Account /> },
       { path: 'inbox', element: <Inbox /> },
       { path: 'manage', element: <Manage /> },
       { path: 'activity', element: <Activity /> },

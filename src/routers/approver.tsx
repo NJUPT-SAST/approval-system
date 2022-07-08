@@ -11,7 +11,8 @@ const approver: RouteObject[] = [
     path: '/',
     element: <Home />,
     children: [
-      { path: 'account', index: true, element: <Account /> },
+      { index: true, element: <Account /> },
+      { path: 'account', element: <Account /> },
       { path: 'inbox', element: <Inbox /> },
       { path: 'review', element: <Review /> },
       { path: '*', element: <NoMatch /> },

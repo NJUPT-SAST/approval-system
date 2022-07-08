@@ -8,9 +8,9 @@ function JudgeMenu(props: any) {
       mode="inline"
       onClick={props.handleClickMenuItem}
       selectedKeys={[props.navigation]}
-      defaultSelectedKeys={['/account']}
+      defaultSelectedKeys={['/']}
     >
-      <Menu.Item key="/account" icon={<DashboardOutlined />}>
+      <Menu.Item key="/" icon={<DashboardOutlined />}>
         首页
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>

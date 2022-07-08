@@ -8,9 +8,9 @@ function UserMenu(props: any) {
       mode="inline"
       onClick={props.handleClickMenuItem}
       selectedKeys={[props.navigation]}
-      defaultSelectedKeys={['/account']}
+      defaultSelectedKeys={['/']}
     >
-      <Menu.Item key="/account" icon={<DashboardOutlined />}>
+      <Menu.Item key="/" icon={<DashboardOutlined />}>
         我的账号
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>

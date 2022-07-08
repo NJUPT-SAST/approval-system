@@ -8,7 +8,8 @@ const unLogin: RouteObject[] = [
     path: '/',
     element: <Home />,
     children: [
-      { path: 'activity', index: true, element: <Activity /> },
+      { index: true, element: <Activity /> },
+      { path: 'activity', element: <Activity /> },
       { path: '*', element: <NoMatch /> },
     ],
   },

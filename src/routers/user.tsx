@@ -11,7 +11,8 @@ const user: RouteObject[] = [
     element: <Home />,
     children: [
       // { index: true, element: <Index /> },
-      { path: 'account', index: true, element: <Account /> },
+      { index: true, element: <Account /> },
+      { path: 'account', element: <Account /> },
       { path: 'activity', element: <Activity /> },
       { path: 'inbox', element: <Inbox /> },
       { path: '*', element: <NoMatch /> },
