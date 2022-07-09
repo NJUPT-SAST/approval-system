@@ -1,0 +1,19 @@
+.activity {
+  .searchBody {
+    height: 150px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .searchBar{
+        width: 800px;
+        height: 50px;
+        .ant-input-search-button{
+            height: 50px;
+        }
+        .ant-input{
+            height: 50px;
+        }
+    }
+  }
+}

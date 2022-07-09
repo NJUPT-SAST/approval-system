@@ -1,0 +1,13 @@
+.topBar {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 14px;
+    padding-left: 20px;
+    background-color: white;
+    .breadCrumbItem {
+      a {
+        color: rgba(24, 144, 255, 1);
+      }
+    }
+  }
