@@ -4,6 +4,9 @@ import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import './index.scss'
 
+/**
+ * 顶部面包屑与返回上一页的小栏
+ */
 function TopBar() {
   const handleGoBack = () => {
     window.history.back()
