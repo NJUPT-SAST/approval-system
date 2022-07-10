@@ -2,7 +2,7 @@ import { RollbackOutlined, SearchOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Form, Radio, Select } from 'antd'
 import Input from 'antd/lib/input'
 import React, { Fragment } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -11,6 +11,7 @@ const { Option } = Select
 const { Meta } = Card
 
 function Activity() {
+  const navigate = useNavigate()
   const ActivityCard = (props: {
     coverUrl: string
     title: string
@@ -18,10 +19,18 @@ function Activity() {
     time: string
     author: string
   }) => {
+    const handleNavigateActivityDetail = () => {
+      navigate('/activity/10001')
+    }
     return (
-      <Card hoverable className="activityCard" cover={<img alt="activity cover" src={props.coverUrl} height="180px" />}>
-        <Meta title={props.title} description={props.description} className="activityContent" />
-        <div className="additionContent">
+      <Card
+        hoverable
+        className="activity-card"
+        cover={<img alt="activity cover" src={props.coverUrl} height="180px" />}
+        onClick={handleNavigateActivityDetail}
+      >
+        <Meta title={props.title} description={props.description} className="activity-content" />
+        <div className="addition-content">
           <div className="time">{props.time}</div>
           <div className="author">{props.author}</div>
         </div>
@@ -34,32 +43,32 @@ function Activity() {
   return (
     <div className="activity">
       <TopBar />
-      <div className="searchBody">
-        <Search placeholder="搜索比赛活动或关键词" className="searchBar" onSearch={onSearch} enterButton={`搜索`} />
+      <div className="search-body">
+        <Search placeholder="搜索比赛活动或关键词" className="search-bar" onSearch={onSearch} enterButton={`搜索`} />
       </div>
-      <div className="pageBody">
-        <div className="filterBody">
-          <Form name="filterFrom">
+      <div className="page-body">
+        <div className="filter-body">
+          <Form name="filter-from">
             <Form.Item>
               <Radio.Group defaultValue="all" size="large">
-                <Radio.Button value="all" className="filterButton">
+                <Radio.Button value="all" className="filter-button">
                   全部
                 </Radio.Button>
-                <Radio.Button value="b" className="filterButton">
+                <Radio.Button value="b" className="filter-button">
                   #科技节
                 </Radio.Button>
-                <Radio.Button value="c" className="filterButton">
+                <Radio.Button value="c" className="filter-button">
                   #人文
                 </Radio.Button>
-                <Radio.Button value="d" className="filterButton">
+                <Radio.Button value="d" className="filter-button">
                   #安全知识竞赛
                 </Radio.Button>
-                <Radio.Button value="e" className="filterButton">
+                <Radio.Button value="e" className="filter-button">
                   #互联网+
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
-            <div className="formGroup">
+            <div className="form-group">
               <Form.Item>
                 <Select defaultValue="组织单位" size="large" style={{ width: 120, marginRight: '20px' }}>
                   <Option value="组织单位" disabled>
@@ -88,7 +97,7 @@ function Activity() {
             </div>
           </Form>
         </div>
-        <div className="activitiesBody">
+        <div className="activities-body">
           <ActivityCard
             coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
             title="“创新杯”创新创业大赛"
