@@ -68,6 +68,7 @@ function Activity() {
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
+
             <div className="form-group">
               <Form.Item>
                 <Select defaultValue="组织单位" size="large" style={{ width: 120, marginRight: '20px' }}>
@@ -166,5 +167,4 @@ function Activity() {
     </div>
   )
 }
-
 export default Activity
