@@ -5,6 +5,9 @@ import { useLocation, Link } from 'react-router-dom'
 import './index.scss'
 
 function TopBar() {
+  const handleGoBack = () => {
+    window.history.back()
+  }
   const breadcrumbNameMap: Record<string, string> = {
     '/activity': '活动广场',
     '/inbox': '收件箱',
@@ -30,7 +33,7 @@ function TopBar() {
   return (
     <div className="topBar">
       <Breadcrumb style={{ marginTop: '5px' }}>{breadcrumbItems}</Breadcrumb>
-      <Button type="link" icon={<RollbackOutlined />}>
+      <Button type="link" onClick={handleGoBack} icon={<RollbackOutlined />}>
         返回上一级
       </Button>
     </div>
