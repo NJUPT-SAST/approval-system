@@ -20,7 +20,7 @@ function Activity() {
     author: string
   }) => {
     const handleNavigateActivityDetail = () => {
-      navigate('/activity/10001')
+      navigate('/activity/10001#title')
     }
     return (
       <Card
