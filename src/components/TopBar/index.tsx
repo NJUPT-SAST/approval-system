@@ -17,9 +17,11 @@ function TopBar() {
     '/manage': '活动管理',
     '/account': '我的帐号',
     '/review': '活动评审',
+    '/review/detail': '挑战杯',
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)
+
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
     return (
@@ -28,6 +30,7 @@ function TopBar() {
       </Breadcrumb.Item>
     )
   })
+
   const breadcrumbItems = [
     <Breadcrumb.Item key="home" className="breadCrumbItem">
       <Link to="/">主页</Link>
