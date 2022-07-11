@@ -43,7 +43,7 @@ const columns: ColumnsType<DataType> = [
     render: () => (
       // render 返回一个组件
       <Space size="middle">
-        <Link to={`/review/${'"挑战杯"创新创业大赛'}`}>
+        <Link to="/review/detail">
           <Button className="count" type="primary" key="1">
             审批
           </Button>

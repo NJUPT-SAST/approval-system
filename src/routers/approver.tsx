@@ -5,6 +5,7 @@ import Account from '../pages/account'
 import Inbox from '../pages/inbox'
 import Review from '../pages/review'
 import NoMatch from '../pages/noMatch'
+import Detail from '../pages/review/Detail'
 
 const approver: RouteObject[] = [
   {
@@ -14,7 +15,16 @@ const approver: RouteObject[] = [
       { index: true, element: <Account /> },
       { path: 'account', element: <Account /> },
       { path: 'inbox', element: <Inbox /> },
-      { path: 'review', element: <Review /> },
+      {
+        path: 'review',
+        element: <Review />,
+        children: [
+          {
+            path: 'detail',
+            element: <Detail />,
+          },
+        ],
+      },
       { path: '*', element: <NoMatch /> },
     ],
   },

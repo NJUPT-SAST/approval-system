@@ -96,7 +96,7 @@ const Home = () => {
           // collapsed={collapsed}
           // onCollapse={(value) => setCollapsed(value)}
           width={200}
-          className="site-layout-background"
+          className="site-layout-background sidebar"
         >
           {userState === 'offline' ? <LoginForm finishCb={onFinish}></LoginForm> : <p>已经登陆</p>}
           <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
