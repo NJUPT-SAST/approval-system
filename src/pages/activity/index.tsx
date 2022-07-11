@@ -161,6 +161,13 @@ function Activity() {
             time="2022/07/10"
             author="计软网安学院"
           />
+          <ActivityCard
+            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
+            title="“创新杯”创新创业大赛"
+            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
+            time="2022/07/10"
+            author="计软网安学院"
+          />
         </div>
       </div>
     </div>

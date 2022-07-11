@@ -19,7 +19,7 @@
     }
   }
   .page-body {
-    width: 1500px;
+    width: 78vw;
     margin: 0 auto;
   }
   .filter-body {
@@ -46,7 +46,7 @@
     display: flex;
     flex-basis: 20px;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 4vw;
     row-gap: 50px;
     .activity-content {
       height: 7em;
@@ -59,8 +59,10 @@
       -webkit-box-orient: vertical;
     }
     .activity-card {
-      height: 360px;
-      width: 360px;
+      height: 16.5vw;
+      width: 16.5vw;
+      min-height: 350px;
+      max-height: 358px;
       border-radius: 5px;
       .addition-content {
         display: flex;
