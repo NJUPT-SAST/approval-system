@@ -169,16 +169,13 @@ function Activity() {
               <Form.Item>
                 <Radio.Group defaultValue="a" size="large">
                   <Radio.Button value="a" className="filter-button">
-                    Hangzhou
+                    进行中
                   </Radio.Button>
                   <Radio.Button value="b" className="filter-button">
-                    Shanghai
+                    未开始
                   </Radio.Button>
                   <Radio.Button value="c" className="filter-button">
-                    Beijing
-                  </Radio.Button>
-                  <Radio.Button value="d" className="filter-button">
-                    Chengdu
+                    已结束
                   </Radio.Button>
                 </Radio.Group>
               </Form.Item>
