@@ -13,6 +13,12 @@ const { Meta } = Card
 function Activity() {
   const navigate = useNavigate()
   const [tagModelVisible, setTagModelVisible] = useState(false)
+
+  /**
+   *
+   * @param props  coverUrl: 封面图 | title: 比赛标题 | description: 比赛介绍 | time: 比赛时间 | author:  比赛发布者
+   * @returns 包含以上信息的卡片
+   */
   const ActivityCard = (props: {
     coverUrl: string
     title: string
@@ -38,9 +44,13 @@ function Activity() {
       </Card>
     )
   }
+  /**
+   * 点击搜索的函数
+   */
   const onSearch = () => {
     console.log('searching')
   }
+
   return (
     <div className="activity">
       <TopBar />

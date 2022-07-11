@@ -1,13 +1,14 @@
 import { RollbackOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button } from 'antd'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import './index.scss'
 
 /**
  * 顶部面包屑与返回上一页的小栏
  */
-function TopBar() {
+function TopBar(props?: { breadcrumb?: string }) {
+  let processedExtraBreadcrumbItems = [<Fragment key="emptyElement"></Fragment>]
   const handleGoBack = () => {
     window.history.back()
   }
@@ -20,19 +21,42 @@ function TopBar() {
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)
-  const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+  // console.log(pathSnippets)
+  const extraBreadcrumbItems = pathSnippets.map((item, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
+    // console.log(pathSnippets.slice(0, index + 1))
     return (
       <Breadcrumb.Item key={url} className="breadCrumbItem">
         <Link to={url}>{breadcrumbNameMap[url]}</Link>
       </Breadcrumb.Item>
     )
   })
+  if (props?.breadcrumb !== undefined || props?.breadcrumb !== null) {
+    processedExtraBreadcrumbItems = extraBreadcrumbItems.slice(0, 1)
+    // console.log(extraBreadcrumbItems.slice(0,1))
+  }
+  const moreExtraBreadcrumbItems = () => {
+    if (props?.breadcrumb !== undefined) {
+      return [
+        <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
+          <Link to="#title">{props.breadcrumb.toString()}</Link>
+        </Breadcrumb.Item>,
+      ]
+    } else {
+      return [
+        <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
+          <Link to="#title">{null}</Link>
+        </Breadcrumb.Item>,
+      ]
+    }
+  }
   const breadcrumbItems = [
     <Breadcrumb.Item key="home" className="breadCrumbItem">
       <Link to="/">主页</Link>
     </Breadcrumb.Item>,
-  ].concat(extraBreadcrumbItems)
+  ]
+    .concat(processedExtraBreadcrumbItems)
+    .concat(moreExtraBreadcrumbItems())
   return (
     <div className="topBar">
       <Breadcrumb style={{ marginTop: '5px' }}>{breadcrumbItems}</Breadcrumb>

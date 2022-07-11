@@ -9,6 +9,11 @@ const { Link } = Anchor
 function ActivityDetail() {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   const userState = localStorage.getItem('userState')
+
+  /**
+   * 调用函数根据不同的角色信息获取不同的按钮显示文字
+   * @returns 角色相应按钮信息
+   */
   const buttonContent = () => {
     switch (userState) {
       case 'admin':
@@ -23,6 +28,7 @@ function ActivityDetail() {
         return '报名'
     }
   }
+  //notice数据
   const noticeData = [
     { date: '2022-05-20', content: '活动结束啦，请大家在...' },
     { date: '2022-05-20', content: '活动结束啦，请大家在...' },
@@ -30,12 +36,15 @@ function ActivityDetail() {
     { date: '2022-05-20', content: '活动结束啦，请大家在...' },
     { date: '2022-05-20', content: '活动结束啦，请大家在...' },
   ]
+
   useEffect(() => {
+    // 计算锚点偏移位置并写入state
     setTargetOffset(window.innerHeight / 2)
   }, [])
+
   return (
     <div>
-      <TopBar />
+      <TopBar breadcrumb="“挑战杯”创新创业大赛" />
       <div className="activity-detail-body">
         <div className="activity-detail-box">
           <img src="https://img.js.design/assets/smartFill/img432164da758808.jpg" className="cover" alt="cover" />
