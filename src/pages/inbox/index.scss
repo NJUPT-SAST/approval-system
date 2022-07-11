@@ -1,14 +1,107 @@
-.inbox-button-nav{
-    height:92px;
+.inbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 71vw;
+  margin: 0 auto;
+  .inbox-button-nav {
+    align-self: flex-end;
+    height: 92px;
     .inbox-button {
-        height: 32px;
-        width: 305px;//button*3 + margin*2 = 274
-        flex-direction: row;
-        float: right;
-        margin: 26px 150px 34px 0px;
-        .inbox-message-control-button {
-          margin-right: 5px;
-        }
+      height: 32px;
+      width: 305px; //button*3 + margin*2 = 274
+      flex-direction: row;
+      float: right;
+      margin: 26px 0px 34px 0px;
+      .inbox-message-control-button {
+        margin-right: 5px;
       }
-}
+    }
+  }
+  .inbox-message-nav-unfold {
+    position: relative;
+    width: 100%;
+    max-width: 1370px;
+    height: 13px;
+    margin-top: 20px;
+    padding-top: 4px;
+    border-radius: 5px 5px 0px 0px;
+    background-color: rgb(220, 220, 220);
+    .inbox-message-display-switch-button {
+      position: absolute;
+      right: 4px;
+      width: 15px;
+      height: 4px;
+      padding: 0px;
+    }
+  }
 
+  .inbox-message-body-unfold {
+    width: 100%;
+    color: rgba(0, 0, 0, 0.85);
+    max-width: 1370px;
+    height: 250px;
+    font-family: HarmonyOS Sans SC;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    background-color: rgb(255, 255, 255);
+    border-radius: 0px 0px 5px 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    .inbox-message-header {
+      font-size: 24px;
+      height: 40px;
+      margin: 0px;
+      padding-left: 18px;
+      border-bottom: solid rgb(237, 237, 237) 1px;
+    }
+    .inbox-message-contents {
+      color: rgba(0, 0, 0, 0.65);
+      height: 160px;
+      padding: 9px 0px 0px 27px;
+      line-height: 22px;
+      border-bottom: solid rgb(237, 237, 237) 1px;
+      overflow-y: auto;
+    }
+    .inbox-message-footer-post {
+      color: rgba(24, 144, 255, 1);
+      line-height: 22px;
+      font-size: 14px;
+      padding: 8px 0px 0px 27px;
+    }
+    .inbox-message-footer-button {
+      float: right;
+      margin-right: 17px;
+    }
+  }
+  .inbox-message-body-fold {
+    width: 100%;
+    font-family: HarmonyOS Sans SC;
+    max-width: 1370px;
+    height: 50px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 0px 0px 5px 5px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    .inbox-message-header {
+      font-size: 24px;
+      color: rgba(0, 0, 0, 0.85);
+      margin-left: 18px;
+      .inbox-message-footer-post {
+        color: rgba(24, 144, 255, 1);
+        line-height: 22px;
+        font-size: 14px;
+        float: right;
+        margin: 8px 30px 0px 0px;
+      }
+    }
+  }
+  .message-read-or-not {
+    position: absolute;
+    border-radius: 50%;
+    height: 6px;
+    width: 6px;
+    margin: 7px;
+    color: red;
+    background-color: red;
+    font-size: 20px;
+  }
+}
