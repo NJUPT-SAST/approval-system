@@ -5,6 +5,7 @@ export type messageType = {
   post: string
   time: string
   haveRead: boolean
+  isfold: boolean
 }
 
 export type inboxMessageType = {
@@ -19,6 +20,7 @@ const message1: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: false,
 }
 const message2: messageType = {
   id: 'message2',
@@ -27,6 +29,7 @@ const message2: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: false,
 }
 const message3: messageType = {
   id: 'message3',
@@ -35,6 +38,7 @@ const message3: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: true,
 }
 const message4: messageType = {
   id: 'message4',
@@ -43,6 +47,7 @@ const message4: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: true,
 }
 const message5: messageType = {
   id: 'message5',
@@ -51,6 +56,7 @@ const message5: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: true,
 }
 const message6: messageType = {
   id: 'message6',
@@ -59,6 +65,7 @@ const message6: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: true,
 }
 const message7: messageType = {
   id: 'message7',
@@ -67,6 +74,7 @@ const message7: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: true,
 }
 const message8: messageType = {
   id: 'message8',
@@ -75,7 +83,6 @@ const message8: messageType = {
   post: '校大学生科协',
   time: 'Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)',
   haveRead: false,
+  isfold: true,
 }
-const message: messageType[] = [message1, message2, message3, message4, message5, message6, message7, message8]
-
-export default message
+export const message: messageType[] = [message1, message2, message3, message4, message5, message6, message7, message8]
