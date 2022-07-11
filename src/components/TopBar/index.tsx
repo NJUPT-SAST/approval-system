@@ -18,11 +18,11 @@ function TopBar(props?: { breadcrumb?: string }) {
     '/manage': '活动管理',
     '/account': '我的帐号',
     '/review': '活动评审',
+    '/review/detail': '挑战杯',
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)
-  // console.log(pathSnippets)
-  const extraBreadcrumbItems = pathSnippets.map((item, index) => {
+  const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
     // console.log(pathSnippets.slice(0, index + 1))
     return (
