@@ -1,3 +1,7 @@
+.filter-button{
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
 .activity {
   margin-bottom: 50px;
   .search-body {
@@ -19,7 +23,7 @@
     }
   }
   .page-body {
-    width: 1500px;
+    width: 78vw;
     margin: 0 auto;
   }
   .filter-body {
@@ -33,12 +37,50 @@
     display: flex;
     background-color: white;
     align-items: center;
+    .tag-filter-body {
+      width: 67vw;
+      position: relative;
+    }
+    .tag-filter::-webkit-scrollbar {
+      display: none;
+      height: 4px;
+      width: 10px;
+      background-color: rgba(255, 255, 255, 0);
+      border-radius: 50%;
+    }
+    .tag-filter::-webkit-scrollbar-thumb {
+      background: rgba(92, 92, 92, 0.37);
+      border-radius: 3px;
+    }
+    .tag-filter:hover::-webkit-scrollbar {
+      display: block;
+    }
+    .tag-filter-button:last-child {
+      margin-right: 150px;
+    }
+    .tag-filter {
+      overflow-x: auto;
+      white-space: nowrap;
+      position: relative;
+      width: 67vw;
+    }
+    .filter-cover-item {
+      height: 40px;
+      width: 300px;
+      background: linear-gradient(to left,rgb(255, 255, 255) 30%,rgba(255, 255, 255, 0));
+      position: absolute;
+      z-index: 999;
+      right: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
     .form-group {
       display: flex;
       flex-direction: row;
     }
     .filter-button {
       margin-right: 20px;
+      margin-bottom: 0;
     }
   }
   .activities-body {
@@ -46,7 +88,7 @@
     display: flex;
     flex-basis: 20px;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 4vw;
     row-gap: 50px;
     .activity-content {
       height: 7em;
@@ -59,14 +101,22 @@
       -webkit-box-orient: vertical;
     }
     .activity-card {
-      height: 360px;
-      width: 360px;
+      height: 16.5vw;
+      width: 16.5vw;
+      min-height: 350px;
+      max-height: 358px;
       border-radius: 5px;
       .addition-content {
         display: flex;
         align-items: flex-end;
         flex-direction: column;
         color: rgb(167, 167, 167);
+      }
+    }
+  }
+  @media (max-width: 1160px) {
+    .activity-body {
+      .activity-card {
       }
     }
   }
