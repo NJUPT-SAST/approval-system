@@ -2,11 +2,11 @@
     height:92px;
     .inbox-button {
         height: 32px;
-        width: 320px;//button*3 + margin*2 = 274
+        width: 305px;//button*3 + margin*2 = 274
         flex-direction: row;
         float: right;
         margin: 26px 150px 34px 0px;
-        .inbox-massage-control-button {
+        .inbox-message-control-button {
           margin-right: 5px;
         }
       }

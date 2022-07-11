@@ -14,7 +14,7 @@ function UserMenu(props: any) {
         我的账号
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
-        收件箱
+        收件箱<span className="message-read-or-not"></span>
       </Menu.Item>
       <Menu.Item key="/activity" icon={<DashboardOutlined />}>
         活动广场

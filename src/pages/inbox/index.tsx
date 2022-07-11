@@ -1,31 +1,69 @@
 import { Button } from 'antd'
-import React, { useReducer } from 'react'
+import React, { useState } from 'react'
 import TopBar from '../../components/TopBar'
-import massage from '../../test/Inbox-massage'
-import Massage from './components/Massage/Massage'
+import { message, messageType } from '../../test/inbox-message'
+import Message from './components/message/message'
 import './index.scss'
 
+export const MessageContext = React.createContext(message)
+export const AllFoldContext = React.createContext({ fold: false, unfold: false })
 const Inbox: React.FC = () => {
+  const [foldState, setFoldState] = useState({ fold: true, unfold: false })
   return (
     <div>
       <TopBar />
       <div className="inbox-button-nav">
         <div className="inbox-button">
-          <Button type="primary" className="inbox-massage-control-button">
+          <Button type="primary" className="inbox-message-control-button">
             全部已读
           </Button>
-          <Button type="primary" className="inbox-massage-control-button">
+          <Button
+            type="primary"
+            className="inbox-message-control-button"
+            onClick={() => setFoldState({ fold: true, unfold: false })}
+          >
             全部收起
           </Button>
-          <Button type="primary" className="inbox-massage-control-button">
+          <Button
+            type="primary"
+            className="inbox-message-control-button"
+            onClick={() => setFoldState({ fold: false, unfold: true })}
+          >
             全部展开
           </Button>
         </div>
       </div>
-      <Massage {...massage[0]} />
-      <Massage {...massage[1]} />
+      <MessageContext.Provider value={message}>
+        <AllFoldContext.Provider value={foldState}>
+          {message.map((value, index) => (
+            <Message index={index} key={value.id} />
+          ))}
+        </AllFoldContext.Provider>
+      </MessageContext.Provider>
     </div>
   )
 }
 
 export default Inbox
+
+export function reducer(messageState: { message: messageType[] }, action: actionType) {
+  switch (action.type) {
+    case 'messageAllRead': {
+      return { ...messageState }
+    }
+    case 'messageAllUnfold': {
+      return messageState
+    }
+    case 'messageAllFold': {
+      return messageState
+    }
+    default: {
+      throw new Error()
+    }
+  }
+}
+
+type actionType = {
+  type: string
+  payload: messageType[]
+}
