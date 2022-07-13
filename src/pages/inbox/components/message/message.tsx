@@ -2,7 +2,6 @@ import { Button } from 'antd'
 import React, { useState, useContext, useEffect } from 'react'
 import { AllFoldContext, MessageContext } from '../..'
 import { messageType } from '../../../../test/inbox-message'
-import './message.scss'
 
 const Message: React.FC<{ index: number }> = (iNdex: { index: number }) => {
   const { index } = iNdex
