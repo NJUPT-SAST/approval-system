@@ -34,6 +34,8 @@ function ActivityDetail() {
   const handleButtonAction = () => {
     if (userState === 'user') {
       navigate('/activity/10001/register')
+    } else if (userState === 'judge') {
+      navigate('/review')
     }
   }
 
