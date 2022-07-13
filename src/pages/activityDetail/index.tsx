@@ -1,6 +1,7 @@
 import { Anchor, Button, List, Timeline } from 'antd'
 import Item from 'antd/lib/list/Item'
 import React, { useEffect, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -9,6 +10,7 @@ const { Link } = Anchor
 function ActivityDetail() {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   const userState = localStorage.getItem('userState')
+  const navigate = useNavigate()
 
   /**
    * 调用函数根据不同的角色信息获取不同的按钮显示文字
@@ -25,9 +27,18 @@ function ActivityDetail() {
       case 'approver':
         return '审批'
       default:
-        return '报名'
+        return '请先登录'
     }
   }
+
+  const handleButtonAction = () => {
+    if (userState === 'user') {
+      navigate('/activity/10001/register')
+    } else if (userState === 'judge') {
+      navigate('/review')
+    }
+  }
+
   //notice数据
   const noticeData = [
     { date: '2022-05-20', content: '活动结束啦，请大家在...' },
@@ -44,7 +55,7 @@ function ActivityDetail() {
 
   return (
     <div>
-      <TopBar breadcrumb="“挑战杯”创新创业大赛" />
+      <TopBar activity="“挑战杯”创新创业大赛" />
       <div className="activity-detail-body">
         <div className="activity-detail-box">
           <img src="https://img.js.design/assets/smartFill/img432164da758808.jpg" className="cover" alt="cover" />
@@ -61,7 +72,9 @@ function ActivityDetail() {
               <div className="title-section" id="title">
                 <div className="title">“挑战杯”创新创业大赛</div>
                 <div className="action-button">
-                  <Button type="primary">{buttonContent()}</Button>
+                  <Button type="primary" onClick={handleButtonAction}>
+                    {buttonContent()}
+                  </Button>
                 </div>
               </div>
               <div className="description" id="description">
