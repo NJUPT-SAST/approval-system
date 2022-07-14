@@ -86,7 +86,7 @@ function Pass() {
           <p className="title">账号信息</p>
           <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }} layout="horizontal">
             <Form.Item label="账号">
-              <span className="id">B21021021</span>
+              <span className="name">B21021021</span>
             </Form.Item>
             <Form.Item label="原密码">
               <Input placeholder="输入原密码" />
