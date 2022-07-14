@@ -1,0 +1,158 @@
+.manage-body {
+  padding-left: 2vw;
+  margin-top: 12px;
+  overflow: scroll;
+  white-space: nowrap;
+  .manage-top {
+    padding-right: 2vw;
+    height: 55px;
+    #manage-title {
+      font-size: x-large;
+      float: left;
+      margin-bottom: 0;
+    }
+    .match-create {
+      width: 70px;
+      height: 31px;
+      padding-left: 8px;
+      float: right;
+      margin-top: 1px;
+      span {
+        font-size: small;
+      }
+    }
+  }
+  .match-all {
+    margin-left: 1vw;
+    margin-right: 2vw;
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    .match-header {
+      list-style-type: none;
+      padding-left: 2.25vw;
+      margin-bottom: 5px;
+      min-width: 80vw;
+      li {
+        display: inline-block;
+        font-weight: 600;
+        font-size: smaller;
+        margin-top: 14px;
+      }
+      #match-name {
+        padding-left: 4vw;
+      }
+
+      #match-des {
+        padding-left: 4.5vw;
+      }
+      #match-review {
+        padding-left: 4.7vw;
+      }
+      #match-starttime,
+      #match-excel {
+        padding-left: 4.75vw;
+      }
+      #match-endtime {
+        padding-left: 2.5vw;
+      }
+      #match-state {
+        padding-left: 3vw;
+      }
+      #match-regist,
+      #match-submit,
+      #match-finish {
+        padding-left: 1vw;
+      }
+      #match-notice,
+      #match-revise {
+        padding-left: 2vw;
+      }
+      #match-revise {
+        margin-right: 2vw;
+      }
+    }
+    .divider {
+      height: 3px;
+      background-color: rgba(0, 0, 0, 0.6);
+      margin: 0 1.5vw;
+    }
+    .item-0,
+    .item-1 {
+      height: 3vw;
+      margin: 5px 1.75vw 0 1.75vw;
+      padding-left: 0.6vw;
+      li {
+        line-height: 3.2vw;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: small;
+        display: inline-block;
+        text-align: center;
+        span {
+          font-size: small;
+        }
+      }
+    }
+    .item-1 {
+      background-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.15);
+    }
+    .item-0 {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .item-0 .item-idx,
+    .item-1 .item-idx {
+      width: 2vw;
+      text-align: left;
+    }
+    .item-name {
+      width: 9vw;
+    }
+    .item-start {
+      width: 4.5vw;
+    }
+    .item-end {
+      margin-left: 1vw;
+      margin-right: 0.5vw;
+      width: 4.5vw;
+    }
+    .item-des {
+      width: 10.5vw;
+    }
+    .item-review {
+      width: 4.25vw;
+    }
+    .item-state {
+      width: 3vw;
+      margin-left: 2vw;
+    }
+    .item-regist {
+      width: 3vw;
+      margin-left: 1.75vw;
+    }
+    .item-submit {
+      width: 3vw;
+      margin-left: 2.5vw;
+    }
+    .item-finish {
+      width: 3vw;
+      margin-left: 3vw;
+    }
+    .item-excel {
+      margin-left: 6.5vw;
+    }
+    .item-notice {
+      margin-left: 1.7vw;
+    }
+    .item-revise {
+      margin-left: 1.3vw;
+    }
+  }
+  .ant-pagination {
+    margin-top: 30px;
+    margin-bottom: 25px;
+  }
+}

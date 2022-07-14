@@ -5,7 +5,7 @@ import Account from '../pages/account'
 import Inbox from '../pages/inbox'
 import Review from '../pages/review'
 import NoMatch from '../pages/noMatch'
-import Detail from '../pages/review/Detail'
+import Detail from '../pages/reviewDetail'
 
 const approver: RouteObject[] = [
   {

@@ -5,7 +5,7 @@ import Review from '../pages/review'
 import Inbox from '../pages/inbox'
 import NoMatch from '../pages/noMatch'
 import Account from '../pages/account'
-import Detail from '../pages/review/Detail'
+import ReviewDetail from '../pages/reviewDetail'
 
 const judge: RouteObject[] = [
   {
@@ -21,7 +21,7 @@ const judge: RouteObject[] = [
         children: [
           {
             path: 'detail',
-            element: <Detail />,
+            element: <ReviewDetail />,
           },
         ],
       },
