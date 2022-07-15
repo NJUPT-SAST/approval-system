@@ -8,6 +8,7 @@ import NoMatch from '../pages/noMatch'
 import Activity from '../pages/activity'
 import ActivityDetail from '../pages/activityDetail'
 import Register from '../pages/register'
+import ManageDetail from '../pages/manageDetail'
 
 const admin: RouteObject[] = [
   {
@@ -21,6 +22,7 @@ const admin: RouteObject[] = [
       { path: 'activity', element: <Activity /> },
       { path: 'activity/:id', element: <ActivityDetail /> },
       { path: 'activity/:id/register', element: <Register /> },
+      { path: 'activity/:id/manage', element: <ManageDetail /> },
       { path: '*', element: <NoMatch /> },
     ],
   },
