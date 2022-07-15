@@ -2,8 +2,7 @@ import React from 'react'
 import TopBar from '../../components/TopBar'
 import { Space, Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
-import { Link, useLocation } from 'react-router-dom'
-import ReviewDetail from '../reviewDetail'
+import { Link } from 'react-router-dom'
 import './index.scss'
 
 interface DataType {
@@ -18,32 +17,26 @@ const columns: ColumnsType<DataType> = [
   {
     title: '序号',
     dataIndex: 'id',
-    key: 'id',
   },
   {
     title: '比赛名称',
     dataIndex: 'name',
-    key: 'id',
   },
   {
     title: '待评审数',
     dataIndex: 'notreviewed',
-    key: 'id',
   },
   {
     title: '已评审数',
     dataIndex: 'reviewed',
-    key: 'id',
   },
   {
     title: '评审开始日期',
     dataIndex: 'start_date',
-    key: 'id',
   },
   {
     title: '评审截止日期',
     dataIndex: 'end_date',
-    key: 'id',
   },
   {
     title: '操作',
@@ -151,35 +144,21 @@ const data: DataType[] = [
 ]
 
 function Review() {
-  const { pathname } = useLocation()
-  console.log(pathname)
-
-  if (pathname === '/review') {
-    return (
-      <div className="manage">
-        <TopBar />
-        <div className="manage-content">
-          <div className="manage-content-table">
-            <div>
-              <h1 className="manage-content-table-title">活动评审</h1>
-              <div className="manage-content-table-body">
-                <Table columns={columns} dataSource={data} pagination={{ pageSize: 9 }} />
-              </div>
+  return (
+    <div className="manage">
+      <TopBar />
+      <div className="manage-content">
+        <div className="manage-content-table">
+          <div>
+            <h1 className="manage-content-table-title">活动评审</h1>
+            <div className="manage-content-table-body">
+              <Table columns={columns} dataSource={data} pagination={{ pageSize: 9 }} />
             </div>
           </div>
         </div>
       </div>
-    )
-  } else {
-    return (
-      <div className="manage">
-        <TopBar />
-        <div className="manage-content">
-          <ReviewDetail />
-        </div>
-      </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Review

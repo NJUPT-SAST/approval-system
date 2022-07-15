@@ -3,6 +3,7 @@ import { Menu } from 'antd'
 import React from 'react'
 
 function ApproveMenu(props: any) {
+  const allRead = true
   return (
     <Menu
       mode="inline"
@@ -14,7 +15,7 @@ function ApproveMenu(props: any) {
         我的账号
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
-        收件箱<span className="message-read-or-not"></span>
+        收件箱{allRead ? <></> : <span className="message-read-or-not"></span>}
       </Menu.Item>
       <Menu.Item key="/review" icon={<DashboardOutlined />}>
         活动评审

@@ -1,11 +1,10 @@
 import { Button } from 'antd'
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState } from 'react'
 
 type propsType = {
   index: number
   readState: boolean
-  controlReadState: (newState: boolean) => void
-  controlAllHaveReadState: (newAllReadState: boolean) => void
+  controlReadState: () => void
 }
 
 const InboxReadStateControlButton: React.FC<propsType> = (props) => {
@@ -20,10 +19,9 @@ const InboxReadStateControlButton: React.FC<propsType> = (props) => {
         const newState = false
         return newState
       })
-    }, 1000)
-    props.controlReadState(!props.readState)
+    }, 500)
+    props.controlReadState()
   }
-
   return (
     <Button type={props.readState ? 'ghost' : 'primary'} loading={loadingState} onClick={changeState}>
       {props.readState ? '取消已读' : '已读'}
