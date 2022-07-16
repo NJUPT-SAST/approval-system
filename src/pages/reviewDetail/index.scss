@@ -29,7 +29,6 @@
     height: 839px;
     background-color: #fff;
     .message {
-      position: relative;
       height: 514px;
       margin: 42px;
       overflow: auto;
@@ -49,7 +48,6 @@
           text-align: left;
           list-style: none;
           font-feature-settings: 'tnum';
-          position: relative;
           padding-left: 2px;
         }
       }
