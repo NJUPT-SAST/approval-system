@@ -3,8 +3,8 @@
   flex-direction: column;
   justify-content: flex-start;
   margin-left: 22px;
-  width: 1590px;
-  height: 935px;
+  min-width: 1562px;
+  height: 900px;
   .manage-content-header {
     display: flex;
     flex-direction: row;
@@ -25,7 +25,7 @@
     }
   }
   .manage-content-main {
-    width: 1566px;
+    min-width: 1562px;
     height: 839px;
     background-color: #fff;
     .message {
@@ -65,7 +65,6 @@
         }
       }
       .ant-table {
-        transform: translate(-15px);
         border: none !important;
       }
       .ant-table-cell {
@@ -88,6 +87,7 @@
       }
       .ant-pagination {
         display: none;
+        transform: translateX(-20px);
       }
     }
     .judge {
@@ -105,11 +105,13 @@
         }
       }
       .inputbox {
+        overflow: auto;
         outline: none;
         padding: 5px;
         font-size: 14px;
         line-height: 22px;
         width: 783px;
+        resize: none;
       }
     }
   }

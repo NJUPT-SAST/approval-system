@@ -79,11 +79,16 @@ const data: DataType[] = [
     academy: '计软网安院',
   },
 ]
+
 const ReviewDetail: React.FC = () => {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
-
+  // let handleScroll = function () {
+  //   console.log('111')
+  // }
   useEffect(() => {
     setTargetOffset(window.innerHeight / 2)
+
+    // document.querySelector('.navigation').addEventListener('scroll', handleScroll)
   }, [])
 
   return (
@@ -97,7 +102,7 @@ const ReviewDetail: React.FC = () => {
       <div className="manage-content-main">
         <div className="message">
           <div className="navigation">
-            <Anchor style={{ position: 'fixed' }} targetOffset={targetOffset}>
+            <Anchor style={{ position: 'absolute' }} targetOffset={targetOffset}>
               <Link href="#team" title="导航" />
               <Link href="#user-information" title="参赛者信息" />
               <Link href="#show-work" title="作品展示" />
@@ -184,7 +189,7 @@ const ReviewDetail: React.FC = () => {
           </div>
           <div className="inputBox">
             <span>评价: </span>
-            <textarea className="inputbox" placeholder="请输入"></textarea>
+            <textarea className="inputbox" style={{ height: '80px' }} placeholder="请输入"></textarea>
           </div>
           <div>
             <Pagination defaultCurrent={1} total={50} />

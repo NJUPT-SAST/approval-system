@@ -1,6 +1,8 @@
 .manage {
-  height: calc(100% - 64px);
+  overflow: hidden;
+  height: calc(100vh - 64px);
   background-color: #f0f0f0;
+  overflow: auto;
 }
 .manage-content {
   padding: 0 34px 0 34px;
@@ -13,15 +15,16 @@
     font-weight: normal;
   }
   .manage-content-table-body {
-    // margin-left: 18px;
+    margin-left: 21px;
+    margin-right: 18px;
     padding: 53px 70px 20px 70px;
-    max-width: 1560px;
+    min-width: 1562px;
     text-align: center;
     background-color: #fff;
   }
 }
 .ant-table {
-  margin-bottom: 32px;
+  margin-bottom: 0px;
 }
 .ant-table-tbody > tr > td {
   line-height: 22px;
