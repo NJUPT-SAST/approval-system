@@ -2,23 +2,23 @@
   overflow: hidden;
   height: calc(100vh - 64px);
   background-color: #f0f0f0;
-  overflow: auto;
+  overflow: hidden;
 }
 .manage-content {
-  padding: 0 34px 0 34px;
+  padding: 0 1.77vw 0 1.77vw;
   .manage-content-table-title {
-    margin: 45px 0 35px 0;
-    line-height: 36px;
-    font-size: 36px;
+    margin: 4.16vh 0 2.5vh 0;
+    line-height: 3.15vh;
+    font-size: 3.15vh;
     color: rgba(0, 0, 0, 0.85);
     text-shadow: 0 2px 4px;
     font-weight: normal;
   }
   .manage-content-table-body {
-    margin-left: 21px;
-    margin-right: 18px;
-    padding: 53px 70px 20px 70px;
-    min-width: 1562px;
+    margin-left: 1.1vw;
+    margin-right: 0.93vw;
+    padding: 1.8vh 3.6vw 1.8vh 3.6vw;
+    min-width: 81.3vw;
     text-align: center;
     background-color: #fff;
   }
@@ -27,20 +27,20 @@
   margin-bottom: 0px;
 }
 .ant-table-tbody > tr > td {
-  line-height: 22px;
+  line-height: 1.1vw;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 .ant-table-tbody > tr > td {
-  line-height: 22px;
+  line-height: 1.1vw;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 .ant-table-thead > tr > th {
-  line-height: 22px;
-  height: 68px;
+  line-height: 1.1vw;
+  height: 6.3vh;
   color: #000;
   border: none !important;
   background-color: white;
-  font-size: 14px;
+  font-size: 1.3vh;
   font-weight: bold;
   text-align: center;
 }

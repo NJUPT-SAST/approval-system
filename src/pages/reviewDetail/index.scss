@@ -2,47 +2,47 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-left: 22px;
-  min-width: 1562px;
-  height: 900px;
+  margin-left: 1.1vw;
+  min-width: 81.5vw;
+  height: 85vh;
   .manage-content-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
     .manage-content-title {
-      margin: 45px 0 20px 0;
-      line-height: 36px;
-      font-size: 36px;
+      margin: 4.16vh 0 1.385vh 0;
+      line-height: 3.15vh;
+      font-size: 3.15vh;
       color: rgba(0, 0, 0, 0.85);
       text-shadow: 0 2px 4px;
       font-weight: normal;
     }
     .submit {
-      margin: 40px 0 20px 0;
-      line-height: 36px;
-      font-size: 36px;
+      margin: 4.16vh 0 1.385vh 0;
+      line-height: 3.15vh;
+      font-size: 3.15vh;
     }
   }
   .manage-content-main {
-    min-width: 1562px;
-    height: 839px;
+    min-width: 81.3vw;
+    height: 77.6vh;
     background-color: #fff;
     .message {
-      height: 514px;
-      margin: 42px;
+      height: 47.5vh;
+      margin: 3.8vh;
       background-color: #f7f7f7;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       .navigation {
-        margin: 20px 30px;
+        margin: 1.85vh 1.5vw;
         .ant-anchor {
           box-sizing: border-box;
           margin-bottom: 10px;
           color: rgba(0, 0, 0, 0.85);
           font-size: 16px;
-          line-height: 70px;
+          line-height: 3.64vw;
           text-align: left;
           list-style: none;
           font-feature-settings: 'tnum';
@@ -51,10 +51,10 @@
       }
       .content {
         overflow: auto;
-        min-width: 1600px;
+        min-width: calc(1562px - 178px);
         .item {
-          margin-left: 50px;
-          margin-top: 45px;
+          margin-left: 2.6vw;
+          margin-top: 2.3vw;
         }
         .ant-table-thead {
           .ant-table-cell {
@@ -88,6 +88,7 @@
       .ant-pagination {
         display: none;
         transform: translateX(-20px);
+        margin-bottom: 1vh;
       }
     }
     .judge {
@@ -97,8 +98,8 @@
       justify-content: center;
       .inputBox {
         color: rgba(0, 0, 0, 0.85);
-        margin-left: 350px;
-        margin-bottom: 20px;
+        margin-left: 18.2vw;
+        margin-bottom: 15px;
         span {
           vertical-align: top;
           font-size: 16px;
@@ -110,7 +111,7 @@
         padding: 5px;
         font-size: 14px;
         line-height: 22px;
-        width: 783px;
+        width: 40.8vw;
         resize: none;
       }
     }
