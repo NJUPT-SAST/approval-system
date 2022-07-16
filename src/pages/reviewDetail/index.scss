@@ -31,7 +31,6 @@
     .message {
       height: 514px;
       margin: 42px;
-      overflow: auto;
       background-color: #f7f7f7;
       display: flex;
       flex-direction: row;
@@ -51,8 +50,10 @@
         }
       }
       .content {
+        overflow: auto;
+        min-width: 1600px;
         .item {
-          margin-left: 200px;
+          margin-left: 50px;
           margin-top: 45px;
         }
         .ant-table-thead {
