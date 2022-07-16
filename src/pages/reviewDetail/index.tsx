@@ -102,7 +102,7 @@ const ReviewDetail: React.FC = () => {
       <div className="manage-content-main">
         <div className="message">
           <div className="navigation">
-            <Anchor style={{ position: 'absolute' }} targetOffset={targetOffset}>
+            <Anchor style={{ position: 'fixed' }} targetOffset={targetOffset}>
               <Link href="#team" title="导航" />
               <Link href="#user-information" title="参赛者信息" />
               <Link href="#show-work" title="作品展示" />
