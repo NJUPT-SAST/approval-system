@@ -29,6 +29,7 @@
     height: 839px;
     background-color: #fff;
     .message {
+      position: relative;
       height: 514px;
       margin: 42px;
       overflow: auto;
@@ -38,6 +39,7 @@
       justify-content: flex-start;
       .navigation {
         margin: 20px 30px;
+        position: fixed;
         .ant-anchor {
           box-sizing: border-box;
           margin-bottom: 10px;
@@ -53,7 +55,7 @@
       }
       .content {
         .item {
-          margin-left: 100px;
+          margin-left: 200px;
           margin-top: 45px;
         }
         .ant-table-thead {
