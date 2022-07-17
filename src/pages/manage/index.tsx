@@ -1,5 +1,6 @@
 import { Button, Pagination } from 'antd'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -25,6 +26,7 @@ function Manage() {
   }
   //state为当前所在页数和数据量
   const [pageNow, setPageNow] = useState([1, Math.min(data.length, PageMaxNum)])
+  const navigate = useNavigate()
   return (
     <div className="manage">
       <TopBar />
@@ -83,7 +85,13 @@ function Manage() {
                     </Button>
                   </li>
                   <li className="item-revise">
-                    <Button type="link" size="small">
+                    <Button
+                      type="link"
+                      size="small"
+                      onClick={() => {
+                        navigate('/activity/1001/manage')
+                      }}
+                    >
                       编辑
                     </Button>
                   </li>

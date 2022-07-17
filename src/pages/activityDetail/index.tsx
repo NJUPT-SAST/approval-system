@@ -36,6 +36,8 @@ function ActivityDetail() {
       navigate('/activity/10001/register')
     } else if (userState === 'judge') {
       navigate('/review')
+    } else if (userState === 'admin') {
+      navigate('/activity/10001/manage')
     }
   }
 
