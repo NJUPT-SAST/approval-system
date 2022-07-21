@@ -80,7 +80,13 @@ function Manage() {
                     </Button>
                   </li>
                   <li className="item-notice">
-                    <Button type="link" size="small">
+                    <Button
+                      type="link"
+                      size="small"
+                      onClick={() => {
+                        navigate('/activity/10001/notice')
+                      }}
+                    >
                       发布公告
                     </Button>
                   </li>
@@ -89,7 +95,7 @@ function Manage() {
                       type="link"
                       size="small"
                       onClick={() => {
-                        navigate('/activity/1001/manage')
+                        navigate('/activity/10001/manage')
                       }}
                     >
                       编辑

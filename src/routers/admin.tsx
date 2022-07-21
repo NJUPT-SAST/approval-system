@@ -9,6 +9,7 @@ import Activity from '../pages/activity'
 import ActivityDetail from '../pages/activityDetail'
 import Register from '../pages/register'
 import ManageDetail from '../pages/manageDetail'
+import Notice from '../pages/notice'
 
 const admin: RouteObject[] = [
   {
@@ -23,6 +24,7 @@ const admin: RouteObject[] = [
       { path: 'activity/:id', element: <ActivityDetail /> },
       { path: 'activity/:id/register', element: <Register /> },
       { path: 'activity/:id/manage', element: <ManageDetail /> },
+      { path: 'activity/:id/notice', element: <Notice /> },
       { path: '*', element: <NoMatch /> },
     ],
   },
