@@ -6,7 +6,6 @@ import ActivityDetail from '../pages/activityDetail'
 import Home from '../pages/home'
 import Inbox from '../pages/inbox'
 import NoMatch from '../pages/noMatch'
-import Register from '../pages/register'
 const user: RouteObject[] = [
   {
     path: '/',
@@ -17,7 +16,6 @@ const user: RouteObject[] = [
       { path: 'account', element: <Account /> },
       { path: 'activity', element: <Activity /> },
       { path: 'activity/:id', element: <ActivityDetail /> },
-      { path: 'activity/:id/register', element: <Register /> },
       { path: 'inbox', element: <Inbox /> },
       { path: '*', element: <NoMatch /> },
     ],
