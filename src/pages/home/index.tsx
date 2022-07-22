@@ -40,7 +40,7 @@ const Home = () => {
         break
       case 'user':
         setUserState('user')
-        localStorage.setItem('userState', 'user')
+        localStorage.setItem('userState', 'admin')
         break
       case 'judge':
         setUserState('judge')
