@@ -19,6 +19,9 @@ function TopBar(props?: { breadcrumb?: string }) {
     '/account': '我的帐号',
     '/review': '活动评审',
     '/review/detail': '挑战杯',
+    '/register': '活动报名',
+    '/notice': '发布公告',
+
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)

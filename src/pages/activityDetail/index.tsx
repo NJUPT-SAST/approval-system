@@ -25,7 +25,17 @@ function ActivityDetail() {
       case 'approver':
         return '审批'
       default:
-        return '报名'
+        return '请先登录'
+    }
+  }
+
+  const handleButtonAction = () => {
+    if (userState === 'user') {
+      navigate('/activity/10001/register')
+    } else if (userState === 'judge') {
+      navigate('/review')
+    } else if (userState === 'admin') {
+      navigate('/activity/10001/manage')
     }
   }
   //notice数据
