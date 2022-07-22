@@ -4,6 +4,7 @@ import TopBar from '../../components/TopBar'
 import './index.scss'
 import StatisticsBox from './components'
 import { ColumnsType } from 'antd/es/table'
+import { useNavigate } from 'react-router-dom'
 
 interface DataType {
   key: React.Key
@@ -56,6 +57,7 @@ const columns: ColumnsType<DataType> = [
 function ManageDetail() {
   const [data, setData]: any = useState([])
   const [reviewer] = useState(['Max评审', 'Ming评审', 'R评审'])
+  const navigate = useNavigate()
   useEffect(() => {
     if (data.length !== 0) {
       return
@@ -110,7 +112,14 @@ function ManageDetail() {
         <Button type="primary" size="small" id="manage-detail-set">
           设置
         </Button>
-        <Button type="primary" size="small" id="manage-detail-notice">
+        <Button
+          type="primary"
+          size="small"
+          id="manage-detail-notice"
+          onClick={() => {
+            navigate('/activity/10001/notice')
+          }}
+        >
           公告
         </Button>
         <Button type="primary" size="small" id="manage-detail-download-result">
