@@ -54,6 +54,10 @@ const Home = () => {
   const logout = () => {
     setUserState('offline')
     localStorage.setItem('userState', 'offline')
+    localStorage.removeItem('inboxPoint')
+    localStorage.removeItem('allReadState')
+    localStorage.removeItem('allFoldState')
+    localStorage.removeItem('everyInboxMessageState')
     setNavigation('/')
     navigate('/')
   }
