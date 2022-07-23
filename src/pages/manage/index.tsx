@@ -33,7 +33,13 @@ function Manage() {
       <div className="manage-body">
         <div className="manage-top">
           <p id="manage-title">活动管理</p>
-          <Button type="primary" className="match-create">
+          <Button
+            type="primary"
+            className="match-create"
+            onClick={() => {
+              navigate('/manage/create')
+            }}
+          >
             创建比赛
           </Button>
         </div>

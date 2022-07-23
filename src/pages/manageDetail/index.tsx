@@ -106,10 +106,17 @@ function ManageDetail() {
   }, [])
   return (
     <div className="manage-detail">
-      <TopBar activity='"挑战杯"创新创业大赛' />
+      <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="manage-detail-header">
         <p className="manage-detail-title">&quot;挑战杯&quot;创新创业大赛</p>
-        <Button type="primary" size="small" id="manage-detail-set">
+        <Button
+          type="primary"
+          size="small"
+          id="manage-detail-set"
+          onClick={() => {
+            navigate('/activity/10001/manage/create')
+          }}
+        >
           设置
         </Button>
         <Button
