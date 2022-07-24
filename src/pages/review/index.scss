@@ -1,13 +1,13 @@
 .manage {
   overflow: hidden;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 70px);
   background-color: #f0f0f0;
   overflow: hidden;
 }
 .manage-content {
   padding: 0 1.77vw 0 1.77vw;
   .manage-content-table-title {
-    margin: 4.16vh 0 2.5vh 0;
+    margin: 3vh 0 2.5vh 0;
     line-height: 3.15vh;
     font-size: 3.15vh;
     color: rgba(0, 0, 0, 0.85);
@@ -17,8 +17,8 @@
   .manage-content-table-body {
     margin-left: 1.1vw;
     margin-right: 0.93vw;
-    padding: 1.8vh 3.6vw 1.8vh 3.6vw;
-    min-width: 81.3vw;
+    padding: 1.8vh 3.6vw 0 3.6vw;
+    min-width: 80vw;
     text-align: center;
     background-color: #fff;
   }
@@ -40,7 +40,7 @@
   color: #000;
   border: none !important;
   background-color: white;
-  font-size: 1.3vh;
+  font-size: 1.6vh;
   font-weight: bold;
   text-align: center;
 }

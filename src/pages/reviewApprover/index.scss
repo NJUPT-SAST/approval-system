@@ -10,23 +10,23 @@
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
+    margin: 3vh 0 1vh 0;
+    line-height: 3.15vh;
+    font-size: 3.15vh;
+    color: rgba(0, 0, 0, 0.85);
     .manage-content-title {
-      margin: 4.16vh 0 1.385vh 0;
-      line-height: 3.15vh;
-      font-size: 3.15vh;
-      color: rgba(0, 0, 0, 0.85);
+      padding-top: 5px;
       text-shadow: 0 2px 4px;
       font-weight: normal;
+      text-align: center;
     }
     .submit {
-      margin: 4.16vh 0 1.385vh 0;
-      line-height: 3.15vh;
-      font-size: 3.15vh;
+      margin-bottom: 1.5vh;
     }
   }
   .manage-content-main {
-    min-width: 81.3vw;
-    height: 77.6vh;
+    min-width: 100%;
+    height: 76vh;
     background-color: #fff;
     .message {
       height: 47.5vh;
@@ -50,11 +50,32 @@
         }
       }
       .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
         overflow: auto;
-        min-width: calc(1562px - 178px);
+        min-width: calc(1562px - 160px);
         .item {
-          margin-left: 2.6vw;
+          h3 {
+            margin-left: 40px;
+          }
+        }
+        .udata {
+          font-size: 14px;
+          font-weight: 600;
+          color: #242424;
           margin-top: 2.3vw;
+          text-shadow: 0 2px 4px;
+          li {
+            list-style: none;
+            text-shadow: none;
+          }
+          span {
+            margin-right: 20px;
+            margin-left: 10px;
+            line-height: 36px;
+            color: rgba($color: #000000, $alpha: 0.65);
+          }
         }
         .ant-table-thead {
           .ant-table-cell {
@@ -99,7 +120,7 @@
       .inputBox {
         color: rgba(0, 0, 0, 0.85);
         margin-left: 18.2vw;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         span {
           vertical-align: top;
           font-size: 16px;
@@ -111,8 +132,9 @@
         padding: 5px;
         font-size: 14px;
         line-height: 22px;
-        width: 40.8vw;
+        width: 30vw;
         resize: none;
+        border-radius: 5px;
       }
     }
   }

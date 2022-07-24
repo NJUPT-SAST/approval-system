@@ -4,6 +4,7 @@ import type { ColumnsType } from 'antd/es/table'
 import './index.scss'
 
 const { Link } = Anchor
+
 interface DataType {
   posts: string
   name: string
@@ -80,21 +81,16 @@ const data: DataType[] = [
   },
 ]
 
-const ReviewDetail: React.FC = () => {
+const ReviewJudge: React.FC = (props) => {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
-  // let handleScroll = function () {
-  //   console.log('111')
-  // }
+
   useEffect(() => {
     setTargetOffset(window.innerHeight / 2)
-
-    // document.querySelector('.navigation').addEventListener('scroll', handleScroll)
   }, [])
-
   return (
     <div className="manage-content-body">
       <div className="manage-content-header">
-        <div className="manage-content-title">评审</div>
+        <h1 className="manage-content-title">评审</h1>
         <div className="submit">
           <Button type="primary">提交</Button>
         </div>
@@ -102,7 +98,10 @@ const ReviewDetail: React.FC = () => {
       <div className="manage-content-main">
         <div className="message">
           <div className="navigation">
-            <Anchor targetOffset={targetOffset}>
+            <Anchor
+              targetOffset={targetOffset}
+              getContainer={() => document.querySelector('.navigation') as HTMLElement}
+            >
               <Link href="#team" title="导航" />
               <Link href="#user-information" title="参赛者信息" />
               <Link href="#show-work" title="作品展示" />
@@ -200,4 +199,4 @@ const ReviewDetail: React.FC = () => {
   )
 }
 
-export default ReviewDetail
+export default ReviewJudge

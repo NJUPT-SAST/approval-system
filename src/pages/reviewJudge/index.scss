@@ -1,0 +1,119 @@
+.manage-content-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 1.1vw;
+  min-width: 81.5vw;
+  height: 85vh;
+  .manage-content-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    margin: 3vh 0 1vh 0;
+    line-height: 3.15vh;
+    font-size: 3.15vh;
+    color: rgba(0, 0, 0, 0.85);
+    .manage-content-title {
+      padding-top: 5px;
+      text-shadow: 0 2px 4px;
+      font-weight: normal;
+      text-align: center;
+    }
+    .submit{
+      margin-bottom: 1.5vh;
+    }
+  }
+  .manage-content-main {
+    min-width: 100%;
+    height: 76vh;
+    background-color: #fff;
+    .message {
+      height: 47.5vh;
+      margin: 3.8vh;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      .navigation {
+        margin: 1.85vh 1.5vw;
+        .ant-anchor {
+          box-sizing: border-box;
+          margin-bottom: 10px;
+          color: rgba(0, 0, 0, 0.85);
+          font-size: 16px;
+          line-height: 3.64vw;
+          text-align: left;
+          list-style: none;
+          font-feature-settings: 'tnum';
+          padding-left: 2px;
+        }
+      }
+      .content {
+        overflow: auto;
+        min-width: calc(1562px - 160px);
+        .item {
+          margin-left: 2.6vw;
+          margin-top: 2.3vw;
+        }
+        .ant-table-thead {
+          .ant-table-cell {
+            height: 17px;
+            line-height: 18px;
+            padding: 10px 16px !important;
+          }
+        }
+      }
+      .ant-table {
+        border: none !important;
+      }
+      .ant-table-cell {
+        background-color: #f7f7f7;
+      }
+      .ant-table-thead {
+        padding: 0;
+        border: none !important;
+        color: rgba(0, 0, 0, 0.85) !important;
+      }
+      .ant-table-tbody > tr > td {
+        border: none !important;
+        line-height: 18px;
+        padding: 10px 15px;
+        font-size: 18px;
+        color: #999;
+      }
+      .ant-table-tbody > tr > td:first-child {
+        color: rgba(0, 0, 0, 0.85);
+      }
+      .ant-pagination {
+        display: none;
+        transform: translateX(-20px);
+        margin-bottom: 1vh;
+      }
+    }
+    .judge {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      .inputBox {
+        color: rgba(0, 0, 0, 0.85);
+        margin-left: 18.2vw;
+        margin-bottom: 10px;
+        span {
+          vertical-align: top;
+          font-size: 16px;
+        }
+      }
+      .inputbox {
+        overflow: auto;
+        outline: none;
+        padding: 5px;
+        font-size: 14px;
+        line-height: 22px;
+        width: 40.8vw;
+        resize: none;
+      }
+    }
+  }
+}
