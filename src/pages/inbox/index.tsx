@@ -23,6 +23,7 @@ const Inbox: React.FC = () => {
   }, [])
   //用来管理向子串传值的
   useEffect(() => {
+    console.log(childState, allFoldState, allReadState)
     if (messageStateStorage.getItem('everyInboxMessageState') === null) {
       const a = new Array<{ fold: boolean; read: boolean }>(8)
       for (let i = 0; i < 8; i++) {
@@ -32,7 +33,7 @@ const Inbox: React.FC = () => {
     //填充
     else {
       let a = new Array<{ fold: boolean; read: boolean }>(8)
-      const b_str = messageStateStorage.getItem('everyInvoxMessageState') ?? JSON.stringify(a)
+      const b_str = messageStateStorage.getItem('everyInboxMessageState') ?? JSON.stringify(a)
       const b = JSON.parse(b_str)
       a = [...a, ...b]
       for (let i = 0; i < 8; i++) {
@@ -44,7 +45,7 @@ const Inbox: React.FC = () => {
   const readState_str: string =
     messageStateStorage.getItem('allReadState') ?? JSON.stringify({ allRead: false, haveReadNumber: 0, maxNumber: 8 })
   const foldState_str: string =
-    messageStateStorage.getItem('allFoldSate') ?? JSON.stringify({ allFold: true, haveFoldNumber: 8, maxNumber: 8 })
+    messageStateStorage.getItem('allFoldState') ?? JSON.stringify({ allFold: true, haveFoldNumber: 8, maxNumber: 8 })
   const childState_str: string =
     messageStateStorage.getItem('everyInboxMessageState') ??
     (() => {
@@ -68,6 +69,7 @@ const Inbox: React.FC = () => {
     haveReadNumber: messageReadState.haveReadNumber,
     maxNumber: messageReadState.maxNumber,
   })
+  //控制 inbox
   const controlAllReadState = (messageState: boolean): void => {
     //若点击事件的信息组件当前为已读 那么切换至未读状态 已读数目减少 若在此之前数目为数目为最大数目，则设置全部已读为false，并且同步至localStorage
     if (messageState) {
@@ -99,6 +101,7 @@ const Inbox: React.FC = () => {
         return a
       })
       setuserPointState({ point: 'on' })
+      console.log(childState, allFoldState, allReadState)
     }
   }
 
@@ -112,6 +115,7 @@ const Inbox: React.FC = () => {
           a.allFold = false
         }
         a.haveFoldNumber--
+        console.log(a)
         messageStateStorage.setItem('allFoldState', JSON.stringify(a))
         return a
       })
@@ -153,17 +157,20 @@ const Inbox: React.FC = () => {
                   const a = { ...preState }
                   a.allRead = true
                   a.haveReadNumber = a.maxNumber
-                  messageStateStorage.setItem('allFoldState', JSON.stringify(a))
+
+                  messageStateStorage.setItem('allReadState', JSON.stringify(a))
                   messageStateStorage.setItem('inboxPoint', 'on')
                   return a
                 })
                 setuserPointState({ point: 'on' })
                 setChildState((preState) => {
                   const a = [...preState]
+
                   a.map((value) => {
                     value.read = true
                     return 0
                   })
+
                   messageStateStorage.setItem('everyInboxMessageState', JSON.stringify(a))
                   return a
                 })
@@ -179,6 +186,7 @@ const Inbox: React.FC = () => {
                   const a = { ...preState }
                   a.allFold = true
                   a.haveFoldNumber = a.maxNumber
+                  messageStateStorage.setItem('allFoldState', JSON.stringify(a))
                   return a
                 })
                 setChildState((preState) => {
@@ -202,6 +210,7 @@ const Inbox: React.FC = () => {
                   const a = { ...preState }
                   a.allFold = false
                   a.haveFoldNumber = 0
+                  messageStateStorage.setItem('allFoldState', JSON.stringify(a))
                   return a
                 })
                 setChildState((preState) => {
@@ -210,6 +219,7 @@ const Inbox: React.FC = () => {
                     value.fold = false
                     return 0
                   })
+                  console.log(a)
                   messageStateStorage.setItem('everyInboxMessageState', JSON.stringify(a))
                   return a
                 })
@@ -219,19 +229,22 @@ const Inbox: React.FC = () => {
             </Button>
           </div>
         </div>
-        {message.map((value, index) => (
-          <Message
-            localIndex={message.length - index - 1} //倒续
-            index={index}
-            key={value.id}
-            foldState={childState[message.length - index - 1].fold}
-            readState={childState[message.length - index - 1].read}
-            allChildState={childState}
-            controlChildState={controlChildState}
-            controlAllFoldState={controlAllFoldState}
-            controlAllReadState={controlAllReadState}
-          />
-        ))}
+        {
+          //展示数据用
+          message.map((value, index) => (
+            <Message
+              localIndex={message.length - index - 1} //倒续
+              index={index}
+              key={value.id}
+              foldState={childState[message.length - index - 1].fold}
+              readState={childState[message.length - index - 1].read}
+              allChildState={childState}
+              controlChildState={controlChildState}
+              controlAllFoldState={controlAllFoldState}
+              controlAllReadState={controlAllReadState}
+            />
+          ))
+        }
       </div>
     </>
   )

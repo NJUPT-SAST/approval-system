@@ -14,7 +14,8 @@ function AdminMenu(props: any) {
   const setuserPointState = useSetRecoilState(userPointState)
   useEffect(() => {
     return () => {
-      if (point) setuserPointState({ point: 'off' })
+      if (!point) setuserPointState({ point: 'off' })
+      console.log(point)
     }
   }, [])
 
