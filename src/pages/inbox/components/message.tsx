@@ -1,6 +1,6 @@
 import { Button } from 'antd'
-import React, { useState, useContext, useEffect } from 'react'
-import { AllFoldContext, MessageContext } from '..'
+import React, { useContext } from 'react'
+import { MessageContext } from '..'
 import InboxReadStateControlButton from './inboxReadStateControlButton'
 
 type propsType = {

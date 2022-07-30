@@ -28,5 +28,4 @@ const InboxReadStateControlButton: React.FC<propsType> = (props) => {
     </Button>
   )
 }
-
 export default InboxReadStateControlButton
