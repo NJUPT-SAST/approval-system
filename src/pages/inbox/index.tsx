@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import TopBar from '../../components/TopBar'
 import { message } from '../../test/inbox-message'
 import Message from './components/message'
-import { userPointState } from '../home/components/menu/AdminMenu'
+import { userInboxPointState } from '../home'
 import { useSetRecoilState } from 'recoil'
 import './index.scss'
 
@@ -12,7 +12,7 @@ export const AllFoldContext = React.createContext({ fold: false, unfold: false }
 const Inbox: React.FC = () => {
   const messageStateStorage = window.localStorage
   //用来存储状态的 依赖项应为信息最大数目？
-  const setuserPointState = useSetRecoilState(userPointState)
+  const setuserPointState = useSetRecoilState(userInboxPointState)
   useEffect(() => {
     if (messageStateStorage.getItem('allReadState') === null) {
       messageStateStorage.setItem('allReadState', JSON.stringify({ allRead: false, haveReadNumber: 0, maxNumber: 8 })) //maxNumber 由请求返回 其余自定

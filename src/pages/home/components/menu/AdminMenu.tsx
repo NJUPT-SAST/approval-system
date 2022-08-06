@@ -1,23 +1,11 @@
 import { DashboardOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
-import React, { useEffect } from 'react'
-import { atom, useRecoilValue, useSetRecoilState } from 'recoil'
-
-const state_str = window.localStorage.getItem('inboxPoint') ?? 'off'
-export const userPointState = atom({
-  key: 'userPointState',
-  default: { point: state_str },
-})
+import React from 'react'
+import { useRecoilValue } from 'recoil'
+import { userInboxPointState } from '../..'
 
 function AdminMenu(props: any) {
-  const point = useRecoilValue(userPointState)
-  const setuserPointState = useSetRecoilState(userPointState)
-  useEffect(() => {
-    return () => {
-      if (!point) setuserPointState({ point: 'off' })
-      console.log(point)
-    }
-  }, [])
+  const point = useRecoilValue(userInboxPointState)
 
   return (
     <Menu
@@ -30,7 +18,7 @@ function AdminMenu(props: any) {
         我的账号
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
-        收件箱{point.point === 'off' ? <span className="message-read-or-not"></span> : <></>}
+        收件箱{point.point === 'on' ? <></> : <span className="message-read-or-not"></span>}
       </Menu.Item>
       <Menu.Item key="/activity" icon={<DashboardOutlined />}>
         活动广场
