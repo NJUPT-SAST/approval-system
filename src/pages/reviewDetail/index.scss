@@ -1,0 +1,116 @@
+.manage-content-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 22px;
+  width: 1590px;
+  height: 935px;
+  .manage-content-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    .manage-content-title {
+      margin: 45px 0 20px 0;
+      line-height: 36px;
+      font-size: 36px;
+      color: rgba(0, 0, 0, 0.85);
+      text-shadow: 0 2px 4px;
+      font-weight: normal;
+    }
+    .submit {
+      margin: 40px 0 20px 0;
+      line-height: 36px;
+      font-size: 36px;
+    }
+  }
+  .manage-content-main {
+    width: 1566px;
+    height: 839px;
+    background-color: #fff;
+    .message {
+      height: 514px;
+      margin: 42px;
+      overflow: auto;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      .navigation {
+        margin: 20px 30px;
+        .ant-anchor {
+          box-sizing: border-box;
+          margin-bottom: 10px;
+          color: rgba(0, 0, 0, 0.85);
+          font-size: 16px;
+          line-height: 70px;
+          text-align: left;
+          list-style: none;
+          font-feature-settings: 'tnum';
+          position: relative;
+          padding-left: 2px;
+        }
+      }
+      .content {
+        .item {
+          margin-left: 100px;
+          margin-top: 45px;
+        }
+        .ant-table-thead {
+          .ant-table-cell {
+            height: 17px;
+            line-height: 18px;
+            padding: 10px 16px !important;
+          }
+        }
+      }
+      .ant-table {
+        transform: translate(-15px);
+        border: none !important;
+      }
+      .ant-table-cell {
+        background-color: #f7f7f7;
+      }
+      .ant-table-thead {
+        padding: 0;
+        border: none !important;
+        color: rgba(0, 0, 0, 0.85) !important;
+      }
+      .ant-table-tbody > tr > td {
+        border: none !important;
+        line-height: 18px;
+        padding: 10px 15px;
+        font-size: 18px;
+        color: #999;
+      }
+      .ant-table-tbody > tr > td:first-child {
+        color: rgba(0, 0, 0, 0.85);
+      }
+      .ant-pagination {
+        display: none;
+      }
+    }
+    .judge {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      .inputBox {
+        color: rgba(0, 0, 0, 0.85);
+        margin-left: 350px;
+        margin-bottom: 20px;
+        span {
+          vertical-align: top;
+          font-size: 16px;
+        }
+      }
+      .inputbox {
+        outline: none;
+        padding: 5px;
+        font-size: 14px;
+        line-height: 22px;
+        width: 783px;
+      }
+    }
+  }
+}

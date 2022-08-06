@@ -4,11 +4,17 @@ import { Layout } from 'antd'
 import React, { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm'
 import userStateStore from '../../store/userState'
-import { useRecoilState } from 'recoil'
+import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import menuMap from './components/menu'
 import './index.scss'
 
 const { Header, Content, Sider } = Layout
+//on表示无红点 off与其他表示有红点 位置待调整
+const state_str = window.localStorage.getItem('inboxPoint') ?? 'off'
+export const userInboxPointState = atom({
+  key: 'userPointState',
+  default: { point: state_str },
+})
 
 const Home = () => {
   const location = useLocation()
@@ -16,6 +22,7 @@ const Home = () => {
   const [navigation, setNavigation] = useState('/')
   // const [collapsed, setCollapsed] = useState(false)
   const [userState, setUserState] = useRecoilState(userStateStore)
+  const setUserInboxPointState = useSetRecoilState(userInboxPointState)
   const Menu = menuMap.get(userState)
   useEffect(() => {
     const match = location?.pathname
@@ -50,10 +57,14 @@ const Home = () => {
         break
     }
   }
-
   const logout = () => {
     setUserState('offline')
     localStorage.setItem('userState', 'offline')
+    localStorage.removeItem('inboxPoint')
+    localStorage.removeItem('allReadState')
+    localStorage.removeItem('allFoldState')
+    localStorage.removeItem('everyInboxMessageState')
+    setUserInboxPointState({ point: 'off' })
     setNavigation('/')
     navigate('/')
   }

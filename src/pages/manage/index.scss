@@ -1,0 +1,53 @@
+$vm_base: 1920;
+$vh_base: 1080;
+
+@function vw($px) {
+  @return calc($px / $vm_base) * 100vw;
+}
+
+@function vh($px) {
+  @return calc($px / $vh_base) * 100vh;
+}
+
+.manage-header {
+  display: flex;
+  align-items: flex-end;
+  height: 72px;
+  margin-top: 27px;
+  #manage-header-title {
+    width: 184px;
+    height: 72px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 36px;
+    line-height: 72px;
+    font-weight: 500;
+    margin-left: 44px;
+    margin-bottom: 0;
+  }
+  .ant-btn-primary {
+    align-self: center;
+    margin-right: 30px;
+    margin-left: auto;
+  }
+}
+
+.manage-body {
+  min-width: vw(1562);
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  margin-left: 55px;
+  margin-right: 24px;
+  .ant-table-wrapper {
+    margin-left: 68px;
+    margin-right: 24px;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    line-height: 22px;
+
+    .manage-list-even {
+      background-color: white;
+    }
+  }
+}
