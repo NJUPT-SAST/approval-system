@@ -2,6 +2,7 @@
   "name": "approval-system",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://81.68.225.220:8080/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@craco/craco": "^6.4.3",
