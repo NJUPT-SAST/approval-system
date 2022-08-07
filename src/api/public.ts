@@ -28,6 +28,7 @@ export const getValidateCode = () => {
   return axios({
     method: 'get',
     url: '/getValidateCode',
+    responseType: 'blob',
   })
 }
 
