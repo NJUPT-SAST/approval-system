@@ -83,7 +83,16 @@
       background-size: contain;
       background-repeat: no-repeat;
     }
-
+    .validate-part-body{
+      display: flex;
+      .validate-input{
+        width: 55%;
+      }
+      .validate-img{
+        width: 45%;
+        height: 32px;
+      }
+    }
     .login-form-button {
       background: rgba(255, 255, 255, 0.3);
       width: 100%;

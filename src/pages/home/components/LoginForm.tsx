@@ -1,4 +1,4 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { LockOutlined, SafetyOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Divider, Form, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getValidateCode } from '../../../api/public'
@@ -52,10 +52,16 @@ function LoginForm(props: loginFormProp) {
       <Form.Item name="password" rules={[{ required: false, message: 'Please input your Password!' }]}>
         <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
       </Form.Item>
-      <Form.Item name="validate" rules={[{ required: true, message: 'Please input the validate code!' }]}>
-        <Input prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Validate code" />
-      </Form.Item>
-      <img src={validateCodeUrl} alt="validate code" />
+      <div className="validate-part-body">
+        <Form.Item
+          name="validate"
+          className="validate-input"
+          rules={[{ required: true, message: 'Please input the validate code!' }]}
+        >
+          <Input prefix={<SafetyOutlined className="site-form-item-icon" />} placeholder="Validate code" />
+        </Form.Item>
+        <img src={validateCodeUrl} alt="validate code" className="validate-img" />
+      </div>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
