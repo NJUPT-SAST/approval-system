@@ -7,6 +7,7 @@ import userStateStore from '../../store/userState'
 import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import menuMap from './components/menu'
 import './index.scss'
+import { login } from '../../api/public'
 
 const { Header, Content, Sider } = Layout
 //on表示无红点 off与其他表示有红点 位置待调整
@@ -22,6 +23,7 @@ const Home = () => {
   const [navigation, setNavigation] = useState('/')
   // const [collapsed, setCollapsed] = useState(false)
   const [userState, setUserState] = useRecoilState(userStateStore)
+  const [validateCodeId, setValidateCodeId] = useState('')
   const setUserInboxPointState = useSetRecoilState(userInboxPointState)
   const Menu = menuMap.get(userState)
   useEffect(() => {
@@ -36,29 +38,34 @@ const Home = () => {
   }
   const onFinish = (values: any) => {
     // console.log('Received values of form: ', values)
-    switch (values.username) {
-      case 'admin':
-        setUserState('admin')
-        localStorage.setItem('userState', 'admin')
-        break
-      case 'approver':
-        setUserState('approver')
-        localStorage.setItem('userState', 'admin')
-        break
-      case 'user':
-        setUserState('user')
-        localStorage.setItem('userState', 'user')
-        break
-      case 'judge':
-        setUserState('judge')
-        localStorage.setItem('userState', 'admin')
-        break
-      default:
-        break
-    }
+    login(validateCodeId, values.validate, values.username).then((res) => {
+      console.log(res)
+      localStorage.setItem('token', res.data.data.token)
+      switch (res.data.data.role) {
+        case 3:
+          setUserState('admin')
+          localStorage.setItem('userState', 'admin')
+          break
+        case 2:
+          setUserState('approver')
+          localStorage.setItem('userState', 'admin')
+          break
+        case 0:
+          setUserState('user')
+          localStorage.setItem('userState', 'user')
+          break
+        case 1:
+          setUserState('judge')
+          localStorage.setItem('userState', 'admin')
+          break
+        default:
+          break
+      }
+    })
   }
   const logout = () => {
     setUserState('offline')
+    localStorage.clear()
     localStorage.setItem('userState', 'offline')
     localStorage.removeItem('inboxPoint')
     localStorage.removeItem('allReadState')
@@ -68,6 +75,10 @@ const Home = () => {
     setNavigation('/')
     navigate('/')
   }
+  const getValidateId = (validateId: string) => {
+    setValidateCodeId(validateId)
+  }
+  console.log(validateCodeId)
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header className="header">
@@ -109,7 +120,11 @@ const Home = () => {
           width={200}
           className="site-layout-background sidebar"
         >
-          {userState === 'offline' ? <LoginForm finishCb={onFinish}></LoginForm> : <p>已经登陆</p>}
+          {userState === 'offline' ? (
+            <LoginForm finishCb={onFinish} setCodeId={getValidateId}></LoginForm>
+          ) : (
+            <p>已经登陆</p>
+          )}
           <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
         </Sider>
         <Layout>
