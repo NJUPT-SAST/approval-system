@@ -2,19 +2,9 @@ import { Button } from 'antd'
 import React, { useContext } from 'react'
 import { MessageContext } from '..'
 import InboxReadStateControlButton from './inboxReadStateControlButton'
+import { inboxMessagePropsType } from '../../../type/inboxType'
 
-type propsType = {
-  localIndex: number
-  index: number
-  readState: boolean
-  foldState: boolean
-  allChildState: { read: boolean; fold: boolean }[]
-  controlAllReadState: (messageReadState: boolean) => void
-  controlAllFoldState: (messageFoldState: boolean) => void
-  controlChildState: (localindex: number, newReadState: boolean, newFoldState: boolean) => void
-}
-
-const Message: React.FC<propsType> = (props) => {
+const InboxMessage: React.FC<inboxMessagePropsType> = (props) => {
   const { index, localIndex, readState, foldState, controlAllReadState, controlAllFoldState, controlChildState } = props
   const inboxMessage = useContext(MessageContext)[index]
   const controlReadState = () => {
@@ -66,4 +56,4 @@ const Message: React.FC<propsType> = (props) => {
     </>
   )
 }
-export default Message
+export default InboxMessage

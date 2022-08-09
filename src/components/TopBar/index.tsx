@@ -27,7 +27,7 @@ function TopBar(props?: { activity?: string }) {
   const pathSnippets = location.pathname.split('/').filter((i) => i)
   const extraBreadcrumbItems = pathSnippets.map((item, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
-    console.log(url)
+    // console.log(url)
     if (!isNaN(Number(pathSnippets[index])) && props?.activity !== undefined) {
       return (
         <Breadcrumb.Item key="current-activity" className="breadCrumbItem">

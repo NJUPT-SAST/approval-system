@@ -2,7 +2,7 @@ import { Button } from 'antd'
 import React, { useState, useEffect } from 'react'
 import TopBar from '../../components/TopBar'
 import { message } from '../../test/inbox-message'
-import Message from './components/message'
+import InboxMessage from './components/inboxMessage'
 import { userInboxPointState } from '../home'
 import { useSetRecoilState } from 'recoil'
 import './index.scss'
@@ -23,7 +23,6 @@ const Inbox: React.FC = () => {
   }, [])
   //用来管理向子串传值的
   useEffect(() => {
-    console.log(childState, allFoldState, allReadState)
     if (messageStateStorage.getItem('everyInboxMessageState') === null) {
       const a = new Array<{ fold: boolean; read: boolean }>(8)
       for (let i = 0; i < 8; i++) {
@@ -78,14 +77,14 @@ const Inbox: React.FC = () => {
         const a = { ...preState }
         if (a.haveReadNumber === 8) {
           a.allRead = false
+          messageStateStorage.setItem('inboxPoint', 'off')
+          messageStateStorage.setItem('allRead', 'false')
+          setuserPointState({ point: 'off' })
         }
         a.haveReadNumber--
         messageStateStorage.setItem('allReadState', JSON.stringify(a))
-        messageStateStorage.setItem('inboxPoint', 'off')
-        messageStateStorage.setItem('allRead', 'false')
         return a
       })
-      setuserPointState({ point: 'off' })
     }
     //否则切换至已读状态 已读数目增加 若此时数目为最大数目 则设置全部已读为true
     else {
@@ -94,13 +93,13 @@ const Inbox: React.FC = () => {
         a.haveReadNumber++
         if (a.haveReadNumber === 8) {
           a.allRead = true
+          messageStateStorage.setItem('inboxPoint', 'on')
+          messageStateStorage.setItem('allRead', 'true')
+          setuserPointState({ point: 'on' })
         }
         messageStateStorage.setItem('allReadState', JSON.stringify(a))
-        messageStateStorage.setItem('inboxPoint', 'on')
-        messageStateStorage.setItem('allRead', 'true')
         return a
       })
-      setuserPointState({ point: 'on' })
       console.log(childState, allFoldState, allReadState)
     }
   }
@@ -115,7 +114,6 @@ const Inbox: React.FC = () => {
           a.allFold = false
         }
         a.haveFoldNumber--
-        console.log(a)
         messageStateStorage.setItem('allFoldState', JSON.stringify(a))
         return a
       })
@@ -157,7 +155,6 @@ const Inbox: React.FC = () => {
                   const a = { ...preState }
                   a.allRead = true
                   a.haveReadNumber = a.maxNumber
-
                   messageStateStorage.setItem('allReadState', JSON.stringify(a))
                   messageStateStorage.setItem('inboxPoint', 'on')
                   return a
@@ -232,7 +229,7 @@ const Inbox: React.FC = () => {
         {
           //展示数据用
           message.map((value, index) => (
-            <Message
+            <InboxMessage
               localIndex={message.length - index - 1} //倒续
               index={index}
               key={value.id}
