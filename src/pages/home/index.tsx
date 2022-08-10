@@ -36,10 +36,11 @@ const Home = () => {
     navigate(e.key)
     setNavigation(e.key)
   }
+  //点击登录时将会执行下面的 onFinish函数
   const onFinish = (values: any) => {
     // console.log('Received values of form: ', values)
     login(validateCodeId, values.validate, values.username).then((res) => {
-      console.log(res)
+      // console.log(res)
       localStorage.setItem('token', res.data.data.token)
       switch (res.data.data.role) {
         case 3:
@@ -63,6 +64,7 @@ const Home = () => {
       }
     })
   }
+  //退出登录时将会执行这里的 logout 函数
   const logout = () => {
     setUserState('offline')
     localStorage.clear()
@@ -75,10 +77,12 @@ const Home = () => {
     setNavigation('/')
     navigate('/')
   }
+
   const getValidateId = (validateId: string) => {
     setValidateCodeId(validateId)
   }
-  console.log(validateCodeId)
+  // console.log(validateCodeId)
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header className="header">
