@@ -1,8 +1,9 @@
 import { RollbackOutlined, SearchOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Card, Form, Modal, Radio, Select } from 'antd'
+import { Breadcrumb, Button, Card, Empty, Form, Modal, Radio, Select } from 'antd'
 import Input from 'antd/lib/input'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { getAllCompetitionList } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -10,12 +11,24 @@ const { Search } = Input
 const { Option } = Select
 const { Meta } = Card
 
+const useGetActivities = (): any => {
+  const [activities, setActivities] = useState([])
+  useEffect(() => {
+    getAllCompetitionList(1, 8).then((res) => {
+      console.log(res)
+      setActivities(res.data.data.records)
+    })
+  }, [])
+  return activities
+}
+
 function Activity() {
   const navigate = useNavigate()
   const [tagModelVisible, setTagModelVisible] = useState(false)
+  const activities: any[] = useGetActivities()
 
   /**
-   *
+   * 活动卡片
    * @param props  coverUrl: 封面图 | title: 比赛标题 | description: 比赛介绍 | time: 比赛时间 | author:  比赛发布者
    * @returns 包含以上信息的卡片
    */
@@ -44,6 +57,28 @@ function Activity() {
       </Card>
     )
   }
+
+  const Activities = (): JSX.Element => {
+    if (activities.length === 0 || activities === undefined) {
+      return <Empty style={{ margin: '0 auto' }} />
+    } else {
+      activities.map((item: any, index) => {
+        return (
+          <ActivityCard
+            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
+            title={item.name}
+            time={item.date}
+            description="hello"
+            author="hello"
+            key={item.id}
+          />
+        )
+      })
+    }
+    console.log(activities)
+    return <Empty style={{ margin: '0 auto' }} />
+  }
+
   /**
    * 点击搜索的函数
    */
@@ -193,76 +228,7 @@ function Activity() {
           </Form>
         </div>
         <div className="activities-body">
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
-          <ActivityCard
-            coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-            title="“创新杯”创新创业大赛"
-            description="挑战自我，创新突破，挑战杯有你更精彩!截止报名时间为3月25日，报名请加QQ群来参与吧！"
-            time="2022/07/10"
-            author="计软网安学院"
-          />
+          <Activities />
         </div>
       </div>
     </div>
