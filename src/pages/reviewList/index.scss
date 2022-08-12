@@ -1,17 +1,29 @@
 .manage {
-  overflow: hidden;
-  height: 92vh;
+  overflow: auto;
+  height: calc(100vh - 70px);
   background-color: #f0f0f0;
 }
 .manage-content {
   padding: 0 1.77vw 0 1.77vw;
-  .manage-content-table-title {
-    margin: 3vh 0 2.5vh 0;
+  .manage-content-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    margin: 3vh 0 1vh 0;
     line-height: 3.15vh;
     font-size: 3.15vh;
     color: rgba(0, 0, 0, 0.85);
-    text-shadow: 0 2px 4px;
-    font-weight: normal;
+    .manage-content-title {
+      padding-top: 5px;
+      text-shadow: 0 2px 4px;
+      font-weight: normal;
+      text-align: center;
+    }
+    .go-detail {
+      margin-bottom: 1.5vh;
+      margin-right: 1.5vh;
+    }
   }
   .manage-content-table-body {
     margin-left: 1.1vw;

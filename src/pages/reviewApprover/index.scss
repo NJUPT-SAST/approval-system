@@ -25,7 +25,6 @@
     }
   }
   .manage-content-main {
-    min-width: 100%;
     height: 76vh;
     background-color: #fff;
     .message {
@@ -49,19 +48,24 @@
           padding-left: 2px;
         }
       }
+      .content::-webkit-scrollbar {
+        width: 0;
+      }
       .content {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         overflow: auto;
-        min-width: calc(1562px - 160px);
+        width: 100%;
+        min-width: 73vw;
         .item {
           h3 {
-            margin-left: 40px;
+            margin-left: 2vw;
+            width: 60vh;
           }
         }
         .udata {
-          font-size: 14px;
+          font-size: 2vh;
           font-weight: 600;
           color: #242424;
           margin-top: 2.3vw;
@@ -71,21 +75,22 @@
             text-shadow: none;
           }
           span {
-            margin-right: 20px;
-            margin-left: 10px;
-            line-height: 36px;
+            margin-right: 1vw;
+            margin-left: 0.5vw;
+            line-height: 3.3vh;
             color: rgba($color: #000000, $alpha: 0.65);
           }
         }
         .ant-table-thead {
           .ant-table-cell {
-            height: 17px;
-            line-height: 18px;
-            padding: 10px 16px !important;
+            height: 1.7vh;
+            line-height: 1.7vh;
+            padding: 0.5vw 0.8vw !important;
           }
         }
       }
       .ant-table {
+        width: 60vw;
         border: none !important;
       }
       .ant-table-cell {
@@ -98,9 +103,9 @@
       }
       .ant-table-tbody > tr > td {
         border: none !important;
-        line-height: 18px;
-        padding: 10px 15px;
-        font-size: 18px;
+        line-height: 1.7vh;
+        padding: 0.5vw 0.7vw;
+        font-size: 0.9vw;
         color: #999;
       }
       .ant-table-tbody > tr > td:first-child {
@@ -120,18 +125,18 @@
       .inputBox {
         color: rgba(0, 0, 0, 0.85);
         margin-left: 18.2vw;
-        margin-bottom: 10px;
+        margin-bottom: 0.5vw;
         span {
           vertical-align: top;
-          font-size: 16px;
+          font-size: 0.8vw;
         }
       }
       .inputbox {
         overflow: auto;
         outline: none;
         padding: 5px;
-        font-size: 14px;
-        line-height: 22px;
+        font-size: 0.7vw;
+        line-height: 2vh;
         width: 30vw;
         resize: none;
         border-radius: 5px;

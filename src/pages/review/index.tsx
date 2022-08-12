@@ -3,9 +3,10 @@ import TopBar from '../../components/TopBar'
 import { Space, Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, useLocation } from 'react-router-dom'
+import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
 import './index.scss'
-import ReviewApprover from '../reviewApprover'
-import ReviewJudge from '../reviewJudge'
+import ReviewList from '../reviewList'
+import { parse } from 'node:path/win32'
 
 // 获取本地存储数据，主要是获取登陆人员身份
 const userState = localStorage.getItem('userState')
@@ -19,6 +20,12 @@ const role = () => {
       return '评审'
   }
 }
+
+// 获取评审和审批比赛的表单
+const judgeCompetitionList = getJudgeCompetitionList(1)
+const ScoreCompetitionList = getScoreCompetitionList(1)
+console.log(ScoreCompetitionList)
+
 // 限制表格数据类型
 interface DataType {
   id: number
@@ -33,40 +40,34 @@ const columns: ColumnsType<DataType> = [
   {
     title: '序号',
     dataIndex: 'id',
-    key: 'id',
   },
   {
     title: '比赛名称',
     dataIndex: 'name',
-    key: 'id',
   },
   {
     title: '待评审数',
     dataIndex: 'notreviewed',
-    key: 'id',
   },
   {
     title: '已评审数',
     dataIndex: 'reviewed',
-    key: 'id',
   },
   {
     title: '评审开始日期',
     dataIndex: 'start_date',
-    key: 'id',
   },
   {
     title: '评审截止日期',
     dataIndex: 'end_date',
-    key: 'id',
   },
   {
     title: '操作',
     render: () => (
       // render 返回一个组件
       <Space size="middle">
-        <Link to="/review/detail">
-          <Button className="count" type="primary" key="1">
+        <Link to="/review/list">
+          <Button className="count" type="primary">
             {role()}
           </Button>
         </Link>
@@ -200,7 +201,7 @@ function Review(props: { role: any }) {
   const { pathname } = useLocation()
   const role = props.role
   const table = role === 'judge' ? <JudgeReview /> : <ApproverReview />
-  const detail = role === 'judge' ? <ReviewJudge /> : <ReviewApprover />
+  const detail = <ReviewList role={undefined} />
   if (pathname === '/review') {
     return (
       <div className="manage">
@@ -209,12 +210,7 @@ function Review(props: { role: any }) {
       </div>
     )
   } else {
-    return (
-      <div className="manage">
-        <TopBar />
-        <div className="manage-content">{detail}</div>
-      </div>
-    )
+    return <div>{detail}</div>
   }
 }
 

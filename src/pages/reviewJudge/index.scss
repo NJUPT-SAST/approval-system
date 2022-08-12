@@ -20,7 +20,7 @@
       font-weight: normal;
       text-align: center;
     }
-    .submit{
+    .submit {
       margin-bottom: 1.5vh;
     }
   }
@@ -48,6 +48,9 @@
           font-feature-settings: 'tnum';
           padding-left: 2px;
         }
+      }
+      .content::-webkit-scrollbar {
+        width: 0;
       }
       .content {
         overflow: auto;

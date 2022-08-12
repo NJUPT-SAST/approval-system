@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Anchor, Button, Pagination, Radio } from 'antd'
 import type { RadioChangeEvent } from 'antd'
-import type { ColumnsType } from 'antd/es/table'
+// import type { ColumnsType } from 'antd/es/table'
 import './index.scss'
 
 const { Link } = Anchor
@@ -19,7 +19,6 @@ const ReviewApprover: React.FC = (props) => {
 
   // 单选框
   const [value, setValue] = useState(1)
-
   const onChange = (e: RadioChangeEvent) => {
     console.log('radio checked', e.target.value)
     setValue(e.target.value)
@@ -40,7 +39,11 @@ const ReviewApprover: React.FC = (props) => {
       <div className="manage-content-main">
         <div className="message">
           <div className="navigation">
-            <Anchor targetOffset={targetOffset}>
+            <Anchor
+              targetOffset={targetOffset}
+              onClick={(e) => e.preventDefault()}
+              // getContainer={() => document.querySelector('.message')}
+            >
               <Link href="#user-information" title="参赛者信息" />
               <Link href="#show-work" title="作品展示" />
             </Anchor>

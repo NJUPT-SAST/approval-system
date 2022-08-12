@@ -99,8 +99,9 @@ const ReviewJudge: React.FC = (props) => {
         <div className="message">
           <div className="navigation">
             <Anchor
+              // target={() => document.getElementById('manage-content-main')}
               targetOffset={targetOffset}
-              getContainer={() => document.querySelector('.navigation') as HTMLElement}
+              getContainer={() => document.querySelector('.manage-content-main') as HTMLElement}
             >
               <Link href="#team" title="导航" />
               <Link href="#user-information" title="参赛者信息" />
