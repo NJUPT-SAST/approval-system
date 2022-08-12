@@ -7,8 +7,8 @@ import './index.scss'
 /**
  * 顶部面包屑与返回上一页的小栏
  */
-function TopBar(props?: { breadcrumb?: string }) {
-  let processedExtraBreadcrumbItems = [<Fragment key="emptyElement"></Fragment>]
+function TopBar(props?: { activity?: string }) {
+  // let processedExtraBreadcrumbItems = [<Fragment key="emptyElement"></Fragment>]
   const handleGoBack = () => {
     window.history.back()
   }
@@ -16,47 +16,57 @@ function TopBar(props?: { breadcrumb?: string }) {
     '/activity': '活动广场',
     '/inbox': '收件箱',
     '/manage': '活动管理',
+    '/create': '创建活动',
     '/account': '我的帐号',
     '/review': '活动评审',
     '/review/detail': '挑战杯',
+    '/register': '活动报名',
+    '/notice': '发布公告',
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)
-  const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+  const extraBreadcrumbItems = pathSnippets.map((item, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
-    // console.log(pathSnippets.slice(0, index + 1))
-    return (
-      <Breadcrumb.Item key={url} className="breadCrumbItem">
-        <Link to={url}>{breadcrumbNameMap[url]}</Link>
-      </Breadcrumb.Item>
-    )
-  })
-  if (props?.breadcrumb !== undefined || props?.breadcrumb !== null) {
-    processedExtraBreadcrumbItems = extraBreadcrumbItems.slice(0, 1)
-    // console.log(extraBreadcrumbItems.slice(0,1))
-  }
-  const moreExtraBreadcrumbItems = () => {
-    if (props?.breadcrumb !== undefined) {
-      return [
+    // console.log(url)
+    if (!isNaN(Number(pathSnippets[index])) && props?.activity !== undefined) {
+      return (
         <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
-          <Link to="#title">{props.breadcrumb.toString()}</Link>
-        </Breadcrumb.Item>,
-      ]
+          <Link to={url}>{props.activity.toString()}</Link>
+        </Breadcrumb.Item>
+      )
     } else {
-      return [
-        <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
-          <Link to="#title">{null}</Link>
-        </Breadcrumb.Item>,
-      ]
+      return (
+        <Breadcrumb.Item key={url} className="breadCrumbItem">
+          <Link to={url}>{breadcrumbNameMap['/' + item]}</Link>
+        </Breadcrumb.Item>
+      )
     }
-  }
+  })
+  // if (props?.activity !== null) {
+  //   processedExtraBreadcrumbItems = extraBreadcrumbItems.slice(0, 1)
+  //   // console.log(extraBreadcrumbItems.slice(0,1))
+  // }
+  // const moreExtraBreadcrumbItems = () => {
+  //   if (props?.activity !== undefined) {
+  //     return [
+  //       <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
+  //         <Link to="#title">{props.activity.toString()}</Link>
+  //       </Breadcrumb.Item>,
+  //     ]
+  //   } else {
+  //     return [
+  //       <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
+  //         <Link to="#title">{null}</Link>
+  //       </Breadcrumb.Item>,
+  //     ]
+  //   }
+  // }
   const breadcrumbItems = [
     <Breadcrumb.Item key="home" className="breadCrumbItem">
       <Link to="/">主页</Link>
     </Breadcrumb.Item>,
-  ]
-    .concat(processedExtraBreadcrumbItems)
-    .concat(moreExtraBreadcrumbItems())
+  ].concat(extraBreadcrumbItems)
+  // .concat(moreExtraBreadcrumbItems())
   return (
     <div className="topBar">
       <Breadcrumb style={{ marginTop: '5px' }}>{breadcrumbItems}</Breadcrumb>

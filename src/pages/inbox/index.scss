@@ -94,14 +94,26 @@
       }
     }
   }
-  .message-read-or-not {
-    position: absolute;
-    border-radius: 50%;
-    height: 6px;
-    width: 6px;
-    margin: 7px;
-    color: red;
-    background-color: red;
-    font-size: 20px;
-  }
+  // .message-read-or-not {
+  //   position: absolute;
+  //   border-radius: 50%;
+  //   height: 6px;
+  //   width: 6px;
+  //   margin: 7px;
+  //   color: red;
+  //   background-color: red;
+  //   font-size: 20px;
+  // }
+}
+//这个样式在home界面也有用到，详见收件箱旁边的小红点
+//如果觉得烦可以调到上个括号的位置
+.message-read-or-not {
+  position: absolute;
+  border-radius: 50%;
+  height: 6px;
+  width: 6px;
+  margin: 7px;
+  color: red;
+  background-color: red;
+  font-size: 20px;
 }

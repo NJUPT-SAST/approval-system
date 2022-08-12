@@ -2,6 +2,7 @@
   "name": "approval-system",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://81.68.225.220:8080/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@craco/craco": "^6.4.3",
@@ -16,6 +17,7 @@
     "axios": "^0.27.2",
     "craco": "^0.0.3",
     "craco-less": "^2.0.0",
+    "form-render": "^1.13.11",
     "inquirer": "^8.2.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -24,6 +26,7 @@
     "recoil": "^0.7.4",
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
+    "storage-pocket": "^0.2.0",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4"
   },
