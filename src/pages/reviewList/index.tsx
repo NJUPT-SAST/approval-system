@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TopBar from '../../components/TopBar'
-import { Space, Button, Table } from 'antd'
+import { Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, useLocation } from 'react-router-dom'
 import './index.scss'
 import ReviewApprover from '../reviewApprover'
 import ReviewJudge from '../reviewJudge'
+// import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
 
 // 获取本地存储数据，主要是获取登陆人员身份
 const userState = localStorage.getItem('userState')
@@ -121,6 +122,10 @@ const data: DataType[] = [
 
 // 表格内容
 function ProgramList() {
+  const [current, setCurrent] = useState(1)
+  if (userState === 'judge') {
+    // const judgeCompetitionList = getJudgeCompetitionList(current).
+  }
   return (
     <div className="manage-content">
       <div className="manage-content-table">
@@ -134,7 +139,17 @@ function ProgramList() {
             </div>
           </div>
           <div className="manage-content-table-body">
-            <Table columns={columns} dataSource={data} pagination={{ pageSize: 9 }} />
+            <Table
+              columns={columns}
+              dataSource={data}
+              pagination={{
+                pageSize: 9,
+                onChange: (current) => {
+                  setCurrent(current)
+                  // console.log(current);
+                },
+              }}
+            />
           </div>
         </div>
       </div>
@@ -145,7 +160,6 @@ function ProgramList() {
 function ReviewList(props: { role: any }) {
   const { pathname } = useLocation()
   const role = props.role
-  console.log(role)
   const table = <ProgramList />
   const detail = role === 'judge' ? <ReviewJudge /> : <ReviewApprover />
   if (pathname === '/review/list') {
