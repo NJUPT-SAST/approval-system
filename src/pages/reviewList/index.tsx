@@ -10,6 +10,7 @@ import ReviewJudge from '../reviewJudge'
 
 // 获取本地存储数据，主要是获取登陆人员身份
 const userState = localStorage.getItem('userState')
+// 根据角色更换按钮中的内容
 const role = () => {
   switch (userState) {
     case 'judge':
