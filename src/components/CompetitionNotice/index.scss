@@ -1,5 +1,5 @@
 //最顶部横条的样式
-.notice-message-nav-unfold {
+.competition-notice-nav {
   position: relative;
   width: 100%;
   max-width: 1370px;
@@ -8,7 +8,7 @@
   padding-top: 4px;
   border-radius: 5px 5px 0px 0px;
   background-color: rgb(220, 220, 220);
-  .notice-message-display-switch-button {
+  .competition-notice-display-switch-button {
     position: absolute;
     right: 4px;
     width: 15px;
@@ -17,7 +17,7 @@
   }
 }
 //未折叠的 展示 信息的主体部分 的样式
-.notice-message-body-unfold {
+.competition-notice-body-unfold {
   width: 100%;
   color: rgba(0, 0, 0, 0.85);
   max-width: 1370px;
@@ -28,7 +28,7 @@
   border-radius: 0px 0px 5px 5px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   //公告 标题 的样式
-  .notice-message-header {
+  .competition-notice-header {
     font-size: 24px;
     height: 40px;
     margin: 0px;
@@ -36,7 +36,7 @@
     border-bottom: solid rgb(237, 237, 237) 1px;
   }
   //公告 内容 的样式
-  .notice-message-contents {
+  .competition-notice-content {
     color: rgba(0, 0, 0, 0.65);
     height: 160px;
     padding: 9px 0px 0px 27px;
@@ -45,20 +45,20 @@
     overflow-y: auto;
   }
   // 公告底部 发布情况 的样式
-  .notice-message-footer-post {
+  .competition-notice-footer-post {
     color: rgba(24, 144, 255, 1);
     line-height: 22px;
     font-size: 14px;
     padding: 8px 0px 0px 27px;
   }
   // 公告底部 按钮 的样式
-  .notice-message-footer-button {
+  .competition-notice-footer-button {
     float: right;
     margin-right: 17px;
   }
 }
 // 折叠状态下的 公告内容
-.notice-message-body-fold {
+.competition-notice-body-fold {
   width: 100%;
   font-family: HarmonyOS Sans SC;
   max-width: 1370px;
@@ -68,12 +68,12 @@
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   // 标题 的样式
-  .notice-message-header {
+  .competition-notice-header {
     font-size: 24px;
     color: rgba(0, 0, 0, 0.85);
     margin-left: 18px;
     // 发布状态 的样式
-    .notice-message-footer-post {
+    .competition-notice-footer-post {
       color: rgba(24, 144, 255, 1);
       line-height: 22px;
       font-size: 14px;
