@@ -27,7 +27,7 @@ const useGetActivities = (pageOpt: number, pageSizeOpt: number): any => {
   })
   useEffect(() => {
     getAllCompetitionList(pageOpt, pageSizeOpt).then((res) => {
-      console.log(res)
+      // console.log(res)
       setActivities(res.data.data)
     })
   }, [])
@@ -42,15 +42,21 @@ function Activity() {
     pageSize: 8,
   })
   const activities: activityInfo = useGetActivities(pageOpt.page, pageOpt.pageSize)
-  console.log(activities)
+  // console.log(activities)
   /**
    * 活动卡片
    * @param props  coverUrl: 封面图 | title: 比赛标题 | description: 比赛介绍 | time: 比赛时间 | author:  比赛发布者
    * @returns 包含以上信息的卡片
    */
-  const ActivityCard = (props: { coverUrl: string; title: string; description: string; time: string }) => {
+  const ActivityCard = (props: {
+    coverUrl: string
+    title: string
+    description: string
+    time: string
+    competitionId: number
+  }) => {
     const handleNavigateActivityDetail = () => {
-      navigate('/activity/10001#title')
+      navigate('/activity/' + props.competitionId + '#title')
     }
     return (
       <Card
@@ -224,6 +230,7 @@ function Activity() {
                 time={item.date}
                 description={item.intro}
                 key={item.id}
+                competitionId={item.id}
               />
             )
           })}
