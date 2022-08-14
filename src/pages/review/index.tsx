@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { Space, Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
@@ -19,7 +19,6 @@ const role = () => {
       return '评审'
   }
 }
-
 // 限制表格数据类型
 interface DataType {
   id: number
@@ -91,106 +90,27 @@ const data: DataType[] = [
     start_date: '2022年7月10日',
     end_date: '2022年7月20日',
   },
-  {
-    id: 2,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 3,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 4,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 5,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 6,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 7,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 8,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 9,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 10,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
-  {
-    id: 11,
-    name: 'yang',
-    notreviewed: 4,
-    reviewed: 2,
-    start_date: '2022年7月10日',
-    end_date: '2022年7月20日',
-  },
 ]
+
 // 身份为评审人员时表格内容
-function JudgeReview() {
+const JudgeReview: React.FC = () => {
   const [current, setCurrent] = useState(1)
   // const [activeIndex, setActiveIndex] = useState(0)
-  const scoreCompetitionList = getScoreCompetitionList(current)
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  // const [listdata, setData] = useState({ data: [{}] })
 
+  // 获取表格数据
+  useEffect(() => {
+    const fetchJudgeData = async () => {
+      const result = await getJudgeCompetitionList(current)
+    }
+  })
   return (
     <div className="manage-content">
       <div className="manage-content-table">
         <div>
           <h1 className="manage-content-table-title">活动评审</h1>
           <div className="manage-content-table-body">
-            <Table
+            <Table<DataType>
               columns={columns}
               dataSource={data}
               pagination={{
@@ -198,7 +118,6 @@ function JudgeReview() {
                 current: current,
                 onChange: (current) => {
                   setCurrent(current)
-                  // console.log(current);
                 },
               }}
             />
@@ -209,17 +128,21 @@ function JudgeReview() {
   )
 }
 // 身份为审批人员时表格内容
-function ApproverReview() {
+const ApproverReview: React.FC = () => {
   // current 当前页码， activeIndex 点击的行的索引
   const [current, setCurrent] = useState(1)
   // const [activeIndex, setActiveIndex] = useState(0)
-  const judgeCompetitionList = getJudgeCompetitionList(current)
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  const [data, setData] = useState()
+  const judgeCompetitionList = () => {
+    getJudgeCompetitionList(current)
+      .then((res) => {
+        console.log(res)
+        setData(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
   return (
     <div className="manage-content">
       <div className="manage-content-table">
@@ -248,10 +171,6 @@ function ApproverReview() {
 function Review(props: { role: any }) {
   const { pathname } = useLocation()
   const role = props.role
-  const state = {
-    current: 1,
-  }
-  console.log(role)
   const table = role === 'judge' ? <JudgeReview /> : <ApproverReview />
   const detail = <ReviewList role={undefined} />
   if (pathname === '/review') {

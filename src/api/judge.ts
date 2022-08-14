@@ -30,6 +30,9 @@ export const getJudgeCompetitionList = (page: number) => {
   return axios({
     method: 'get',
     url: '/review/competition-list',
+    headers: {
+      Token: '',
+    },
     data: data,
   })
 }
@@ -77,6 +80,9 @@ export const getScoreCompetitionList = (page: number) => {
   return axios({
     method: 'get',
     url: '/score/competition-list',
+    headers: {
+      Token: '',
+    },
     data: data,
   })
 }
