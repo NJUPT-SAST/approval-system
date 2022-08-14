@@ -2,6 +2,7 @@ import { Button } from 'antd'
 import React, { useState, useEffect } from 'react'
 import TopBar from '../../components/TopBar'
 import { message } from '../../test/inbox-message'
+import CompetitionNotice from '../../components/CompetitionNotice'
 import InboxMessage from './components/inboxMessage'
 import { userInboxPointState } from '../home'
 import { useSetRecoilState } from 'recoil'
@@ -226,6 +227,12 @@ const Inbox: React.FC = () => {
             </Button>
           </div>
         </div>
+        <CompetitionNotice
+          role={0}
+          title="比赛通知"
+          content="这里是测试内容"
+          time="Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)"
+        />
         {
           //展示数据用
           message.map((value, index) => (
