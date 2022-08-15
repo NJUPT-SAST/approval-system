@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Layout } from 'antd'
 import React, { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm'
+import UserProfile from './components/userProfile'
 import userStateStore from '../../store/userState'
 import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import menuMap from './components/menu'
@@ -127,7 +128,7 @@ const Home = () => {
           {userState === 'offline' ? (
             <LoginForm finishCb={onFinish} setCodeId={getValidateId}></LoginForm>
           ) : (
-            <p>已经登陆</p>
+            <UserProfile code={'B21000001'} name={'王小明'} logout={logout} />
           )}
           <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
         </Sider>

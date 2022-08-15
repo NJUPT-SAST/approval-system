@@ -46,19 +46,40 @@ function LoginForm(props: loginFormProp) {
   return (
     <Form name="normal_login" className="login-form" onFinish={props.finishCb}>
       <div className="avatar"></div>
-      <Form.Item name="username" rules={[{ required: true, message: 'Please input your Username!' }]}>
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+      <Form.Item
+        className="login-form-body"
+        name="username"
+        rules={[{ required: true, message: '请输入正确的用户名！' }]}
+      >
+        <Input
+          className="login-form-input"
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Username"
+        />
       </Form.Item>
-      <Form.Item name="password" rules={[{ required: false, message: 'Please input your Password!' }]}>
-        <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
+      <Form.Item
+        className="login-form-body"
+        name="password"
+        rules={[{ required: false, message: '请输入正确的密码！' }]}
+      >
+        <Input
+          className="login-form-input"
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Password"
+        />
       </Form.Item>
       <div className="validate-part-body">
         <Form.Item
           name="validate"
-          className="validate-input"
-          rules={[{ required: true, message: 'Please input the validate code!' }]}
+          className="validate-input login-form-body"
+          rules={[{ required: true, message: '验证码错误！' }]}
         >
-          <Input prefix={<SafetyOutlined className="site-form-item-icon" />} placeholder="Validate code" />
+          <Input
+            className="login-form-input validate"
+            prefix={<SafetyOutlined className="site-form-item-icon" />}
+            placeholder="Validate code"
+          />
         </Form.Item>
         <img src={validateCodeUrl} alt="validate code" className="validate-img" />
       </div>
