@@ -2,6 +2,13 @@ import axios from 'axios'
 import { competitionInfoType } from '../type/apiTypes'
 import qs from 'qs'
 
+axios.interceptors.request.use((config: any) => {
+  if (localStorage.getItem('token') !== null) {
+    config.headers['Token'] = localStorage.getItem('token')
+  }
+  return config
+})
+
 //经询问 比赛 与接口文档中的 活动 是同一个东西
 //故在该文件内 比赛 字段 指的是接口文档中的 活动 字段
 
