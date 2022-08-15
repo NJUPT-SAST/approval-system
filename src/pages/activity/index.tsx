@@ -1,9 +1,9 @@
-import { RollbackOutlined, SearchOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Card, Empty, Form, Modal, Pagination, Radio, Select } from 'antd'
+import { LoadingOutlined, RollbackOutlined, SearchOutlined } from '@ant-design/icons'
+import { Breadcrumb, Button, Card, Empty, Form, Modal, Pagination, Radio, Result, Select, Spin } from 'antd'
 import Input from 'antd/lib/input'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { getAllCompetitionList } from '../../api/user'
+import { getAllCompetitionList, searchCompetition } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -18,30 +18,43 @@ interface activityInfo {
   total: number
 }
 
-const useGetActivities = (pageOpt: number, pageSizeOpt: number): any => {
+function Activity() {
   const [activities, setActivities] = useState({
     pageNum: 0,
     pageSize: 0,
     records: [],
-    total: 0,
+    total: 1,
   })
-  useEffect(() => {
-    getAllCompetitionList(pageOpt, pageSizeOpt).then((res) => {
-      // console.log(res)
-      setActivities(res.data.data)
-    })
-  }, [])
-  return activities
-}
-
-function Activity() {
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
+  const ifSearch = useRef(false)
   const navigate = useNavigate()
   const [tagModelVisible, setTagModelVisible] = useState(false)
   const [pageOpt, setPageOpt] = useState({
     page: 1,
     pageSize: 8,
   })
-  const activities: activityInfo = useGetActivities(pageOpt.page, pageOpt.pageSize)
+  useEffect(() => {
+    setIsLoading(true)
+    if (ifSearch.current) {
+      searchCompetition(searchKeyword, pageOpt.page, pageOpt.pageSize).then((res) => {
+        console.log(res)
+        setActivities(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
+      })
+    } else {
+      getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
+        // console.log(res)
+        setActivities(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
+      })
+    }
+  }, [pageOpt])
   // console.log(activities)
   /**
    * 活动卡片
@@ -76,18 +89,48 @@ function Activity() {
   /**
    * 点击搜索的函数
    */
-  const onSearch = () => {
-    console.log('searching')
+  const onSearch = (value: string) => {
+    // console.log(typeof(value))
+    setPageOpt((prev) => {
+      return {
+        page: 1,
+        pageSize: prev.pageSize,
+      }
+    })
+    searchCompetition(searchKeyword, 1, pageOpt.pageSize).then((res) => {
+      console.log(res)
+      setActivities(res.data.data)
+    })
+  }
+
+  /**
+   * 判断此时用户是否在搜索
+   * @param value 搜索框的值
+   */
+  const ifSearching = (value: any) => {
+    console.log(value)
+    if (value === '') {
+      ifSearch.current = false
+    } else {
+      ifSearch.current = true
+      setSearchKeyword(value)
+    }
   }
 
   return (
     <div className="activity">
       <TopBar />
       <div className="search-body">
-        <Search placeholder="搜索比赛活动或关键词" className="search-bar" onSearch={onSearch} enterButton={`搜索`} />
+        <Search
+          placeholder="搜索比赛活动或关键词"
+          className="search-bar"
+          onSearch={(value) => onSearch(value)}
+          onChange={(value) => ifSearching(value.target.value)}
+          enterButton={`搜索`}
+        />
       </div>
       <div className="page-body">
-        <div className="filter-body">
+        {/* <div className="filter-body">
           <Form name="filter-form">
             <div className="tag-filter-body">
               <div className="filter-cover-item">
@@ -220,32 +263,43 @@ function Activity() {
               </Form.Item>
             </div>
           </Form>
-        </div>
+        </div> */}
         <div className="activities-body">
-          {activities.records.map((item: any, index: number) => {
-            return (
-              <ActivityCard
-                coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-                title={item.name}
-                time={item.date}
-                description={item.intro}
-                key={item.id}
-                competitionId={item.id}
-              />
-            )
-          })}
-          <Pagination
-            showSizeChanger
-            defaultCurrent={1}
-            defaultPageSize={8}
-            pageSizeOptions={[8, 12, 24, 48, 96]}
-            total={activities.total}
-            style={{ margin: '0 auto' }}
-            onChange={(page, pageSize) => {
-              setPageOpt({ page: page, pageSize: pageSize })
-            }}
-          />
+          {isLoading ? (
+            <Spin tip="^_^数据加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
+          ) : activities.records.length === 0 ? (
+            <Result
+              style={{ margin: '0 auto' }}
+              status="404"
+              title="找不到相关比赛"
+              subTitle="似乎找不到你想要的比赛，换个关键词再试一次吧！"
+            />
+          ) : (
+            activities.records.map((item: any, index: number) => {
+              return (
+                <ActivityCard
+                  coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
+                  title={item.name}
+                  time={item.date}
+                  description={item.intro}
+                  key={item.id}
+                  competitionId={item.id}
+                />
+              )
+            })
+          )}
         </div>
+        <Pagination
+          showSizeChanger
+          defaultCurrent={1}
+          defaultPageSize={8}
+          pageSizeOptions={[8, 12, 24, 48, 96]}
+          total={activities.total}
+          style={{ margin: '0 auto', marginTop: '40px' }}
+          onChange={(page, pageSize) => {
+            setPageOpt({ page: page, pageSize: pageSize })
+          }}
+        />
       </div>
     </div>
   )
