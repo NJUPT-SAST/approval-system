@@ -1,5 +1,5 @@
-import { RollbackOutlined, SearchOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Card, Empty, Form, Modal, Pagination, Radio, Select } from 'antd'
+import { LoadingOutlined, RollbackOutlined, SearchOutlined } from '@ant-design/icons'
+import { Breadcrumb, Button, Card, Empty, Form, Modal, Pagination, Radio, Result, Select, Spin } from 'antd'
 import Input from 'antd/lib/input'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -26,6 +26,8 @@ function Activity() {
     total: 1,
   })
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   const ifSearch = useRef(false)
   const navigate = useNavigate()
   const [tagModelVisible, setTagModelVisible] = useState(false)
@@ -34,15 +36,22 @@ function Activity() {
     pageSize: 8,
   })
   useEffect(() => {
+    setIsLoading(true)
     if (ifSearch.current) {
       searchCompetition(searchKeyword, pageOpt.page, pageOpt.pageSize).then((res) => {
         console.log(res)
         setActivities(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
       })
     } else {
       getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
         // console.log(res)
         setActivities(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
       })
     }
   }, [pageOpt])
@@ -256,18 +265,29 @@ function Activity() {
           </Form>
         </div> */}
         <div className="activities-body">
-          {activities.records.map((item: any, index: number) => {
-            return (
-              <ActivityCard
-                coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
-                title={item.name}
-                time={item.date}
-                description={item.intro}
-                key={item.id}
-                competitionId={item.id}
-              />
-            )
-          })}
+          {isLoading ? (
+            <Spin tip="^_^数据加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
+          ) : activities.records.length === 0 ? (
+            <Result
+              style={{ margin: '0 auto' }}
+              status="404"
+              title="找不到相关比赛"
+              subTitle="似乎找不到你想要的比赛，换个关键词再试一次吧！"
+            />
+          ) : (
+            activities.records.map((item: any, index: number) => {
+              return (
+                <ActivityCard
+                  coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
+                  title={item.name}
+                  time={item.date}
+                  description={item.intro}
+                  key={item.id}
+                  competitionId={item.id}
+                />
+              )
+            })
+          )}
         </div>
         <Pagination
           showSizeChanger
