@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { getCompetitionNoticeList } from '../../api/public'
 import { getCompetitionInfo } from '../../api/user'
+import CompetitionNotice from '../../components/CompetitionNotice'
 import TopBar from '../../components/TopBar'
 import { competitionInfoType } from '../../type/apiTypes'
 import './index.scss'
@@ -22,6 +23,11 @@ interface competitionDetailType {
   submitEnd: string
 }
 
+/**
+ * 获取比赛的详细信息
+ * @param id 比赛的id
+ * @returns 返回比赛详细信息的state
+ */
 const useGetCompetitionDetail = (id: number) => {
   const [competitionDetail, setCompetitionDetail] = useState<competitionDetailType>({
     introduce: '载入中',
@@ -43,11 +49,20 @@ const useGetCompetitionDetail = (id: number) => {
   return competitionDetail
 }
 
+/**
+ *
+ * @param id 比赛的id
+ * @returns 返回比赛比赛通知公告的state
+ */
 const useGetCompetitionNotice = (id: number) => {
-  const [competitionNoticeList, setCompetitionNoticeList] = useState()
-  getCompetitionNoticeList(id).then((res) => {
-    console.log(res)
-  })
+  const [competitionNoticeList, setCompetitionNoticeList] = useState([])
+  useEffect(() => {
+    getCompetitionNoticeList(id).then((res) => {
+      // console.log(res)
+      setCompetitionNoticeList(res.data.data)
+    })
+  }, [])
+  return competitionNoticeList
 }
 
 function ActivityDetail() {
@@ -56,8 +71,9 @@ function ActivityDetail() {
   const navigate = useNavigate()
   const { id } = useParams()
   const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
-  console.log(competitionDetail)
-  useGetCompetitionNotice(Number(id))
+  // console.log(competitionDetail)
+  const competitionNotice = useGetCompetitionNotice(Number(id))
+  console.log(competitionNotice)
 
   /**
    * 调用函数根据不同的角色信息获取不同的按钮显示文字
@@ -78,6 +94,25 @@ function ActivityDetail() {
     }
   }
 
+  /**
+   * 调用函数将用户角色信息转换为对应编号
+   * @returns 角色相应编号
+   */
+  const userStateToNumber = () => {
+    switch (userState) {
+      case 'admin':
+        return 3
+      case 'user':
+        return 0
+      case 'judge':
+        return 1
+      case 'approver':
+        return 2
+      default:
+        return 0
+    }
+  }
+
   const handleButtonAction = () => {
     if (userState === 'user') {
       navigate('/activity/' + id + '/register')
@@ -87,15 +122,6 @@ function ActivityDetail() {
       navigate('/activity/' + id + '/manage')
     }
   }
-
-  //notice数据
-  const noticeData = [
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-  ]
 
   useEffect(() => {
     // 计算锚点偏移位置并写入state
@@ -133,17 +159,15 @@ function ActivityDetail() {
                 <div className="notice" id="notice">
                   <div className="notice-title">消息/公告</div>
                   <div className="notice-table">
-                    <List
-                      bordered
-                      dataSource={noticeData}
-                      renderItem={(item) => (
-                        <>
-                          <List.Item>
-                            {item.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{item.content}
-                          </List.Item>
-                        </>
-                      )}
-                    />
+                    {competitionNotice.map((item: any, index) => (
+                      <CompetitionNotice
+                        key={index}
+                        role={userStateToNumber()}
+                        title={item.title}
+                        time={item.time}
+                        content={item.content}
+                      />
+                    ))}
                   </div>
                 </div>
                 <div className="arrangement" id="arrangement">
