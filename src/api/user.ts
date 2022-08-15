@@ -30,7 +30,7 @@ export const getAllCompetitionList = (cur: number, limit: number) => {
 export const searchCompetition = (key: string, cur: number, limit: number) => {
   return axios({
     method: 'GET',
-    url: '/user/com/list?cur=' + cur.toString() + '&limit=' + limit.toString() + '&key=' + key,
+    url: '/user/com/search?cur=' + cur.toString() + '&limit=' + limit.toString() + '&key=' + key,
   })
 }
 
