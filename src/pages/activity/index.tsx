@@ -1,9 +1,9 @@
 import { RollbackOutlined, SearchOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Empty, Form, Modal, Pagination, Radio, Select } from 'antd'
 import Input from 'antd/lib/input'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { getAllCompetitionList } from '../../api/user'
+import { getAllCompetitionList, searchCompetition } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -18,30 +18,34 @@ interface activityInfo {
   total: number
 }
 
-const useGetActivities = (pageOpt: number, pageSizeOpt: number): any => {
+function Activity() {
   const [activities, setActivities] = useState({
     pageNum: 0,
     pageSize: 0,
     records: [],
     total: 0,
   })
-  useEffect(() => {
-    getAllCompetitionList(pageOpt, pageSizeOpt).then((res) => {
-      // console.log(res)
-      setActivities(res.data.data)
-    })
-  }, [])
-  return activities
-}
-
-function Activity() {
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const ifSearch = useRef(false)
   const navigate = useNavigate()
   const [tagModelVisible, setTagModelVisible] = useState(false)
   const [pageOpt, setPageOpt] = useState({
     page: 1,
     pageSize: 8,
   })
-  const activities: activityInfo = useGetActivities(pageOpt.page, pageOpt.pageSize)
+  useEffect(() => {
+    if (ifSearch.current) {
+      searchCompetition(searchKeyword, 1, pageOpt.pageSize).then((res) => {
+        console.log(res)
+        setActivities(res.data.data)
+      })
+    } else {
+      getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
+        // console.log(res)
+        setActivities(res.data.data)
+      })
+    }
+  }, [pageOpt])
   // console.log(activities)
   /**
    * 活动卡片
@@ -76,18 +80,48 @@ function Activity() {
   /**
    * 点击搜索的函数
    */
-  const onSearch = () => {
-    console.log('searching')
+  const onSearch = (value: string) => {
+    // console.log(typeof(value))
+    setPageOpt((prev) => {
+      return {
+        page: 1,
+        pageSize: prev.pageSize,
+      }
+    })
+    searchCompetition(searchKeyword, 1, pageOpt.pageSize).then((res) => {
+      console.log(res)
+      setActivities(res.data.data)
+    })
+  }
+
+  /**
+   * 判断此时用户是否在搜索
+   * @param value 搜索框的值
+   */
+  const ifSearching = (value: any) => {
+    console.log(value)
+    if (value === '') {
+      ifSearch.current = false
+    } else {
+      ifSearch.current = true
+      setSearchKeyword(value)
+    }
   }
 
   return (
     <div className="activity">
       <TopBar />
       <div className="search-body">
-        <Search placeholder="搜索比赛活动或关键词" className="search-bar" onSearch={onSearch} enterButton={`搜索`} />
+        <Search
+          placeholder="搜索比赛活动或关键词"
+          className="search-bar"
+          onSearch={(value) => onSearch(value)}
+          onChange={(value) => ifSearching(value.target.value)}
+          enterButton={`搜索`}
+        />
       </div>
       <div className="page-body">
-        <div className="filter-body">
+        {/* <div className="filter-body">
           <Form name="filter-form">
             <div className="tag-filter-body">
               <div className="filter-cover-item">
@@ -220,7 +254,7 @@ function Activity() {
               </Form.Item>
             </div>
           </Form>
-        </div>
+        </div> */}
         <div className="activities-body">
           {activities.records.map((item: any, index: number) => {
             return (
@@ -236,7 +270,7 @@ function Activity() {
           })}
           <Pagination
             showSizeChanger
-            defaultCurrent={1}
+            current={1}
             defaultPageSize={8}
             pageSizeOptions={[8, 12, 24, 48, 96]}
             total={activities.total}
