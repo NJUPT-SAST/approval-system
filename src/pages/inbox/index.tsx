@@ -4,7 +4,7 @@ import TopBar from '../../components/TopBar'
 import { message } from '../../test/inbox-message'
 import CompetitionNotice from '../../components/CompetitionNotice'
 import InboxMessage from './components/inboxMessage'
-import { userInboxPointState } from '../home'
+import { userInboxPointState } from '../../store/userInboxState'
 import { useSetRecoilState } from 'recoil'
 import './index.scss'
 
