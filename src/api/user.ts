@@ -1,5 +1,12 @@
 import axios from 'axios'
 
+axios.interceptors.request.use((config: any) => {
+  if (localStorage.getItem('token') !== null) {
+    config.headers['Token'] = localStorage.getItem('token')
+  }
+  return config
+})
+
 /**
  * 获取所有比赛列表
  * @param cur 当前页数
