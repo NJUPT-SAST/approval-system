@@ -23,7 +23,7 @@ function Activity() {
     pageNum: 0,
     pageSize: 0,
     records: [],
-    total: 0,
+    total: 1,
   })
   const [searchKeyword, setSearchKeyword] = useState('')
   const ifSearch = useRef(false)
@@ -268,18 +268,18 @@ function Activity() {
               />
             )
           })}
-          <Pagination
-            showSizeChanger
-            current={1}
-            defaultPageSize={8}
-            pageSizeOptions={[8, 12, 24, 48, 96]}
-            total={activities.total}
-            style={{ margin: '0 auto' }}
-            onChange={(page, pageSize) => {
-              setPageOpt({ page: page, pageSize: pageSize })
-            }}
-          />
         </div>
+        <Pagination
+          showSizeChanger
+          defaultCurrent={1}
+          defaultPageSize={8}
+          pageSizeOptions={[8, 12, 24, 48, 96]}
+          total={activities.total}
+          style={{ margin: '0 auto', marginTop: '40px' }}
+          onChange={(page, pageSize) => {
+            setPageOpt({ page: page, pageSize: pageSize })
+          }}
+        />
       </div>
     </div>
   )
