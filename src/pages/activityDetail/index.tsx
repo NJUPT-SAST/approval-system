@@ -1,4 +1,5 @@
-import { Anchor, Button, List, Timeline } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Anchor, Button, Empty, List, Skeleton, Timeline } from 'antd'
 import Item from 'antd/lib/list/Item'
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -23,57 +24,63 @@ interface competitionDetailType {
   submitEnd: string
 }
 
-/**
- * 获取比赛的详细信息
- * @param id 比赛的id
- * @returns 返回比赛详细信息的state
- */
-const useGetCompetitionDetail = (id: number) => {
-  const [competitionDetail, setCompetitionDetail] = useState<competitionDetailType>({
-    introduce: '载入中',
-    name: '载入中',
-    regBegin: '载入中',
-    regEnd: '载入中',
-    reviewBegin: '载入中',
-    reviewEnd: '载入中',
-    status: 0,
-    submitBegin: '载入中',
-    submitEnd: '载入中',
-  })
-  useEffect(() => {
-    getCompetitionInfo(Number(id)).then((res) => {
-      // console.log(res)
-      setCompetitionDetail(res.data.data)
-    })
-  }, [])
-  return competitionDetail
-}
-
-/**
- *
- * @param id 比赛的id
- * @returns 返回比赛比赛通知公告的state
- */
-const useGetCompetitionNotice = (id: number) => {
-  const [competitionNoticeList, setCompetitionNoticeList] = useState([])
-  useEffect(() => {
-    getCompetitionNoticeList(id).then((res) => {
-      // console.log(res)
-      setCompetitionNoticeList(res.data.data)
-    })
-  }, [])
-  return competitionNoticeList
-}
-
 function ActivityDetail() {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   const userState = localStorage.getItem('userState')
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const { id } = useParams()
-  const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
   // console.log(competitionDetail)
-  const competitionNotice = useGetCompetitionNotice(Number(id))
-  console.log(competitionNotice)
+
+  /**
+   * 获取比赛的详细信息
+   * @param id 比赛的id
+   * @returns 返回比赛详细信息的state
+   */
+  const useGetCompetitionDetail = (id: number) => {
+    const [competitionDetail, setCompetitionDetail] = useState<competitionDetailType>({
+      introduce: '载入中',
+      name: '载入中',
+      regBegin: '载入中',
+      regEnd: '载入中',
+      reviewBegin: '载入中',
+      reviewEnd: '载入中',
+      status: 0,
+      submitBegin: '载入中',
+      submitEnd: '载入中',
+    })
+    useEffect(() => {
+      setIsLoading(true)
+      getCompetitionInfo(Number(id)).then((res) => {
+        // console.log(res)
+        setCompetitionDetail(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
+      })
+    }, [])
+    return competitionDetail
+  }
+
+  /**
+   *
+   * @param id 比赛的id
+   * @returns 返回比赛比赛通知公告的state
+   */
+  const useGetCompetitionNotice = (id: number) => {
+    const [competitionNoticeList, setCompetitionNoticeList] = useState([])
+    useEffect(() => {
+      setIsLoading(true)
+      getCompetitionNoticeList(id).then((res) => {
+        // console.log(res)
+        setCompetitionNoticeList(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
+      })
+    }, [])
+    return competitionNoticeList
+  }
 
   /**
    * 调用函数根据不同的角色信息获取不同的按钮显示文字
@@ -128,6 +135,10 @@ function ActivityDetail() {
     setTargetOffset(window.innerHeight / 2)
   }, [])
 
+  const competitionNotice = useGetCompetitionNotice(Number(id))
+  console.log(competitionNotice)
+  const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
+
   return (
     <div>
       <TopBar activity={competitionDetail.name} />
@@ -145,43 +156,56 @@ function ActivityDetail() {
             </div>
             <div className="activity-content">
               <div className="title-section" id="title">
-                <div className="title">{competitionDetail.name}</div>
+                <Skeleton active loading={isLoading} paragraph={false} style={{ width: '400px' }}>
+                  <div className="title">{competitionDetail.name}</div>
+                </Skeleton>
                 <div className="action-button">
                   <Button type="primary" onClick={handleButtonAction}>
                     {buttonContent()}
                   </Button>
                 </div>
               </div>
-              <div className="description" id="description">
-                {competitionDetail.introduce}
-              </div>
+              <Skeleton active loading={isLoading} title={false}>
+                <div className="description" id="description">
+                  {competitionDetail.introduce}
+                </div>
+              </Skeleton>
               <div className="announcement-section">
                 <div className="notice" id="notice">
                   <div className="notice-title">消息/公告</div>
-                  <div className="notice-table">
-                    {competitionNotice.map((item: any, index) => (
-                      <CompetitionNotice
-                        key={index}
-                        role={userStateToNumber()}
-                        title={item.title}
-                        time={item.time}
-                        content={item.content}
-                      />
-                    ))}
-                  </div>
+                  <Skeleton active loading={isLoading}>
+                    <div className="notice-table">
+                      {competitionNotice.length === 0 ? (
+                        <Empty className="empty" description="暂时没有公告" />
+                      ) : (
+                        competitionNotice.map((item: any, index) => (
+                          <CompetitionNotice
+                            key={index}
+                            role={userStateToNumber()}
+                            title={item.title}
+                            time={item.time}
+                            content={item.content}
+                          />
+                        ))
+                      )}
+                    </div>
+                  </Skeleton>
+                  <Skeleton active loading={isLoading}></Skeleton>
                 </div>
                 <div className="arrangement" id="arrangement">
                   <div className="arrangement-title">时间安排</div>
-                  <div className="arrangement-content">
-                    <Timeline>
-                      {/* <Timeline.Item>活动发布时间 {competitionDetail.regBegin}</Timeline.Item> */}
-                      <Timeline.Item>报名开始时间 {competitionDetail.regBegin}</Timeline.Item>
-                      <Timeline.Item>报名截止时间 {competitionDetail.regEnd}</Timeline.Item>
-                      <Timeline.Item>评审开始时间 {competitionDetail.reviewBegin}</Timeline.Item>
-                      <Timeline.Item>评审结束时间 {competitionDetail.reviewEnd}</Timeline.Item>
-                      {/* <Timeline.Item>活动结束时间 {competitionDetail.reviewEnd}</Timeline.Item> */}
-                    </Timeline>
-                  </div>
+                  <Skeleton active loading={isLoading} title={false} style={{ width: '217px' }}>
+                    <div className="arrangement-content">
+                      <Timeline>
+                        {/* <Timeline.Item>活动发布时间 {competitionDetail.regBegin}</Timeline.Item> */}
+                        <Timeline.Item>报名开始时间 {competitionDetail.regBegin}</Timeline.Item>
+                        <Timeline.Item>报名截止时间 {competitionDetail.regEnd}</Timeline.Item>
+                        <Timeline.Item>评审开始时间 {competitionDetail.reviewBegin}</Timeline.Item>
+                        <Timeline.Item>评审结束时间 {competitionDetail.reviewEnd}</Timeline.Item>
+                        {/* <Timeline.Item>活动结束时间 {competitionDetail.reviewEnd}</Timeline.Item> */}
+                      </Timeline>
+                    </div>
+                  </Skeleton>
                 </div>
               </div>
             </div>
