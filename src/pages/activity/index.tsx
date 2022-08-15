@@ -35,7 +35,7 @@ function Activity() {
   })
   useEffect(() => {
     if (ifSearch.current) {
-      searchCompetition(searchKeyword, 1, pageOpt.pageSize).then((res) => {
+      searchCompetition(searchKeyword, pageOpt.page, pageOpt.pageSize).then((res) => {
         console.log(res)
         setActivities(res.data.data)
       })
