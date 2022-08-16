@@ -43,15 +43,15 @@ function Activity() {
         setActivities(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
-        }, 500)
+        }, 100)
       })
     } else {
       getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
-        // console.log(res)
+        console.log(res)
         setActivities(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
-        }, 500)
+        }, 100)
       })
     }
   }, [pageOpt])
@@ -278,7 +278,7 @@ function Activity() {
             activities.records.map((item: any, index: number) => {
               return (
                 <ActivityCard
-                  coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
+                  coverUrl={item.cover}
                   title={item.name}
                   time={item.date}
                   description={item.intro}
