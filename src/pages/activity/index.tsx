@@ -30,11 +30,13 @@ function Activity() {
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   const ifSearch = useRef(false)
   const navigate = useNavigate()
-  const [tagModelVisible, setTagModelVisible] = useState(false)
+  // const [tagModelVisible, setTagModelVisible] = useState(false)
   const [pageOpt, setPageOpt] = useState({
     page: 1,
     pageSize: 8,
   })
+
+  //页面初始化时候加载信息
   useEffect(() => {
     setIsLoading(true)
     if (ifSearch.current) {
@@ -43,19 +45,21 @@ function Activity() {
         setActivities(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
-        }, 500)
+        }, 100)
       })
     } else {
       getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
-        // console.log(res)
+        console.log(res)
         setActivities(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
-        }, 500)
+        }, 100)
       })
     }
   }, [pageOpt])
+
   // console.log(activities)
+
   /**
    * 活动卡片
    * @param props  coverUrl: 封面图 | title: 比赛标题 | description: 比赛介绍 | time: 比赛时间 | author:  比赛发布者
@@ -75,7 +79,7 @@ function Activity() {
       <Card
         hoverable
         className="activity-card"
-        cover={<img alt="activity cover" src={props.coverUrl} height="180px" />}
+        cover={<img alt="activity cover" src={props.coverUrl} height="180px" style={{ objectFit: 'cover' }} />}
         onClick={handleNavigateActivityDetail}
       >
         <Meta title={props.title} description={props.description} className="activity-content" />
@@ -278,7 +282,7 @@ function Activity() {
             activities.records.map((item: any, index: number) => {
               return (
                 <ActivityCard
-                  coverUrl="https://img.js.design/assets/smartFill/img432164da758808.jpg"
+                  coverUrl={item.cover}
                   title={item.name}
                   time={item.date}
                   description={item.intro}

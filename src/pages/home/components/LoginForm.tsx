@@ -1,14 +1,20 @@
 import { LockOutlined, SafetyOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Divider, Form, Input } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Checkbox, Divider, Form, Input, InputRef } from 'antd'
+import React, { createRef, Ref, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { getValidateCode } from '../../../api/public'
 
 interface loginFormProp {
   finishCb: (values: any) => void
   setCodeId: (validateCodeId: string) => void
+  getValidateCode: number
 }
-
-const useValidateCode = () => {
+/**
+ * 刷新验证码的hook
+ * @param flag 本地的验证码刷新触发器
+ * @param homeFlag 来自home页面的验证码触发器
+ * @returns 验证码图片和验证码id
+ */
+const useValidateCode = (flag: any, homeFlag: any) => {
   const [validateImgData, setValidateImgData] = useState<Blob>()
   const [validateCodeId, setValidateCodeId] = useState('')
   useEffect(() => {
@@ -16,7 +22,7 @@ const useValidateCode = () => {
       setValidateImgData(res.data)
       setValidateCodeId(res.headers.captcha)
     })
-  }, [])
+  }, [flag, homeFlag])
   return [validateImgData, validateCodeId]
 }
 
@@ -35,7 +41,25 @@ const BlobConvertBase64 = (imgData: any) => {
 }
 
 function LoginForm(props: loginFormProp) {
-  const [validateCode, codeUUID] = useValidateCode()
+  const [refreshValidateCode, setFreshValidateCode] = useState(1)
+  const [validateValue, setValidateValue] = useState('')
+  const [validateCode, codeUUID] = useValidateCode(refreshValidateCode, props.getValidateCode)
+  const clearRef = useRef(null)
+
+  //触发刷新验证码
+  const refreshCode = () => {
+    setFreshValidateCode((prev) => {
+      return prev + 1
+    })
+  }
+
+  //本来这个位置是想每次验证码刷新都会清空输入框，但是暂时没想到办法实现
+  useEffect(() => {
+    // console.log(typeof(clearRef.current))
+    setValidateValue('')
+  }, [refreshValidateCode, props.getValidateCode])
+
+  //将验证码转换成本地链接给img读取
   let validateCodeUrl
   if (validateCode !== undefined && typeof validateCode !== 'string') {
     validateCodeUrl = window.URL.createObjectURL(validateCode)
@@ -43,6 +67,7 @@ function LoginForm(props: loginFormProp) {
   if (typeof codeUUID === 'string') {
     props.setCodeId(codeUUID)
   }
+
   return (
     <Form name="normal_login" className="login-form" onFinish={props.finishCb}>
       <div className="avatar"></div>
@@ -77,15 +102,19 @@ function LoginForm(props: loginFormProp) {
         >
           <Input
             className="login-form-input validate"
+            id="validate"
             prefix={<SafetyOutlined className="site-form-item-icon" />}
             placeholder="Validate code"
+            // value={validateValue}
+            // onChange={value=>{setValidateValue(value.target.value)}}
+            ref={clearRef}
           />
         </Form.Item>
-        <img src={validateCodeUrl} alt="validate code" className="validate-img" />
+        <img src={validateCodeUrl} alt="validate code" className="validate-img" onClick={refreshCode} />
       </div>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
+          登 录
         </Button>
       </Form.Item>
     </Form>

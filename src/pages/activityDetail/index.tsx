@@ -22,6 +22,7 @@ interface competitionDetailType {
   status: number
   submitBegin: string
   submitEnd: string
+  cover: string
 }
 
 function ActivityDetail() {
@@ -48,15 +49,16 @@ function ActivityDetail() {
       status: 0,
       submitBegin: '载入中',
       submitEnd: '载入中',
+      cover: '',
     })
     useEffect(() => {
       setIsLoading(true)
       getCompetitionInfo(Number(id)).then((res) => {
-        // console.log(res)
+        console.log(res)
         setCompetitionDetail(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
-        }, 500)
+        }, 100)
       })
     }, [])
     return competitionDetail
@@ -76,7 +78,7 @@ function ActivityDetail() {
         setCompetitionNoticeList(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
-        }, 500)
+        }, 100)
       })
     }, [])
     return competitionNoticeList
@@ -144,7 +146,11 @@ function ActivityDetail() {
       <TopBar activity={competitionDetail.name} />
       <div className="activity-detail-body">
         <div className="activity-detail-box">
-          <img src="https://img.js.design/assets/smartFill/img432164da758808.jpg" className="cover" alt="cover" />
+          {isLoading ? (
+            <Skeleton.Avatar shape="square" active className="cover-loading" />
+          ) : (
+            <img src={competitionDetail.cover} className="cover" alt="cover" />
+          )}
           <div className="activity-content-body">
             <div className="navigator">
               <Anchor targetOffset={targetOffset}>
