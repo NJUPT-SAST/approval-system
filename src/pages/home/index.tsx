@@ -1,7 +1,7 @@
 import { ExportOutlined, QuestionCircleOutlined, SearchOutlined, BellOutlined } from '@ant-design/icons'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Layout } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Layout, notification } from 'antd'
+import React, { Fragment, useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm'
 import UserProfile from './components/userProfile'
 import userStateStore from '../../store/userState'
@@ -38,42 +38,72 @@ const Home = () => {
   const onFinish = (values: any) => {
     // console.log('Received values of form: ', values)
     login(validateCodeId, values.validate, values.username).then((res) => {
-      // console.log(res)
-      localStorage.setItem('token', res.data.data.token)
-      getUserProfile().then((res) => {
-        setUserProfile((pre) => {
-          const a = { ...pre }
-          a.code = res.data.data.code
-          localStorage.setItem('code', res.data.data.code)
-          a.faculty = res.data.data.faculty
-          localStorage.setItem('faculty', res.data.data.faculty)
-          a.name = res.data.data.name
-          localStorage.setItem('name', res.data.data.name)
-          a.major = res.data.data.major
-          localStorage.setItem('major', res.data.data.major)
-          return a
+      if (res.data.success) {
+        localStorage.setItem('token', res.data.data.token)
+        getUserProfile().then((res) => {
+          if (res.data.success) {
+            setUserProfile((pre) => {
+              const a = { ...pre }
+              a.code = res.data.data.code
+              localStorage.setItem('code', res.data.data.code)
+              a.faculty = res.data.data.faculty
+              localStorage.setItem('faculty', res.data.data.faculty)
+              a.name = res.data.data.name
+              localStorage.setItem('name', res.data.data.name)
+              a.major = res.data.data.major
+              localStorage.setItem('major', res.data.data.major)
+              return a
+            })
+            setTimeout(() => {
+              notification.success({
+                message: '😸️ 登录成功',
+                description: res.data.data.code + '' + res.data.data.name + ' 欢迎回来',
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+          } else {
+            setTimeout(() => {
+              notification.success({
+                message: '😭️ 用户信息获取失败',
+                description: res.data.errMsg,
+                top: 20,
+                placement: 'top',
+              })
+            }, 300)
+          }
         })
-      })
-      switch (res.data.data.role) {
-        case 3:
-          setUserState('admin')
-          localStorage.setItem('userState', 'admin')
-          break
-        case 2:
-          setUserState('approver')
-          localStorage.setItem('userState', 'admin')
-          break
-        case 0:
-          setUserState('user')
-          localStorage.setItem('userState', 'user')
-          break
-        case 1:
-          setUserState('judge')
-          localStorage.setItem('userState', 'admin')
-          break
-        default:
-          break
+        switch (res.data.data.role) {
+          case 3:
+            setUserState('admin')
+            localStorage.setItem('userState', 'admin')
+            break
+          case 2:
+            setUserState('approver')
+            localStorage.setItem('userState', 'admin')
+            break
+          case 0:
+            setUserState('user')
+            localStorage.setItem('userState', 'user')
+            break
+          case 1:
+            setUserState('judge')
+            localStorage.setItem('userState', 'admin')
+            break
+          default:
+            break
+        }
+      } else {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 登录失败, 请刷新重试',
+            description: res.data.errMsg,
+            top: 20,
+            placement: 'top',
+          })
+        }, 300)
       }
+      console.log(res)
     })
   }
   //退出登录时将会执行这里的 logout 函数
@@ -83,6 +113,14 @@ const Home = () => {
     localStorage.setItem('userState', 'offline')
     setNavigation('/')
     navigate('/')
+    setTimeout(() => {
+      notification.info({
+        message: '👋🏻️ 已退出登录',
+        description: '期待与你下次相见',
+        top: 20,
+        placement: 'top',
+      })
+    }, 300)
   }
 
   const getValidateId = (validateId: string) => {
@@ -99,27 +137,32 @@ const Home = () => {
             <h1 className="logo-name">通用比赛管理评审系统</h1>
           </div>
           <div className="control-wrap">
-            <div className="control-item">
-              <QuestionCircleOutlined></QuestionCircleOutlined>
-            </div>
-            <div className="control-item">
-              <SearchOutlined></SearchOutlined>
-            </div>
-            <div className="control-item">
-              <BellOutlined></BellOutlined>
-            </div>
-
-            <div className="user-wrap">
-              <div className="user-img"></div>
-              <div className="username">Teacher Gu</div>
-            </div>
-            <div className="control-item" onClick={logout}>
-              <ExportOutlined
-                style={{
-                  fontSize: '24px',
-                }}
-              ></ExportOutlined>
-            </div>
+            {localStorage.getItem('userState') === 'offline' ? (
+              <></>
+            ) : (
+              <Fragment>
+                <div className="control-item">
+                  <QuestionCircleOutlined></QuestionCircleOutlined>
+                </div>
+                <div className="control-item">
+                  <SearchOutlined></SearchOutlined>
+                </div>
+                <div className="control-item">
+                  <BellOutlined></BellOutlined>
+                </div>
+                <div className="user-wrap">
+                  <div className="user-img"></div>
+                  <div className="username">{userProfile.name}</div>
+                </div>
+                <div className="control-item" onClick={logout}>
+                  <ExportOutlined
+                    style={{
+                      fontSize: '24px',
+                    }}
+                  ></ExportOutlined>
+                </div>
+              </Fragment>
+            )}
           </div>
         </div>
       </Header>

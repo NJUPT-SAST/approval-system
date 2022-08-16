@@ -85,7 +85,7 @@ function LoginForm(props: loginFormProp) {
       </div>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
+          登 录
         </Button>
       </Form.Item>
     </Form>
