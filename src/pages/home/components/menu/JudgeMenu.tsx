@@ -1,10 +1,7 @@
 import { DashboardOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import React from 'react'
-import { useRecoilValue } from 'recoil'
-import { userInboxPointState } from '../..'
 function JudgeMenu(props: any) {
-  const point = useRecoilValue(userInboxPointState)
   return (
     <Menu
       mode="inline"
@@ -16,7 +13,7 @@ function JudgeMenu(props: any) {
         首页
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
-        收件箱{point.point === 'on' ? <></> : <span className="message-read-or-not"></span>}
+        收件箱
       </Menu.Item>
       <Menu.Item key="/review" icon={<DashboardOutlined />}>
         活动评审

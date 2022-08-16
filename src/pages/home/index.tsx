@@ -3,19 +3,16 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Layout } from 'antd'
 import React, { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm'
+import UserProfile from './components/userProfile'
 import userStateStore from '../../store/userState'
-import { atom, useRecoilState, useSetRecoilState } from 'recoil'
+import userProfileStore from '../../store/userProfile'
+import { useRecoilState } from 'recoil'
 import menuMap from './components/menu'
 import './index.scss'
 import { login } from '../../api/public'
+import { getUserProfile } from '../../api/user'
 
 const { Header, Content, Sider } = Layout
-//on表示无红点 off与其他表示有红点 位置待调整
-const state_str = window.localStorage.getItem('inboxPoint') ?? 'off'
-export const userInboxPointState = atom({
-  key: 'userPointState',
-  default: { point: state_str },
-})
 
 const Home = () => {
   const location = useLocation()
@@ -23,8 +20,9 @@ const Home = () => {
   const [navigation, setNavigation] = useState('/')
   // const [collapsed, setCollapsed] = useState(false)
   const [userState, setUserState] = useRecoilState(userStateStore)
+  const [userProfile, setUserProfile] = useRecoilState(userProfileStore)
   const [validateCodeId, setValidateCodeId] = useState('')
-  const setUserInboxPointState = useSetRecoilState(userInboxPointState)
+
   const Menu = menuMap.get(userState)
   useEffect(() => {
     const match = location?.pathname
@@ -42,6 +40,20 @@ const Home = () => {
     login(validateCodeId, values.validate, values.username).then((res) => {
       // console.log(res)
       localStorage.setItem('token', res.data.data.token)
+      getUserProfile().then((res) => {
+        setUserProfile((pre) => {
+          const a = { ...pre }
+          a.code = res.data.data.code
+          localStorage.setItem('code', res.data.data.code)
+          a.faculty = res.data.data.faculty
+          localStorage.setItem('faculty', res.data.data.faculty)
+          a.name = res.data.data.name
+          localStorage.setItem('name', res.data.data.name)
+          a.major = res.data.data.major
+          localStorage.setItem('major', res.data.data.major)
+          return a
+        })
+      })
       switch (res.data.data.role) {
         case 3:
           setUserState('admin')
@@ -69,11 +81,6 @@ const Home = () => {
     setUserState('offline')
     localStorage.clear()
     localStorage.setItem('userState', 'offline')
-    localStorage.removeItem('inboxPoint')
-    localStorage.removeItem('allReadState')
-    localStorage.removeItem('allFoldState')
-    localStorage.removeItem('everyInboxMessageState')
-    setUserInboxPointState({ point: 'off' })
     setNavigation('/')
     navigate('/')
   }
@@ -127,7 +134,7 @@ const Home = () => {
           {userState === 'offline' ? (
             <LoginForm finishCb={onFinish} setCodeId={getValidateId}></LoginForm>
           ) : (
-            <p>已经登陆</p>
+            <UserProfile code={userProfile.code} name={userProfile.name} logout={logout} />
           )}
           <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
         </Sider>
