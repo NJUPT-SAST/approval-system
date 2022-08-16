@@ -8,7 +8,12 @@ interface loginFormProp {
   setCodeId: (validateCodeId: string) => void
   getValidateCode: number
 }
-
+/**
+ * 刷新验证码的hook
+ * @param flag 本地的验证码刷新触发器
+ * @param homeFlag 来自home页面的验证码触发器
+ * @returns 验证码图片和验证码id
+ */
 const useValidateCode = (flag: any, homeFlag: any) => {
   const [validateImgData, setValidateImgData] = useState<Blob>()
   const [validateCodeId, setValidateCodeId] = useState('')
@@ -40,15 +45,21 @@ function LoginForm(props: loginFormProp) {
   const [validateValue, setValidateValue] = useState('')
   const [validateCode, codeUUID] = useValidateCode(refreshValidateCode, props.getValidateCode)
   const clearRef = useRef(null)
+
+  //触发刷新验证码
   const refreshCode = () => {
     setFreshValidateCode((prev) => {
       return prev + 1
     })
   }
+
+  //本来这个位置是想每次验证码刷新都会清空输入框，但是暂时没想到办法实现
   useEffect(() => {
     // console.log(typeof(clearRef.current))
     setValidateValue('')
   }, [refreshValidateCode, props.getValidateCode])
+
+  //将验证码转换成本地链接给img读取
   let validateCodeUrl
   if (validateCode !== undefined && typeof validateCode !== 'string') {
     validateCodeUrl = window.URL.createObjectURL(validateCode)
@@ -56,6 +67,7 @@ function LoginForm(props: loginFormProp) {
   if (typeof codeUUID === 'string') {
     props.setCodeId(codeUUID)
   }
+
   return (
     <Form name="normal_login" className="login-form" onFinish={props.finishCb}>
       <div className="avatar"></div>

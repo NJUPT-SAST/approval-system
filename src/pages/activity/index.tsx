@@ -30,11 +30,13 @@ function Activity() {
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   const ifSearch = useRef(false)
   const navigate = useNavigate()
-  const [tagModelVisible, setTagModelVisible] = useState(false)
+  // const [tagModelVisible, setTagModelVisible] = useState(false)
   const [pageOpt, setPageOpt] = useState({
     page: 1,
     pageSize: 8,
   })
+
+  //页面初始化时候加载信息
   useEffect(() => {
     setIsLoading(true)
     if (ifSearch.current) {
@@ -55,7 +57,9 @@ function Activity() {
       })
     }
   }, [pageOpt])
+
   // console.log(activities)
+
   /**
    * 活动卡片
    * @param props  coverUrl: 封面图 | title: 比赛标题 | description: 比赛介绍 | time: 比赛时间 | author:  比赛发布者

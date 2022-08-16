@@ -18,6 +18,7 @@ const Home = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [navigation, setNavigation] = useState('/')
+  //给loginForm组件用于刷新验证码
   const [getValidateCode, setGetValidateCode] = useState(1)
   // const [collapsed, setCollapsed] = useState(false)
   const [userState, setUserState] = useRecoilState(userStateStore)
@@ -35,6 +36,7 @@ const Home = () => {
     navigate(e.key)
     setNavigation(e.key)
   }
+
   //点击登录时将会执行下面的 onFinish函数
   const onFinish = (values: any) => {
     // console.log('Received values of form: ', values)
@@ -110,6 +112,7 @@ const Home = () => {
       console.log(res)
     })
   }
+
   //退出登录时将会执行这里的 logout 函数
   const logout = () => {
     setUserState('offline')
@@ -127,9 +130,11 @@ const Home = () => {
     }, 300)
   }
 
+  //通过state触发验证码刷新
   const getValidateId = (validateId: string) => {
     setValidateCodeId(validateId)
   }
+
   // console.log(validateCodeId)
 
   return (
