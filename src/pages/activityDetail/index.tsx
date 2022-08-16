@@ -1,16 +1,86 @@
-import { Anchor, Button, List, Timeline } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Anchor, Button, Empty, List, Skeleton, Timeline } from 'antd'
 import Item from 'antd/lib/list/Item'
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { getCompetitionNoticeList } from '../../api/public'
+import { getCompetitionInfo } from '../../api/user'
+import CompetitionNotice from '../../components/CompetitionNotice'
 import TopBar from '../../components/TopBar'
+import { competitionInfoType } from '../../type/apiTypes'
 import './index.scss'
 
 const { Link } = Anchor
 
+interface competitionDetailType {
+  introduce: string
+  name: string
+  regBegin: string
+  regEnd: string
+  reviewBegin: string
+  reviewEnd: string
+  status: number
+  submitBegin: string
+  submitEnd: string
+}
+
 function ActivityDetail() {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   const userState = localStorage.getItem('userState')
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
+  const { id } = useParams()
+  // console.log(competitionDetail)
+
+  /**
+   * 获取比赛的详细信息
+   * @param id 比赛的id
+   * @returns 返回比赛详细信息的state
+   */
+  const useGetCompetitionDetail = (id: number) => {
+    const [competitionDetail, setCompetitionDetail] = useState<competitionDetailType>({
+      introduce: '载入中',
+      name: '载入中',
+      regBegin: '载入中',
+      regEnd: '载入中',
+      reviewBegin: '载入中',
+      reviewEnd: '载入中',
+      status: 0,
+      submitBegin: '载入中',
+      submitEnd: '载入中',
+    })
+    useEffect(() => {
+      setIsLoading(true)
+      getCompetitionInfo(Number(id)).then((res) => {
+        // console.log(res)
+        setCompetitionDetail(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
+      })
+    }, [])
+    return competitionDetail
+  }
+
+  /**
+   *
+   * @param id 比赛的id
+   * @returns 返回比赛比赛通知公告的state
+   */
+  const useGetCompetitionNotice = (id: number) => {
+    const [competitionNoticeList, setCompetitionNoticeList] = useState([])
+    useEffect(() => {
+      setIsLoading(true)
+      getCompetitionNoticeList(id).then((res) => {
+        // console.log(res)
+        setCompetitionNoticeList(res.data.data)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500)
+      })
+    }, [])
+    return competitionNoticeList
+  }
 
   /**
    * 调用函数根据不同的角色信息获取不同的按钮显示文字
@@ -31,33 +101,47 @@ function ActivityDetail() {
     }
   }
 
-  const handleButtonAction = () => {
-    if (userState === 'user') {
-      navigate('/activity/10001/register')
-    } else if (userState === 'judge') {
-      navigate('/review')
-    } else if (userState === 'admin') {
-      navigate('/activity/10001/manage')
+  /**
+   * 调用函数将用户角色信息转换为对应编号
+   * @returns 角色相应编号
+   */
+  const userStateToNumber = () => {
+    switch (userState) {
+      case 'admin':
+        return 3
+      case 'user':
+        return 0
+      case 'judge':
+        return 1
+      case 'approver':
+        return 2
+      default:
+        return 0
     }
   }
 
-  //notice数据
-  const noticeData = [
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-    { date: '2022-05-20', content: '活动结束啦，请大家在...' },
-  ]
+  const handleButtonAction = () => {
+    if (userState === 'user') {
+      navigate('/activity/' + id + '/register')
+    } else if (userState === 'judge') {
+      navigate('/review')
+    } else if (userState === 'admin') {
+      navigate('/activity/' + id + '/manage')
+    }
+  }
 
   useEffect(() => {
     // 计算锚点偏移位置并写入state
     setTargetOffset(window.innerHeight / 2)
   }, [])
 
+  const competitionNotice = useGetCompetitionNotice(Number(id))
+  console.log(competitionNotice)
+  const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
+
   return (
     <div>
-      <TopBar activity="“挑战杯”创新创业大赛" />
+      <TopBar activity={competitionDetail.name} />
       <div className="activity-detail-body">
         <div className="activity-detail-box">
           <img src="https://img.js.design/assets/smartFill/img432164da758808.jpg" className="cover" alt="cover" />
@@ -72,45 +156,56 @@ function ActivityDetail() {
             </div>
             <div className="activity-content">
               <div className="title-section" id="title">
-                <div className="title">“挑战杯”创新创业大赛</div>
+                <Skeleton active loading={isLoading} paragraph={false} style={{ width: '400px' }}>
+                  <div className="title">{competitionDetail.name}</div>
+                </Skeleton>
                 <div className="action-button">
                   <Button type="primary" onClick={handleButtonAction}>
                     {buttonContent()}
                   </Button>
                 </div>
               </div>
-              <div className="description" id="description">
-                现在很多APP在用户截图时会自动提示用户是否要进行分享。这个时机确实抓的很棒，一般来说，用户截图大多数时候都是为了分享给他人，少部分是为了留底备份。
-                用户分享内容到社交媒体或好友，不应该是一种粗暴的强制行为，我们应该在保证产品本身内容有吸引力的核心前提下，仔细揣摩用户心理，结合产品本身的特色，在不同情境下提供给用户最合适的分享平台及方式，让用户分享成为一种水到渠成的自然行为，甚至在某些时候还能给用户带来一些小的惊喜就更棒了。
-                往年作品https://wangnianxiangmuzhanshi.com/...
-              </div>
+              <Skeleton active loading={isLoading} title={false}>
+                <div className="description" id="description">
+                  {competitionDetail.introduce}
+                </div>
+              </Skeleton>
               <div className="announcement-section">
                 <div className="notice" id="notice">
                   <div className="notice-title">消息/公告</div>
-                  <div className="notice-table">
-                    <List
-                      bordered
-                      dataSource={noticeData}
-                      renderItem={(item) => (
-                        <>
-                          <List.Item>
-                            {item.date}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{item.content}
-                          </List.Item>
-                        </>
+                  <Skeleton active loading={isLoading}>
+                    <div className="notice-table">
+                      {competitionNotice.length === 0 ? (
+                        <Empty className="empty" description="暂时没有公告" />
+                      ) : (
+                        competitionNotice.map((item: any, index) => (
+                          <CompetitionNotice
+                            key={index}
+                            role={userStateToNumber()}
+                            title={item.title}
+                            time={item.time}
+                            content={item.content}
+                          />
+                        ))
                       )}
-                    />
-                  </div>
+                    </div>
+                  </Skeleton>
+                  <Skeleton active loading={isLoading}></Skeleton>
                 </div>
                 <div className="arrangement" id="arrangement">
                   <div className="arrangement-title">时间安排</div>
-                  <div className="arrangement-content">
-                    <Timeline>
-                      <Timeline.Item>活动发布时间 2022-02-22</Timeline.Item>
-                      <Timeline.Item>报名开始时间 2022-02-22</Timeline.Item>
-                      <Timeline.Item>报名截止时间 2022-05-20</Timeline.Item>
-                      <Timeline.Item>活动结束时间 2022-05-20</Timeline.Item>
-                    </Timeline>
-                  </div>
+                  <Skeleton active loading={isLoading} title={false} style={{ width: '217px' }}>
+                    <div className="arrangement-content">
+                      <Timeline>
+                        {/* <Timeline.Item>活动发布时间 {competitionDetail.regBegin}</Timeline.Item> */}
+                        <Timeline.Item>报名开始时间 {competitionDetail.regBegin}</Timeline.Item>
+                        <Timeline.Item>报名截止时间 {competitionDetail.regEnd}</Timeline.Item>
+                        <Timeline.Item>评审开始时间 {competitionDetail.reviewBegin}</Timeline.Item>
+                        <Timeline.Item>评审结束时间 {competitionDetail.reviewEnd}</Timeline.Item>
+                        {/* <Timeline.Item>活动结束时间 {competitionDetail.reviewEnd}</Timeline.Item> */}
+                      </Timeline>
+                    </div>
+                  </Skeleton>
                 </div>
               </div>
             </div>
