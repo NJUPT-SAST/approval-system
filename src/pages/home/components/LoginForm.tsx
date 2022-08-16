@@ -1,14 +1,15 @@
 import { LockOutlined, SafetyOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Divider, Form, Input } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Checkbox, Divider, Form, Input, InputRef } from 'antd'
+import React, { createRef, Ref, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { getValidateCode } from '../../../api/public'
 
 interface loginFormProp {
   finishCb: (values: any) => void
   setCodeId: (validateCodeId: string) => void
+  getValidateCode: number
 }
 
-const useValidateCode = () => {
+const useValidateCode = (flag: any, homeFlag: any) => {
   const [validateImgData, setValidateImgData] = useState<Blob>()
   const [validateCodeId, setValidateCodeId] = useState('')
   useEffect(() => {
@@ -16,7 +17,7 @@ const useValidateCode = () => {
       setValidateImgData(res.data)
       setValidateCodeId(res.headers.captcha)
     })
-  }, [])
+  }, [flag, homeFlag])
   return [validateImgData, validateCodeId]
 }
 
@@ -35,7 +36,19 @@ const BlobConvertBase64 = (imgData: any) => {
 }
 
 function LoginForm(props: loginFormProp) {
-  const [validateCode, codeUUID] = useValidateCode()
+  const [refreshValidateCode, setFreshValidateCode] = useState(1)
+  const [validateValue, setValidateValue] = useState('')
+  const [validateCode, codeUUID] = useValidateCode(refreshValidateCode, props.getValidateCode)
+  const clearRef = useRef(null)
+  const refreshCode = () => {
+    setFreshValidateCode((prev) => {
+      return prev + 1
+    })
+  }
+  useEffect(() => {
+    // console.log(typeof(clearRef.current))
+    setValidateValue('')
+  }, [refreshValidateCode, props.getValidateCode])
   let validateCodeUrl
   if (validateCode !== undefined && typeof validateCode !== 'string') {
     validateCodeUrl = window.URL.createObjectURL(validateCode)
@@ -77,11 +90,15 @@ function LoginForm(props: loginFormProp) {
         >
           <Input
             className="login-form-input validate"
+            id="validate"
             prefix={<SafetyOutlined className="site-form-item-icon" />}
             placeholder="Validate code"
+            // value={validateValue}
+            // onChange={value=>{setValidateValue(value.target.value)}}
+            ref={clearRef}
           />
         </Form.Item>
-        <img src={validateCodeUrl} alt="validate code" className="validate-img" />
+        <img src={validateCodeUrl} alt="validate code" className="validate-img" onClick={refreshCode} />
       </div>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">

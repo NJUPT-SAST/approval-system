@@ -18,6 +18,7 @@ const Home = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [navigation, setNavigation] = useState('/')
+  const [getValidateCode, setGetValidateCode] = useState(1)
   // const [collapsed, setCollapsed] = useState(false)
   const [userState, setUserState] = useRecoilState(userStateStore)
   const [userProfile, setUserProfile] = useRecoilState(userProfileStore)
@@ -102,6 +103,9 @@ const Home = () => {
             placement: 'top',
           })
         }, 300)
+        setGetValidateCode((prev) => {
+          return prev + 1
+        })
       }
       console.log(res)
     })
@@ -175,7 +179,7 @@ const Home = () => {
           className="site-layout-background sidebar"
         >
           {userState === 'offline' ? (
-            <LoginForm finishCb={onFinish} setCodeId={getValidateId}></LoginForm>
+            <LoginForm finishCb={onFinish} setCodeId={getValidateId} getValidateCode={getValidateCode}></LoginForm>
           ) : (
             <UserProfile code={userProfile.code} name={userProfile.name} logout={logout} />
           )}
