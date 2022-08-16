@@ -1,11 +1,7 @@
 import React from 'react'
-import Review from '../review'
+
 function Approve() {
-  return (
-    <div>
-      <Review role={'admin'} />
-    </div>
-  )
+  return <div>Approve</div>
 }
 
 export default Approve

@@ -1,5 +1,12 @@
 import axios from 'axios'
 
+axios.interceptors.request.use((config: any) => {
+  if (localStorage.getItem('token') !== null) {
+    config.headers['Token'] = localStorage.getItem('token')
+  }
+  return config
+})
+
 /**
  * 提交作品审核列表
  * @param workId 作品 id
@@ -30,9 +37,6 @@ export const getJudgeCompetitionList = (page: number) => {
   return axios({
     method: 'get',
     url: '/review/competition-list',
-    headers: {
-      Token: '',
-    },
     data: data,
   })
 }
@@ -80,9 +84,6 @@ export const getScoreCompetitionList = (page: number) => {
   return axios({
     method: 'get',
     url: '/score/competition-list',
-    headers: {
-      Token: '',
-    },
     data: data,
   })
 }

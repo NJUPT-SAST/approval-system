@@ -1,34 +1,35 @@
 import { Button } from 'antd'
-import React, { useState, useContext, useEffect } from 'react'
-import { AllFoldContext, MessageContext } from '../..'
-import { messageType } from '../../../../test/inbox-message'
+import React, { useContext } from 'react'
+import { MessageContext } from '..'
+import InboxReadStateControlButton from './inboxReadStateControlButton'
+import { inboxMessagePropsType } from '../../../type/inboxType'
 
-const Message: React.FC<{ index: number }> = (iNdex: { index: number }) => {
-  const { index } = iNdex
+const InboxMessage: React.FC<inboxMessagePropsType> = (props) => {
+  const { index, localIndex, readState, foldState, controlAllReadState, controlAllFoldState, controlChildState } = props
   const inboxMessage = useContext(MessageContext)[index]
-
-  const allFold = useContext(AllFoldContext)
-  const [haveRead, setHaveRead] = useState(inboxMessage.haveRead)
-  const [isfold, setIsfold] = useState(inboxMessage.isfold)
-  useEffect(() => setIsfold(allFold.fold), [allFold])
+  const controlReadState = () => {
+    controlAllReadState(readState)
+    controlChildState(localIndex, !readState, foldState)
+  }
   return (
     <>
-      <div className={isfold ? 'inbox-message-nav-unfold' : 'inbox-message-nav-unfold'}>
+      <div className={foldState ? 'inbox-message-nav-unfold' : 'inbox-message-nav-unfold'}>
         <Button
           type="primary"
           className="inbox-message-display-switch-button"
           onClick={() => {
-            setIsfold(isfold ? false : true)
+            controlAllFoldState(foldState)
+            controlChildState(localIndex, readState, !foldState)
           }}
         >
           {' '}
         </Button>
       </div>
-      {isfold ? ( //折叠后的
+      {foldState ? ( //折叠后的
         <div className="inbox-message-body-fold">
           <div className="inbox-message-header">
             {inboxMessage.title}
-            {haveRead ? <></> : <span className="message-read-or-not"></span>}
+            {readState ? <></> : <span className="message-read-or-not"></span>}
             <span className="inbox-message-footer-post">
               由 {inboxMessage.post} 发布于 {inboxMessage.time}
             </span>
@@ -39,16 +40,14 @@ const Message: React.FC<{ index: number }> = (iNdex: { index: number }) => {
         <div className="inbox-message-body-unfold">
           <div className="inbox-message-header">
             {inboxMessage.title}
-            {haveRead ? <></> : <span className="message-read-or-not"></span>}
+            {readState ? <></> : <span className="message-read-or-not"></span>}
           </div>
           <div className="inbox-message-contents">{inboxMessage.content}</div>
           <div className="inbox-message-footer">
             <div className="inbox-message-footer-post">
               由 {inboxMessage.post} 发布于 {inboxMessage.time}
               <div className="inbox-message-footer-button">
-                <Button type="primary" onClick={() => setHaveRead(true)}>
-                  已读
-                </Button>
+                <InboxReadStateControlButton index={index} readState={readState} controlReadState={controlReadState} />
               </div>
             </div>
           </div>
@@ -57,4 +56,4 @@ const Message: React.FC<{ index: number }> = (iNdex: { index: number }) => {
     </>
   )
 }
-export default Message
+export default InboxMessage

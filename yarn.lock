@@ -3181,11 +3181,7 @@ axe-core@^4.3.5:
 
 axios@^0.27.2:
   version "0.27.2"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
-=======
   resolved "https://registry.npmmirror.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
->>>>>>> master
   integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
   dependencies:
     follow-redirects "^1.14.9"
@@ -5864,23 +5860,17 @@ form-data@^3.0.0:
 
 form-data@^4.0.0:
   version "4.0.0"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
-=======
   resolved "https://registry.npmmirror.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
->>>>>>> master
   integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-<<<<<<< HEAD
-=======
-form-render@^1.13.11:
-  version "1.13.11"
-  resolved "https://registry.npmmirror.com/form-render/-/form-render-1.13.11.tgz#d7bb587c78cf95d848b3116ae340ba3174fb1d9f"
-  integrity sha512-AKkVsARnsseCoIKkQeuKOIrvrhCMZBGy0tlrfi7it4uue1aJj1Rsc//aGYQvjWnRiRhpncIDQzkKbE4ffnUQFQ==
+form-render@^1.13.12:
+  version "1.13.12"
+  resolved "https://registry.yarnpkg.com/form-render/-/form-render-1.13.12.tgz#e1dd40b7e29e78ee27068497b4d4972d1236f23b"
+  integrity sha512-NMESV6LYFf/32U66BVgbwQ1/1nzRRHQnhIT6DOPtnlic3ukgsLBb7N+mXTwZKcmA9fxrCbVOqsqZoFs7yHC5cw==
   dependencies:
     "@ant-design/icons" "^4.0.2"
     async-validator "^3.5.1"
@@ -5891,7 +5881,6 @@ form-render@^1.13.11:
     rc-color-picker "^1.2.6"
     virtualizedtableforantd4 "^1.1.2"
 
->>>>>>> master
 forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
@@ -11715,10 +11704,8 @@ watchpack@^1.7.4:
   resolved "https://registry.npmmirror.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
-    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
-    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
