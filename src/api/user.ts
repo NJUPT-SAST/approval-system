@@ -21,6 +21,20 @@ export const getAllCompetitionList = (cur: number, limit: number) => {
 }
 
 /**
+ * 搜索比赛
+ * @param key 搜索关键词
+ * @param cur 当前页数
+ * @param limit 每页显示的数量
+ * @returns axios对象
+ */
+export const searchCompetition = (key: string, cur: number, limit: number) => {
+  return axios({
+    method: 'GET',
+    url: '/user/com/search?cur=' + cur.toString() + '&limit=' + limit.toString() + '&key=' + key,
+  })
+}
+
+/**
  * 获取已报名比赛列表
  * @param cur 页数
  * @param limit 每页数据量
