@@ -21,9 +21,17 @@ interface DataType {
 }
 
 const Manage: React.FC = () => {
-  const [pageState, setPageState] = useState(1)
+  const [pageState, setPageState] = useState(0)
   const onChange: PaginationProps['onChange'] = (page) => {
-    setPageState(page)
+    setPageState(page - 1)
+  }
+  //跳转到发布公告的界面
+  const toPostNotice = (competitionId: number) => {
+    Navigate('../activity/' + competitionId + '/notice')
+  }
+  //跳转到编辑界面
+  const toEditCompetition = (competitionId: number) => {
+    Navigate('../activity/' + competitionId + '/manage')
   }
   const Navigate = useNavigate()
   return (
@@ -53,18 +61,18 @@ const Manage: React.FC = () => {
             <span className="manage-body-title-edit-competition">修改活动</span>
           </div>
           <div className="manage-body-items">
-            <ManageItem page={pageState} index={1} />
-            <ManageItem page={pageState} index={2} />
-            <ManageItem page={pageState} index={3} />
-            <ManageItem page={pageState} index={4} />
-            <ManageItem page={pageState} index={5} />
-            <ManageItem page={pageState} index={6} />
-            <ManageItem page={pageState} index={7} />
-            <ManageItem page={pageState} index={8} />
-            <ManageItem page={pageState} index={9} />
+            <ManageItem page={pageState} index={1} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={2} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={3} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={4} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={5} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={6} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={7} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={8} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={9} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
           </div>
           <div className="manage-body-page">
-            <Pagination current={pageState} pageSize={9} showSizeChanger={false} onChange={onChange} total={9} />
+            <Pagination current={pageState + 1} pageSize={9} showSizeChanger={false} onChange={onChange} total={9} />
           </div>
         </div>
       </div>
