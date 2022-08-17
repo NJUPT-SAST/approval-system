@@ -1,7 +1,6 @@
 import { CalendarOutlined } from '@ant-design/icons'
 import { Button, Input, Radio } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import React from 'react'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
