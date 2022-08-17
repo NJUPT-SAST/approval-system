@@ -25,12 +25,13 @@ const Manage: React.FC = () => {
   const onChange: PaginationProps['onChange'] = (page) => {
     setPageState(page)
   }
+  const Navigate = useNavigate()
   return (
     <div>
       <TopBar />
       <div className="manage-header">
         <h1 id="manage-header-title">活动管理</h1>
-        <Button type="primary" size="small">
+        <Button type="primary" size="small" onClick={() => Navigate('./create')}>
           创建比赛
         </Button>
       </div>
