@@ -1,11 +1,5 @@
 import axios from 'axios'
-
-axios.interceptors.request.use((config: any) => {
-  if (localStorage.getItem('token') !== null) {
-    config.headers['Token'] = localStorage.getItem('token')
-  }
-  return config
-})
+import { apis } from '.'
 
 /**
  * 提交作品审核列表
@@ -19,7 +13,7 @@ export const uploadWorkJudgeInfo = (workId: number, accept: boolean, opinion: st
   data.append('id', workId.toString())
   data.append('accept', accept.toString())
   data.append('opinion', opinion)
-  return axios({
+  return apis({
     method: 'POST',
     url: '/review/upload',
     data: data,
@@ -34,7 +28,7 @@ export const uploadWorkJudgeInfo = (workId: number, accept: boolean, opinion: st
 export const getJudgeCompetitionList = (page: number) => {
   const data = new FormData()
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/competition-list',
     data: data,
@@ -51,7 +45,7 @@ export const getJudgeWorkList = (competitionId: number, page: number) => {
   const data = new FormData()
   data.append('comId', competitionId.toString())
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/program-list',
     data: data,
@@ -66,7 +60,7 @@ export const getJudgeWorkList = (competitionId: number, page: number) => {
 export const getJudgeWorkInfo = (workId: number) => {
   const data = new FormData()
   data.append('id', workId.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/program-info',
     data: data,
@@ -81,7 +75,7 @@ export const getJudgeWorkInfo = (workId: number) => {
 export const getScoreCompetitionList = (page: number) => {
   const data = new FormData()
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/competition-list',
     data: data,
@@ -98,7 +92,7 @@ export const getScoreWorkList = (competitionId: number, page: number) => {
   const data = new FormData()
   data.append('comId', competitionId.toString())
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/program-list',
     data: data,
@@ -113,7 +107,7 @@ export const getScoreWorkList = (competitionId: number, page: number) => {
 export const getScoreWork = (workId: number) => {
   const data = new FormData()
   data.append('id', workId.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/program-info',
     data: data,
@@ -132,7 +126,7 @@ export const uploadWorkScoreInfo = (workId: number, score: number, opinion: stri
   data.append('id', workId.toString())
   data.append('score', score.toString())
   data.append('opinion', opinion)
-  return axios({
+  return apis({
     method: 'POST',
     url: '/score/upload',
     data: data,
@@ -144,7 +138,7 @@ export const uploadWorkScoreInfo = (workId: number, score: number, opinion: stri
  * @return axios 对象
  */
 export const judgePoint = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/red-point',
   })
@@ -155,7 +149,7 @@ export const judgePoint = () => {
  * @return axios 对象
  */
 export const scorePoint = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/red-point',
   })
