@@ -1,11 +1,5 @@
 import axios from 'axios'
-
-axios.interceptors.request.use((config: any) => {
-  if (localStorage.getItem('token') !== null) {
-    config.headers['Token'] = localStorage.getItem('token')
-  }
-  return config
-})
+import { apis } from '.'
 
 /**
  * 登录接口
@@ -17,7 +11,7 @@ export const login = (captcha: string, validateCode: string, studentId: string) 
   const data = new FormData()
   data.append('validateCode', validateCode)
   data.append('code', studentId)
-  return axios({
+  return apis({
     method: 'POST',
     url: '/login',
     headers: {
@@ -32,7 +26,7 @@ export const login = (captcha: string, validateCode: string, studentId: string) 
  * @returns axios对象
  */
 export const getValidateCode = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/getValidateCode',
     responseType: 'blob',
@@ -45,7 +39,7 @@ export const getValidateCode = () => {
  * @returns axios对象
  */
 export const getCompetitionNoticeList = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/com/notice/list?id=' + competitionId.toString(),
   })
