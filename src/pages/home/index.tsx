@@ -41,6 +41,7 @@ const Home = () => {
   const onFinish = (values: any) => {
     // console.log('Received values of form: ', values)
     login(validateCodeId, values.validate, values.username).then((res) => {
+      console.log(res)
       if (res.data.success) {
         localStorage.setItem('token', res.data.data.token)
         getUserProfile().then((res) => {
@@ -67,7 +68,7 @@ const Home = () => {
             }, 100)
           } else {
             setTimeout(() => {
-              notification.success({
+              notification.error({
                 message: '😭️ 用户信息获取失败',
                 description: res.data.errMsg,
                 top: 20,
