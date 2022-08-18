@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { notification } from 'antd'
+import { exportWorkFileDataToAssignScorer } from '../../../api/admin'
 type ManageItemType = {
   page: number
   index: number
@@ -21,7 +22,33 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
         <span className="manage-body-item-team-number">45</span>
         <span className="manage-body-item-work-number">37</span>
         <span className="manage-body-item-judged-number">16</span>
-        <span className="manage-body-item-export">导出</span>
+        <span
+          className="manage-body-item-export"
+          onClick={() => {
+            exportWorkFileDataToAssignScorer().then((res) => {
+              if (res.data.success) {
+                setTimeout(() => {
+                  notification.error({
+                    message: '😸️ 导出成功',
+                    description: '',
+                    top: 20,
+                    placement: 'top',
+                  })
+                }, 300)
+              } else
+                setTimeout(() => {
+                  notification.error({
+                    message: '😭️ 导出失败',
+                    description: res.data.errMsg,
+                    top: 20,
+                    placement: 'top',
+                  })
+                }, 300)
+            })
+          }}
+        >
+          导出
+        </span>
         <span
           className="manage-body-item-post-notice"
           onClick={() => {

@@ -1,8 +1,11 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { competitionInfoType } from '../../type/apiTypes'
 import { Button, Input, message, Radio, RadioChangeEvent, Select, Upload } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload/interface'
-import { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler, useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { constSelector } from 'recoil'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 import TimeRanger from './TimeRanger'
@@ -30,8 +33,12 @@ const teamMemberNumArray = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '
 
 function Create() {
   //上传比赛照片
+  const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const [imageUrl, setImageUrl] = useState<string>()
+  //判断是修改还是创建
+  const location = useLocation()
+  const [isEditState, setIsEditState] = useState<boolean>(false)
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
@@ -53,7 +60,9 @@ function Create() {
       <div style={{ marginTop: 8 }}>上传照片</div>
     </div>
   )
-
+  const [competitionInfo, setCompetitionInfo] = useState<competitionInfoType>()
+  //比赛的名字
+  const [name, setName] = useState<string | undefined>(undefined)
   //比赛类型(1为单人，2位团队)
   const [matchType, setMatchType] = useState<number>(2)
   //比赛类型变化
@@ -92,6 +101,12 @@ function Create() {
   //允许报名白名单
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (location.state) console.log(location.state)
+    else {
+      console.log(null)
+    }
+  }, [])
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
@@ -102,7 +117,14 @@ function Create() {
           <Button type="primary" size="small">
             发布
           </Button>
-          <Button type="primary" size="small" id="activity-create-cancel">
+          <Button
+            type="primary"
+            size="small"
+            id="activity-create-cancel"
+            onClick={() => {
+              Navigate(-1)
+            }}
+          >
             取消
           </Button>
         </div>
@@ -131,7 +153,18 @@ function Create() {
         </div>
         <div className="activity-create-name">
           <span id="activity-create-name">比赛名称</span>
-          <Input maxLength={15} placeholder="清晰简洁，不得多于15字" showCount={false} />
+          <Input
+            maxLength={15}
+            placeholder="清晰简洁，不得多于15字"
+            value={name}
+            showCount={false}
+            onChange={(e) => {
+              setName(e.target.value)
+            }}
+            onBlur={(e) => {
+              setName(e.target.value)
+            }}
+          />
         </div>
         <div className="activity-create-type">
           <span id="activity-create-type">比赛类型</span>
@@ -168,6 +201,7 @@ function Create() {
           <TextArea
             value={matchDes}
             onChange={(e) => setMatchDes(e.target.value)}
+            onBlur={(e) => setMatchDes(e.target.value)}
             placeholder="不少于100字，不超过1000字"
             maxLength={1000}
           />

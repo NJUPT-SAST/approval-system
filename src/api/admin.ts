@@ -36,14 +36,16 @@ export const deleteCompetitionInfo = (competitionId: number) => {
 /**
  * 修改活动信息
  * @comment 接口参数命名那里既有 驼峰法 又有 下划线 ,烂
+ * @param competitionId 比赛活动 ID
  * @param data 见类型定义
  * @return axios对象
  */
-export const editCompetitionInfo = (data: competitionInfoType) => {
+export const editCompetitionInfo = (competitionId: number, data: competitionInfoType) => {
   return apis({
     method: 'POST',
     url: '/admin/com/edit',
     data: {
+      id: competitionId,
       ...data,
     },
   })
@@ -87,7 +89,7 @@ export const assignJudge = () => {
  * 导出作品（分配评委） 导出作品后用于分配评委
  * @return axios对象
  */
-export const exportWorkFileDataToAssignJudge = () => {
+export const exportWorkFileDataToAssignScorer = () => {
   return apis({
     method: 'get',
     url: '/admin/exportFIleData', //这里的大小写异常出自接口

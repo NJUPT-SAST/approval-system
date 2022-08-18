@@ -1,5 +1,4 @@
 export type competitionInfoType = {
-  id: number // 比赛id
   name: string // 比赛名称
   reg_begin_time: string // 报名开始时间
   reg_end_time: string // 报名结束时间
