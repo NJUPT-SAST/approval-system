@@ -1,4 +1,4 @@
-import { Button, Result } from 'antd'
+import { Button, message, Result } from 'antd'
 import FormRender, { useForm } from 'form-render'
 import React, { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -10,6 +10,7 @@ function Register() {
   const form = useForm()
   const { id } = useParams()
   const [messageSent, setMessageSent] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [messageStatus, setMessageStatus] = useState('null')
   const [errCode, setErrCode] = useState(0)
   const [errMsg, setErrMsg] = useState('')
@@ -18,6 +19,7 @@ function Register() {
     maxParti: 1,
   })
   const [curParti, setCurParti] = useState(1)
+  const [teamInfo, setTeamInfo] = useState({})
   const [formSchema, setFormSchema] = useState<any>({
     type: 'object',
     labelWidth: 151,
@@ -65,6 +67,48 @@ function Register() {
       },
     },
   })
+  const storeTeamInfo = () => {
+    setLoading(true)
+    message.loading({
+      content: '🤔️ 正在获取已保存信息，请稍候',
+      key: 'loading',
+      duration: 50,
+    })
+    getTeamInfo(Number(id)).then((res) => {
+      console.log(res)
+      if (res.data.errCode !== 2003) {
+        setTeamInfo({
+          teamName: res.data.data.teamName,
+          teamMember: res.data.data.teamMember,
+        })
+        form.setValueByPath('numOfParti', res.data.data.teamMember.length)
+        form.setValueByPath('input_teamName', res.data.data.teamName)
+        form.setValueByPath('leader', {
+          name: res.data.data.teamMember[0].name,
+          code: res.data.data.teamMember[0].code,
+        })
+        for (let i = 1; i <= res.data.data.teamMember.length - 1; i++) {
+          const formName = 'parti' + i
+          form.setValueByPath(formName, {
+            name: res.data.data.teamMember[i].name,
+            code: res.data.data.teamMember[i].code,
+          })
+        }
+        setLoading(false)
+        message.success({
+          content: '😸️ 信息加载成功',
+          key: 'loading',
+        })
+      } else {
+        setLoading(false)
+        message.error({
+          content: '🙀️ 信息加载错误，请联系管理员',
+          key: 'loading',
+          duration: 20,
+        })
+      }
+    })
+  }
   useEffect(() => {
     getCompetitionSignInfo(Number(id)).then((res) => {
       // console.log(res)
@@ -73,10 +117,9 @@ function Register() {
         minParti: res.data.data.minTeamMembers,
       })
     })
-    getTeamInfo(Number(id)).then((res) => {
-      console.log(res)
-    })
+    storeTeamInfo()
   }, [])
+  console.log(teamInfo)
   const generateForm = (number: number) => {
     const participants: any[] = []
     for (let i = 1; i <= number - 1; i++) {
@@ -116,6 +159,12 @@ function Register() {
   const onFinish = (formData: any, errors: any) => {
     console.log('formData:', formData, 'errors', errors)
     if (errors.length === 0) {
+      setLoading(true)
+      message.loading({
+        content: '🤔️ 信息提交中',
+        key: 'loading',
+        duration: 50,
+      })
       const teamName = formData.input_teamName
       const teamMember = []
       teamMember.push(formData.leader)
@@ -129,10 +178,19 @@ function Register() {
         setMessageSent(true)
         if (res.data.success === true) {
           setMessageStatus('success')
+          message.success({
+            content: '😸️ 信息提交成功',
+            key: 'loading',
+          })
         } else {
           setMessageStatus('error')
           setErrCode(res.data.errCode)
           setErrMsg(res.data.errMsg)
+          message.error({
+            content: '🙀️ 信息好像有点问题哦，检查下吧',
+            key: 'loading',
+            duration: 3,
+          })
         }
       })
     }
@@ -205,6 +263,7 @@ function Register() {
   }
   const editAgain = () => {
     setMessageSent(false)
+    storeTeamInfo()
   }
   // console.log(formSchema)
   return (
@@ -221,9 +280,9 @@ function Register() {
                 onFinish={onFinish}
                 onValuesChange={(values) => valueChangeAction(values)}
                 style={{ maxWidth: '600px' }}
-                debug
+                disabled={loading}
               />
-              <Button type="primary" onClick={form.submit}>
+              <Button type="primary" onClick={form.submit} loading={loading} disabled={loading}>
                 提交
               </Button>
             </Fragment>
