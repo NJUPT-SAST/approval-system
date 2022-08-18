@@ -1,6 +1,8 @@
-import { Button, Pagination } from 'antd'
+import { Button, Pagination, Spin, Result } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import type { PaginationProps } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { getCompetitionList } from '../../api/admin'
 import { useNavigate } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import ManageItem from './components/manageItem'
@@ -21,17 +23,60 @@ interface DataType {
 }
 
 const Manage: React.FC = () => {
-  const [pageState, setPageState] = useState(1)
+  // 保存页码状态的 state
+  const [pageState, setPageState] = useState<{ pageNumber: number; pageSize: number; total: number; records: [] }>({
+    pageNumber: 0,
+    pageSize: 9,
+    total: 0,
+    records: [],
+  })
+  //保存 是否在加载 的状态的 state
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  useEffect(() => {
+    setIsLoading(true)
+    getCompetitionList()
+      .then((res) => {
+        console.log(res)
+        setPageState((pre) => {
+          const a = { ...pre }
+          a.total = res.data.total
+          a.records = res.data.records
+          return a
+        })
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        console.log(error)
+      })
+  }, [pageState.pageNumber])
+  //页码
   const onChange: PaginationProps['onChange'] = (page) => {
-    setPageState(page)
+    setPageState((pre) => {
+      const a = { ...pre }
+      a.pageNumber = page - 1
+      return a
+    })
   }
+  //跳转到发布公告的界面
+  const toPostNotice = (competitionId: number) => {
+    Navigate('../activity/' + competitionId + '/notice')
+  }
+  //跳转到编辑界面
+  const toEditCompetition = (competitionId: number) => {
+    Navigate('../activity/' + competitionId + '/manage')
+  }
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
+  //导出
+  //路由
+  const Navigate = useNavigate()
   return (
     <div>
       <TopBar />
       <div className="manage-header">
         <h1 id="manage-header-title">活动管理</h1>
-        <Button type="primary" size="small">
-          创建比赛
+        <Button type="primary" size="small" onClick={() => Navigate('./create')}>
+          创建活动
         </Button>
       </div>
       <div className="manage">
@@ -52,18 +97,46 @@ const Manage: React.FC = () => {
             <span className="manage-body-title-edit-competition">修改活动</span>
           </div>
           <div className="manage-body-items">
-            <ManageItem page={pageState} index={1} />
-            <ManageItem page={pageState} index={2} />
-            <ManageItem page={pageState} index={3} />
-            <ManageItem page={pageState} index={4} />
-            <ManageItem page={pageState} index={5} />
-            <ManageItem page={pageState} index={6} />
-            <ManageItem page={pageState} index={7} />
-            <ManageItem page={pageState} index={8} />
-            <ManageItem page={pageState} index={9} />
+            {isLoading ? (
+              <Spin tip="^_^数据加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
+            ) : pageState.records.length === 0 ? (
+              <Result
+                style={{ margin: '0 auto' }}
+                status="404"
+                title="没有活动数据"
+                subTitle="现在好像没有活动,快去创建活动吧！"
+              />
+            ) : (
+              pageState.records.map((value, index) => {
+                return (
+                  <ManageItem
+                    key={value + ' ' + index}
+                    page={pageState.pageNumber}
+                    index={index}
+                    toPostNotice={toPostNotice}
+                    toEditCompetition={toEditCompetition}
+                  />
+                )
+              })
+            )}
+            {/* <ManageItem page={pageState} index={1} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={2} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={3} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={4} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={5} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={6} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={7} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={8} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={9} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} /> */}
           </div>
           <div className="manage-body-page">
-            <Pagination current={pageState} pageSize={9} showSizeChanger={false} onChange={onChange} total={9} />
+            <Pagination
+              current={pageState.pageNumber + 1}
+              pageSize={pageState.pageSize}
+              showSizeChanger={false}
+              onChange={onChange}
+              total={pageState.total}
+            />
           </div>
         </div>
       </div>
