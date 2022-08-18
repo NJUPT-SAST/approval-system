@@ -1,10 +1,10 @@
 .manage {
-  overflow: hidden;
-  height: 92vh;
+  overflow: auto;
+  height: calc(100vh - 124px);
   background-color: #f0f0f0;
 }
 .manage-content {
-  padding: 0 1.77vw 0 1.77vw;
+  padding: 0 1.77vw 0 0;
   .manage-content-table-title {
     margin: 3vh 0 2.5vh 0;
     line-height: 3.15vh;
@@ -17,7 +17,6 @@
     margin-left: 1.1vw;
     margin-right: 0.93vw;
     padding: 1.8vh 3.6vw 0 3.6vw;
-    min-width: 80vw;
     text-align: center;
     background-color: #fff;
   }

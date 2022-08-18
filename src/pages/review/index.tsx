@@ -1,13 +1,12 @@
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { Space, Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, Route } from 'react-router-dom'
 import './index.scss'
 import ReviewList from '../reviewList'
 import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
-import { DataType, DataListType } from '../../type/judgeTypes'
-import { totalmem } from 'os'
+import { DataListType } from '../../type/judgeTypes'
 
 // 获取本地存储数据，判断登陆人员身份
 const userState = localStorage.getItem('userState')
@@ -29,7 +28,12 @@ function Review(props: { role: any }) {
   // 当前页
   const [pageNum, setPageNum] = useState(1)
   // 页面数据
-  const [dataList, SetDataList] = useState<DataType[]>([])
+  const [dataList, SetDataList] = useState<any>({})
+
+  // 获取子组件中的页数
+  const getpageNum = (current: number) => {
+    setPageNum(current)
+  }
 
   /**
    * 获取表格数据
@@ -47,20 +51,32 @@ function Review(props: { role: any }) {
       })
     }
   }, [pageNum])
+  console.log(dataList.list)
 
-  // console.log(dataList)
+  const detail = <ReviewList role={role} />
 
-  // 渲染子组件
-  const table =
-    role === 'judge' ? (
-      <JudgeReview list={[]} total={0} pageNum={0} pageSize={0} pages={0} isFirstPage={false} isLastPage={false} />
-    ) : (
-      <ApproverReview total={0} list={[]} pageNum={0} pageSize={0} pages={0} isFirstPage={false} isLastPage={false} />
-    )
-  const detail = <ReviewList role={undefined} />
   if (pathname === '/review') {
+    // 渲染子组件
+    const table =
+      role === 'judge' ? (
+        <JudgeReview
+          getPageNum={getpageNum}
+          list={dataList.list}
+          pageNum={dataList.pageNum}
+          total={dataList.total}
+          pageSize={dataList.pageSize}
+        />
+      ) : (
+        <ApproverReview
+          getPageNum={getpageNum}
+          list={dataList.list}
+          pageNum={dataList.pageNum}
+          total={dataList.total}
+          pageSize={dataList.pageSize}
+        />
+      )
     return (
-      <div className="manage">
+      <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
         <TopBar />
         {table}
       </div>
@@ -70,8 +86,17 @@ function Review(props: { role: any }) {
   }
 }
 
+interface IJudgeReview {
+  list: any
+  pageNum: number
+  total: number
+  pageSize: number
+  getPageNum: any
+}
+
 // 身份为评审人员时表格内容
-const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
+const JudgeReview: React.FC<IJudgeReview> = (props) => {
+  const { getPageNum, list, total, pageSize } = props
   // 表头内容
   const columns: ColumnsType<DataListType> = [
     {
@@ -82,7 +107,7 @@ const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
     {
       key: '2',
       title: '比赛名称',
-      dataIndex: 'name',
+      dataIndex: 'title',
     },
     {
       key: '3',
@@ -97,12 +122,12 @@ const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
     {
       key: '5',
       title: '评审开始日期',
-      dataIndex: 'start_date',
+      dataIndex: 'startDate',
     },
     {
       key: '6',
       title: '评审截止日期',
-      dataIndex: 'end_date',
+      dataIndex: 'endDate',
     },
     {
       key: '7',
@@ -112,8 +137,7 @@ const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
         <Space size="middle">
           <Link
             to={{
-              pathname: '/review/list',
-              search: '?comId=1&page=1',
+              pathname: `/review/list?comId=` + id + '&page=' + current,
             }}
           >
             <Button className="count" type="primary">
@@ -124,9 +148,12 @@ const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
       ),
     },
   ]
-  // 修改当前页数
+  // 表格当前页数的声明、修改和传参
+  const [current, setCurrent] = useState(1)
+  const [id, setId] = useState(1)
   const changePageNum = (current: number) => {
-    pageNum = current
+    setCurrent(current)
+    getPageNum(current)
   }
 
   return (
@@ -138,17 +165,17 @@ const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
             <Table<DataListType>
               columns={columns}
               dataSource={list}
+              rowKey={(record) => record.id}
               onRow={(record) => {
                 return {
-                  onClick: (event) => {
-                    console.log(record)
+                  onClick: () => {
+                    setId(record.id)
                   },
                 }
               }}
               pagination={{
                 pageSize: pageSize,
                 total: total,
-                current: pageNum,
                 onChange: (current) => {
                   changePageNum(current)
                 },
@@ -161,7 +188,8 @@ const JudgeReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
   )
 }
 // 身份为审批人员时表格内容
-const ApproverReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
+const ApproverReview: React.FC<IJudgeReview> = (props) => {
+  const { getPageNum, list, total, pageSize } = props
   // 表头内容
   const columns: ColumnsType<DataListType> = [
     {
@@ -172,7 +200,7 @@ const ApproverReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
     {
       key: '2',
       title: '比赛名称',
-      dataIndex: 'name',
+      dataIndex: 'title',
     },
     {
       key: '3',
@@ -187,12 +215,12 @@ const ApproverReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
     {
       key: '5',
       title: '评审开始日期',
-      dataIndex: 'start_date',
+      dataIndex: 'startDate',
     },
     {
       key: '6',
       title: '评审截止日期',
-      dataIndex: 'end_date',
+      dataIndex: 'endDate',
     },
     {
       key: '7',
@@ -200,23 +228,27 @@ const ApproverReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Link
-            to={{
-              pathname: '/review/list',
-              search: '?comId=1&page=1',
-            }}
-          >
-            <Button className="count" type="primary">
-              {role()}
-            </Button>
-          </Link>
+          <Route>
+            <Link
+              to={{
+                pathname: `/review/list?comId=` + id + '&page=' + current,
+              }}
+            >
+              <Button className="count" type="primary">
+                {role()}
+              </Button>
+            </Link>
+          </Route>
         </Space>
       ),
     },
   ]
-  // 修改当前页数
+  // 表格当前页数的声明、修改和传参
+  const [current, setCurrent] = useState(1)
+  const [id, setId] = useState(1)
   const changePageNum = (current: number) => {
-    pageNum = current
+    setCurrent(current)
+    getPageNum(current)
   }
 
   return (
@@ -225,13 +257,20 @@ const ApproverReview: FC<DataType> = ({ list, pageNum, total, pageSize }) => {
         <div>
           <h1 className="manage-content-table-title">活动审批</h1>
           <div className="manage-content-table-body">
-            <Table
+            <Table<DataListType>
               columns={columns}
               dataSource={list}
+              rowKey={(record) => record.id}
+              onRow={(record) => {
+                return {
+                  onClick: () => {
+                    setId(record.id)
+                  },
+                }
+              }}
               pagination={{
                 pageSize: pageSize,
                 total: total,
-                current: pageNum,
                 onChange: (current) => {
                   changePageNum(current)
                 },

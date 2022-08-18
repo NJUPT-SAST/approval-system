@@ -8,7 +8,7 @@ const { Link } = Anchor
 interface DataType {
   posts: string
   name: string
-  stuid: string
+  studentId: string
   grade: string
   major: string
   academy: string
@@ -16,33 +16,33 @@ interface DataType {
 const columns: ColumnsType<DataType> = [
   {
     title: '职位',
-    dataIndex: 'posts',
-    key: 'posts',
+    dataIndex: 'isCaptain',
+    key: '1',
   },
   {
     title: '姓名',
     dataIndex: 'name',
-    key: 'name',
+    key: '2',
   },
   {
     title: '学号',
-    dataIndex: 'stuid',
-    key: 'stuid',
+    dataIndex: 'studentId',
+    key: '3',
   },
   {
     title: '年级',
     dataIndex: 'grade',
-    key: 'grade',
+    key: '4',
   },
   {
     title: '专业',
     dataIndex: 'major',
-    key: 'major',
+    key: '5',
   },
   {
     title: '学院',
     dataIndex: 'academy',
-    key: 'academy',
+    key: '6',
   },
 ]
 
@@ -50,7 +50,7 @@ const data: DataType[] = [
   {
     posts: '队长',
     name: 'John Brown',
-    stuid: 'B122323',
+    studentId: 'B122323',
     grade: '大一',
     major: '计算机科学与技术',
     academy: '计软网安院',
@@ -58,7 +58,7 @@ const data: DataType[] = [
   {
     posts: '队员',
     name: 'John Brown',
-    stuid: 'B122323',
+    studentId: 'B122323',
     grade: '大一',
     major: '计算机科学与技术',
     academy: '计软网安院',
@@ -66,7 +66,7 @@ const data: DataType[] = [
   {
     posts: '队员',
     name: 'John Brown',
-    stuid: 'B122323',
+    studentId: 'B122323',
     grade: '大一',
     major: '计算机科学与技术',
     academy: '计软网安院',
@@ -74,7 +74,7 @@ const data: DataType[] = [
   {
     posts: '队员',
     name: 'John Brown',
-    stuid: 'B122323',
+    studentId: 'B122323',
     grade: '大一',
     major: '计算机科学与技术',
     academy: '计软网安院',

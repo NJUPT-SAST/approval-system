@@ -49,7 +49,7 @@ const Home = () => {
           break
         case 2:
           setUserState('approver')
-          localStorage.setItem('userState', 'admin')
+          localStorage.setItem('userState', 'approver')
           break
         case 0:
           setUserState('user')
@@ -57,7 +57,7 @@ const Home = () => {
           break
         case 1:
           setUserState('judge')
-          localStorage.setItem('userState', 'admin')
+          localStorage.setItem('userState', 'judge')
           break
         default:
           break

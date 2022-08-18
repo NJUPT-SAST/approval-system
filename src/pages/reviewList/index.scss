@@ -1,7 +1,8 @@
 .manage {
-  overflow: auto;
-  height: calc(100vh - 70px);
+  width: calc(100vw - 201px);
+  height: calc(100vh - 75px);
   background-color: #f0f0f0;
+  overflow: auto;
 }
 .manage-content {
   padding: 0 1.77vw 0 1.77vw;
@@ -29,7 +30,6 @@
     margin-left: 1.1vw;
     margin-right: 0.93vw;
     padding: 1.8vh 3.6vw 0 3.6vw;
-    min-width: 80vw;
     text-align: center;
     background-color: #fff;
   }

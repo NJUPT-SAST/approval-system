@@ -25,7 +25,7 @@ const judge: RouteObject[] = [
             element: <ReviewJudge />,
           },
           {
-            path: 'judgelist',
+            path: 'list',
             element: <ReviewList role={'judge'} />,
           },
         ],

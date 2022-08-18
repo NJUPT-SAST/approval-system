@@ -36,24 +36,24 @@ export const getJudgeCompetitionList = (page: number) => {
   data.append('page', page.toString())
   return axios({
     method: 'get',
-    url: '/review/competition-list',
+    url: '/review/competition-list?page=' + page,
     data: data,
   })
 }
 
 /**
  * 获取审核作品列表
- * @param competitionId 比赛 id
+ * @param comId 比赛 id
  * @param page 当前页数
  * @return axios 对象
  */
-export const getJudgeWorkList = (competitionId: number, page: number) => {
+export const getJudgeWorkList = (comId: number, page: number) => {
   const data = new FormData()
-  data.append('comId', competitionId.toString())
+  data.append('comId', comId.toString())
   data.append('page', page.toString())
   return axios({
     method: 'get',
-    url: '/review/program-list',
+    url: '/review/program-list?comId=' + comId + '&page=' + page,
     data: data,
   })
 }
@@ -83,24 +83,24 @@ export const getScoreCompetitionList = (page: number) => {
   data.append('page', page.toString())
   return axios({
     method: 'get',
-    url: '/score/competition-list',
+    url: '/score/competition-list?page=' + page,
     data: data,
   })
 }
 
 /**
  * 获取评分作品列表
- * @param competitionId 比赛 id
+ * @param comId 比赛 id
  * @param page 当前页数
  * @return axios 对象
  */
-export const getScoreWorkList = (competitionId: number, page: number) => {
+export const getScoreWorkList = (comId: number, page: number) => {
   const data = new FormData()
-  data.append('comId', competitionId.toString())
+  data.append('comId', comId.toString())
   data.append('page', page.toString())
   return axios({
     method: 'get',
-    url: '/score/program-list',
+    url: '/score/program-list?comId=' + comId + '&page=' + page,
     data: data,
   })
 }
@@ -115,7 +115,7 @@ export const getScoreWork = (workId: number) => {
   data.append('id', workId.toString())
   return axios({
     method: 'get',
-    url: '/score/program-info',
+    url: '/score/program-info?id=' + workId,
     data: data,
   })
 }
