@@ -30,6 +30,11 @@ const getNoticeStorageIndex = (noticeArray: Array<noticeType>, id: number): numb
   return index
 }
 
+//创建or编辑公告，1为创建，2为编辑
+const createOrEdit = (pathname: string): number => {
+  return pathname.startsWith('/manage') ? 1 : 2
+}
+
 function Notice() {
   //活动标题
   const titleRef = useRef(null)
@@ -40,8 +45,9 @@ function Notice() {
   const roleChange = ({ target: { value } }: RadioChangeEvent) => {
     setRole(value)
   }
-
   const { pathname } = useLocation()
+  //创建or编辑公告
+  const [pageState] = useState(createOrEdit(pathname))
   //活动id
   const id: number = getActivityId(pathname)
   //本地已保存所有公告（所有活动）
@@ -87,7 +93,7 @@ function Notice() {
   return (
     <div className="activity-notice">
       <TopBar activity='"挑战杯"创新创业大赛' />
-      <p id="activity-notice-header">发布公告</p>
+      <p id="activity-notice-header">{pageState === 1 ? '发布公告' : '编辑公告'}</p>
       <div className="activity-notice-body">
         <div className="activity-notice-title">
           <p id="activity-notice-title">公告标题：</p>
@@ -108,15 +114,27 @@ function Notice() {
           </Radio.Group>
         </div>
         <div className="activity-notice-operation">
-          <Button type="primary" size="small" icon={<CalendarOutlined />} onClick={saveNotice}>
-            保存
-          </Button>
-          <Button type="primary" size="small">
-            发布
-          </Button>
-          <Button type="primary" size="small">
-            删除
-          </Button>
+          {pageState === 2 ? (
+            <Button type="primary" size="small" icon={<CalendarOutlined />} onClick={saveNotice}>
+              保存
+            </Button>
+          ) : (
+            <></>
+          )}
+          {pageState === 1 ? (
+            <Button type="primary" size="small">
+              发布
+            </Button>
+          ) : (
+            <></>
+          )}
+          {pageState === 2 ? (
+            <Button type="primary" size="small">
+              删除
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>
