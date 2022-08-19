@@ -2,6 +2,8 @@ import './index.scss'
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { getUserProfile } from '../../api/user'
+import { Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 // import { useNavigate, useSearchParams } from 'react-router-dom'
 // import { message, Upload, Button, Form, Input, Select } from 'antd'
 // import type { UploadChangeParam } from 'antd/lib/upload/'
@@ -140,6 +142,8 @@ function Main() {
   //     })
   //   }
   // }
+  const [isLoading, setIsLoading] = useState(true)
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
 
   const [personalInfo, setPersonalInfo] = useState<Record<string, InfoItem>>({
     name: {
@@ -179,53 +183,59 @@ function Main() {
   )
 
   useEffect(() => {
-    let userInfo: userApiData | string | null = sessionStorage.getItem('userProfile')
+    const code = localStorage.getItem('code')
+    let userInfo: userApiData | string | null = code ? sessionStorage.getItem(code) : null
 
     async function getUserInfo() {
+      if (userInfo) return
+
       try {
         const res = (await getUserProfile()).data
+
         if (res.success) {
           userInfo = JSON.stringify(res.data)
-          sessionStorage.setItem('userProfile', userInfo)
+          sessionStorage.setItem(res.data.code, userInfo)
         }
       } catch {
         console.log('请求网络失败')
       }
     }
 
-    if (!userInfo) getUserInfo()
-    if (!userInfo) return console.log('初始化异常')
-    userInfo = JSON.parse(userInfo as string) as userApiData
+    getUserInfo().then(() => {
+      userInfo = JSON.parse(userInfo as string) as userApiData
 
-    const {
-      code = 'B21021021',
-      name = '王小明',
-      major = '软件工程',
-      faculty = '计算机学院、软件学院、网络空间安全学院',
-    } = userInfo
+      const {
+        code = 'B21021021',
+        name = '王小明',
+        major = '软件工程',
+        faculty = '计算机学院、软件学院、网络空间安全学院',
+      } = userInfo
 
-    // 初始化数据
-    setAccountInfo({
-      ...accountInfo,
-      account: Object.assign({}, accountInfo.account, {
-        content: code,
-      }),
-    })
+      // 初始化数据
+      setAccountInfo({
+        ...accountInfo,
+        account: Object.assign({}, accountInfo.account, {
+          content: code,
+        }),
+      })
 
-    setPersonalInfo({
-      ...personalInfo,
-      name: Object.assign({}, personalInfo.name, {
-        content: name,
-      }),
-      major: Object.assign({}, personalInfo.major, {
-        content: major,
-      }),
-      grade: Object.assign({}, personalInfo.grade, {
-        content: codeToGrade(code),
-      }),
-      faculty: Object.assign({}, personalInfo.faculty, {
-        content: faculty,
-      }),
+      setPersonalInfo({
+        ...personalInfo,
+        name: Object.assign({}, personalInfo.name, {
+          content: name,
+        }),
+        major: Object.assign({}, personalInfo.major, {
+          content: major,
+        }),
+        grade: Object.assign({}, personalInfo.grade, {
+          content: codeToGrade(code),
+        }),
+        faculty: Object.assign({}, personalInfo.faculty, {
+          content: faculty,
+        }),
+      })
+
+      setIsLoading(false)
     })
 
     // B21150124
@@ -264,42 +274,48 @@ function Main() {
     <>
       <TopBar />
       <div className="account">
-        <div className="account-wrap">
-          {/* 头像部分内容 */}
-          {/* <div className="upload-avatar">
-            <Upload {...uploadProps} listType="picture-card" className="avatar-uploader" onChange={handleChange}>
-              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-            </Upload>
-
-            <Upload {...uploadProps} listType="picture" onChange={handleChange}>
-              <Button type="primary">点击上传</Button>
-            </Upload>
-
-            <span className="tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
-          </div> */}
-          <div className="personal-info">
-            <p className="info-title">个人信息</p>
-            <div className="info-wrap">
-              {Object.keys(personalInfo).map((key, index) => (
-                <InfoItem key={index} title={personalInfo[key].title} content={personalInfo[key].content} />
-              ))}
-            </div>
-            {/* <Button className="personal-btn" type="primary" onClick={() => navigate('/account?type=edit')}>
-              编辑
-            </Button> */}
+        {isLoading ? (
+          <div className="loading">
+            <Spin tip="^_^信息加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
           </div>
-          <div className="account-info">
-            <p className="info-title">账号信息</p>
-            <div className="info-wrap">
-              {Object.keys(accountInfo).map((key, index) => (
-                <InfoItem key={index} title={accountInfo[key].title} content={accountInfo[key].content} />
-              ))}
+        ) : (
+          <div className="account-wrap">
+            {/* 头像部分内容 */}
+            {/* <div className="upload-avatar">
+              <Upload {...uploadProps} listType="picture-card" className="avatar-uploader" onChange={handleChange}>
+                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+              </Upload>
+  
+              <Upload {...uploadProps} listType="picture" onChange={handleChange}>
+                <Button type="primary">点击上传</Button>
+              </Upload>
+  
+              <span className="tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
+            </div> */}
+            <div className="personal-info">
+              <p className="info-title">个人信息</p>
+              <div className="info-wrap">
+                {Object.keys(personalInfo).map((key, index) => (
+                  <InfoItem key={index} title={personalInfo[key].title} content={personalInfo[key].content} />
+                ))}
+              </div>
+              {/* <Button className="personal-btn" type="primary" onClick={() => navigate('/account?type=edit')}>
+                编辑
+              </Button> */}
             </div>
-            {/* <Button className="account-btn" type="primary" onClick={() => navigate('/account?type=pass')}>
-              修改密码
-            </Button> */}
+            <div className="account-info">
+              <p className="info-title">账号信息</p>
+              <div className="info-wrap">
+                {Object.keys(accountInfo).map((key, index) => (
+                  <InfoItem key={index} title={accountInfo[key].title} content={accountInfo[key].content} />
+                ))}
+              </div>
+              {/* <Button className="account-btn" type="primary" onClick={() => navigate('/account?type=pass')}>
+                修改密码
+              </Button> */}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   )

@@ -1,71 +1,78 @@
+// .manage {
+//   width: calc(100vw - 201px);
+//   height: calc(100vh - 75px);
+//   background-color: #f0f0f0;
+//   overflow: auto;
+// }
+
 .manage-content-body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-left: 22px;
-  width: 1590px;
-  height: 935px;
+  margin-left: 1.1vw;
+  height: 85vh;
   .manage-content-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
+    margin: 3vh 0 1vh 0;
+    line-height: 3.15vh;
+    font-size: 3.15vh;
+    color: rgba(0, 0, 0, 0.85);
     .manage-content-title {
-      margin: 45px 0 20px 0;
-      line-height: 36px;
-      font-size: 36px;
-      color: rgba(0, 0, 0, 0.85);
+      padding-top: 5px;
       text-shadow: 0 2px 4px;
       font-weight: normal;
+      text-align: center;
     }
     .submit {
-      margin: 40px 0 20px 0;
-      line-height: 36px;
-      font-size: 36px;
+      margin-bottom: 1.5vh;
     }
   }
   .manage-content-main {
-    width: 1566px;
-    height: 839px;
+    height: 76vh;
+    padding-bottom: 2vh;
     background-color: #fff;
     .message {
-      height: 514px;
-      margin: 42px;
-      overflow: auto;
+      height: 47.5vh;
+      margin: 3.8vh;
       background-color: #f7f7f7;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       .navigation {
-        margin: 20px 30px;
+        margin: 1.85vh 1.5vw;
         .ant-anchor {
           box-sizing: border-box;
           margin-bottom: 10px;
           color: rgba(0, 0, 0, 0.85);
           font-size: 16px;
-          line-height: 70px;
+          line-height: 3.64vw;
           text-align: left;
           list-style: none;
           font-feature-settings: 'tnum';
-          position: relative;
           padding-left: 2px;
         }
       }
+      .content::-webkit-scrollbar {
+        width: 0;
+      }
       .content {
+        overflow: auto;
         .item {
-          margin-left: 100px;
-          margin-top: 45px;
+          margin-left: 2.6vw;
+          margin-top: 2.3vw;
         }
         .ant-table-thead {
           .ant-table-cell {
             height: 17px;
             line-height: 18px;
-            padding: 10px 16px !important;
+            padding: 10px 14px !important;
           }
         }
       }
       .ant-table {
-        transform: translate(-15px);
         border: none !important;
       }
       .ant-table-cell {
@@ -88,6 +95,7 @@
       }
       .ant-pagination {
         display: none;
+        transform: translateX(-20px);
       }
     }
     .judge {
@@ -97,19 +105,22 @@
       justify-content: center;
       .inputBox {
         color: rgba(0, 0, 0, 0.85);
-        margin-left: 350px;
-        margin-bottom: 20px;
+        margin-left: 18.2vw;
+        padding-left: 8vw;
+        margin-bottom: 10px;
         span {
           vertical-align: top;
           font-size: 16px;
         }
       }
       .inputbox {
+        overflow: auto;
         outline: none;
         padding: 5px;
         font-size: 14px;
         line-height: 22px;
-        width: 783px;
+        width: 40.8vw;
+        resize: none;
       }
     }
   }
