@@ -4,10 +4,7 @@ import { Button, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './index.scss'
-// import ReviewJudge from '../reviewJudge'
-// import ReviewApprover from '../reviewApprover'
 import { getScoreWorkList, getJudgeWorkList } from '../../api/judge'
-// import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
 
 // 限制表格数据类型
 interface DataType {
@@ -71,23 +68,12 @@ function ReviewList() {
       getPageNum={getpageNum}
     />
   )
-  // const detail =
-  //   role === 'approver' ? <ReviewApprover total={dataList.total} /> : <ReviewJudge total={dataList.total} />
-  // if (pathname === '/review/list') {
   return (
     <div className="manage">
       <TopBar />
       {table}
     </div>
   )
-  // } else {
-  //   return (
-  //     <div className="manage">
-  //       <TopBar />
-  //       <div className="manage-content">{detail}</div>
-  //     </div>
-  //   )
-  // }
 }
 
 interface IProgramList {
@@ -160,11 +146,6 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
         <div>
           <div className="manage-content-header">
             <h1 className="manage-content-title">活动项目列表</h1>
-            {/* <div className="go-detail">
-              <Link to="/review/detail">
-                <Button type="primary">{rolestate}</Button>
-              </Link>
-            </div> */}
           </div>
           <div className="manage-content-table-body">
             <Table
