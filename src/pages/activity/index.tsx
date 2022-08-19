@@ -121,6 +121,22 @@ function Activity() {
     }
   }
 
+  // const consoleText = ()=>{
+  //   /* %c
+  //    ______     ______     ______     ______
+  //   /\  ___\   /\  __ \   /\  ___\   /\__  _\
+  //   \ \___  \  \ \  __ \  \ \___  \  \/_/\ \/
+  //    \/\_____\  \ \_\ \_\  \/\_____\    \ \_\
+  //     \/_____/   \/_/\/_/   \/_____/     \/_/
+  //   */
+  //     }
+  //     function getMultiLine(f:any) {
+  //       const lines =f.toString();
+  //       return lines.substring(lines.indexOf("/*") + 3, lines.lastIndexOf("*/"));
+  //       }
+  //     console.log(getMultiLine(consoleText),'color:orange')
+  //     console.log("%c⭐️️ 支持我们的项目： https://github.com/NJUPT-SAST/approval-system",'color:orange;font-size:20px;font-face')
+
   return (
     <div className="activity">
       <TopBar />
