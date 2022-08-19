@@ -28,7 +28,7 @@ export const createCompetitionInfo = (data: competitionInfoType) => {
 export const deleteCompetitionInfo = (competitionId: number) => {
   return axios({
     method: 'POST',
-    url: 'admin/com/delete?id=' + competitionId.toString(),
+    url: '/admin/com/delete?id=' + competitionId.toString(),
   })
 }
 
