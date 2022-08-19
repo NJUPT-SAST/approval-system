@@ -29,21 +29,23 @@ export const createCompetitionInfo = (data: competitionInfoType) => {
 export const deleteCompetitionInfo = (competitionId: number) => {
   return apis({
     method: 'POST',
-    url: 'admin/com/delete?id=' + competitionId.toString(),
+    url: '/admin/com/delete?id=' + competitionId.toString(),
   })
 }
 
 /**
  * 修改活动信息
  * @comment 接口参数命名那里既有 驼峰法 又有 下划线 ,烂
+ * @param competitionId 比赛活动 ID
  * @param data 见类型定义
  * @return axios对象
  */
-export const editCompetitionInfo = (data: competitionInfoType) => {
+export const editCompetitionInfo = (competitionId: number, data: competitionInfoType) => {
   return apis({
     method: 'POST',
     url: '/admin/com/edit',
     data: {
+      id: competitionId,
       ...data,
     },
   })
@@ -62,12 +64,14 @@ export const viewCompetitionInfo = () => {
 
 /**
  * 获取活动列表
+ * @param cur 当前页数
+ * @param limit 每页数据条数
  * @return axios对象
  */
-export const getCompetitionList = () => {
+export const getCompetitionList = (cur: number, limit: number) => {
   return apis({
     method: 'get',
-    url: '/com/competitionList',
+    url: '/com/competitionList?pageNum=' + cur + '&pageSize=' + limit,
   })
 }
 
@@ -87,10 +91,10 @@ export const assignJudge = () => {
  * 导出作品（分配评委） 导出作品后用于分配评委
  * @return axios对象
  */
-export const exportWorkFileDataToAssignJudge = () => {
+export const exportWorkFileDataToAssignScorer = () => {
   return apis({
     method: 'get',
-    url: '/admin/exportFIleData', //这里的大小写异常出自接口
+    url: '/admin/exportFileData',
   })
 }
 
@@ -153,18 +157,18 @@ export const exportTeamInfo = (competitionId: number) => {
 
 /**
  * 修改公告
- * @param competitionId 比赛Id
+ * @param noticeId 比赛Id
  * @param title 公告标题
  * @param content 公告正文
  * @param role 公告接收角色
  * @return axios对象
  */
-export const editNotice = (competitionId: number, title: string, content: string, role: number) => {
+export const editNotice = (noticeId: number, title: string, content: string, role: number) => {
   return apis({
     method: 'POST',
-    url: 'admin/notice/edit',
+    url: '/admin/notice/edit',
     data: {
-      com_id: competitionId,
+      id: noticeId,
       title: title,
       content: content,
       role: role,
