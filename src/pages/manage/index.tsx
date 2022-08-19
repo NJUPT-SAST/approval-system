@@ -1,4 +1,4 @@
-import { Button, Pagination, Spin, Result } from 'antd'
+import { Button, Pagination, Spin, Result, Alert } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import type { PaginationProps } from 'antd'
 import React, { useEffect, useState } from 'react'
@@ -23,6 +23,8 @@ interface DataType {
 }
 
 const Manage: React.FC = () => {
+  //路由
+  const Navigate = useNavigate()
   // 保存页码状态的 state
   const [pageState, setPageState] = useState<{ pageNumber: number; pageSize: number; total: number; records: [] }>({
     pageNumber: 0,
@@ -34,13 +36,14 @@ const Manage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   useEffect(() => {
     setIsLoading(true)
-    getCompetitionList()
+    getCompetitionList(pageState.pageNumber + 1, pageState.pageSize)
       .then((res) => {
         console.log(res)
         setPageState((pre) => {
           const a = { ...pre }
           a.total = res.data.total
           a.records = res.data.records
+          console.log(a.records)
           return a
         })
         setIsLoading(false)
@@ -66,10 +69,8 @@ const Manage: React.FC = () => {
   const toEditCompetition = (competitionId: number) => {
     Navigate('../activity/' + competitionId + '/manage')
   }
-  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
-  //导出
   //路由
-  const Navigate = useNavigate()
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   return (
     <div>
       <TopBar />
