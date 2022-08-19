@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { apis } from '.'
 
 /**
  * 获取所有比赛列表
@@ -7,9 +8,23 @@ import axios from 'axios'
  * @return axios对象
  */
 export const getAllCompetitionList = (cur: number, limit: number) => {
-  return axios({
+  return apis({
     method: 'GET',
     url: '/user/com/list?cur=' + cur.toString() + '&limit=' + limit.toString(),
+  })
+}
+
+/**
+ * 搜索比赛
+ * @param key 搜索关键词
+ * @param cur 当前页数
+ * @param limit 每页显示的数量
+ * @returns axios对象
+ */
+export const searchCompetition = (key: string, cur: number, limit: number) => {
+  return apis({
+    method: 'GET',
+    url: '/user/com/search?cur=' + cur.toString() + '&limit=' + limit.toString() + '&key=' + key,
   })
 }
 
@@ -20,7 +35,7 @@ export const getAllCompetitionList = (cur: number, limit: number) => {
  * @return axios对象
  */
 export const getSignedCompetitionList = (cur: number, limit: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/com/signList?cur=' + cur.toString() + '&limit=' + limit.toString(),
   })
@@ -32,7 +47,7 @@ export const getSignedCompetitionList = (cur: number, limit: number) => {
  * @returns axios对象
  */
 export const getCompetitionInfo = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/com/info/' + competitionId.toString(),
   })
@@ -44,7 +59,7 @@ export const getCompetitionInfo = (competitionId: number) => {
  * @returns axios对象
  */
 export const getCompetitionSignInfo = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/com/signInfo/' + competitionId.toString(),
   })
@@ -63,7 +78,7 @@ export const signUp = (
   teamName: string | null,
   teamMember: { name: string; code: string }[],
 ) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/user/com/signUp',
     data: {
@@ -80,7 +95,7 @@ export const signUp = (
  * @returns axios对象
  */
 export const getTeamInfo = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/com/teamInfo/' + competitionId.toString(),
   })
@@ -100,7 +115,7 @@ export const uplordWork = (competitionId: number, name: string, introduce: strin
   data.append('name', name)
   data.append('introduce', introduce)
   data.append('file', file)
-  return axios({
+  return apis({
     method: 'POST',
     url: '/user/com/upload',
     data: data,
@@ -115,7 +130,7 @@ export const uplordWork = (competitionId: number, name: string, introduce: strin
 export const deleteWork = (competitionId: number) => {
   const data = new FormData()
   data.append('id', competitionId.toString())
-  return axios({
+  return apis({
     method: 'POST',
     url: '/user/com/delete',
     data: data,
@@ -128,7 +143,7 @@ export const deleteWork = (competitionId: number) => {
  * @returns axios对象
  */
 export const getWorkInfo = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/com/workInfo/' + competitionId.toString(),
   })
@@ -140,7 +155,7 @@ export const getWorkInfo = (competitionId: number) => {
  * @returns axios对象
  */
 export const getWorkSchema = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/com/schema/' + competitionId.toString(),
   })
@@ -153,7 +168,7 @@ export const getWorkSchema = (competitionId: number) => {
  * @returns axios对象
  */
 export const uploadWorkSchema = (competitionId: number, data: string) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/user/com/uploadSchema/' + competitionId.toString(),
     data: {
@@ -167,7 +182,7 @@ export const uploadWorkSchema = (competitionId: number, data: string) => {
  * @returns axios对象
  */
 export const getUserProfile = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/user/profile',
   })

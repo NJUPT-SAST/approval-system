@@ -1,176 +1,144 @@
-import { Button } from 'antd'
-import Table, { ColumnsType } from 'antd/lib/table'
+import { Button, Pagination, Spin, Result } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import type { PaginationProps } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { getCompetitionList } from '../../api/admin'
 import { useNavigate } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
+import ManageItem from './components/manageItem'
 import './index.scss'
 
 interface DataType {
-  key: number
-  index: number
-  name: string
-  start: string
-  end: string
-  des: string
-  reviewer: string
-  state: string
-  regist: number
-  submit: number
-  finish: number
+  key: number //
+  index: number //
+  name: string //
+  start: string //
+  end: string //
+  des: string //
+  reviewer: string //
+  state: string //
+  regist: number //
+  submit: number //
+  finish: number //
 }
 
-function Manage() {
-  const [data, setData] = useState<Array<DataType>>([])
-  const navigate = useNavigate()
-  const columns: ColumnsType<DataType> = [
-    {
-      title: '序号',
-      key: 'index',
-      dataIndex: 'index',
-      width: 30,
-    },
-    {
-      title: '名称',
-      key: 'name',
-      dataIndex: 'name',
-      width: 120,
-    },
-    {
-      title: '开始日期',
-      key: 'start',
-      dataIndex: 'start',
-    },
-    {
-      title: '结束日期',
-      key: 'end',
-      dataIndex: 'end',
-    },
-    {
-      title: '比赛简介',
-      key: 'des',
-      dataIndex: 'des',
-      width: 150,
-    },
-    {
-      title: '评审人员',
-      key: 'reviewer',
-      dataIndex: 'reviewer',
-      width: 75,
-    },
-    {
-      title: '活动状态',
-      key: 'state',
-      dataIndex: 'state',
-      width: 75,
-    },
-    {
-      title: '已报名人数',
-      key: 'regist',
-      dataIndex: 'regist',
-      width: 90,
-    },
-    {
-      title: '已提交材料人数',
-      key: 'submit',
-      dataIndex: 'submit',
-      width: 100,
-    },
-    {
-      title: '已评审完毕人数',
-      key: 'finish',
-      dataIndex: 'finish',
-      width: 100,
-    },
-    {
-      title: '导出Excel',
-      key: 'excel',
-      dataIndex: '',
-      width: 75,
-      render: () => (
-        <Button type="link" size="small">
-          导出
-        </Button>
-      ),
-    },
-    {
-      title: '发布公告',
-      key: 'notice',
-      dataIndex: '',
-      width: 75,
-      render: () => (
-        <Button
-          type="link"
-          size="small"
-          onClick={() => {
-            navigate('/activity/10001/notice')
-          }}
-        >
-          发布公告
-        </Button>
-      ),
-    },
-    {
-      title: '修改活动',
-      key: 'modify',
-      dataIndex: '',
-      width: 75,
-      render: () => (
-        <Button
-          type="link"
-          size="small"
-          onClick={() => {
-            navigate('/activity/10001/manage')
-          }}
-        >
-          编辑
-        </Button>
-      ),
-    },
-  ]
-
+const Manage: React.FC = () => {
+  // 保存页码状态的 state
+  const [pageState, setPageState] = useState<{ pageNumber: number; pageSize: number; total: number; records: [] }>({
+    pageNumber: 0,
+    pageSize: 9,
+    total: 0,
+    records: [],
+  })
+  //保存 是否在加载 的状态的 state
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   useEffect(() => {
-    if (data.length !== 0) {
-      return
-    }
-    setData((data: DataType[]) => {
-      //先自己生成一点测试数据用,之后用api获取
-      for (let i = 0; i < 45; ++i) {
-        data.push({
-          key: i,
-          index: 114514,
-          name: '名字什么的随便就好了',
-          start: '2022-07-14',
-          end: '2022-07-25',
-          des: '就随便写点吧',
-          reviewer: '随便谁吧',
-          state: '进行中',
-          regist: 1,
-          submit: 1,
-          finish: 1,
+    setIsLoading(true)
+    getCompetitionList()
+      .then((res) => {
+        console.log(res)
+        setPageState((pre) => {
+          const a = { ...pre }
+          a.total = res.data.total
+          a.records = res.data.records
+          return a
         })
-      }
-      return [...data]
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        console.log(error)
+      })
+  }, [pageState.pageNumber])
+  //页码
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setPageState((pre) => {
+      const a = { ...pre }
+      a.pageNumber = page - 1
+      return a
     })
-  }, [])
-
+  }
+  //跳转到发布公告的界面
+  const toPostNotice = (competitionId: number) => {
+    Navigate('../activity/' + competitionId + '/notice')
+  }
+  //跳转到编辑界面
+  const toEditCompetition = (competitionId: number) => {
+    Navigate('../activity/' + competitionId + '/manage')
+  }
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
+  //导出
+  //路由
+  const Navigate = useNavigate()
   return (
     <div>
       <TopBar />
       <div className="manage-header">
         <h1 id="manage-header-title">活动管理</h1>
-        <Button type="primary" size="small">
-          创建比赛
+        <Button type="primary" size="small" onClick={() => Navigate('./create')}>
+          创建活动
         </Button>
       </div>
-      <div className="manage-body">
-        <Table
-          columns={columns}
-          dataSource={data}
-          rowClassName={(record, index) => {
-            //奇偶行不同样式
-            return index % 2 === 0 ? 'manage-list-odd' : 'manage-list-even'
-          }}
-        />
+      <div className="manage">
+        <div className="manage-body">
+          <div className="manage-body-title">
+            <span className="manage-body-title-ID">序号</span>
+            <span className="manage-body-title-name">名称</span>
+            <span className="manage-body-title-begin-time">开始日期</span>
+            <span className="manage-body-title-end-time">结束日期</span>
+            <span className="manage-body-title-introduce">比赛简介</span>
+            <span className="manage-body-title-review-state">审批人员</span>
+            <span className="manage-body-title-competition-state">活动状态</span>
+            <span className="manage-body-title-team-number">已报名人数</span>
+            <span className="manage-body-title-work-number">已提交材料人数</span>
+            <span className="manage-body-title-judged-number">已审批完毕人数</span>
+            <span className="manage-body-title-export">导出Excel</span>
+            <span className="manage-body-title-post-notice">发布公告</span>
+            <span className="manage-body-title-edit-competition">修改活动</span>
+          </div>
+          <div className="manage-body-items">
+            {isLoading ? (
+              <Spin tip="^_^数据加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
+            ) : pageState.records.length === 0 ? (
+              <Result
+                style={{ margin: '0 auto' }}
+                status="404"
+                title="没有活动数据"
+                subTitle="现在好像没有活动,快去创建活动吧！"
+              />
+            ) : (
+              pageState.records.map((value, index) => {
+                return (
+                  <ManageItem
+                    key={value + ' ' + index}
+                    page={pageState.pageNumber}
+                    index={index}
+                    toPostNotice={toPostNotice}
+                    toEditCompetition={toEditCompetition}
+                  />
+                )
+              })
+            )}
+            {/* <ManageItem page={pageState} index={1} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={2} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={3} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={4} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={5} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={6} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={7} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={8} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
+            <ManageItem page={pageState} index={9} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} /> */}
+          </div>
+          <div className="manage-body-page">
+            <Pagination
+              current={pageState.pageNumber + 1}
+              pageSize={pageState.pageSize}
+              showSizeChanger={false}
+              onChange={onChange}
+              total={pageState.total}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

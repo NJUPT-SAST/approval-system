@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { competitionInfoType } from '../type/apiTypes'
 import qs from 'qs'
+import { apis } from '.'
 
 //经询问 比赛 与接口文档中的 活动 是同一个东西
 //故在该文件内 比赛 字段 指的是接口文档中的 活动 字段
@@ -11,7 +12,7 @@ import qs from 'qs'
  * @return axios对象
  */
 export const createCompetitionInfo = (data: competitionInfoType) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/admin/com/create',
     data: {
@@ -26,7 +27,7 @@ export const createCompetitionInfo = (data: competitionInfoType) => {
  * @return axios对象
  */
 export const deleteCompetitionInfo = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/admin/com/delete?id=' + competitionId.toString(),
   })
@@ -39,7 +40,7 @@ export const deleteCompetitionInfo = (competitionId: number) => {
  * @return axios对象
  */
 export const editCompetitionInfo = (data: competitionInfoType) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/admin/com/edit',
     data: {
@@ -53,7 +54,7 @@ export const editCompetitionInfo = (data: competitionInfoType) => {
  * @return axios对象
  */
 export const viewCompetitionInfo = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/admin/com/competitionInfo',
   })
@@ -64,7 +65,7 @@ export const viewCompetitionInfo = () => {
  * @return axios对象
  */
 export const getCompetitionList = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/com/competitionList',
   })
@@ -75,7 +76,7 @@ export const getCompetitionList = () => {
  * @@return axios对象
  */
 export const assignJudge = () => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/admin/judge/assign',
     data: qs.stringify({}), //接口有个 x-www-form-urlencoded 参数，但内容是空的
@@ -87,7 +88,7 @@ export const assignJudge = () => {
  * @return axios对象
  */
 export const exportWorkFileDataToAssignJudge = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/admin/exportFIleData', //这里的大小写异常出自接口
   })
@@ -99,7 +100,7 @@ export const exportWorkFileDataToAssignJudge = () => {
  * @return axios对象
  */
 export const getUserInfo = (code: string) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/admin/userInfo/' + code,
   })
@@ -111,7 +112,7 @@ export const getUserInfo = (code: string) => {
  * @return axios对象
  */
 export const exportJudgeResult = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/admin/data/result/' + competitionId.toString(),
   })
@@ -126,7 +127,7 @@ export const exportJudgeResult = (competitionId: number) => {
  * @return axios对象
  */
 export const releaseNotice = (competitionId: number, title: string, content: string, role: number) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: '/admin/notice/release',
     data: {
@@ -144,7 +145,7 @@ export const releaseNotice = (competitionId: number, title: string, content: str
  * @return axios对象
  */
 export const exportTeamInfo = (competitionId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/admin/data/exportFile/' + competitionId.toString(),
   })
@@ -159,7 +160,7 @@ export const exportTeamInfo = (competitionId: number) => {
  * @return axios对象
  */
 export const editNotice = (competitionId: number, title: string, content: string, role: number) => {
-  return axios({
+  return apis({
     method: 'POST',
     url: 'admin/notice/edit',
     data: {
@@ -178,7 +179,7 @@ export const editNotice = (competitionId: number, title: string, content: string
  */
 
 export const exportWorkFile = (fileId: number) => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/admin/data/exportWork?fileId=' + fileId.toString(),
   })

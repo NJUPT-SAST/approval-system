@@ -90,6 +90,19 @@
     flex-wrap: wrap;
     gap: 4vw;
     row-gap: 50px;
+    .loading{
+      width: 100%;
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .ant-spin-text{
+        font-size: 20px;
+        font-weight: 500;
+        margin-top: 20px;
+      }
+    }
     .activity-content {
       height: 7em;
     }
@@ -101,7 +114,7 @@
       -webkit-box-orient: vertical;
     }
     .activity-card {
-      height: 16.5vw;
+      height: 16.5vh;
       width: 16.5vw;
       min-height: 350px;
       max-height: 358px;
