@@ -141,7 +141,7 @@ function Main() {
   //   }
   // }
 
-  const personalInfo: Record<string, InfoItem> = {
+  const [personalInfo, setPersonalInfo] = useState<Record<string, InfoItem>>({
     name: {
       title: '姓名',
       content: '',
@@ -158,9 +158,9 @@ function Main() {
       title: '专业',
       content: '',
     },
-  }
+  })
 
-  const accountInfo: Record<string, InfoItem> = {
+  const [accountInfo, setAccountInfo] = useState<Record<string, InfoItem>>({
     account: {
       title: '账号',
       content: '',
@@ -169,7 +169,7 @@ function Main() {
       title: '密码',
       content: '*********',
     },
-  }
+  })
 
   const InfoItem = (props: { title: string; content: string }) => (
     <div className="info-item">
@@ -205,11 +205,28 @@ function Main() {
     } = userInfo
 
     // 初始化数据
-    accountInfo.account.content = code
-    personalInfo.name.content = name
-    personalInfo.major.content = major
-    personalInfo.faculty.content = faculty
-    personalInfo.grade.content = codeToGrade(code)
+    setAccountInfo({
+      ...accountInfo,
+      account: Object.assign({}, accountInfo.account, {
+        content: code,
+      }),
+    })
+
+    setPersonalInfo({
+      ...personalInfo,
+      name: Object.assign({}, personalInfo.name, {
+        content: name,
+      }),
+      major: Object.assign({}, personalInfo.major, {
+        content: major,
+      }),
+      grade: Object.assign({}, personalInfo.grade, {
+        content: codeToGrade(code),
+      }),
+      faculty: Object.assign({}, personalInfo.faculty, {
+        content: faculty,
+      }),
+    })
 
     // B21150124
     function codeToGrade(code: string): string {
