@@ -157,18 +157,18 @@ export const exportTeamInfo = (competitionId: number) => {
 
 /**
  * 修改公告
- * @param competitionId 比赛Id
+ * @param noticeId 比赛Id
  * @param title 公告标题
  * @param content 公告正文
  * @param role 公告接收角色
  * @return axios对象
  */
-export const editNotice = (competitionId: number, title: string, content: string, role: number) => {
+export const editNotice = (noticeId: number, title: string, content: string, role: number) => {
   return apis({
     method: 'POST',
-    url: 'admin/notice/edit',
+    url: '/admin/notice/edit',
     data: {
-      com_id: competitionId,
+      id: noticeId,
       title: title,
       content: content,
       role: role,
