@@ -5,7 +5,7 @@ import Account from '../pages/account'
 import Inbox from '../pages/inbox'
 import Review from '../pages/review'
 import NoMatch from '../pages/noMatch'
-import ReviewApprover from '../pages/reviewApprover'
+import ReviewApprover from '../pages/reviewJudge'
 import ReviewList from '../pages/reviewList'
 
 const approver: RouteObject[] = [
@@ -18,7 +18,7 @@ const approver: RouteObject[] = [
       { path: 'inbox', element: <Inbox /> },
       {
         path: 'review',
-        element: <Review role={'approver'} />,
+        element: <Review />,
         children: [
           {
             path: 'detail',
@@ -26,7 +26,7 @@ const approver: RouteObject[] = [
           },
           {
             path: 'list',
-            element: <ReviewList role={'approver'} />,
+            element: <ReviewList />,
           },
         ],
       },

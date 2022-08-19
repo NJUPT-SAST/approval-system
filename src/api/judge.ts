@@ -1,11 +1,5 @@
 import axios from 'axios'
-
-axios.interceptors.request.use((config: any) => {
-  if (localStorage.getItem('token') !== null) {
-    config.headers['Token'] = localStorage.getItem('token')
-  }
-  return config
-})
+import { apis } from '.'
 
 /**
  * 提交作品审核列表
@@ -19,7 +13,7 @@ export const uploadWorkJudgeInfo = (workId: number, accept: boolean, opinion: st
   data.append('id', workId.toString())
   data.append('accept', accept.toString())
   data.append('opinion', opinion)
-  return axios({
+  return apis({
     method: 'POST',
     url: '/review/upload',
     data: data,
@@ -34,7 +28,7 @@ export const uploadWorkJudgeInfo = (workId: number, accept: boolean, opinion: st
 export const getJudgeCompetitionList = (page: number) => {
   const data = new FormData()
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/competition-list?page=' + page,
     data: data,
@@ -51,7 +45,7 @@ export const getJudgeWorkList = (comId: number, page: number) => {
   const data = new FormData()
   data.append('comId', comId.toString())
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/program-list?comId=' + comId + '&page=' + page,
     data: data,
@@ -66,9 +60,9 @@ export const getJudgeWorkList = (comId: number, page: number) => {
 export const getJudgeWorkInfo = (workId: number) => {
   const data = new FormData()
   data.append('id', workId.toString())
-  return axios({
+  return apis({
     method: 'get',
-    url: '/review/program-info',
+    url: '/review/program-info?id=' + workId,
     data: data,
   })
 }
@@ -81,7 +75,7 @@ export const getJudgeWorkInfo = (workId: number) => {
 export const getScoreCompetitionList = (page: number) => {
   const data = new FormData()
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/competition-list?page=' + page,
     data: data,
@@ -98,7 +92,7 @@ export const getScoreWorkList = (comId: number, page: number) => {
   const data = new FormData()
   data.append('comId', comId.toString())
   data.append('page', page.toString())
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/program-list?comId=' + comId + '&page=' + page,
     data: data,
@@ -113,7 +107,21 @@ export const getScoreWorkList = (comId: number, page: number) => {
 export const getScoreWork = (workId: number) => {
   const data = new FormData()
   data.append('id', workId.toString())
-  return axios({
+  return apis({
+    method: 'get',
+    url: '/score/program-info?id=' + workId,
+    data: data,
+  })
+}
+/**
+ * 获取评分作品总数
+ * @param workId 作品id
+ * @return axios 对象
+ */
+export const getScoreWorkTotal = (workId: number) => {
+  const data = new FormData()
+  data.append('id', workId.toString())
+  return apis({
     method: 'get',
     url: '/score/program-info?id=' + workId,
     data: data,
@@ -132,7 +140,7 @@ export const uploadWorkScoreInfo = (workId: number, score: number, opinion: stri
   data.append('id', workId.toString())
   data.append('score', score.toString())
   data.append('opinion', opinion)
-  return axios({
+  return apis({
     method: 'POST',
     url: '/score/upload',
     data: data,
@@ -144,7 +152,7 @@ export const uploadWorkScoreInfo = (workId: number, score: number, opinion: stri
  * @return axios 对象
  */
 export const judgePoint = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/review/red-point',
   })
@@ -155,7 +163,7 @@ export const judgePoint = () => {
  * @return axios 对象
  */
 export const scorePoint = () => {
-  return axios({
+  return apis({
     method: 'get',
     url: '/score/red-point',
   })

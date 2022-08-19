@@ -1,9 +1,13 @@
 .manage {
   overflow: auto;
-  height: calc(100vh - 124px);
+  // height: calc(100vh - 124px);
   background-color: #f0f0f0;
+  .topBar {
+    width: 100%;
+  }
 }
 .manage-content {
+  width: 100%;
   padding: 0 1.77vw 0 0;
   .manage-content-table-title {
     margin: 3vh 0 2.5vh 0;

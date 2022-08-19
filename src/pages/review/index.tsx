@@ -2,34 +2,36 @@ import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { Space, Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
-import { Link, useLocation, Route } from 'react-router-dom'
+import { Link, useLocation, Route, useNavigate } from 'react-router-dom'
 import './index.scss'
 import ReviewList from '../reviewList'
 import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
 import { DataListType } from '../../type/judgeTypes'
+import ReviewApprover from '../reviewApprover'
+import ReviewJudge from '../reviewJudge'
 
 // 获取本地存储数据，判断登陆人员身份
 const userState = localStorage.getItem('userState')
 const role = () => {
   switch (userState) {
-    case 'judge':
-      return '评审'
     case 'approver':
-      return '审批'
-    default:
       return '评审'
+    case 'judge':
+      return '审批'
   }
 }
 
-// 渲染审批界面
-function Review(props: { role: any }) {
+// 渲染review主界面
+const Review: React.FC = () => {
   const { pathname } = useLocation()
-  const role = props.role
+  const userState = localStorage.getItem('userState')
   // 当前页
   const [pageNum, setPageNum] = useState(1)
   // 页面数据
   const [dataList, SetDataList] = useState<any>({})
+  const [loading, setLoading] = useState(true)
 
+  const navigate = useNavigate()
   // 获取子组件中的页数
   const getpageNum = (current: number) => {
     setPageNum(current)
@@ -41,48 +43,68 @@ function Review(props: { role: any }) {
    * @returns 表格数据
    */
   useEffect(() => {
-    if (role === '审批') {
+    if (userState === 'judge') {
+      setLoading(true)
       getJudgeCompetitionList(pageNum).then((res) => {
         SetDataList(res.data.data)
+        setLoading(false)
       })
     } else {
+      setLoading(true)
       getScoreCompetitionList(pageNum).then((res) => {
         SetDataList(res.data.data)
+        setLoading(false)
       })
     }
   }, [pageNum])
-  console.log(dataList.list)
+  console.log(dataList)
 
-  const detail = <ReviewList role={role} />
-
+  const list = <ReviewList />
+  const detail = userState === 'approver' ? <ReviewApprover /> : <ReviewJudge />
   if (pathname === '/review') {
     // 渲染子组件
-    const table =
-      role === 'judge' ? (
-        <JudgeReview
-          getPageNum={getpageNum}
-          list={dataList.list}
-          pageNum={dataList.pageNum}
-          total={dataList.total}
-          pageSize={dataList.pageSize}
-        />
-      ) : (
-        <ApproverReview
-          getPageNum={getpageNum}
-          list={dataList.list}
-          pageNum={dataList.pageNum}
-          total={dataList.total}
-          pageSize={dataList.pageSize}
-        />
-      )
-    return (
-      <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
-        <TopBar />
-        {table}
-      </div>
+    const approverTable = (
+      <ApproverReview
+        loading={loading}
+        getPageNum={getpageNum}
+        list={dataList.list}
+        pageNum={dataList.pageNum}
+        total={dataList.total}
+        pageSize={dataList.pageSize}
+      />
     )
-  } else {
+    const judgeTable = (
+      <JudgeReview
+        loading={loading}
+        getPageNum={getpageNum}
+        list={dataList.list}
+        pageNum={dataList.pageNum}
+        total={dataList.total}
+        pageSize={dataList.pageSize}
+      />
+    )
+    if (userState === 'approver') {
+      return (
+        <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
+          <TopBar />
+          {approverTable}
+        </div>
+      )
+    } else {
+      return (
+        <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
+          <TopBar />
+          {judgeTable}
+        </div>
+      )
+    }
+  } else if (pathname === '/review/list') {
+    return <div>{list}</div>
+  } else if (pathname === '/review/detail') {
     return <div>{detail}</div>
+  } else {
+    navigate('/')
+    return null
   }
 }
 
@@ -92,11 +114,12 @@ interface IJudgeReview {
   total: number
   pageSize: number
   getPageNum: any
+  loading: boolean
 }
 
-// 身份为评审人员时表格内容
+// 身份为审批人员时表格内容
 const JudgeReview: React.FC<IJudgeReview> = (props) => {
-  const { getPageNum, list, total, pageSize } = props
+  const { getPageNum, list, total, pageSize, loading } = props
   // 表头内容
   const columns: ColumnsType<DataListType> = [
     {
@@ -160,11 +183,12 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     <div className="manage-content">
       <div className="manage-content-table">
         <div>
-          <h1 className="manage-content-table-title">活动评审</h1>
+          <h1 className="manage-content-table-title">活动审批</h1>
           <div className="manage-content-table-body">
             <Table<DataListType>
               columns={columns}
               dataSource={list}
+              loading={loading}
               rowKey={(record) => record.id}
               onRow={(record) => {
                 return {
@@ -187,9 +211,9 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     </div>
   )
 }
-// 身份为审批人员时表格内容
+// 身份为评审人员时表格内容
 const ApproverReview: React.FC<IJudgeReview> = (props) => {
-  const { getPageNum, list, total, pageSize } = props
+  const { getPageNum, list, total, pageSize, loading } = props
   // 表头内容
   const columns: ColumnsType<DataListType> = [
     {
@@ -255,9 +279,10 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
     <div className="manage-content">
       <div className="manage-content-table">
         <div>
-          <h1 className="manage-content-table-title">活动审批</h1>
+          <h1 className="manage-content-table-title">活动评审</h1>
           <div className="manage-content-table-body">
             <Table<DataListType>
+              loading={loading}
               columns={columns}
               dataSource={list}
               rowKey={(record) => record.id}

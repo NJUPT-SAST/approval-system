@@ -1,3 +1,4 @@
+//顶部横幅
 .header {
   .header-wrap {
     display: flex;
@@ -62,15 +63,17 @@
     }
   }
 }
-
+//左边的menu
 .site-layout-background {
   background: rgba(237, 237, 237, 1);
+  //登录 界面
   .login-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 200px;
     background: rgba(24, 144, 255, 1);
+    //头像缩略图
     .avatar {
       margin: 10px 0;
       width: 70px;
@@ -83,22 +86,103 @@
       background-size: contain;
       background-repeat: no-repeat;
     }
-    .validate-part-body{
+    .login-form-body {
       display: flex;
-      .validate-input{
-        width: 55%;
+      flex-direction: column;
+      align-items: center;
+      width: 80%;
+      .login-form-input {
+        border: 1px solid rgba(255, 255, 255, 1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        }
+        .validate{
+          border-radius: 5px 0 0 5px;
+        }
       }
-      .validate-img{
-        width: 45%;
+    //验证码
+    .validate-part-body {
+      display: flex;
+      align-items: top;
+      .validate-input {
+        width: 90px;
+      }
+      .validate-img {
+        width: 70px;
         height: 32px;
+        border-radius: 0 5px 5px 0;
       }
     }
+  
+    //登陆的 button
     .login-form-button {
-      background: rgba(255, 255, 255, 0.3);
-      width: 100%;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 1);
+      background: rgba(24, 144, 255, 1);
+      color: rgba(255, 255, 255, 1);
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 5px;
+    }
+  }
+  //个人简洁信息 界面
+  .user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    background: rgba(24, 144, 255, 1);
+    //头像缩略图
+    .avatar {
+      margin: 80px 0 30px 0;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      background-image: url(https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png);
+      background-position: center;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    //展示个人学号以及姓名
+    .user-profile-code {
+      display: flex;
+      margin: 0 0 5px 0;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      color: rgba(255, 255, 255, 1);
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 700;
+      //加俩空格便于区分
+      span:after {
+        content: '\00a0\00a0';
+      }
+    }
+    //展示所属单位 目前固定为学校
+    .user-profile-school {
+      display: flex;
+      margin: 0 0 20px 0;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      color: rgba(215, 229, 254, 1);
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 400;
+    }
+    //登出的样式
+    .userprofile-logout {
+      .userprofile-logout-button {
+        margin: 0 0 40px 0;
+        border: 1px solid rgba(255, 255, 255, 1);
+        background: rgba(24, 144, 255, 1);
+        color: rgba(255, 255, 255, 1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+      }
     }
   }
 }
+
 .ant-layout-sider-trigger {
   background: #fff;
   color: #002140;
