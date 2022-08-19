@@ -1,7 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Anchor, Button, Empty, List, Skeleton, Timeline } from 'antd'
 import Item from 'antd/lib/list/Item'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { getCompetitionNoticeList } from '../../api/public'
 import { getCompetitionInfo } from '../../api/user'
@@ -54,7 +54,7 @@ function ActivityDetail() {
     useEffect(() => {
       setIsLoading(true)
       getCompetitionInfo(Number(id)).then((res) => {
-        console.log(res)
+        // console.log(res)
         setCompetitionDetail(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -71,7 +71,7 @@ function ActivityDetail() {
    */
   const useGetCompetitionNotice = (id: number) => {
     const [competitionNoticeList, setCompetitionNoticeList] = useState([])
-    useEffect(() => {
+    useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionNoticeList(id).then((res) => {
         // console.log(res)
@@ -138,7 +138,7 @@ function ActivityDetail() {
   }, [])
 
   const competitionNotice = useGetCompetitionNotice(Number(id))
-  console.log(competitionNotice)
+  // console.log(competitionNotice)
   const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
 
   return (

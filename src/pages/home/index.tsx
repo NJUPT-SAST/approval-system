@@ -41,7 +41,7 @@ const Home = () => {
   const onFinish = (values: any) => {
     // console.log('Received values of form: ', values)
     login(validateCodeId, values.validate, values.username).then((res) => {
-      console.log(res)
+      // console.log(res)
       if (res.data.success) {
         localStorage.setItem('token', res.data.data.token)
         getUserProfile().then((res) => {
@@ -110,7 +110,7 @@ const Home = () => {
           return prev + 1
         })
       }
-      console.log(res)
+      // console.log(res)
     })
   }
 

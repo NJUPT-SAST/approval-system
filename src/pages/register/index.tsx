@@ -1,6 +1,6 @@
 import { Button, message, Result } from 'antd'
 import FormRender, { useForm } from 'form-render'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useLayoutEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getCompetitionInfo, getCompetitionSignInfo, getTeamInfo, signUp } from '../../api/user'
 import TopBar from '../../components/TopBar'
@@ -75,7 +75,7 @@ function Register() {
       duration: 50,
     })
     getTeamInfo(Number(id)).then((res) => {
-      console.log(res)
+      // console.log(res)
       if (res.data.errCode !== 2003) {
         setTeamInfo({
           teamName: res.data.data.teamName,
@@ -99,19 +99,24 @@ function Register() {
           content: '😸️ 信息加载成功',
           key: 'loading',
         })
+      } else if (res.data.errMsg === '您还未报名该比赛') {
+        setLoading(false)
+        message.info({
+          content: '💡️ 请填写比赛信息',
+          key: 'loading',
+        })
       } else {
         setLoading(false)
         message.error({
           content: '🙀️ 信息加载错误，请联系管理员',
           key: 'loading',
-          duration: 20,
         })
       }
     })
   }
-  useEffect(() => {
+  useLayoutEffect(() => {
     getCompetitionSignInfo(Number(id)).then((res) => {
-      // console.log(res)
+      // // console.log(res)
       setCompetitionInfo({
         maxParti: res.data.data.maxTeamMembers,
         minParti: res.data.data.minTeamMembers,
@@ -119,7 +124,7 @@ function Register() {
     })
     storeTeamInfo()
   }, [])
-  console.log(teamInfo)
+  // console.log(teamInfo)
   const generateForm = (number: number) => {
     const participants: any[] = []
     for (let i = 1; i <= number - 1; i++) {
@@ -157,7 +162,7 @@ function Register() {
    * @param errors 错误
    */
   const onFinish = (formData: any, errors: any) => {
-    console.log('formData:', formData, 'errors', errors)
+    // console.log('formData:', formData, 'errors', errors)
     if (errors.length === 0) {
       setLoading(true)
       message.loading({
@@ -172,9 +177,9 @@ function Register() {
         const formName = 'parti' + i
         teamMember.push(formData[formName])
       }
-      console.log('teamName', teamName, 'teamMember', teamMember)
+      // console.log('teamName', teamName, 'teamMember', teamMember)
       signUp(Number(id), teamName, teamMember).then((res) => {
-        console.log(res)
+        // console.log(res)
         setMessageSent(true)
         if (res.data.success === true) {
           setMessageStatus('success')
@@ -200,7 +205,7 @@ function Register() {
    * @param values 改变的值
    */
   const valueChangeAction = (values: any) => {
-    // console.log(values)
+    // // console.log(values)
     if (values.select_numOfParti !== undefined) {
       setFormSchema({
         type: 'object',
@@ -249,7 +254,7 @@ function Register() {
       })
       const number = Number(values.select_numOfParti)
       setCurParti(number)
-      // console.log(number)
+      // // console.log(number)
       const newEle = generateForm(number)
       newEle.forEach((element) => {
         setFormSchema((prev: any) => {
@@ -265,7 +270,7 @@ function Register() {
     setMessageSent(false)
     storeTeamInfo()
   }
-  // console.log(formSchema)
+  // // console.log(formSchema)
   return (
     <div>
       <TopBar activity="“挑战杯”创新创业大赛" />
