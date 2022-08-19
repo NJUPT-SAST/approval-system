@@ -29,7 +29,7 @@ export const createCompetitionInfo = (data: competitionInfoType) => {
 export const deleteCompetitionInfo = (competitionId: number) => {
   return apis({
     method: 'POST',
-    url: 'admin/com/delete?id=' + competitionId.toString(),
+    url: '/admin/com/delete?id=' + competitionId.toString(),
   })
 }
 

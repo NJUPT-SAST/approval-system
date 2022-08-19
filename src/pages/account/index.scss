@@ -5,119 +5,133 @@
   margin: 31px 93px;
   background-color: #fff;
   box-shadow: 0 2px 4px 0 rgba($color: #000000, $alpha: 0.25);
-  .upload-avatar {
-    position: relative;
-    margin: 43px 198px 71px;
-    height: 125px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
 
-    .avatar-uploader {
-      width: auto;
-      margin-right: 25px;
+  .account-wrap {
+    padding: 43px 222px 65px;
 
-      .ant-upload-select {
-        margin: 0;
-        width: 125px;
-        height: 125px;
-        border-radius: 50%;
+    .info-title {
+      color: rgb(0 0 0 / 85%);
+      height: 42px;
+      font-size: 24px;
+      line-height: 22px;
+      text-shadow: 0 2px 4px rgb(0 0 0 / 25%);
+    }
+
+    .upload-avatar {
+      position: relative;
+      margin: 43px 198px 71px;
+      height: 125px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+
+      .avatar-uploader {
+        width: auto;
+        margin-right: 25px;
+
+        .ant-upload-select {
+          margin: 0;
+          width: 125px;
+          height: 125px;
+          border-radius: 50%;
+        }
+      }
+
+      .tips {
+        color: #999;
+        font-size: 14px;
+        line-height: 22px;
+        margin-left: 20px;
       }
     }
 
-    .tips {
-      color: #999;
-      font-size: 14px;
-      line-height: 22px;
-      margin-left: 20px;
-    }
-  }
-
-  .personal-info,
-  .account-info {
-    flex: 1;
-    height: 322px;
-    margin-left: 222px;
-    margin-bottom: 65px;
-    position: relative;
-  }
-
-  .personal-btn,
-  .account-btn {
-    position: absolute;
-    left: 250px;
-    width: 88px;
-  }
-
-  .personal-btn {
-    top: 0;
-  }
-
-  .account-btn {
-    bottom: 0;
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    margin-top: 25px;
-
-    .title {
-      width: 79px;
-      text-align: right;
-      font-size: 14px;
-      line-height: 22px;
-      color: rgb(0 0 0 / 65%);
+    .personal-info {
+      margin-bottom: 65px;
     }
 
-    .content {
+    .personal-info,
+    .account-info {
       flex: 1;
-      display: block;
-      font-size: 14px;
-      line-height: 22px;
-      color: rgb(0 0 0 / 25%);
+      position: relative;
     }
-  }
 
-  .edit {
-    width: 299px;
-    margin: 50px 222px;
-    .ant-form-item-label {
-      label {
+    .personal-btn,
+    .account-btn {
+      position: absolute;
+      left: 250px;
+      width: 88px;
+    }
+
+    .personal-btn {
+      top: 0;
+    }
+
+    .account-btn {
+      bottom: 0;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin-top: 25px;
+
+      .title {
+        width: 79px;
+        text-align: right;
+        font-size: 14px;
+        line-height: 22px;
+        color: rgb(0 0 0 / 65%);
+      }
+
+      .content {
+        flex: 1;
+        display: block;
+        font-size: 14px;
+        line-height: 22px;
+        color: rgb(0 0 0 / 25%);
+      }
+    }
+
+    .edit {
+      width: 299px;
+      margin: 50px 222px;
+      .ant-form-item-label {
+        label {
+          left: 0px;
+          top: 0px;
+          width: 117px;
+          height: 58px;
+          color: rgba(0, 0, 0, 0.65);
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 400;
+        }
+      }
+      .ant-form-item-control {
+        top: 13px;
+      }
+    }
+
+    .pass {
+      width: 507px;
+      padding: 12px 24px;
+
+      .title {
         left: 0px;
         top: 0px;
-        width: 117px;
-        height: 58px;
+        width: 96px;
+        height: 33px;
         color: rgba(0, 0, 0, 0.65);
-        font-size: 14px;
+        font-size: 24px;
         line-height: 22px;
         font-weight: 400;
       }
-    }
-    .ant-form-item-control {
-      top: 13px;
-    }
-  }
 
-  .pass {
-    width: 507px;
-    padding: 12px 24px;
-
-    .title {
-      left: 0px;
-      top: 0px;
-      width: 96px;
-      height: 33px;
-      color: rgba(0, 0, 0, 0.65);
-      font-size: 24px;
-      line-height: 22px;
-      font-weight: 400;
-    }
-
-    .name {
-      color: rgba(0, 0, 0, 0.25);
-      font-size: 14px;
-      font-weight: 400;
+      .name {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: 14px;
+        font-weight: 400;
+      }
     }
   }
 }
