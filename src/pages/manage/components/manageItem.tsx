@@ -12,7 +12,7 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
   return (
     <div className={index % 2 === 1 ? 'manage-body-odd' : 'manage-body-even'}>
       <div className="manage-body-item">
-        <span className="manage-body-item-ID">{page * 9 + index}</span>
+        <span className="manage-body-item-ID">{page * 10 + index}</span>
         <span className="manage-body-item-name">“挑战杯”创新创业比赛</span>
         <span className="manage-body-item-begin-time">2022-02-22</span>
         <span className="manage-body-item-end-time">2022-05-20</span>

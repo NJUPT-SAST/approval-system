@@ -64,12 +64,14 @@ export const viewCompetitionInfo = () => {
 
 /**
  * 获取活动列表
+ * @param cur 当前页数
+ * @param limit 每页数据条数
  * @return axios对象
  */
-export const getCompetitionList = () => {
+export const getCompetitionList = (cur: number, limit: number) => {
   return apis({
     method: 'get',
-    url: '/com/competitionList',
+    url: '/com/competitionList?pageNum=' + cur + '&pageSize=' + limit,
   })
 }
 
@@ -92,7 +94,7 @@ export const assignJudge = () => {
 export const exportWorkFileDataToAssignScorer = () => {
   return apis({
     method: 'get',
-    url: '/admin/exportFIleData', //这里的大小写异常出自接口
+    url: '/admin/exportFileData',
   })
 }
 

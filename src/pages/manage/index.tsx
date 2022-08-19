@@ -36,13 +36,14 @@ const Manage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   useEffect(() => {
     setIsLoading(true)
-    getCompetitionList()
+    getCompetitionList(pageState.pageNumber + 1, pageState.pageSize)
       .then((res) => {
         console.log(res)
         setPageState((pre) => {
           const a = { ...pre }
           a.total = res.data.total
           a.records = res.data.records
+          console.log(a.records)
           return a
         })
         setIsLoading(false)
