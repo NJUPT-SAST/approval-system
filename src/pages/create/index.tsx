@@ -2,7 +2,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { competitionInfoType } from '../../type/apiTypes'
 import { Button, Input, message, notification, Radio, RadioChangeEvent, Select, Upload } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import { createCompetitionInfo } from '../../api/admin'
+import { createCompetitionInfo, viewCompetitionInfo, editCompetitionInfo } from '../../api/admin'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload/interface'
 import { MouseEventHandler, useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -11,6 +11,11 @@ import userProfileStore from '../../store/userProfile'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 import TimeRanger from './TimeRanger'
+
+// 替代泛型
+function useMyLocation<T>() {
+  return useLocation() as { state: T }
+}
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader()
@@ -33,12 +38,12 @@ const beforeImageUpload = (file: RcFile) => {
 //团队比赛人数（最多15人）
 const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
 const code = localStorage.get
+
 function Create() {
   //上传比赛照片
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
-  const [imageUrl, setImageUrl] = useState<string>()
-  const location = useLocation()
+  const location = useMyLocation<{ competitionId: number }>()
   //获取 code
   const userProfile = useRecoilValue(userProfileStore)
   //判断是修改还是创建 id为 -1 则为创建 否则为 修改
@@ -59,6 +64,7 @@ function Create() {
     is_review: 1, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
     review_settings: {}, // 此处无注释 无类型
     introduce: '', // 比赛介绍
+    cover: '', //封面url
   })
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
@@ -70,7 +76,11 @@ function Create() {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false)
-        setImageUrl(url)
+        setCompetitionInfo((pre) => {
+          const a = pre
+          a.cover = url
+          return a
+        })
       })
     }
   }
@@ -173,7 +183,8 @@ function Create() {
             console.log('ok')
             setTimeout(() => {
               notification.success({
-                message: '😸️ 登录成功',
+                message: '😸️ 发布成功',
+                description: '快去看看新活动吧',
                 top: 20,
                 placement: 'top',
               })
@@ -183,27 +194,76 @@ function Create() {
         (error) => {
           console.log(error)
           setTimeout(() => {
-            notification.success({
+            notification.error({
               message: '😸️ 发布失败',
+              description: '快检查一下哪里出错了',
               top: 20,
               placement: 'top',
             })
           }, 100)
         },
       )
-    }
+    } else
+      editCompetitionInfo(competitionId, competitionInfo).then(
+        (res) => {
+          if (res.data.success) {
+            console.log('ok')
+            setTimeout(() => {
+              notification.success({
+                message: '😸️ 发布成功',
+                description: '快去看看新活动吧',
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+          }
+        },
+        (error) => {
+          console.log(error)
+          setTimeout(() => {
+            notification.error({
+              message: '😸️ 发布失败',
+              description: '快检查一下哪里出错了',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+        },
+      )
   }
 
   //允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
   useEffect(() => {
-    if (location.state) console.log(location.state)
-    else {
+    if (location.state) {
+      setCompetitionId(location.state.competitionId)
+      viewCompetitionInfo(location.state.competitionId).then((res) => {
+        setCompetitionInfo((pre) => {
+          const a = { ...pre }
+          a.cover = res.data.data.cover
+          a.introduce = res.data.data.introduce
+          a.is_review = res.data.data.is_review
+          a.max_team_members = res.data.data.max_team_members
+          a.min_team_members = res.data.data.min_team_members
+          a.name = res.data.data.name
+          a.reg_begin_time = res.data.data.reg_begin_time
+          a.reg_end_time = res.data.data.reg_end_time
+          a.review_begin_time = res.data.data.review_begin_time
+          a.review_end_time = res.data.data.review_end_time
+          a.review_settings = res.data.data.review_settings
+          a.type = res.data.data.type
+          a.user_code = res.data.data.user_code
+          a.submit_begin_time = res.data.data.submit_begin_time
+          a.submit_end_time = res.data.data.submit_end_time
+          return a
+        })
+      })
+    } else {
       console.log(null)
     }
-    console.log(competitionInfo)
-  })
+  }, [])
+
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
@@ -245,7 +305,11 @@ function Create() {
             beforeUpload={beforeImageUpload}
             onChange={handleImageChange}
           >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            {competitionInfo.cover === '' ? (
+              uploadButton
+            ) : (
+              <img src={competitionInfo.cover} alt="avatar" style={{ width: '100%' }} />
+            )}
           </Upload>
           <div className="activity-create-cover-upload">
             <Button type="primary" size="small" id="activity-create-cancel">
@@ -262,13 +326,6 @@ function Create() {
             value={competitionInfo.name}
             showCount={false}
             onChange={(e) => {
-              setCompetitionInfo((pre) => {
-                const a = { ...pre }
-                a.name = e.target.value
-                return a
-              })
-            }}
-            onBlur={(e) => {
               setCompetitionInfo((pre) => {
                 const a = { ...pre }
                 a.name = e.target.value
@@ -350,7 +407,38 @@ function Create() {
           preEndTime={competitionInfo.review_end_time}
           setEndTime={setEndTime}
         />
-        <div className="activity-create-white">
+        <div className="activity-create-reviewer-setting">
+          <span>审批者学院</span>
+          <Input
+            className="first"
+            placeholder="审批者所属学院"
+            onChange={(e) => {
+              setCompetitionInfo((pre) => {
+                const a = { ...pre }
+                a.review_settings.key = e.target.value
+                return a
+              })
+            }}
+            value={competitionInfo.review_settings.key}
+            showCount={false}
+          />
+          <span>审批者学号</span>
+          <Input
+            className="last"
+            placeholder="审批者学号"
+            onChange={(e) => {
+              setCompetitionInfo((pre) => {
+                const a = { ...pre }
+                a.review_settings.value = e.target.value
+                return a
+              })
+            }}
+            value={competitionInfo.review_settings.value}
+            showCount={false}
+          />
+        </div>
+
+        {/* <div className="activity-create-white">
           <Radio
             checked={allowWhite}
             onClick={() => {
@@ -359,9 +447,9 @@ function Create() {
           >
             允许报名白名单
           </Radio>
-          {/* 只有选中白名单选项才会显示 */}
           {allowWhite ? <span id="activity-create-white-tips">每条内容请单列一行</span> : <></>}
         </div>
+          */}
       </div>
     </div>
   )
