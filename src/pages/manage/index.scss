@@ -21,13 +21,13 @@
   }
 }
 //管理组件的主体
-.manage {
+.manage-body {
   font-family: HarmonyOS Sans SC;
   display: flex;
   align-items: center;
   flex-direction: column;
   margin: 0;
-  .manage-body {
+  .manage-body-list {
     display: flex;
     align-items: center;
     flex-direction: column;

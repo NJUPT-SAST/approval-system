@@ -80,8 +80,8 @@ const Manage: React.FC = () => {
           创建活动
         </Button>
       </div>
-      <div className="manage">
-        <div className="manage-body">
+      <div className="manage-body">
+        <div className="manage-body-list">
           <div className="manage-body-title">
             <span className="manage-body-title-ID">序号</span>
             <span className="manage-body-title-name">名称</span>

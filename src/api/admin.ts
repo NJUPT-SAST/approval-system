@@ -85,7 +85,7 @@ export const assignJudge = (file: File) => {
   return apis({
     method: 'POST',
     url: '/admin/judge/assign',
-    data: formData, //接口有个 x-www-form-urlencoded 参数，但内容是空的
+    data: formData,
   })
 }
 

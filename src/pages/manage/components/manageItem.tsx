@@ -36,7 +36,7 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
         <span
           className="manage-body-item-export"
           onClick={() => {
-            exportWorkFileDataToAssignScorer().then((res) => {
+            exportWorkFileDataToAssignScorer(value.id).then((res) => {
               if (res.data.success) {
                 setTimeout(() => {
                   notification.error({
