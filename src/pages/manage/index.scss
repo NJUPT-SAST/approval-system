@@ -21,13 +21,13 @@
   }
 }
 //管理组件的主体
-.manage {
+.manage-body {
   font-family: HarmonyOS Sans SC;
   display: flex;
   align-items: center;
   flex-direction: column;
   margin: 0;
-  .manage-body {
+  .manage-body-list {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -54,11 +54,11 @@
       border-bottom: solid rgba(151, 151, 151, 1);
       .manage-body-title-ID {
         //max-width: 45px;
-        width: 3.2%;
+        width: 2.5%;
       }
       .manage-body-title-name {
         //max-width: 140px;
-        width: 11.3%;
+        width: 12.0%;
       }
       .manage-body-title-begin-time {
         //max-width: 95px;

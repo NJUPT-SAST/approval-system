@@ -27,7 +27,7 @@ const Manage: React.FC = () => {
   const Navigate = useNavigate()
   // 保存页码状态的 state
   const [pageState, setPageState] = useState<{ pageNumber: number; pageSize: number; total: number; records: [] }>({
-    pageNumber: 0,
+    pageNumber: 1,
     pageSize: 9,
     total: 0,
     records: [],
@@ -36,13 +36,13 @@ const Manage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   useEffect(() => {
     setIsLoading(true)
-    getCompetitionList(pageState.pageNumber + 1, pageState.pageSize)
+    getCompetitionList(pageState.pageNumber, pageState.pageSize)
       .then((res) => {
         console.log(res)
         setPageState((pre) => {
           const a = { ...pre }
-          a.total = res.data.total
-          a.records = res.data.records
+          a.total = res.data.data.total
+          a.records = res.data.data.records
           console.log(a.records)
           return a
         })
@@ -57,13 +57,13 @@ const Manage: React.FC = () => {
   const onChange: PaginationProps['onChange'] = (page) => {
     setPageState((pre) => {
       const a = { ...pre }
-      a.pageNumber = page - 1
+      a.pageNumber = page
       return a
     })
   }
   //跳转到发布公告的界面
   const toPostNotice = (competitionId: number) => {
-    Navigate('../activity/' + competitionId + '/notice')
+    Navigate('./' + competitionId + '/notice/')
   }
   //跳转到编辑界面
   const toEditCompetition = (competitionId: number) => {
@@ -80,8 +80,8 @@ const Manage: React.FC = () => {
           创建活动
         </Button>
       </div>
-      <div className="manage">
-        <div className="manage-body">
+      <div className="manage-body">
+        <div className="manage-body-list">
           <div className="manage-body-title">
             <span className="manage-body-title-ID">序号</span>
             <span className="manage-body-title-name">名称</span>
@@ -90,12 +90,12 @@ const Manage: React.FC = () => {
             <span className="manage-body-title-introduce">比赛简介</span>
             <span className="manage-body-title-review-state">审批人员</span>
             <span className="manage-body-title-competition-state">活动状态</span>
-            <span className="manage-body-title-team-number">已报名人数</span>
-            <span className="manage-body-title-work-number">已提交材料人数</span>
-            <span className="manage-body-title-judged-number">已审批完毕人数</span>
+            <span className="manage-body-title-team-number">已报名队伍</span>
+            <span className="manage-body-title-work-number">已提交材料数</span>
+            <span className="manage-body-title-judged-number">审批完毕数</span>
             <span className="manage-body-title-export">导出Excel</span>
             <span className="manage-body-title-post-notice">发布公告</span>
-            <span className="manage-body-title-edit-competition">修改活动</span>
+            <span className="manage-body-title-edit-competition">编辑活动</span>
           </div>
           <div className="manage-body-items">
             {isLoading ? (
@@ -111,9 +111,9 @@ const Manage: React.FC = () => {
               pageState.records.map((value, index) => {
                 return (
                   <ManageItem
-                    key={value + ' ' + index}
-                    page={pageState.pageNumber}
                     index={index}
+                    key={pageState.pageNumber + ' ' + index}
+                    value={value}
                     toPostNotice={toPostNotice}
                     toEditCompetition={toEditCompetition}
                   />
@@ -132,7 +132,7 @@ const Manage: React.FC = () => {
           </div>
           <div className="manage-body-page">
             <Pagination
-              current={pageState.pageNumber + 1}
+              current={pageState.pageNumber}
               pageSize={pageState.pageSize}
               showSizeChanger={false}
               onChange={onChange}
