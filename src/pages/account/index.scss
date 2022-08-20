@@ -1,5 +1,5 @@
 .account {
-  min-width: 915px;
+  min-width: 625px;
   display: flex;
   flex-direction: column;
   margin: 31px 93px;
@@ -13,7 +13,7 @@
   }
 
   .account-wrap {
-    padding: 43px 222px 65px;
+    padding: 43px 0 65px 222px;
 
     .info-title {
       color: rgb(0 0 0 / 85%);
