@@ -11,7 +11,6 @@
   justify-content: flex-start;
   // margin-left: 1.1vw;
   // height: 85vh;
-  height: 100%;
   min-width: 1200px;
   .manage-content-header {
     display: flex;
@@ -115,8 +114,8 @@
       justify-content: center;
       .inputBox {
         color: rgba(0, 0, 0, 0.85);
-        margin-left: 18.2vw;
-        // padding-left: 8vw;
+        margin-left: 15.2vw;
+        padding-left: 8vw;
         margin-bottom: 10px;
         span {
           vertical-align: top;
