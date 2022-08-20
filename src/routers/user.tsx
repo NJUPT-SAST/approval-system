@@ -7,7 +7,7 @@ import Home from '../pages/home'
 import Inbox from '../pages/inbox'
 import NoMatch from '../pages/noMatch'
 import Register from '../pages/register'
-import Result from '../pages/result'
+import Result from '../pages/Result'
 const user: RouteObject[] = [
   {
     path: '/',

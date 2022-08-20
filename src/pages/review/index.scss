@@ -55,3 +55,19 @@
   flex-direction: row;
   justify-content: center;
 }
+
+.redPoint:before {
+  position: absolute;
+  left: 5.2vw;
+  width: 5px;
+  height: 5px;
+  content: ' ';
+  background-color: red;
+  border-radius: 50%;
+  z-index: 1000;
+}
+.td{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
