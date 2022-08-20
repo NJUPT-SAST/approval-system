@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { competitionInfoType } from '../type/apiTypes'
-import qs from 'qs'
 import { apis } from '.'
 
 //经询问 比赛 与接口文档中的 活动 是同一个东西
@@ -29,7 +28,7 @@ export const createCompetitionInfo = (data: competitionInfoType) => {
 export const deleteCompetitionInfo = (competitionId: number) => {
   return apis({
     method: 'POST',
-    url: '/admin/com/delete?id=' + competitionId.toString(),
+    url: '/admin/com/delete?id=' + competitionId,
   })
 }
 
@@ -55,10 +54,10 @@ export const editCompetitionInfo = (competitionId: number, data: competitionInfo
  * 查看活动信息
  * @return axios对象
  */
-export const viewCompetitionInfo = () => {
+export const viewCompetitionInfo = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/com/competitionInfo',
+    url: '/admin/com/competitionInfo?comId=' + competitionId,
   })
 }
 
@@ -71,30 +70,36 @@ export const viewCompetitionInfo = () => {
 export const getCompetitionList = (cur: number, limit: number) => {
   return apis({
     method: 'get',
-    url: '/com/competitionList?pageNum=' + cur + '&pageSize=' + limit,
+    url: '/admin/com/competitionList?pageNum=' + cur + '&pageSize=' + limit,
   })
 }
 
 /**
  * 分配评委
- * @@return axios对象
+ * @param
+ * @return axios对象
  */
-export const assignJudge = () => {
+export const assignJudge = (file: File) => {
+  const formData = new FormData()
+  formData.append('file', file)
   return apis({
     method: 'POST',
     url: '/admin/judge/assign',
-    data: qs.stringify({}), //接口有个 x-www-form-urlencoded 参数，但内容是空的
+    data: formData,
   })
 }
 
 /**
- * 导出作品（分配评委） 导出作品后用于分配评委
+ * 导出作品（分配评委）
+ * 导出作品后用于分配评委 导出的是一个 excel 文件
+ *  @param competitionId 活动Id
  * @return axios对象
  */
-export const exportWorkFileDataToAssignScorer = () => {
+export const exportWorkFileDataToAssignScorer = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/exportFileData',
+    url: '/admin/exportFileData?comId=' + competitionId,
+    responseType: 'blob',
   })
 }
 
@@ -118,7 +123,8 @@ export const getUserInfo = (code: string) => {
 export const exportJudgeResult = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/data/result/' + competitionId.toString(),
+    url: '/admin/data/result/' + competitionId,
+    responseType: 'blob',
   })
 }
 
@@ -128,9 +134,10 @@ export const exportJudgeResult = (competitionId: number) => {
  * @param title 公告标题
  * @param content 公告正文
  * @param role 公告接收角色
+ * @param time 发布时间 格式为 'yyyy.mm.dd hh:mm' 如果为未来时间将在未来发布
  * @return axios对象
  */
-export const releaseNotice = (competitionId: number, title: string, content: string, role: number) => {
+export const releaseNotice = (competitionId: number, title: string, content: string, role: number, time?: string) => {
   return apis({
     method: 'POST',
     url: '/admin/notice/release',
@@ -151,19 +158,22 @@ export const releaseNotice = (competitionId: number, title: string, content: str
 export const exportTeamInfo = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/data/exportFile/' + competitionId.toString(),
+    url: '/admin/data/exportFile/' + competitionId,
+    responseType: 'blob',
   })
 }
 
 /**
  * 修改公告
- * @param noticeId 比赛Id
+ * 后端接口有问题 后端待修改
+ * @param noticeId 公告Id
  * @param title 公告标题
  * @param content 公告正文
  * @param role 公告接收角色
+ * @param time 公告发布时间 默认为当前时间 格式为 'yyyy.mm.dd hh:mm'
  * @return axios对象
  */
-export const editNotice = (noticeId: number, title: string, content: string, role: number) => {
+export const editNotice = (noticeId: number, title: string, content: string, role: number, time?: string) => {
   return apis({
     method: 'POST',
     url: '/admin/notice/edit',
@@ -172,12 +182,14 @@ export const editNotice = (noticeId: number, title: string, content: string, rol
       title: title,
       content: content,
       role: role,
+      time: time,
     },
   })
 }
 
 /**
  * 导出附件
+ * 导出的附件是个压缩包
  * @param fileId 文件 id
  * @return axios对象
  */
@@ -185,6 +197,7 @@ export const editNotice = (noticeId: number, title: string, content: string, rol
 export const exportWorkFile = (fileId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/data/exportWork?fileId=' + fileId.toString(),
+    url: '/admin/data/exportWork?fileId=' + fileId,
+    responseType: 'blob',
   })
 }

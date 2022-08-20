@@ -7,7 +7,8 @@ import Home from '../pages/home'
 import Inbox from '../pages/inbox'
 import NoMatch from '../pages/noMatch'
 import Register from '../pages/register'
-import Result from '../pages/Result'
+// import Result from '../pages/result'
+
 const user: RouteObject[] = [
   {
     path: '/',
@@ -21,7 +22,7 @@ const user: RouteObject[] = [
       { path: 'activity/:id/register', element: <Register /> },
       { path: 'inbox', element: <Inbox /> },
       { path: '*', element: <NoMatch /> },
-      { path: 'result', element: <Result /> },
+      // { path: 'result', element: <Result /> },
     ],
   },
 ]
