@@ -1,10 +1,16 @@
+.manage {
+  width: calc(100vw - 201px);
+  height: calc(100vh - 75px);
+  background-color: #f0f0f0;
+  overflow: auto;
+}
 .manage-content-body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin-left: 1.1vw;
-  width: 87vw;
-  height: 90vh;
+  width: 98%;
+  height: 70vh;
   .manage-content-header {
     display: flex;
     flex-direction: row;

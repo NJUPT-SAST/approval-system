@@ -8,6 +8,7 @@ import Inbox from '../pages/inbox'
 import NoMatch from '../pages/noMatch'
 import Register from '../pages/register'
 // import Result from '../pages/result'
+
 const user: RouteObject[] = [
   {
     path: '/',
