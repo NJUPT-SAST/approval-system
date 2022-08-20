@@ -1,9 +1,11 @@
 import { Button } from 'antd'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './index.scss'
 
 type NoticeType = {
   role: number //角色 0代表普通学生 1表示评委 2表示审批人 3表示管理员
+  id: number
   title: string //公告标题
   content: string //公告内容
   time: string //公告发布时间
@@ -11,7 +13,8 @@ type NoticeType = {
 const CompetitionNotice: React.FC<NoticeType> = (props) => {
   //控制公告的折叠状态 true表示折叠 false表示未折叠
   const [foldState, setFoldState] = useState(true)
-  const { role, title, content, time } = props
+  const Navigate = useNavigate()
+  const { id, role, title, content, time } = props
   return (
     <>
       <div className="competition-notice-nav">
@@ -42,7 +45,14 @@ const CompetitionNotice: React.FC<NoticeType> = (props) => {
               由 校大学生科协 发布于 {time}
               {role === 3 ? (
                 <div className="competition-notice-footer-button">
-                  <Button type="primary">编辑</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      Navigate('./notice/' + id + '/')
+                    }}
+                  >
+                    编辑
+                  </Button>
                 </div>
               ) : (
                 <></>

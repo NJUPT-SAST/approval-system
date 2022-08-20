@@ -1,18 +1,24 @@
-// .manage {
-//   width: calc(100vw - 201px);
-//   height: calc(100vh - 75px);
-//   background-color: #f0f0f0;
-//   overflow: auto;
-// }
+.manage {
+  width: calc(100vw - 201px);
+  height: calc(100vh - 75px);
+  background-color: #f0f0f0;
+  overflow: auto;
+}
 
 .manage-content-body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+<<<<<<< HEAD
   // margin-left: 1.1vw;
   // height: 85vh;
   // height: 100%;
   min-width: 1200px;
+=======
+  margin-left: 1.1vw;
+  height: 70vh;
+  width: 98%;
+>>>>>>> master
   .manage-content-header {
     display: flex;
     flex-direction: row;
@@ -117,7 +123,7 @@
         color: rgba(0, 0, 0, 0.85);
         margin-left: 10.2vw;
         padding-left: 8vw;
-        margin-bottom: 10px;
+        margin-bottom: 2vh;
         span {
           vertical-align: top;
           font-size: 16px;
@@ -129,7 +135,7 @@
         padding: 5px;
         font-size: 14px;
         line-height: 22px;
-        width: 40.8vw;
+        width: 45vw;
         resize: none;
       }
     }
