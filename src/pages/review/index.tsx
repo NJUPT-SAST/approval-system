@@ -252,17 +252,15 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Route>
-            <Link
-              to={{
-                pathname: `/review/list?comId=` + id + '&page=' + current,
-              }}
-            >
-              <Button className="count" type="primary">
-                {role()}
-              </Button>
-            </Link>
-          </Route>
+          <Link
+            to={{
+              pathname: `/review/list?comId=` + id + '&page=' + current,
+            }}
+          >
+            <Button className="count" type="primary">
+              {role()}
+            </Button>
+          </Link>
         </Space>
       ),
     },

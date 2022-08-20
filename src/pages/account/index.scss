@@ -4,7 +4,13 @@
   flex-direction: column;
   margin: 31px 93px;
   background-color: #fff;
+  height: calc(100vh - 220px);
+  min-height: 508px;
   box-shadow: 0 2px 4px 0 rgba($color: #000000, $alpha: 0.25);
+
+  .loading {
+    margin: auto;
+  }
 
   .account-wrap {
     padding: 43px 222px 65px;

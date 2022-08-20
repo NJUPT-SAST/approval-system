@@ -10,7 +10,7 @@ function JudgeMenu(props: any) {
       defaultSelectedKeys={['/']}
     >
       <Menu.Item key="/" icon={<DashboardOutlined />}>
-        首页
+        我的账号
       </Menu.Item>
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
         收件箱
