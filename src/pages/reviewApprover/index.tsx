@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Table, Anchor, Button, Pagination } from 'antd'
+import { Form, Input, Table, Anchor, Button, Pagination, notification } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { getScoreWork } from '../../api/judge'
 import './index.scss'
@@ -15,6 +15,13 @@ const ReviewApprover: React.FC = (props) => {
   // 定义显示数据
   const total = Number(localStorage.getItem('listTotal'))
 
+  const { TextArea } = Input
+  // 获取作品id
+  const { search } = useLocation()
+  const [id, setId] = useState<any>()
+
+  // 对输入数据进行限制和处理
+  const [isError, setIsError] = useState(false)
   const [score, setScore] = useState<number | undefined | null>()
   const [opinion, setOpinion] = useState<string | undefined | null>()
   const [dataList, setDataList] = useState<any>({
@@ -25,29 +32,60 @@ const ReviewApprover: React.FC = (props) => {
     memberList: [],
     accessories: '',
   })
-  // 获取作品id
-  const { search } = useLocation()
-  const id = Number(search.slice(1).split('&')[0].split('=')[1])
 
   // 提交表单
   const navigate = useNavigate()
   const handleSubmit = () => {
     if (score! >= 0 && score! <= 100) {
-      uploadWorkScoreInfo(id, score!, opinion!).then(() => {
-        console.log('提交成功')
-        if (id === total) {
-          alert('这是最后一页')
-          return
-        } else if (id > total) {
+      if (opinion !== null) {
+        uploadWorkScoreInfo(id, score!, opinion!).then(() => {
+          setTimeout(() => {
+            notification.info({
+              message: '✅ 提交成功',
+              description: '自动跳转下一个',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+          setId(id + 1)
           navigate('/review/detail?id=' + (id + 1))
-        }
-      })
+          if (id === total) {
+            setTimeout(() => {
+              notification.info({
+                message: '😸️ 审批完成',
+                description: '这是最后一个',
+                top: 20,
+                placement: 'top',
+              })
+            }, 300)
+          } else if (id > total) {
+            navigate('/review/detail?id=' + total)
+          }
+        })
+      } else {
+        setTimeout(() => {
+          notification.info({
+            message: 'x 提交失败',
+            description: '评价不能为空',
+            top: 20,
+            placement: 'top',
+          })
+        }, 300)
+      }
     } else {
-      alert('请输入0-100之间得数')
+      setTimeout(() => {
+        notification.info({
+          message: 'x 提交失败',
+          description: '请输入0-100之间的数字',
+          top: 20,
+          placement: 'top',
+        })
+      }, 100)
     }
   }
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
+    setId(Number(search.slice(1).split('&')[0].split('=')[1]))
     getScoreWork(id).then((res) => {
       const result = res.data.data
       for (let i = 0; i < res.data.data.memberList.length; i++) {
@@ -105,7 +143,7 @@ const ReviewApprover: React.FC = (props) => {
   ]
 
   return (
-    <div className="manage">
+    <div className="reviewApprover-main">
       <TopBar />
       <div className="manage-content-body">
         <div className="manage-content-header">
@@ -152,27 +190,31 @@ const ReviewApprover: React.FC = (props) => {
           <div className="judge">
             <div className="inputBox">
               <span>评分: </span>
-              <input
+              <Input
                 className="inputbox"
-                type="text"
-                placeholder="请输入"
+                placeholder="请输入0-100之间的数"
                 defaultValue={dataList.score}
                 onChange={(e) => {
                   setScore(Number(e.target.value))
+                  if (Number(e.target.value) >= 0 && Number(e.target.value) <= 100) {
+                    setIsError(true)
+                  } else {
+                    setIsError(false)
+                  }
                 }}
-              ></input>
+              />
             </div>
             <div className="inputBox">
               <span>评价: </span>
-              <textarea
+              <TextArea
                 className="inputbox"
-                style={{ height: '80px' }}
+                rows={4}
                 placeholder="请输入"
                 defaultValue={dataList.opinion}
                 onChange={(e) => {
                   setOpinion(e.target.value)
                 }}
-              ></textarea>
+              />
             </div>
             {/* <Form {...formItemLayout}>
               <Form.Item label="评分">
@@ -183,9 +225,6 @@ const ReviewApprover: React.FC = (props) => {
                 <TextArea rows={3} placeholder="请输入" id="warning" />
               </Form.Item>
             </Form> */}
-            <div>
-              <Pagination defaultCurrent={id} total={total} showSizeChanger showQuickJumper />
-            </div>
           </div>
         </div>
       </div>
