@@ -54,10 +54,10 @@ export const editCompetitionInfo = (competitionId: number, data: competitionInfo
  * 查看活动信息
  * @return axios对象
  */
-export const viewCompetitionInfo = () => {
+export const viewCompetitionInfo = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/com/competitionInfo',
+    url: '/admin/com/competitionInfo?comId=' + competitionId,
   })
 }
 

@@ -128,12 +128,13 @@ function ActivityDetail() {
     } else if (userState === 'judge') {
       navigate('/review')
     } else if (userState === 'admin') {
-      navigate('/activity/' + id + '/manage')
+      navigate('/activity/' + id + '/manage', { state: { competitionId: id } })
     }
   }
 
   useEffect(() => {
     // 计算锚点偏移位置并写入state
+    console.log(competitionDetail)
     setTargetOffset(window.innerHeight / 2)
   }, [])
 

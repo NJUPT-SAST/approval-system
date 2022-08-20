@@ -14,4 +14,5 @@ export type competitionInfoType = {
   is_review: number // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
   review_settings: { [key: string]: string } //  一个键值对 键是学院名 值是学号
   introduce: string // 比赛介绍
+  cover: string //封面url
 }

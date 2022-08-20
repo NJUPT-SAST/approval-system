@@ -36,26 +36,37 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
         <span
           className="manage-body-item-export"
           onClick={() => {
-            exportWorkFileDataToAssignScorer(value.id).then((res) => {
-              if (res.data.success) {
+            exportWorkFileDataToAssignScorer(value.id).then(
+              (res) => {
+                const blob = new Blob([res.data])
+                const downloadElement = document.createElement('a')
+                const href = window.URL.createObjectURL(blob) //创建下载的链接
+                downloadElement.href = href
+                downloadElement.download = value.name + '参赛数据.xlsx' //下载后文件名
+                document.body.appendChild(downloadElement)
+                downloadElement.click() //点击下载
+                document.body.removeChild(downloadElement) //下载完成移除元素
+                window.URL.revokeObjectURL(href) //释放掉blob对象
                 setTimeout(() => {
-                  notification.error({
+                  notification.success({
                     message: '😸️ 导出成功',
-                    description: '',
+                    description: value.name + '的参赛数据已导出',
                     top: 20,
                     placement: 'top',
                   })
-                }, 300)
-              } else
+                }, 100)
+              },
+              (error) => {
                 setTimeout(() => {
                   notification.error({
                     message: '😭️ 导出失败',
-                    description: res.data.errMsg,
+                    description: value.name + '的参赛数据未能成功导出',
                     top: 20,
                     placement: 'top',
                   })
-                }, 300)
-            })
+                }, 100)
+              },
+            )
           }}
         >
           导出
