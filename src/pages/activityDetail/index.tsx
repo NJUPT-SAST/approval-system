@@ -74,7 +74,7 @@ function ActivityDetail() {
     useEffect(() => {
       setIsLoading(true)
       getCompetitionNoticeList(id).then((res) => {
-        // console.log(res)
+        //console.log(res)
         setCompetitionNoticeList(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -188,6 +188,7 @@ function ActivityDetail() {
                           <CompetitionNotice
                             key={index}
                             role={userStateToNumber()}
+                            id={item.id}
                             title={item.title}
                             time={item.time}
                             content={item.content}
