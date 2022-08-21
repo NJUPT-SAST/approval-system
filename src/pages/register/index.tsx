@@ -50,18 +50,21 @@ function Register() {
         title: '队长信息',
         type: 'object',
         displayType: 'column',
+        description: '队长信息已自动填写',
         required: true,
         properties: {
           name: {
             title: '姓名',
             type: 'string',
             required: true,
+            readOnly: true,
             props: {},
           },
           code: {
             title: '学号',
             type: 'string',
             required: true,
+            readOnly: true,
             props: {},
           },
         },
@@ -77,6 +80,10 @@ function Register() {
     })
     getTeamInfo(Number(id)).then((res) => {
       // console.log(res)
+      form.setValueByPath('leader', {
+        name: localStorage.getItem('name'),
+        code: localStorage.getItem('code'),
+      })
       if (res.data.errCode !== 2003) {
         setTeamInfo({
           teamName: res.data.data.teamName,
@@ -84,10 +91,6 @@ function Register() {
         })
         form.setValueByPath('numOfParti', res.data.data.teamMember.length)
         form.setValueByPath('input_teamName', res.data.data.teamName)
-        form.setValueByPath('leader', {
-          name: res.data.data.teamMember[0].name,
-          code: res.data.data.teamMember[0].code,
-        })
         for (let i = 1; i <= res.data.data.teamMember.length - 1; i++) {
           const formName = 'parti' + i
           form.setValueByPath(formName, {
@@ -163,7 +166,7 @@ function Register() {
    * @param errors 错误
    */
   const onFinish = (formData: any, errors: any) => {
-    // console.log('formData:', formData, 'errors', errors)
+    console.log('formData:', formData, 'errors', errors)
     if (errors.length === 0) {
       setLoading(true)
       message.loading({
@@ -173,12 +176,12 @@ function Register() {
       })
       const teamName = formData.input_teamName
       const teamMember = []
-      teamMember.push(formData.leader)
+      // teamMember.push(formData.leader)
       for (let i = 1; i <= Number(formData.select_numOfParti) - 1; i++) {
         const formName = 'parti' + i
         teamMember.push(formData[formName])
       }
-      // console.log('teamName', teamName, 'teamMember', teamMember)
+      console.log('teamName', teamName, 'teamMember', teamMember)
       signUp(Number(id), teamName, teamMember).then((res) => {
         console.log(res)
         setMessageSent(true)
@@ -234,19 +237,21 @@ function Register() {
             title: '队长信息',
             type: 'object',
             displayType: 'column',
-            description: '若单人参赛，只需要填写队长信息',
+            description: '队长信息已自动填写',
             required: true,
             properties: {
               name: {
                 title: '姓名',
                 type: 'string',
                 required: true,
+                readOnly: true,
                 props: {},
               },
               code: {
                 title: '学号',
                 type: 'string',
                 required: true,
+                readOnly: true,
                 props: {},
               },
             },
@@ -291,7 +296,13 @@ function Register() {
                 style={{ maxWidth: '600px' }}
                 disabled={loading}
               />
-              <Button type="primary" onClick={form.submit} loading={loading} disabled={loading}>
+              <Button
+                type="primary"
+                onClick={form.submit}
+                loading={loading}
+                disabled={loading}
+                style={{ marginTop: '2rem' }}
+              >
                 提交
               </Button>
             </Fragment>
