@@ -21,10 +21,11 @@
   }
 }
 //管理组件的主体
-.manage-body {
+.manage-body-no-repeat {
   font-family: HarmonyOS Sans SC;
   display: flex;
-  flex-direction: column;
+  flex-direction: column;    
+  align-items: center;
   margin: 0;
   .manage-body-list {
     display: flex;
@@ -38,6 +39,7 @@
     margin: 0 0 25px 0;
     text-align: center;
     //顶端表格的标题
+  }
     .manage-body-title {
       width: 90%;
       margin: 47px 0 8px 0;
@@ -214,4 +216,3 @@
       margin: 50px 0 0 0;
     }
   }
-}

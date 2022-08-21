@@ -228,8 +228,9 @@ const Inbox: React.FC = () => {
           </div>
         </div>
         <CompetitionNotice
-          id={-1}
-          role={0}
+          noticeId={-1}
+          comId={-1}
+          viewer={-1}
           title="比赛通知"
           content="这里是测试内容"
           time="Fri Oct 30 2020 22:55:25 GMT+0800 (China Standard Time)"

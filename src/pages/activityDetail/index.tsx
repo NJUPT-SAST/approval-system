@@ -130,7 +130,7 @@ function ActivityDetail() {
     } else if (userState === 'approver') {
       navigate('/review/list?comId=' + id + '&page=1')
     } else if (userState === 'admin') {
-      navigate('/activity/' + id + '/manage', { state: { competitionId: id } })
+      navigate('/activity/' + id + '/manage', { state: { competitionId: id, competitionName: competitionDetail.name } })
     }
   }
 
@@ -141,7 +141,6 @@ function ActivityDetail() {
   }, [])
 
   const competitionNotice = useGetCompetitionNotice(Number(id))
-  console.log(competitionNotice)
   const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
 
   return (
@@ -190,8 +189,9 @@ function ActivityDetail() {
                         competitionNotice.map((item: any, index) => (
                           <CompetitionNotice
                             key={index}
-                            role={userStateToNumber()}
-                            id={item.id}
+                            viewer={userStateToNumber()}
+                            noticeId={item.id}
+                            comId={id as unknown as number}
                             title={item.title}
                             time={item.time}
                             content={item.content}
