@@ -58,7 +58,7 @@
 
 .redPoint:before {
   position: absolute;
-  left: 5.2vw;
+  left: 4.9vw;
   width: 5px;
   height: 5px;
   content: ' ';
@@ -66,7 +66,10 @@
   border-radius: 50%;
   z-index: 1000;
 }
-.td{
+.nopoint {
+  display: none;
+}
+.tdnum {
   text-align: center;
   display: flex;
   justify-content: center;
