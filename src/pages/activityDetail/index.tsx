@@ -126,7 +126,9 @@ function ActivityDetail() {
     if (userState === 'user') {
       navigate('/activity/' + id + '/register')
     } else if (userState === 'judge') {
-      navigate('/review')
+      navigate('/review/list?comId=' + id + '&page=1')
+    } else if (userState === 'approver') {
+      navigate('/review/list?comId=' + id + '&page=1')
     } else if (userState === 'admin') {
       navigate('/activity/' + id + '/manage', { state: { competitionId: id } })
     }
