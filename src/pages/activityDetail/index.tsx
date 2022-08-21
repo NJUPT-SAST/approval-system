@@ -189,8 +189,9 @@ function ActivityDetail() {
                         competitionNotice.map((item: any, index) => (
                           <CompetitionNotice
                             key={index}
-                            role={userStateToNumber()}
-                            id={item.id}
+                            viewer={userStateToNumber()}
+                            noticeId={item.id}
+                            comId={id as unknown as number}
                             title={item.title}
                             time={item.time}
                             content={item.content}

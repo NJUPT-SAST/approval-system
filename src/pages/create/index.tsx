@@ -96,7 +96,14 @@ function Create() {
   //比赛类型变化时
   const onTypeChange = (e: RadioChangeEvent) => {
     //若更改后类型为个体 则将最大人数默认为2
-    if (e.target.value === 1) {
+    if (e.target.value === 0) {
+      setCompetitionInfo((pre) => {
+        const a = { ...pre }
+        a.max_team_members = 1
+        console.log(a.type)
+        return a
+      })
+    } else {
       setCompetitionInfo((pre) => {
         const a = { ...pre }
         a.max_team_members = 2
