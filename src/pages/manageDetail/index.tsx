@@ -1,7 +1,8 @@
-import { Button, Table, Select } from 'antd'
+import { Button, Table, Select, notification } from 'antd'
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import './index.scss'
+import { exportWorkFileDataToAssignScorer, exportTeamInfo, exportJudgeResult } from '../../api/admin'
 import StatisticsBox from './components'
 import { ColumnsType } from 'antd/es/table'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -53,7 +54,7 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'choose',
   },
 ]
-// 替代泛型
+// 用于替代 location 的泛型
 function useMyLocation<T>() {
   return useLocation() as { state: T }
 }
@@ -62,7 +63,7 @@ function ManageDetail() {
   const [data, setData]: any = useState([])
   const [reviewer] = useState(['Max评审', 'Ming评审', 'R评审'])
   const navigate = useNavigate()
-  const location = useMyLocation<{ competitionId: number }>()
+  const location = useMyLocation<{ competitionId: number; competitionName: string }>()
   // string
   useEffect(() => {
     if (data.length !== 0) {
@@ -110,6 +111,110 @@ function ManageDetail() {
       return [...data]
     })
   }, [])
+  //导出所有参赛队伍 可用于分配评委
+  const exportCompetitionTeam = () => {
+    exportWorkFileDataToAssignScorer(location.state.competitionId).then(
+      (res) => {
+        console.log()
+        const blob = new Blob([res.data])
+        const downloadElement = document.createElement('a')
+        const href = window.URL.createObjectURL(blob) //创建下载的链接
+        downloadElement.href = href
+        downloadElement.download = location.state.competitionName + '参赛数据.xlsx' //下载后文件名
+        document.body.appendChild(downloadElement)
+        downloadElement.click() //点击下载
+        document.body.removeChild(downloadElement) //下载完成移除元素
+        window.URL.revokeObjectURL(href) //释放掉blob对象
+        setTimeout(() => {
+          notification.success({
+            message: '😸️ 导出成功',
+            description: location.state.competitionName + ' 的参赛数据已导出',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+      (error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 导出失败',
+            description: location.state.competitionName + ' 的参赛数据未能成功导出',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+    )
+  }
+  //导出附件信息
+  const exportTeamFileInfo = () => {
+    exportTeamInfo(location.state.competitionId).then(
+      (res) => {
+        console.log(res)
+        const blob = new Blob([res.data])
+        const downloadElement = document.createElement('a')
+        const href = window.URL.createObjectURL(blob) //创建下载的链接
+        downloadElement.href = href
+        downloadElement.download = location.state.competitionName + '附件.xlsx' //下载后文件名
+        document.body.appendChild(downloadElement)
+        downloadElement.click() //点击下载
+        document.body.removeChild(downloadElement) //下载完成移除元素
+        window.URL.revokeObjectURL(href) //释放掉blob对象
+        setTimeout(() => {
+          notification.success({
+            message: '😸️ 导出成功',
+            description: location.state.competitionName + ' 的所有附件已成功导出',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+      (error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 导出失败',
+            description: '未能成功导出 ' + location.state.competitionName + ' 的附件',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+    )
+  }
+  //下载活动评审结果
+  const exportCompetitionResult = () => {
+    exportJudgeResult(location.state.competitionId).then(
+      (res) => {
+        const blob = new Blob([res.data])
+        const downloadElement = document.createElement('a')
+        const href = window.URL.createObjectURL(blob) //创建下载的链接
+        downloadElement.href = href
+        downloadElement.download = location.state.competitionName + '评审结果.xlsx' //下载后文件名
+        document.body.appendChild(downloadElement)
+        downloadElement.click() //点击下载
+        document.body.removeChild(downloadElement) //下载完成移除元素
+        window.URL.revokeObjectURL(href) //释放掉blob对象
+        setTimeout(() => {
+          notification.success({
+            message: '😸️ 导出成功',
+            description: '活动:' + location.state.competitionName + ' 的评审结果已成功导出',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+      (error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 导出失败',
+            description: '未能成功导出活动:' + location.state.competitionName + ' 的评审结果',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+    )
+  }
   return (
     <div className="manage-detail">
       <TopBar activity='"挑战杯"创新创业比赛' />
@@ -125,25 +230,50 @@ function ManageDetail() {
             })
           }}
         >
-          设置
+          修改活动
         </Button>
         <Button
           type="primary"
           size="small"
           id="manage-detail-notice"
           onClick={() => {
-            navigate('/activity/' + location.state.competitionId + '/notice')
+            console.log('now')
+            navigate('../manage/' + location.state.competitionId + '/notice')
           }}
         >
-          公告
+          发布公告
         </Button>
-        <Button type="primary" size="small" id="manage-detail-download-result">
-          下载比赛结果
+        <Button
+          type="primary"
+          size="small"
+          id="manage-detail-download-result"
+          onClick={() => {
+            exportCompetitionResult()
+          }}
+        >
+          下载活动结果
+        </Button>
+        <Button
+          type="primary"
+          size="small"
+          id="manage-detail-download-work"
+          onClick={() => {
+            exportTeamFileInfo()
+          }}
+        >
+          导出附件信息
         </Button>
       </div>
       <div className="manage-detail-body">
         <div className="manage-detail-top">
-          <Button type="primary" size="small" id="manage-detail-download-info">
+          <Button
+            type="primary"
+            size="small"
+            id="manage-detail-download-info"
+            onClick={() => {
+              exportCompetitionTeam()
+            }}
+          >
             下载参赛信息
           </Button>
           <Button type="primary" size="small" id="manage-detail-reviewer">

@@ -123,7 +123,7 @@ export const getUserInfo = (code: string) => {
 export const exportJudgeResult = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/data/result/' + competitionId,
+    url: '/admin/data/result?comId=' + competitionId,
     responseType: 'blob',
   })
 }
@@ -151,14 +151,14 @@ export const releaseNotice = (competitionId: number, title: string, content: str
 }
 
 /**
- * 导出材料
+ * 导出材料 所有参赛人员的附件 大概
  * @param competitionId 比赛Id
  * @return axios对象
  */
 export const exportTeamInfo = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/data/exportFile/' + competitionId,
+    url: '/admin/data/exportFile?comId=' + competitionId,
     responseType: 'blob',
   })
 }
