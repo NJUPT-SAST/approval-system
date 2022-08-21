@@ -128,7 +128,7 @@ function ActivityDetail() {
     } else if (userState === 'judge') {
       navigate('/review')
     } else if (userState === 'admin') {
-      navigate('/activity/' + id + '/manage', { state: { competitionId: id } })
+      navigate('/activity/' + id + '/manage', { state: { competitionId: id, competitionName: competitionDetail.name } })
     }
   }
 
@@ -139,7 +139,6 @@ function ActivityDetail() {
   }, [])
 
   const competitionNotice = useGetCompetitionNotice(Number(id))
-  console.log(competitionNotice)
   const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
 
   return (

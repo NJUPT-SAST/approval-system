@@ -72,6 +72,7 @@ function Create() {
       setLoading(true)
       return
     }
+
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj as RcFile, (url) => {
@@ -179,17 +180,15 @@ function Create() {
     if (competitionId === -1) {
       createCompetitionInfo(competitionInfo).then(
         (res) => {
-          if (res.data.success) {
-            console.log('ok')
-            setTimeout(() => {
-              notification.success({
-                message: '😸️ 发布成功',
-                description: '快去看看新活动吧',
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
-          }
+          Navigate('../../activity/' + res.data.data)
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 发布成功',
+              description: '快去看看新活动吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         },
         (error) => {
           console.log(error)
@@ -206,17 +205,14 @@ function Create() {
     } else
       editCompetitionInfo(competitionId, competitionInfo).then(
         (res) => {
-          if (res.data.success) {
-            console.log('ok')
-            setTimeout(() => {
-              notification.success({
-                message: '😸️ 发布成功',
-                description: '快去看看新活动吧',
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
-          }
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 发布成功',
+              description: '快去看看新活动吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         },
         (error) => {
           console.log(error)
