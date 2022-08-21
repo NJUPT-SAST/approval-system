@@ -57,7 +57,7 @@ function Create() {
     review_begin_time: '', // 评审开始时间
     review_end_time: '', // 评审结束时间
     table: null, // 文档中的注释："表单schema，我不知道是啥"
-    type: 1, // 0 团队 1 个人
+    type: 0, // 0 个人 1 团队
     min_team_members: 1, // 默认值：1 值：1 团队人数限制
     max_team_members: 2, // 值：2 团队人数限制
     user_code: userProfile.code, // 值：1 活动负责人id
@@ -235,6 +235,7 @@ function Create() {
     if (location.state) {
       setCompetitionId(location.state.competitionId)
       viewCompetitionInfo(location.state.competitionId).then((res) => {
+        console.log(res)
         setCompetitionInfo((pre) => {
           const a = { ...pre }
           a.cover = res.data.data.cover
@@ -247,14 +248,17 @@ function Create() {
           a.reg_end_time = res.data.data.reg_end_time
           a.review_begin_time = res.data.data.review_begin_time
           a.review_end_time = res.data.data.review_end_time
-          a.review_settings = res.data.data.review_settings
-          a.type = res.data.data.type
+          if (res.data.data.review_settings === {}) a.review_settings = null
+          else a.review_settings = res.data.data.review_settings
+          if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
+          else a.type = 1
           a.user_code = res.data.data.user_code
           a.submit_begin_time = res.data.data.submit_begin_time
           a.submit_end_time = res.data.data.submit_end_time
           return a
         })
       })
+      console.log(competitionInfo)
     } else {
       console.log(null)
     }
@@ -333,14 +337,15 @@ function Create() {
         <div className="activity-create-type">
           <span id="activity-create-type">比赛类型</span>
           <Radio.Group onChange={onTypeChange} value={competitionInfo.type}>
-            <Radio value={1}>单人</Radio>
-            <Radio value={0}>团队</Radio>
+            <Radio value={0}>单人</Radio>
+            <Radio value={1}>团队</Radio>
           </Radio.Group>
           <span id="activity-create-type-tips">（不可超过15人）</span>
           {/* 当比赛类型选中团队时才出现 */}
-          {competitionInfo.type === 0 ? (
+          {competitionInfo.type === 1 ? (
             <Select
               showSearch
+              defaultValue={competitionInfo.max_team_members.toString()}
               placeholder="最大人数"
               optionFilterProp="children"
               onChange={onTeamMemberNumChange}
@@ -411,11 +416,11 @@ function Create() {
             onChange={(e) => {
               setCompetitionInfo((pre) => {
                 const a = { ...pre }
-                a.review_settings.key = e.target.value
+                ;(a.review_settings as { [key: string]: string }).key = e.target.value
                 return a
               })
             }}
-            value={competitionInfo.review_settings.key}
+            value={(competitionInfo.review_settings as { [key: string]: string }).key}
             showCount={false}
           />
           <span>审批者学号</span>
@@ -425,11 +430,11 @@ function Create() {
             onChange={(e) => {
               setCompetitionInfo((pre) => {
                 const a = { ...pre }
-                a.review_settings.value = e.target.value
+                ;(a.review_settings as { [key: string]: string }).value = e.target.value
                 return a
               })
             }}
-            value={competitionInfo.review_settings.value}
+            value={(competitionInfo.review_settings as { [key: string]: string }).value}
             showCount={false}
           />
         </div>

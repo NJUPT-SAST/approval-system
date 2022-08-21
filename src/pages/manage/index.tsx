@@ -63,11 +63,11 @@ const Manage: React.FC = () => {
   }
   //跳转到发布公告的界面
   const toPostNotice = (competitionId: number) => {
-    Navigate('./' + competitionId + '/notice/')
+    Navigate('./' + competitionId + '/notice/', { state: { competitionId: competitionId } })
   }
   //跳转到编辑界面
   const toEditCompetition = (competitionId: number) => {
-    Navigate('../activity/' + competitionId + '/manage')
+    Navigate('../activity/' + competitionId + '/manage', { state: { competitionId: competitionId } })
   }
   //路由
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
@@ -80,7 +80,7 @@ const Manage: React.FC = () => {
           创建活动
         </Button>
       </div>
-      <div className="manage-body">
+      <div className="manage-body-no-repeat">
         <div className="manage-body-list">
           <div className="manage-body-title">
             <span className="manage-body-title-ID">序号</span>
