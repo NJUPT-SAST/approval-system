@@ -294,7 +294,7 @@ function Register() {
           ) : messageStatus === 'success' ? (
             <Result
               status="success"
-              title="😄️ 报名成功"
+              title="😄️ 信息提交成功"
               subTitle="你的报名信息已提交，祝你比赛顺利"
               extra={[
                 <Button type="primary" key="back" onClick={goBack}>
