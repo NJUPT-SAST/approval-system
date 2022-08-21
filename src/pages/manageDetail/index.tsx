@@ -4,7 +4,7 @@ import TopBar from '../../components/TopBar'
 import './index.scss'
 import StatisticsBox from './components'
 import { ColumnsType } from 'antd/es/table'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 interface DataType {
   key: React.Key
@@ -53,11 +53,17 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'choose',
   },
 ]
+// 替代泛型
+function useMyLocation<T>() {
+  return useLocation() as { state: T }
+}
 
 function ManageDetail() {
   const [data, setData]: any = useState([])
   const [reviewer] = useState(['Max评审', 'Ming评审', 'R评审'])
   const navigate = useNavigate()
+  const location = useMyLocation<{ competitionId: number }>()
+  // string
   useEffect(() => {
     if (data.length !== 0) {
       return
@@ -114,7 +120,9 @@ function ManageDetail() {
           size="small"
           id="manage-detail-set"
           onClick={() => {
-            navigate('/activity/10001/manage/create')
+            navigate('/activity/' + location.state.competitionId + '/manage/create', {
+              state: { competitionId: location.state.competitionId },
+            })
           }}
         >
           设置
@@ -124,7 +132,7 @@ function ManageDetail() {
           size="small"
           id="manage-detail-notice"
           onClick={() => {
-            navigate('/activity/10001/notice')
+            navigate('/activity/' + location.state.competitionId + '/notice')
           }}
         >
           公告

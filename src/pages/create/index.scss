@@ -151,4 +151,21 @@ $vh_base: 1080;
       margin-left: 19px;
     }
   }
+  .activity-create-reviewer-setting{
+    display: flex;
+    align-items: flex-start;
+    margin-left: 241px;
+    margin-bottom: 30px;
+    span{
+      width: 106px;
+      min-height: 14px;
+      color: rgba(128, 128, 128, 1);
+    }
+    .first{
+      margin: 0 138px 0 0;
+    }
+    .ant-input {
+      width: 224px;
+    }
+  }
 }
