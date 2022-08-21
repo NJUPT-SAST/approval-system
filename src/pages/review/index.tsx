@@ -99,9 +99,9 @@ const Review: React.FC = () => {
       )
     }
   } else if (pathname === '/review/list') {
-    return <div>{list}</div>
+    return <>{list}</>
   } else if (pathname === '/review/detail') {
-    return <div>{detail}</div>
+    return <>{detail}</>
   } else {
     navigate('/')
     return null

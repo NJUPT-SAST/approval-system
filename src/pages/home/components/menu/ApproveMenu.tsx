@@ -16,6 +16,9 @@ function ApproveMenu(props: any) {
       <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
         收件箱
       </Menu.Item>
+      <Menu.Item key="/activity" icon={<DashboardOutlined />}>
+        活动广场
+      </Menu.Item>
       <Menu.Item key="/review" icon={<DashboardOutlined />}>
         活动评审
       </Menu.Item>
