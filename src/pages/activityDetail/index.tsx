@@ -74,7 +74,7 @@ function ActivityDetail() {
     useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionNoticeList(id).then((res) => {
-        // console.log(res)
+        //console.log(res)
         setCompetitionNoticeList(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -126,14 +126,17 @@ function ActivityDetail() {
     if (userState === 'user') {
       navigate('/activity/' + id + '/register')
     } else if (userState === 'judge') {
-      navigate('/review')
+      navigate('/review/list?comId=' + id + '&page=1')
+    } else if (userState === 'approver') {
+      navigate('/review/list?comId=' + id + '&page=1')
     } else if (userState === 'admin') {
-      navigate('/activity/' + id + '/manage')
+      navigate('/activity/' + id + '/manage', { state: { competitionId: id } })
     }
   }
 
   useEffect(() => {
     // 计算锚点偏移位置并写入state
+    console.log(competitionDetail)
     setTargetOffset(window.innerHeight / 2)
   }, [])
 
@@ -188,6 +191,7 @@ function ActivityDetail() {
                           <CompetitionNotice
                             key={index}
                             role={userStateToNumber()}
+                            id={item.id}
                             title={item.title}
                             time={item.time}
                             content={item.content}

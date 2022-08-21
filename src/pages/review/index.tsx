@@ -99,9 +99,9 @@ const Review: React.FC = () => {
       )
     }
   } else if (pathname === '/review/list') {
-    return <div>{list}</div>
+    return <>{list}</>
   } else if (pathname === '/review/detail') {
-    return <div>{detail}</div>
+    return <>{detail}</>
   } else {
     navigate('/')
     return null
@@ -120,6 +120,7 @@ interface IJudgeReview {
 // 身份为审批人员时表格内容
 const JudgeReview: React.FC<IJudgeReview> = (props) => {
   const { getPageNum, list, total, pageSize, loading } = props
+
   // 表头内容
   const columns: ColumnsType<DataListType> = [
     {
@@ -134,22 +135,26 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     },
     {
       key: '3',
-      title: '待评审数',
-      dataIndex: 'totalNum',
+      title: '待审批数',
+      render(value, record, index) {
+        return (
+          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+        )
+      },
     },
     {
       key: '4',
-      title: '已评审数',
+      title: '已审批数',
       dataIndex: 'completedNum',
     },
     {
       key: '5',
-      title: '评审开始日期',
+      title: '审批开始日期',
       dataIndex: 'startDate',
     },
     {
       key: '6',
-      title: '评审截止日期',
+      title: '审批截止日期',
       dataIndex: 'endDate',
     },
     {
@@ -164,7 +169,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
             }}
           >
             <Button className="count" type="primary">
-              {role()}
+              审批
             </Button>
           </Link>
         </Space>
@@ -189,6 +194,12 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
               columns={columns}
               dataSource={list}
               loading={loading}
+              // rowClassName={(record) => {
+              //   if (record.totalNum > 0) {
+              //     console.log(record.totalNum)
+              //     return 'redPoint'
+              //   } else return ''
+              // }}
               rowKey={(record) => record.id}
               onRow={(record) => {
                 return {
@@ -229,7 +240,13 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
     {
       key: '3',
       title: '待评审数',
-      dataIndex: 'totalNum',
+      // dataIndex: 'totalNum',
+      // className: 'redPoint',
+      render(value, record, index) {
+        return (
+          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+        )
+      },
     },
     {
       key: '4',
@@ -252,17 +269,15 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Route>
-            <Link
-              to={{
-                pathname: `/review/list?comId=` + id + '&page=' + current,
-              }}
-            >
-              <Button className="count" type="primary">
-                {role()}
-              </Button>
-            </Link>
-          </Route>
+          <Link
+            to={{
+              pathname: `/review/list?comId=` + id + '&page=' + current,
+            }}
+          >
+            <Button className="count" type="primary">
+              评审
+            </Button>
+          </Link>
         </Space>
       ),
     },

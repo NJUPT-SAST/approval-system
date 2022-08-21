@@ -53,6 +53,8 @@ function Notice() {
     setRole(value)
   }
   const { pathname } = useLocation()
+  const { state } = useLocation()
+  const [data, setData] = useState(state)
   //创建or编辑公告
   const [pageState] = useState(createOrEdit(pathname))
   //活动id

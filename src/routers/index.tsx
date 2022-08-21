@@ -17,8 +17,10 @@ function RegisterRouter() {
   const eleMap = new Map()
   eleMap.set('offline', unLoginEle)
   eleMap.set('admin', adminEle)
+  //评委
   eleMap.set('approver', approverEle)
   eleMap.set('user', userEle)
+  //审批
   eleMap.set('judge', judgeEle)
   return eleMap.get(userState)
 }
