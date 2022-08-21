@@ -134,7 +134,11 @@ function ActivityDetail() {
 
   const handleButtonAction = () => {
     if (userState === 'user') {
-      navigate('/activity/' + id + '/register')
+      if (isSigned) {
+        navigate('/activity/' + id + '/register-detail')
+      } else {
+        navigate('/activity/' + id + '/register')
+      }
     } else if (userState === 'judge') {
       navigate('/review/list?comId=' + id + '&page=1')
     } else if (userState === 'approver') {

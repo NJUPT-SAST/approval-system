@@ -1,7 +1,7 @@
 import { Button, message, Result } from 'antd'
 import FormRender, { useForm } from 'form-render'
 import React, { Fragment, useEffect, useLayoutEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getCompetitionInfo, getCompetitionSignInfo, getTeamInfo, signUp } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
@@ -18,6 +18,7 @@ function Register() {
     minParti: 1,
     maxParti: 1,
   })
+  const navigate = useNavigate()
   const [curParti, setCurParti] = useState(1)
   const [teamInfo, setTeamInfo] = useState({})
   const [formSchema, setFormSchema] = useState<any>({
@@ -179,7 +180,7 @@ function Register() {
       }
       // console.log('teamName', teamName, 'teamMember', teamMember)
       signUp(Number(id), teamName, teamMember).then((res) => {
-        // console.log(res)
+        console.log(res)
         setMessageSent(true)
         if (res.data.success === true) {
           setMessageStatus('success')
@@ -263,12 +264,15 @@ function Register() {
       })
     }
   }
-  const goBack = () => {
-    window.history.back()
+  const goBackToActivity = () => {
+    navigate('/activity/' + id)
   }
   const editAgain = () => {
     setMessageSent(false)
     storeTeamInfo()
+  }
+  const goBackToRegisterDetail = () => {
+    navigate('/activity/' + id + '/register-detail')
   }
   // // console.log(formSchema)
   return (
@@ -297,11 +301,11 @@ function Register() {
               title="😄️ 信息提交成功"
               subTitle="你的报名信息已提交，祝你比赛顺利"
               extra={[
-                <Button type="primary" key="back" onClick={goBack}>
+                <Button type="primary" key="back" onClick={goBackToActivity}>
                   返回比赛详情
                 </Button>,
-                <Button key="re-edit" onClick={editAgain}>
-                  修改报名信息
+                <Button key="re-edit" onClick={goBackToRegisterDetail}>
+                  返回报名详情
                 </Button>,
               ]}
             />
@@ -311,7 +315,7 @@ function Register() {
               title="😭️ 提交时发生错误"
               subTitle={'错误代码：' + errCode + '，错误信息：' + errMsg + '，请及时联系管理员'}
               extra={[
-                <Button type="primary" onClick={goBack} key="back">
+                <Button type="primary" onClick={goBackToActivity} key="back">
                   返回比赛详情
                 </Button>,
                 <Button key="retry" onClick={editAgain}>
