@@ -137,7 +137,9 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
       key: '3',
       title: '待审批数',
       render(value, record, index) {
-        return <td className="td redPoint">{list[index].totalNum}</td>
+        return (
+          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+        )
       },
     },
     {
@@ -241,7 +243,9 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
       // dataIndex: 'totalNum',
       // className: 'redPoint',
       render(value, record, index) {
-        return <td className="td redPoint">{list[index].totalNum}</td>
+        return (
+          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+        )
       },
     },
     {
