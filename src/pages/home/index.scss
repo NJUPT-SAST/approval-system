@@ -1,5 +1,6 @@
 //顶部横幅
 .header {
+  padding: 0 5px;
   .header-wrap {
     display: flex;
     justify-content: space-between;
@@ -37,6 +38,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        .anticon {
+          cursor: pointer;
+        }
       }
       .user-wrap {
         display: flex;
@@ -52,8 +56,7 @@
           background-repeat: no-repeat;
         }
         .username {
-          width: 100px;
-          padding-left: 12px;
+          padding: 0 12px;
           color: white;
           white-space: nowrap;
           overflow: hidden;
@@ -95,11 +98,11 @@
         border: 1px solid rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
         border-radius: 5px;
-        }
-        .validate{
-          border-radius: 5px 0 0 5px;
-        }
       }
+      .validate {
+        border-radius: 5px 0 0 5px;
+      }
+    }
     //验证码
     .validate-part-body {
       display: flex;
@@ -113,7 +116,7 @@
         border-radius: 0 5px 5px 0;
       }
     }
-  
+
     //登陆的 button
     .login-form-button {
       align-items: center;

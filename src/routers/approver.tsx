@@ -7,6 +7,8 @@ import Review from '../pages/review'
 import NoMatch from '../pages/noMatch'
 import ReviewApprover from '../pages/reviewApprover'
 import ReviewList from '../pages/reviewList'
+import Activity from '../pages/activity'
+import ActivityDetail from '../pages/activityDetail'
 
 const approver: RouteObject[] = [
   {
@@ -16,6 +18,8 @@ const approver: RouteObject[] = [
       { index: true, element: <Account /> },
       { path: 'account', element: <Account /> },
       { path: 'inbox', element: <Inbox /> },
+      { path: 'activity', element: <Activity /> },
+      { path: 'activity/:id', element: <ActivityDetail /> },
       {
         path: 'review',
         element: <Review />,
