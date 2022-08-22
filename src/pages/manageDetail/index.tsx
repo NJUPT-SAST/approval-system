@@ -238,7 +238,9 @@ function ManageDetail() {
           id="manage-detail-notice"
           onClick={() => {
             console.log('now')
-            navigate('../manage/' + location.state.competitionId + '/notice')
+            navigate('../manage/' + location.state.competitionId + '/notice', {
+              state: { competitionId: location.state.competitionId },
+            })
           }}
         >
           发布公告

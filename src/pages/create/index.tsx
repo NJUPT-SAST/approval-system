@@ -1,13 +1,14 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { LoadingOutlined, PlusOutlined, MinusSquareOutlined, PlusSquareOutlined } from '@ant-design/icons'
 import { competitionInfoType } from '../../type/apiTypes'
 import { Button, Input, message, notification, Radio, RadioChangeEvent, Select, Upload } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import { createCompetitionInfo, viewCompetitionInfo, editCompetitionInfo } from '../../api/admin'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload/interface'
-import { MouseEventHandler, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import userProfileStore from '../../store/userProfile'
+import ReviewSet from './Components/reviewerSet'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 import TimeRanger from './TimeRanger'
@@ -41,6 +42,7 @@ const code = localStorage.get
 
 function Create() {
   //上传比赛照片
+  const [reviewerNum, setReviewerNum] = useState<number>(0)
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const location = useMyLocation<{ competitionId: number }>()
@@ -62,7 +64,7 @@ function Create() {
     max_team_members: 2, // 值：2 团队人数限制
     user_code: userProfile.code, // 值：1 活动负责人id
     is_review: 1, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
-    review_settings: {}, // 此处无注释 无类型
+    review_settings: [], // 此处无注释 无类型
     introduce: '', // 比赛介绍
     cover: '', //封面url
   })
@@ -183,6 +185,22 @@ function Create() {
       })
   }
 
+  const setKey = (index: number, key: string) => {
+    setCompetitionInfo((pre) => {
+      const a = { ...pre }
+      a.review_settings[index].key = key
+      return a
+    })
+  }
+
+  const setValue = (index: number, value: string) => {
+    setCompetitionInfo((pre) => {
+      const a = { ...pre }
+      a.review_settings[index].key = value
+      return a
+    })
+  }
+
   const postCompetition = () => {
     if (competitionId === -1) {
       createCompetitionInfo(competitionInfo).then(
@@ -198,10 +216,9 @@ function Create() {
           }, 100)
         },
         (error) => {
-          console.log(error)
           setTimeout(() => {
             notification.error({
-              message: '😸️ 发布失败',
+              message: '😭️ 发布失败',
               description: '快检查一下哪里出错了',
               top: 20,
               placement: 'top',
@@ -222,10 +239,9 @@ function Create() {
           }, 100)
         },
         (error) => {
-          console.log(error)
           setTimeout(() => {
             notification.error({
-              message: '😸️ 发布失败',
+              message: '😭️ 发布失败',
               description: '快检查一下哪里出错了',
               top: 20,
               placement: 'top',
@@ -255,8 +271,7 @@ function Create() {
           a.reg_end_time = res.data.data.reg_end_time
           a.review_begin_time = res.data.data.review_begin_time
           a.review_end_time = res.data.data.review_end_time
-          if (res.data.data.review_settings === {}) a.review_settings = null
-          else a.review_settings = res.data.data.review_settings
+          a.review_settings = res.data.data.review_settings
           if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
           else a.type = 1
           a.user_code = res.data.data.user_code
@@ -270,6 +285,9 @@ function Create() {
       console.log(null)
     }
   }, [])
+  useEffect(() => {
+    console.log(reviewerNum)
+  })
 
   return (
     <div>
@@ -416,34 +434,43 @@ function Create() {
           setEndTime={setEndTime}
         />
         <div className="activity-create-reviewer-setting">
-          <span>审批者学院</span>
+          <span className="activity-create-reviewer-code">默认审批者</span>
           <Input
             className="first"
-            placeholder="审批者所属学院"
-            onChange={(e) => {
-              setCompetitionInfo((pre) => {
-                const a = { ...pre }
-                ;(a.review_settings as { [key: string]: string }).key = e.target.value
-                return a
-              })
-            }}
-            value={(competitionInfo.review_settings as { [key: string]: string }).key}
-            showCount={false}
-          />
-          <span>审批者学号</span>
-          <Input
-            className="last"
             placeholder="审批者学号"
             onChange={(e) => {
               setCompetitionInfo((pre) => {
                 const a = { ...pre }
-                ;(a.review_settings as { [key: string]: string }).value = e.target.value
+
                 return a
               })
             }}
-            value={(competitionInfo.review_settings as { [key: string]: string }).value}
             showCount={false}
           />
+          <PlusSquareOutlined
+            className="manage-create-icon"
+            onClick={() => {
+              setReviewerNum(reviewerNum + 1)
+              competitionInfo.review_settings.push({})
+            }}
+          />
+
+          {reviewerNum === 0 ? (
+            <></>
+          ) : (
+            <MinusSquareOutlined
+              className="manage-create-icon"
+              onClick={() => {
+                setReviewerNum(reviewerNum - 1)
+                competitionInfo.review_settings.pop()
+              }}
+            />
+          )}
+        </div>
+        <div className="other-setting">
+          {competitionInfo.review_settings.map((value, index) => {
+            return <ReviewSet setKey={setKey} setValue={setValue} key={value.key + index} value={value} index={index} />
+          })}
         </div>
 
         {/* <div className="activity-create-white">
