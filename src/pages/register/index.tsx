@@ -118,7 +118,7 @@ function Register() {
       }
     })
   }
-  useLayoutEffect(() => {
+  useEffect(() => {
     getCompetitionSignInfo(Number(id)).then((res) => {
       // // console.log(res)
       setCompetitionInfo({

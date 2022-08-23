@@ -96,6 +96,10 @@ function RegisterDetail() {
     navigate('/activity/' + id + '/register')
   }
 
+  const changeWorkDetail = () => {
+    navigate('/activity/' + id + '/work-detail')
+  }
+
   useLayoutEffect(() => {
     storeTeamInfo()
   }, [])
@@ -161,7 +165,7 @@ function RegisterDetail() {
               </div>
             </div>
           </Skeleton>
-          <Button type="primary" style={{ marginTop: '1rem' }}>
+          <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
             修改作品信息
           </Button>
         </div>
