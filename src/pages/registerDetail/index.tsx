@@ -1,4 +1,4 @@
-import { Button, message } from 'antd'
+import { Button, message, Skeleton } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCompetitionInfo, getTeamInfo } from '../../api/user'
@@ -81,7 +81,7 @@ function RegisterDetail() {
     useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionInfo(Number(id)).then((res) => {
-        // console.log(res)
+        console.log(res)
         setCompetitionDetail(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -107,52 +107,60 @@ function RegisterDetail() {
         <div className="title">报名参加详情</div>
         <div className="result-detail-box">
           <div className="list-title-h1">队伍信息</div>
-          <div className="list">
-            <div className="list-item">
-              <div className="title">队伍名称: </div>
-              <div className="content">{teamInfo.teamName}</div>
+          <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
+            <div className="list">
+              <div className="list-item">
+                <div className="title">队伍名称: </div>
+                <div className="content">{teamInfo.teamName}</div>
+              </div>
+              <div className="list-item">
+                <div className="title">参赛人数: </div>
+                <div className="content">{teamInfo.teamMember.length} 人</div>
+              </div>
             </div>
-            <div className="list-item">
-              <div className="title">参赛人数: </div>
-              <div className="content">{teamInfo.teamMember.length} 人</div>
-            </div>
-          </div>
+          </Skeleton>
           <div className="list-title-h1">参赛人员信息</div>
           <div className="list">
             <div className="list-title-h2">队长信息</div>
-            <div className="list-item">
-              <div className="title">姓名: </div>
-              <div className="content">{teamInfo.teamMember[0].name}</div>
-            </div>
-            <div className="list-item">
-              <div className="title">学号: </div>
-              <div className="content">{teamInfo.teamMember[0].code}</div>
-            </div>
-          </div>
-          {teamInfo.teamMember.slice(1).map((item, index) => (
-            <div className="list" key={index}>
-              <div className="list-title-h2">队员{index}信息</div>
+            <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
               <div className="list-item">
                 <div className="title">姓名: </div>
-                <div className="content">{item.name}</div>
+                <div className="content">{teamInfo.teamMember[0].name}</div>
               </div>
               <div className="list-item">
                 <div className="title">学号: </div>
-                <div className="content">{item.code}</div>
+                <div className="content">{teamInfo.teamMember[0].code}</div>
               </div>
-            </div>
-          ))}
+            </Skeleton>
+          </div>
+          <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
+            {teamInfo.teamMember.slice(1).map((item, index) => (
+              <div className="list" key={index}>
+                <div className="list-title-h2">队员{index}信息</div>
+                <div className="list-item">
+                  <div className="title">姓名: </div>
+                  <div className="content">{item.name}</div>
+                </div>
+                <div className="list-item">
+                  <div className="title">学号: </div>
+                  <div className="content">{item.code}</div>
+                </div>
+              </div>
+            ))}
+          </Skeleton>
           <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeRegisterInfo}>
             修改报名信息
           </Button>
           <div className="space"></div>
           <div className="list-title-h1">作品提交信息</div>
-          <div className="list">
-            <div className="list-item">
-              <div className="title">附件1: </div>
-              <div className="content"></div>
+          <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
+            <div className="list">
+              <div className="list-item">
+                <div className="title">附件1: </div>
+                <div className="content"></div>
+              </div>
             </div>
-          </div>
+          </Skeleton>
           <Button type="primary" style={{ marginTop: '1rem' }}>
             修改作品信息
           </Button>
