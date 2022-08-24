@@ -4,7 +4,7 @@ import { exportWorkFileDataToAssignScorer } from '../../../api/admin'
 type ManageItemType = {
   index: number
   toPostNotice: (competition: number) => void
-  toEditCompetition: (competition: number) => void
+  toEditCompetition: (competition: number, name: string) => void
   value: {
     id: number //活动id
     name: string //活动名字
@@ -82,7 +82,7 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
         <span
           className="manage-body-item-edit-competition"
           onClick={() => {
-            toEditCompetition(value.id)
+            toEditCompetition(value.id, value.name)
           }}
         >
           编辑

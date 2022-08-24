@@ -66,8 +66,8 @@ const Manage: React.FC = () => {
     Navigate('./' + competitionId + '/notice/', { state: { competitionId: competitionId } })
   }
   //跳转到编辑界面
-  const toEditCompetition = (competitionId: number) => {
-    Navigate('../activity/' + competitionId + '/manage', { state: { competitionId: competitionId } })
+  const toEditCompetition = (competitionId: number, name: string) => {
+    Navigate('../activity/' + competitionId + '/manage', { state: { competitionId: competitionId, name: name } })
   }
   //路由
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
@@ -120,15 +120,6 @@ const Manage: React.FC = () => {
                 )
               })
             )}
-            {/* <ManageItem page={pageState} index={1} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={2} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={3} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={4} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={5} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={6} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={7} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={8} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} />
-            <ManageItem page={pageState} index={9} toPostNotice={toPostNotice} toEditCompetition={toEditCompetition} /> */}
           </div>
           <div className="manage-body-page">
             <Pagination

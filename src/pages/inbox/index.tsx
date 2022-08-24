@@ -228,6 +228,7 @@ const Inbox: React.FC = () => {
           </div>
         </div>
         <CompetitionNotice
+          role={-1}
           noticeId={-1}
           comId={-1}
           viewer={-1}

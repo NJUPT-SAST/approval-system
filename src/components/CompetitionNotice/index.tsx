@@ -10,12 +10,13 @@ type NoticeType = {
   title: string //公告标题
   content: string //公告内容
   time: string //公告发布时间
+  role: undefined | number //
 }
 const CompetitionNotice: React.FC<NoticeType> = (props) => {
   //控制公告的折叠状态 true表示折叠 false表示未折叠
   const [foldState, setFoldState] = useState(true)
   const Navigate = useNavigate()
-  const { viewer, noticeId, comId, title, content, time } = props
+  const { role, viewer, noticeId, comId, title, content, time } = props
   return (
     <>
       <div className="competition-notice-nav">
@@ -50,7 +51,14 @@ const CompetitionNotice: React.FC<NoticeType> = (props) => {
                     type="primary"
                     onClick={() => {
                       Navigate('./notice/' + noticeId, {
-                        state: { title: title, content: content, time: time, competitionId: comId, noticeId: noticeId },
+                        state: {
+                          title: title,
+                          content: content,
+                          time: time,
+                          competitionId: comId,
+                          noticeId: noticeId,
+                          role: role,
+                        },
                       })
                     }}
                   >

@@ -49,13 +49,13 @@ const Home = () => {
             setUserProfile((pre) => {
               const a = { ...pre }
               a.code = res.data.data.code
-              localStorage.setItem('code', res.data.data.code)
+              localStorage.setItem('approval-system-code', res.data.data.code)
               a.faculty = res.data.data.faculty
-              localStorage.setItem('faculty', res.data.data.faculty)
+              localStorage.setItem('approval-system-faculty', res.data.data.faculty)
               a.name = res.data.data.name
-              localStorage.setItem('name', res.data.data.name)
+              localStorage.setItem('approval-system-name', res.data.data.name)
               a.major = res.data.data.major
-              localStorage.setItem('major', res.data.data.major)
+              localStorage.setItem('approval-system-major', res.data.data.major)
               return a
             })
             setTimeout(() => {
