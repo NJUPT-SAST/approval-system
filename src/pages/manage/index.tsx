@@ -43,7 +43,6 @@ const Manage: React.FC = () => {
           const a = { ...pre }
           a.total = res.data.data.total
           a.records = res.data.data.records
-          console.log(a.records)
           return a
         })
         setIsLoading(false)
