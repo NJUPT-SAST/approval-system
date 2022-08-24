@@ -35,17 +35,17 @@ const beforeImageUpload = (file: RcFile) => {
   }
   return isJpgOrPng && isLt5M
 }
-
 //团队比赛人数（最多15人）
 const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
 const code = localStorage.get
 
 function Create() {
   //上传比赛照片
-  const [reviewerNum, setReviewerNum] = useState<number>(0)
+  const [reviewerNum, setReviewerNum] = useState<number>(1)
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const location = useMyLocation<{ competitionId: number }>()
+  const [reviewSettings, setReviewSettings] = useState<{ key: number; value: string }[]>([{ key: 0, value: '' }])
   //获取 code
   const userProfile = useRecoilValue(userProfileStore)
   //判断是修改还是创建 id为 -1 则为创建 否则为 修改
@@ -64,7 +64,6 @@ function Create() {
     max_team_members: 2, // 值：2 团队人数限制
     user_code: userProfile.code, // 值：1 活动负责人id
     is_review: 1, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
-    review_settings: [], // 此处无注释 无类型
     introduce: '', // 比赛介绍
     cover: '', //封面url
   })
@@ -119,7 +118,6 @@ function Create() {
       return a
     })
   }
-
   /**
    * 团队比赛人数变化
    * @param value
@@ -185,25 +183,32 @@ function Create() {
       })
   }
 
-  const setKey = (index: number, key: string) => {
-    setCompetitionInfo((pre) => {
-      const a = { ...pre }
-      a.review_settings[index].key = key
+  const setKey = (index: number, key: number) => {
+    setReviewSettings((pre) => {
+      const a = [...pre]
+      a[index].key = key
       return a
     })
   }
 
   const setValue = (index: number, value: string) => {
-    setCompetitionInfo((pre) => {
-      const a = { ...pre }
-      a.review_settings[index].key = value
+    setReviewSettings((pre) => {
+      const a = [...pre]
+      a[index].value = value
       return a
     })
   }
 
   const postCompetition = () => {
+    const reviewSetting_map: Map<number, string> = new Map([[reviewSettings[0].key, reviewSettings[0].value]])
+    for (let i = 0; i < reviewerNum; i++) {
+      reviewSetting_map.set(reviewSettings[i].key, reviewSettings[i].value)
+    }
+    console.log(Object.fromEntries(reviewSetting_map.entries()))
+    // -1 表示此时为创建活动
     if (competitionId === -1) {
-      createCompetitionInfo(competitionInfo).then(
+      //改成键值对形式
+      createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries())).then(
         (res) => {
           Navigate('../../activity/' + res.data.data)
           setTimeout(() => {
@@ -227,8 +232,9 @@ function Create() {
         },
       )
     } else
-      editCompetitionInfo(competitionId, competitionInfo).then(
+      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries())).then(
         (res) => {
+          Navigate('../../activity/' + res.data.data)
           setTimeout(() => {
             notification.success({
               message: '😸️ 发布成功',
@@ -258,7 +264,12 @@ function Create() {
     if (location.state) {
       setCompetitionId(location.state.competitionId)
       viewCompetitionInfo(location.state.competitionId).then((res) => {
-        console.log(res)
+        const array: { key: number; value: string }[] = []
+        Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
+          array.push({ key: +key, value: res.data.data.review_settings[key] })
+        })
+        setReviewerNum(array.length)
+        setReviewSettings(array)
         setCompetitionInfo((pre) => {
           const a = { ...pre }
           a.cover = res.data.data.cover
@@ -271,7 +282,6 @@ function Create() {
           a.reg_end_time = res.data.data.reg_end_time
           a.review_begin_time = res.data.data.review_begin_time
           a.review_end_time = res.data.data.review_end_time
-          a.review_settings = res.data.data.review_settings
           if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
           else a.type = 1
           a.user_code = res.data.data.user_code
@@ -280,14 +290,8 @@ function Create() {
           return a
         })
       })
-      console.log(competitionInfo)
-    } else {
-      console.log(null)
     }
   }, [])
-  useEffect(() => {
-    console.log(reviewerNum)
-  })
 
   return (
     <div>
@@ -401,13 +405,6 @@ function Create() {
                 return a
               })
             }
-            onBlur={(e) =>
-              setCompetitionInfo((pre) => {
-                const a = { ...pre }
-                a.introduce = e.target.value
-                return a
-              })
-            }
             placeholder="不少于100字，不超过1000字"
             maxLength={1000}
           />
@@ -438,10 +435,11 @@ function Create() {
           <Input
             className="first"
             placeholder="审批者学号"
+            value={reviewSettings[0].value}
             onChange={(e) => {
-              setCompetitionInfo((pre) => {
-                const a = { ...pre }
-
+              setReviewSettings((pre) => {
+                const a = [...pre]
+                a[0].value = e.target.value
                 return a
               })
             }}
@@ -451,25 +449,43 @@ function Create() {
             className="manage-create-icon"
             onClick={() => {
               setReviewerNum(reviewerNum + 1)
-              competitionInfo.review_settings.push({})
+              setReviewSettings((pre) => {
+                const a = [...pre]
+                a.push({ key: -1, value: '' })
+                return a
+              })
             }}
           />
 
-          {reviewerNum === 0 ? (
+          {reviewerNum === 1 ? (
             <></>
           ) : (
             <MinusSquareOutlined
               className="manage-create-icon"
               onClick={() => {
                 setReviewerNum(reviewerNum - 1)
-                competitionInfo.review_settings.pop()
+                setReviewSettings((pre) => {
+                  const a = [...pre]
+                  a.pop()
+                  return a
+                })
               }}
             />
           )}
         </div>
         <div className="other-setting">
-          {competitionInfo.review_settings.map((value, index) => {
-            return <ReviewSet setKey={setKey} setValue={setValue} key={value.key + index} value={value} index={index} />
+          {reviewSettings.map((value, index) => {
+            if (value.key === 0) return <></>
+            else
+              return (
+                <ReviewSet
+                  setKey={setKey}
+                  setValue={setValue}
+                  key={value.key + ' ' + index}
+                  value={value}
+                  index={index}
+                />
+              )
           })}
         </div>
 

@@ -10,11 +10,12 @@ import { apis } from '.'
  * @param data 见类型定义
  * @return axios对象
  */
-export const createCompetitionInfo = (data: competitionInfoType) => {
+export const createCompetitionInfo = (data: competitionInfoType, review_settings: object) => {
   return apis({
     method: 'POST',
     url: '/admin/com/create',
     data: {
+      review_settings: { ...review_settings },
       ...data,
     },
   })
@@ -39,11 +40,12 @@ export const deleteCompetitionInfo = (competitionId: number) => {
  * @param data 见类型定义
  * @return axios对象
  */
-export const editCompetitionInfo = (competitionId: number, data: competitionInfoType) => {
+export const editCompetitionInfo = (competitionId: number, data: competitionInfoType, review_settings: object) => {
   return apis({
     method: 'POST',
     url: '/admin/com/edit',
     data: {
+      review_settings: { ...review_settings },
       id: competitionId,
       ...data,
     },
@@ -111,7 +113,7 @@ export const exportWorkFileDataToAssignScorer = (competitionId: number) => {
 export const getUserInfo = (code: string) => {
   return apis({
     method: 'get',
-    url: '/admin/userInfo/' + code,
+    url: '/admin/userInfo?code=' + code,
   })
 }
 
@@ -142,6 +144,7 @@ export const releaseNotice = (competitionId: number, title: string, content: str
     method: 'POST',
     url: '/admin/notice/release',
     data: {
+      time: time,
       com_id: competitionId,
       title: title,
       content: content,
@@ -199,5 +202,19 @@ export const exportWorkFile = (fileId: number) => {
     method: 'get',
     url: '/admin/data/exportWork?fileId=' + fileId,
     responseType: 'blob',
+  })
+}
+
+/**
+ * 获取管理活动界面的 list
+ * @param competitionId 活动Id
+ * @param pageNumber 页码
+ * @param pageSize 单页最大数据条数
+ * @returns Axios对象
+ */
+export const getManageCompetitionList = (competitionId: number, pageNumber: number, pageSize: number) => {
+  return apis({
+    method: 'get',
+    url: '/admin/com/manager?comId=' + competitionId + '&pageNum=' + pageNumber + '&pageSize=' + pageSize,
   })
 }

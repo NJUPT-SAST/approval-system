@@ -1,116 +1,146 @@
-import { Button, Table, Select, notification } from 'antd'
+import { Button, Table, Select, notification, Dropdown, Menu, Pagination } from 'antd'
+import type { PaginationProps } from 'antd'
+import { DownOutlined, UserOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import './index.scss'
-import { exportWorkFileDataToAssignScorer, exportTeamInfo, exportJudgeResult } from '../../api/admin'
+import DataTable from './components/dataTable'
+import {
+  exportWorkFileDataToAssignScorer,
+  exportTeamInfo,
+  exportJudgeResult,
+  getManageCompetitionList,
+} from '../../api/admin'
 import StatisticsBox from './components'
 import { ColumnsType } from 'antd/es/table'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-interface DataType {
-  key: React.Key
+// interface DataType {
+//   key: React.Key
+//   index: number
+//   name: string
+//   reviewer: string
+//   score: string
+//   evaluation: string
+//   choose: any
+// }
+
+type DataType = {
   index: number
-  name: string
-  reviewer: string
-  score: string
-  evaluation: string
-  choose: any
+  comId: number
+  fileId: number
+  fileName: string
+  isAssignJudge: number
+  judges: string[]
+}
+type columnsData = {
+  key: number
+  fileName: string
+  judges: any
+  export: any
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: '序号',
-    key: 'index',
-    dataIndex: 'index',
-    width: 30,
-  },
-  {
-    title: '项目名称',
-    key: 'name',
-    dataIndex: 'name',
-    width: 250,
-  },
-  {
-    title: '评委',
-    key: 'reviewer',
-    dataIndex: 'reviewer',
-    width: 120,
-  },
-  {
-    title: '评分',
-    key: 'score',
-    dataIndex: 'score',
-    width: 65,
-  },
-  {
-    title: '评价',
-    key: 'evaluation',
-    dataIndex: 'evaluation',
-    width: 600,
-  },
-  {
-    title: '',
-    key: 'choose',
-    dataIndex: 'choose',
-  },
-]
+// const columns: ColumnsType<DataType> = [
+//   {
+//     title: '序号',
+//     key: 'index',
+//     dataIndex: 'index',
+//     width: 100,
+//   },
+//   {
+//     title: '项目名称',
+//     key: 'fileName',
+//     dataIndex: 'fileName',
+//   },
+
+//   {
+//     title: '评委',
+//     key: 'judges',
+//     dataIndex: 'judges',
+//   },
+//   {
+//     title: '导出作品',
+//     key: 'export',
+//     dataIndex: 'export',
+//   },
+// ]
 // 用于替代 location 的泛型
 function useMyLocation<T>() {
   return useLocation() as { state: T }
 }
 
 function ManageDetail() {
-  const [data, setData]: any = useState([])
-  const [reviewer] = useState(['Max评审', 'Ming评审', 'R评审'])
+  const [columnsData, setColumnsData]: any[] = useState([])
+  const [pageState, setPageState] = useState<{ total: number; pageNumber: number; pageSize: number }>({
+    total: 0,
+    pageNumber: 1,
+    pageSize: 10,
+  })
+  // const [reviewer] = useState(['Max评审', 'Ming评审', 'R评审'])
   const navigate = useNavigate()
+  const [data, setData] = useState<DataType[]>([])
   const location = useMyLocation<{ competitionId: number; competitionName: string }>()
-  // string
-  useEffect(() => {
-    if (data.length !== 0) {
-      return
-    }
-    //生成一点造假数据×
-    setData((data: DataType[]) => {
-      for (let i = 0; i < 300; ++i) {
-        const flag = i >= 4
-        data.push({
+  const createMenu = (index: number) => {
+    if (data[index].isAssignJudge === 1) {
+      const tempArray: any = []
+      for (let i = 0; i < data[index].judges.length; i++) {
+        tempArray.push({
+          label: data[index].judges[i],
           key: i,
-          index: 114514,
-          name: '随便取个名字就好了',
-          reviewer: flag ? '未分配' : '随便了',
-          score: flag ? '/' : '100',
-          evaluation: flag ? '无' : '好耶！',
-          choose: flag ? (
-            <Select
-              showSearch
-              placeholder="请选择"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-              }
-              onChange={(value: string) => {
-                setData((data: DataType[]) => {
-                  data[i].reviewer = value
-                  return [...data]
-                })
-              }}
-            >
-              {reviewer.map((value, index) => {
-                return (
-                  <Select.Option key={index} value={value}>
-                    {value}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-          ) : (
-            <></>
-          ),
+          icon: <UserOutlined />,
         })
       }
-      return [...data]
-    })
-  }, [])
+      return <Menu items={tempArray} />
+    } else return <Menu></Menu>
+  }
+  // string
+  // useEffect(() => {
+  //   if (data.length !== 0) {
+  //     return
+  //   }
+  //   //生成一点造假数据×
+  //   setData((data: DataType[]) => {
+  //     for (let i = 0; i < 300; ++i) {
+  //       const flag = i >= 4
+  //       data.push({
+  //         key: i,
+  //         index: 114514,
+  //         name: '随便取个名字就好了',
+  //         reviewer: flag ? '未分配' : '随便了',
+  //         score: flag ? '/' : '100',
+  //         evaluation: flag ? '无' : '好耶！',
+  //         choose: flag ? (
+  //           <Select
+  //             showSearch
+  //             placeholder="请选择"
+  //             optionFilterProp="children"
+  //             filterOption={(input, option) =>
+  //               (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+  //             }
+  //             onChange={(value: string) => {
+  //               setData((data: DataType[]) => {
+  //                 data[i].reviewer = value
+  //                 return [...data]
+  //               })
+  //             }}
+  //           >
+  //             {reviewer.map((value, index) => {
+  //               return (
+  //                 <Select.Option key={index} value={value}>
+  //                   {value}
+  //                 </Select.Option>
+  //               )
+  //             })}
+  //           </Select>
+  //         ) : (
+  //           <></>
+  //         ),
+  //       })
+  //     }
+  //     return [...data]
+  //   })
+  // }, [])
+
   //导出所有参赛队伍 可用于分配评委
   const exportCompetitionTeam = () => {
     exportWorkFileDataToAssignScorer(location.state.competitionId).then(
@@ -215,11 +245,45 @@ function ManageDetail() {
       },
     )
   }
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setPageState((pre) => {
+      const a = { ...pre }
+      a.pageNumber = page
+      return a
+    })
+  }
+  useEffect(() => {
+    getManageCompetitionList(location.state.competitionId, 1, 10).then((res) => {
+      console.log(res)
+      setData(res.data.data.record)
+    })
+    // const tempArray: columnsData[] = []
+    // for (let i = 0; i < data.length; i++) {
+    //   const menu = createMenu(i)
+    //   tempArray.push({
+    //     key: i + 1,
+    //     fileName: data[i].fileName,
+    //     judges:
+    //       data[i].isAssignJudge === 1 ? (
+    //         <Dropdown.Button overlay={menu} disabled icon={<UserOutlined />}>
+    //           未分配
+    //         </Dropdown.Button>
+    //       ) : (
+    //         <Dropdown.Button overlay={menu} icon={<UserOutlined />}>
+    //           已分配
+    //         </Dropdown.Button>
+    //       ),
+    //     export: <Button>导出数据</Button>,
+    //   })
+    // }
+    // setColumnsData(tempArray)
+  }, [])
+
   return (
     <div className="manage-detail">
       <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="manage-detail-header">
-        <p className="manage-detail-title">&quot;挑战杯&quot;创新创业大赛</p>
+        <p className="manage-detail-title">{location.state.competitionName}</p>
         <Button
           type="primary"
           size="small"
@@ -266,6 +330,7 @@ function ManageDetail() {
           导出附件信息
         </Button>
       </div>
+
       <div className="manage-detail-body">
         <div className="manage-detail-top">
           <Button
@@ -287,13 +352,30 @@ function ManageDetail() {
           <StatisticsBox name="regist" num={219} />
         </div>
         <div className="manage-detail-list">
-          <Table
-            columns={columns}
-            dataSource={data}
-            rowClassName={(record, index) => {
-              //奇偶行不同样式
-              return index % 2 === 0 ? 'manage-detail-list-odd' : 'manage-detail-list-even'
-            }}
+          <div className="manage-detail-list-title">
+            <div className="manage-detail-list-title-index">序号</div>
+            <div className="manage-detail-list-title-fileName">项目名称</div>
+            <div className="manage-detail-list-title-judges">评委</div>
+            <div className="manage-detail-list-title-export">导出</div>
+          </div>
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+          <DataTable />
+        </div>
+        <div className="manage-detail-page">
+          <Pagination
+            current={pageState.pageNumber}
+            pageSize={pageState.pageSize}
+            showSizeChanger={false}
+            onChange={onChange}
+            total={pageState.total}
           />
         </div>
       </div>
