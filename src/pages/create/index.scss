@@ -168,6 +168,9 @@ $vh_base: 1080;
     .first{
       margin: 0 138px 0 0;
     }
+    .last{
+      min-width: 224px;
+    }
     .ant-input {
       width: 224px;
     }
