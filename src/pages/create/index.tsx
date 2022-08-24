@@ -2,7 +2,7 @@ import { LoadingOutlined, PlusOutlined, MinusSquareOutlined, PlusSquareOutlined 
 import { competitionInfoType } from '../../type/apiTypes'
 import { Button, Input, message, notification, Radio, RadioChangeEvent, Select, Upload } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import { createCompetitionInfo, viewCompetitionInfo, editCompetitionInfo } from '../../api/admin'
+import { createCompetitionInfo, viewCompetitionInfo, editCompetitionInfo, deleteCompetitionInfo } from '../../api/admin'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload/interface'
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -208,19 +208,30 @@ function Create() {
     // -1 表示此时为创建活动
     if (competitionId === -1) {
       //改成键值对形式
-      createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries())).then(
-        (res) => {
-          Navigate('../../activity/' + res.data.data)
-          setTimeout(() => {
-            notification.success({
-              message: '😸️ 发布成功',
-              description: '快去看看新活动吧',
-              top: 20,
-              placement: 'top',
-            })
-          }, 100)
-        },
-        (error) => {
+      createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
+        .then((res) => {
+          if (res.data.success) {
+            Navigate('../../activity/' + res.data.data)
+            setTimeout(() => {
+              notification.success({
+                message: '😸️ 发布成功',
+                description: '快去看看新活动吧',
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+          } else {
+            setTimeout(() => {
+              notification.error({
+                message: '😭️ 发布失败',
+                description: res.data.data.errMsg,
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+          }
+        })
+        .catch((error) => {
           setTimeout(() => {
             notification.error({
               message: '😭️ 发布失败',
@@ -229,77 +240,161 @@ function Create() {
               placement: 'top',
             })
           }, 100)
-        },
-      )
+        })
     } else
-      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries())).then(
-        (res) => {
-          Navigate('../../activity/' + res.data.data)
-          setTimeout(() => {
-            notification.success({
-              message: '😸️ 发布成功',
-              description: '快去看看新活动吧',
-              top: 20,
-              placement: 'top',
-            })
-          }, 100)
-        },
-        (error) => {
+      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
+        .then((res) => {
+          console.log(res)
+          if (res.data.success) {
+            Navigate('../../activity/' + res.data.data)
+            setTimeout(() => {
+              notification.success({
+                message: '😸️ 发布成功',
+                description: '快去看看新活动吧',
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+          } else
+            setTimeout(() => {
+              notification.error({
+                message: '😭️ 发布失败',
+                description: '快检查一下哪里出错了',
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+        })
+        .catch((error) => {
           setTimeout(() => {
             notification.error({
               message: '😭️ 发布失败',
-              description: '快检查一下哪里出错了',
               top: 20,
               placement: 'top',
             })
           }, 100)
-        },
-      )
+        })
   }
 
   //允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
+  const deleteCompetition = () => {
+    deleteCompetitionInfo(competitionId)
+      .then((res) => {
+        if (res.data.success) {
+          Navigate('../../activity/')
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 删除成功',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+        } else
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 发布失败',
+              description: res.data.errMsg,
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+      })
+      .catch((error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 删除失败',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      })
+  }
+
   useEffect(() => {
     if (location.state) {
       setCompetitionId(location.state.competitionId)
-      viewCompetitionInfo(location.state.competitionId).then((res) => {
-        const array: { key: number; value: string }[] = []
-        Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
-          array.push({ key: +key, value: res.data.data.review_settings[key] })
+      viewCompetitionInfo(location.state.competitionId)
+        .then((res) => {
+          if (res.data.success) {
+            const array: { key: number; value: string }[] = []
+            Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
+              array.push({ key: +key, value: res.data.data.review_settings[key] })
+            })
+            if (array.length === 0) {
+              array.push({ key: 0, value: '' })
+            }
+            setReviewerNum(array.length)
+            setReviewSettings(array)
+            setCompetitionInfo((pre) => {
+              const a = { ...pre }
+              a.cover = res.data.data.cover
+              a.introduce = res.data.data.introduce
+              a.is_review = res.data.data.is_review
+              a.max_team_members = res.data.data.max_team_members
+              a.min_team_members = res.data.data.min_team_members
+              a.name = res.data.data.name
+              a.reg_begin_time = res.data.data.reg_begin_time
+              a.reg_end_time = res.data.data.reg_end_time
+              a.review_begin_time = res.data.data.review_begin_time
+              a.review_end_time = res.data.data.review_end_time
+              if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
+              else a.type = 1
+              a.user_code = res.data.data.user_code
+              a.submit_begin_time = res.data.data.submit_begin_time
+              a.submit_end_time = res.data.data.submit_end_time
+              return a
+            })
+          } else {
+            Navigate(-1)
+            setTimeout(() => {
+              notification.error({
+                message: '😭️ 获取活动信息失败',
+                description: res.data.data.errMsg,
+                top: 20,
+                placement: 'top',
+              })
+            }, 100)
+          }
         })
-        setReviewerNum(array.length)
-        setReviewSettings(array)
-        setCompetitionInfo((pre) => {
-          const a = { ...pre }
-          a.cover = res.data.data.cover
-          a.introduce = res.data.data.introduce
-          a.is_review = res.data.data.is_review
-          a.max_team_members = res.data.data.max_team_members
-          a.min_team_members = res.data.data.min_team_members
-          a.name = res.data.data.name
-          a.reg_begin_time = res.data.data.reg_begin_time
-          a.reg_end_time = res.data.data.reg_end_time
-          a.review_begin_time = res.data.data.review_begin_time
-          a.review_end_time = res.data.data.review_end_time
-          if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
-          else a.type = 1
-          a.user_code = res.data.data.user_code
-          a.submit_begin_time = res.data.data.submit_begin_time
-          a.submit_end_time = res.data.data.submit_end_time
-          return a
+        .catch((error) => {
+          Navigate(-1)
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 获取活动信息失败',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         })
-      })
     }
   }, [])
 
+  useEffect(() => {
+    console.log(reviewSettings)
+  })
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="activity-create-header">
-        <h1 id="activity-create-header-title">创建活动</h1>
+        <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1>
         <div className="activity-create-header-buttons">
           {/* //todo 发布时校验比赛简介字数大于100 */}
+          {competitionId === -1 ? (
+            <></>
+          ) : (
+            <Button
+              type="primary"
+              size="small"
+              danger
+              onClick={() => {
+                deleteCompetition()
+              }}
+            >
+              删除
+            </Button>
+          )}
           <Button
             type="primary"
             size="small"
@@ -405,8 +500,8 @@ function Create() {
                 return a
               })
             }
-            placeholder="不少于100字，不超过1000字"
-            maxLength={1000}
+            placeholder="不少于100字，不超过3000字"
+            maxLength={3000}
           />
         </div>
         <TimeRanger
@@ -435,7 +530,7 @@ function Create() {
           <Input
             className="first"
             placeholder="审批者学号"
-            value={reviewSettings[0].value}
+            value={reviewSettings ? reviewSettings[0].value : ''}
             onChange={(e) => {
               setReviewSettings((pre) => {
                 const a = [...pre]

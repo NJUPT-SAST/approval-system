@@ -5,7 +5,7 @@ import TextArea from 'antd/lib/input/TextArea'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { editNotice, releaseNotice } from '../../api/admin'
+import { editNotice, releaseNotice, deleteCompetitionNotice } from '../../api/admin'
 import TimeRanger from './timeRanger'
 import TopBar from '../../components/TopBar'
 import './index.scss'
@@ -60,7 +60,6 @@ function Notice() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 发布成功',
-              description: '快去看看新公告吧',
               top: 20,
               placement: 'top',
             })
@@ -69,7 +68,7 @@ function Notice() {
           setTimeout(() => {
             notification.error({
               message: '😭️ 发布失败',
-              description: '待会儿再试试吧',
+              description: res.data.errMsg,
               top: 20,
               placement: 'top',
             })
@@ -77,20 +76,25 @@ function Notice() {
         }
       })
       .catch((e) => {
-        console.log(e)
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 发布失败',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
       })
   }
   //保存公告
   const saveNotice = () => {
     console.log(pageState)
-    editNotice(state.noticeId, pageState.title, pageState.content, pageState.role, pageState.time).then(
-      (resp) => {
+    editNotice(state.noticeId, pageState.title, pageState.content, pageState.role, pageState.time)
+      .then((resp) => {
         if (resp.data.success) {
           navigate(-1)
           setTimeout(() => {
             notification.success({
               message: '😸️ 保存成功',
-              description: '快去看看新公告吧',
               top: 20,
               placement: 'top',
             })
@@ -99,14 +103,14 @@ function Notice() {
           setTimeout(() => {
             notification.error({
               message: '😭️ 保存失败',
-              description: '待会儿再试试吧',
+              description: resp.data.errMsg,
               top: 20,
               placement: 'top',
             })
           }, 100)
         }
-      },
-      (error) => {
+      })
+      .catch((error) => {
         setTimeout(() => {
           notification.error({
             message: '😭️ 保存失败',
@@ -115,20 +119,18 @@ function Notice() {
             placement: 'top',
           })
         }, 100)
-      },
-    )
+      })
   }
 
   const deleteNotice = () => {
     //调用api删除公告
-    editNotice(state.noticeId, '', '', pageState.role)
+    deleteCompetitionNotice(state.noticeId)
       .then((resp) => {
         if (resp.data.success) {
-          navigate('../')
+          navigate(-1)
           setTimeout(() => {
             notification.success({
               message: '😸️ 删除成功',
-              description: '快去看看新公告吧',
               top: 20,
               placement: 'top',
             })
