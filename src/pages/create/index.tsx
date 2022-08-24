@@ -2,7 +2,7 @@ import { LoadingOutlined, PlusOutlined, MinusSquareOutlined, PlusSquareOutlined 
 import { competitionInfoType } from '../../type/apiTypes'
 import { Button, Input, message, notification, Radio, RadioChangeEvent, Select, Upload } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import { createCompetitionInfo, viewCompetitionInfo, editCompetitionInfo } from '../../api/admin'
+import { createCompetitionInfo, viewCompetitionInfo, editCompetitionInfo, deleteCompetitionInfo } from '../../api/admin'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload/interface'
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -279,6 +279,39 @@ function Create() {
   //允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
+  const deleteCompetition = () => {
+    deleteCompetitionInfo(competitionId)
+      .then((res) => {
+        if (res.data.success) {
+          Navigate('../../activity/')
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 删除成功',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+        } else
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 发布失败',
+              description: res.data.errMsg,
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+      })
+      .catch((error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 删除失败',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      })
+  }
+
   useEffect(() => {
     if (location.state) {
       setCompetitionId(location.state.competitionId)
@@ -289,6 +322,9 @@ function Create() {
             Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
               array.push({ key: +key, value: res.data.data.review_settings[key] })
             })
+            if (array.length === 0) {
+              array.push({ key: 0, value: '' })
+            }
             setReviewerNum(array.length)
             setReviewSettings(array)
             setCompetitionInfo((pre) => {
@@ -345,6 +381,20 @@ function Create() {
         <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1>
         <div className="activity-create-header-buttons">
           {/* //todo 发布时校验比赛简介字数大于100 */}
+          {competitionId === -1 ? (
+            <></>
+          ) : (
+            <Button
+              type="primary"
+              size="small"
+              danger
+              onClick={() => {
+                deleteCompetition()
+              }}
+            >
+              删除
+            </Button>
+          )}
           <Button
             type="primary"
             size="small"
@@ -480,7 +530,7 @@ function Create() {
           <Input
             className="first"
             placeholder="审批者学号"
-            value={reviewSettings[0].value}
+            value={reviewSettings ? reviewSettings[0].value : ''}
             onChange={(e) => {
               setReviewSettings((pre) => {
                 const a = [...pre]
