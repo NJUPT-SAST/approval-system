@@ -110,7 +110,7 @@ function Notice() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 保存失败',
-            description: '快看看哪里出问题了,注意发布时间哦',
+            description: '快看看哪里出问题了',
             top: 20,
             placement: 'top',
           })
