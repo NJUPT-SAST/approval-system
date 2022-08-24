@@ -81,9 +81,7 @@ export const getCompetitionList = (cur: number, limit: number) => {
  * @param
  * @return axios对象
  */
-export const assignJudge = (file: File) => {
-  const formData = new FormData()
-  formData.append('file', file)
+export const assignJudge = (formData: FormData) => {
   return apis({
     method: 'POST',
     url: '/admin/judge/assign',
@@ -187,6 +185,13 @@ export const editNotice = (noticeId: number, title: string, content: string, rol
       role: role,
       time: time,
     },
+  })
+}
+
+export const deleteCompetitionNotice = (NoticeId: number) => {
+  return apis({
+    method: 'POST',
+    url: '/admin/notice/del?id=' + NoticeId,
   })
 }
 
