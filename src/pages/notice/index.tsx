@@ -1,55 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CalendarOutlined } from '@ant-design/icons'
-import { Button, Input, Radio, RadioChangeEvent, message } from 'antd'
+import { Button, Input, Radio, RadioChangeEvent, notification } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
-import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { editNotice, releaseNotice } from '../../api/admin'
-import { getCompetitionNoticeList } from '../../api/public'
+import TimeRanger from './timeRanger'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
-const getActivityId = (pathname: string): number => {
-  const idArray: RegExpMatchArray | null = pathname.match(/(\d+)/g)
-  return parseInt(idArray ? idArray[0] : '1')
-}
-
-const getNoticeId = (pathname: string): number => {
-  const idArray: RegExpMatchArray | null = pathname.match(/(\d+)/g)
-  return parseInt(idArray ? idArray[1] : '-1')
-}
-
-//公告对象类型
-interface noticeType {
-  id: number
-  title: string
-  content: string
-  time: string
-}
-
-//获取api返回公告列表中对应id的公告内容
-const getNotice = (noticeArray: Array<noticeType>, id: number): noticeType | null => {
-  for (let index = 0; index < noticeArray.length; index++) {
-    if (noticeArray[index].id === id) {
-      return noticeArray[index]
-    }
-  }
-  return null
-}
-
 //创建or编辑公告，1为创建，2为编辑
-const createOrEdit = (pathname: string): number => {
-  return pathname.startsWith('/manage') ? 1 : 2
-}
 function useMyLocation<T>() {
   return useLocation() as { state: T }
 }
 
 function Notice() {
-  //活动标题
-  const titleRef = useRef(null)
-  //公告内容
-  const contentRef = useRef(null)
+  const navigate = useNavigate()
   //面向对象
   const roleChange = ({ target: { value } }: RadioChangeEvent) => {
     setPageState((pre) => {
@@ -58,7 +25,6 @@ function Notice() {
       return a
     })
   }
-  const { pathname } = useLocation()
   const { state } = useMyLocation<{
     competitionId: number
     noticeId: number
@@ -67,7 +33,7 @@ function Notice() {
     title: string
     role: number
   }>()
-  const [data, setData] = useState(state)
+
   //创建or编辑公告
   const [createOrEdit, setCreateOrEdit] = useState<number>(1)
   const [pageState, setPageState] = useState<{
@@ -83,26 +49,31 @@ function Notice() {
     title: '',
     role: -1,
   })
-  // const [pageState] = useState(createOrEdit(pathname))
-  //活动id
-  const activityId: number = getActivityId(pathname)
-  //公告id
-  const noticeId: number = getNoticeId(pathname)
 
   //发布公告
   const postNotice = () => {
-    // let current: any = titleRef.current
-    // const title: string = current.input.value
-    // current = contentRef.current
-    // const content: string = current.resizableTextArea.textArea.innerHTML
     //api调用发布公告
-    console.log(pageState)
     releaseNotice(pageState.competitionId, pageState.title, pageState.content, pageState.role, pageState.time)
-      .then((resp) => {
-        if (resp.data.success) {
-          message.success('发布成功！')
+      .then((res) => {
+        if (res.data.success) {
+          navigate('../')
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 发布成功',
+              description: '快去看看新公告吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         } else {
-          message.error('发布失败！')
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 发布失败',
+              description: '待会儿再试试吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         }
       })
       .catch((e) => {
@@ -111,23 +82,41 @@ function Notice() {
   }
   //保存公告
   const saveNotice = () => {
-    // let current: any = titleRef.current
-    // const title: string = current.input.value
-    // current = contentRef.current
-    // const content: string = current.resizableTextArea.textArea.innerHTML
-    // //调用api更新公告
     console.log(pageState)
-    editNotice(state.noticeId, pageState.title, pageState.content, pageState.role, pageState.time)
-      .then((resp) => {
+    editNotice(state.noticeId, pageState.title, pageState.content, pageState.role, pageState.time).then(
+      (resp) => {
         if (resp.data.success) {
-          message.success('公告更新成功！')
+          navigate(-1)
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 保存成功',
+              description: '快去看看新公告吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         } else {
-          message.success('公告更新失败！')
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 保存失败',
+              description: '待会儿再试试吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         }
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+      },
+      (error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 保存失败',
+            description: '快看看哪里出问题了,注意发布时间哦',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      },
+    )
   }
 
   const deleteNotice = () => {
@@ -135,9 +124,24 @@ function Notice() {
     editNotice(state.noticeId, '', '', pageState.role)
       .then((resp) => {
         if (resp.data.success) {
-          message.success('公告更新成功！')
+          navigate('../')
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 删除成功',
+              description: '快去看看新公告吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         } else {
-          message.success('公告更新失败！')
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 删除失败',
+              description: '待会儿再试试吧',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
         }
       })
       .catch((e) => {
@@ -145,30 +149,13 @@ function Notice() {
       })
   }
 
-  const mounted = useRef(false)
-
-  // useEffect(() => {
-  //   if (mounted.current || pageState === 1) {
-  //     return
-  //   }
-  //   mounted.current = true
-  //   //api获取原先比赛公告，在此基础上修改
-  //   getCompetitionNoticeList(activityId).then((resp) => {
-  //     if (!resp.data.success) {
-  //       message.error('载入原先公告出错！')
-  //       return
-  //     }
-  //     const dataArray: Array<noticeType> = resp.data.data
-  //     const notice: noticeType | null = getNotice(dataArray, noticeId)
-  //     if (!notice) {
-  //       return
-  //     }
-  //     let current: any = titleRef.current
-  //     current.input.value = notice.title
-  //     current = contentRef.current
-  //     current.resizableTextArea.textArea.innerHTML = notice.content
-  //   })
-  // }, [])
+  const setTime = (time: string) => {
+    setPageState((pre) => {
+      const a = { ...pre }
+      a.time = time
+      return a
+    })
+  }
 
   useEffect(() => {
     setPageState((pre) => {
@@ -182,7 +169,8 @@ function Notice() {
       setPageState((pre) => {
         const a = { ...pre }
         a.content = state.content
-        a.time = state.time
+        a.time = moment(state.time, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm')
+        a.role = state.role
         a.title = state.title
         return a
       })
@@ -222,9 +210,13 @@ function Notice() {
             }}
           />
         </div>
+        <div className="activity-notice-time-ranger">
+          <p>发布时间</p>
+          <TimeRanger preTime={pageState.time} setTime={setTime} />
+        </div>
         <div className="activity-notice-people">
           <p>面向对象：</p>
-          <Radio.Group name="radiogroup" defaultValue={pageState.role} onChange={roleChange}>
+          <Radio.Group name="radiogroup" defaultValue={state.role} onChange={roleChange}>
             <Radio value={-1}>公开</Radio>
             <Radio value={0}>选手</Radio>
             <Radio value={1}>评委</Radio>
