@@ -11,6 +11,7 @@ function RegisterDetail() {
   const [teamInfo, setTeamInfo] = useState<{
     teamName: string
     teamMember: any[]
+    teamNum?: number
   }>({
     teamName: '加载中',
     teamMember: [{ name: '加载中', code: '加载中' }],
@@ -30,6 +31,7 @@ function RegisterDetail() {
         setTeamInfo({
           teamName: res.data.data.teamName,
           teamMember: res.data.data.teamMember,
+          teamNum: res.data.data.teamMember.length,
         })
         setIsLoading(false)
         message.success({
@@ -140,7 +142,7 @@ function RegisterDetail() {
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             {teamInfo.teamMember.slice(1).map((item, index) => (
               <div className="list" key={index}>
-                <div className="list-title-h2">队员{index}信息</div>
+                <div className="list-title-h2">队员{index + 1} 信息</div>
                 <div className="list-item">
                   <div className="title">姓名: </div>
                   <div className="content">{item.name}</div>
