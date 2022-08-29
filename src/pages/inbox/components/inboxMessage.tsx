@@ -1,12 +1,17 @@
 import { Button } from 'antd'
-import React, { useContext } from 'react'
-import { MessageContext } from '..'
+import React from 'react'
 import InboxReadStateControlButton from './inboxReadStateControlButton'
 import { inboxMessagePropsType } from '../../../type/inboxType'
 
+const inboxMessage = {
+  title: '欢迎使用评审系统',
+  post: '校大学生科协',
+  time: 'Mon Aug 29 2022 18:00:00 GMT+0800 (China Standard Time)',
+  content: '欢迎使用评审系统，如果您在使用过程中遇到问题，请联系校大学生科协。',
+}
+
 const InboxMessage: React.FC<inboxMessagePropsType> = (props) => {
   const { index, localIndex, readState, foldState, controlAllReadState, controlAllFoldState, controlChildState } = props
-  const inboxMessage = useContext(MessageContext)[index]
   const controlReadState = () => {
     controlAllReadState(readState)
     controlChildState(localIndex, !readState, foldState)
