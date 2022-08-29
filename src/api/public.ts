@@ -44,3 +44,15 @@ export const getCompetitionNoticeList = (competitionId: number) => {
     url: '/com/notice/list?id=' + competitionId.toString(),
   })
 }
+
+/**
+ * 下载比赛文件
+ * @param url
+ * @returns
+ */
+export const downLordFile = (url: string) => {
+  return apis({
+    method: 'get',
+    url: '/com/file/download?url=' + url,
+  })
+}

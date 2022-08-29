@@ -100,7 +100,7 @@ export const assignJudge = (formData: FormData) => {
 export const exportWorkFileDataToAssignScorer = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/exportFileData?comId=' + competitionId,
+    url: '/admin/exportWorkData?comId=' + competitionId,
     responseType: 'blob',
   })
 }
@@ -189,26 +189,15 @@ export const editNotice = (noticeId: number, title: string, content: string, rol
     },
   })
 }
-
+/**
+ * 删除公告
+ * @param NoticeId 公告id
+ * @returns
+ */
 export const deleteCompetitionNotice = (NoticeId: number) => {
   return apis({
     method: 'POST',
     url: '/admin/notice/del?id=' + NoticeId,
-  })
-}
-
-/**
- * 导出附件
- * 导出的附件是个压缩包
- * @param fileId 文件 id
- * @return axios对象
- */
-
-export const exportWorkFile = (fileId: number) => {
-  return apis({
-    method: 'get',
-    url: '/admin/data/exportWork?fileId=' + fileId,
-    responseType: 'blob',
   })
 }
 

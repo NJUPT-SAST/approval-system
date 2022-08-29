@@ -37,11 +37,11 @@ const beforeImageUpload = (file: RcFile) => {
 }
 //团队比赛人数（最多15人）
 const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
-const code = localStorage.get
 
 function Create() {
   //上传比赛照片
-  const [reviewerNum, setReviewerNum] = useState<number>(1)
+  //审批者数目
+  const [reviewerNum, setReviewerNum] = useState<number>(2)
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const location = useMyLocation<{ competitionId: number }>()
@@ -61,7 +61,7 @@ function Create() {
     table: null, // 文档中的注释："表单schema，我不知道是啥"
     type: 0, // 0 个人 1 团队
     min_team_members: 1, // 默认值：1 值：1 团队人数限制
-    max_team_members: 2, // 值：2 团队人数限制
+    max_team_members: 1, // 值：2 团队人数限制
     user_code: userProfile.code, // 值：1 活动负责人id
     is_review: 1, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
     introduce: '', // 比赛介绍
@@ -198,6 +198,7 @@ function Create() {
       return a
     })
   }
+  // 发布公告
 
   const postCompetition = () => {
     const reviewSetting_map: Map<number, string> = new Map([[reviewSettings[0].key, reviewSettings[0].value]])
@@ -241,7 +242,7 @@ function Create() {
             })
           }, 100)
         })
-    } else
+    } else {
       editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
         .then((res) => {
           console.log(res)
@@ -274,9 +275,10 @@ function Create() {
             })
           }, 100)
         })
+    }
   }
 
-  //允许报名白名单 意义不明
+  // 允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
   const deleteCompetition = () => {
