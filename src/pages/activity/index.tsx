@@ -1,7 +1,7 @@
 import { LoadingOutlined, RollbackOutlined, SearchOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Empty, Form, Modal, Pagination, Radio, Result, Select, Spin } from 'antd'
 import Input from 'antd/lib/input'
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getAllCompetitionList, searchCompetition } from '../../api/user'
 import TopBar from '../../components/TopBar'
@@ -37,11 +37,11 @@ function Activity() {
   })
 
   //页面初始化时候加载信息
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsLoading(true)
     if (ifSearch.current) {
       searchCompetition(searchKeyword, pageOpt.page, pageOpt.pageSize).then((res) => {
-        console.log(res)
+        // console.log(res)
         setActivities(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -49,7 +49,7 @@ function Activity() {
       })
     } else {
       getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
-        console.log(res)
+        // console.log(res)
         setActivities(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -102,7 +102,7 @@ function Activity() {
       }
     })
     searchCompetition(searchKeyword, 1, pageOpt.pageSize).then((res) => {
-      console.log(res)
+      // console.log(res)
       setActivities(res.data.data)
     })
   }
@@ -112,7 +112,7 @@ function Activity() {
    * @param value 搜索框的值
    */
   const ifSearching = (value: any) => {
-    console.log(value)
+    // console.log(value)
     if (value === '') {
       ifSearch.current = false
     } else {
@@ -120,6 +120,22 @@ function Activity() {
       setSearchKeyword(value)
     }
   }
+
+  // const consoleText = ()=>{
+  //   /* %c
+  //    ______     ______     ______     ______
+  //   /\  ___\   /\  __ \   /\  ___\   /\__  _\
+  //   \ \___  \  \ \  __ \  \ \___  \  \/_/\ \/
+  //    \/\_____\  \ \_\ \_\  \/\_____\    \ \_\
+  //     \/_____/   \/_/\/_/   \/_____/     \/_/
+  //   */
+  //     }
+  //     function getMultiLine(f:any) {
+  //       const lines =f.toString();
+  //       return lines.substring(lines.indexOf("/*") + 3, lines.lastIndexOf("*/"));
+  //       }
+  //     console.log(getMultiLine(consoleText),'color:orange')
+  //     console.log("%c⭐️️ 支持我们的项目： https://github.com/NJUPT-SAST/approval-system",'color:orange;font-size:20px;font-face')
 
   return (
     <div className="activity">

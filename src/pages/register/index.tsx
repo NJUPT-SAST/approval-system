@@ -1,7 +1,7 @@
 import { Button, message, Result } from 'antd'
 import FormRender, { useForm } from 'form-render'
-import React, { Fragment, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { Fragment, useEffect, useLayoutEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getCompetitionInfo, getCompetitionSignInfo, getTeamInfo, signUp } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
@@ -18,6 +18,7 @@ function Register() {
     minParti: 1,
     maxParti: 1,
   })
+  const navigate = useNavigate()
   const [curParti, setCurParti] = useState(1)
   const [teamInfo, setTeamInfo] = useState({})
   const [formSchema, setFormSchema] = useState<any>({
@@ -49,18 +50,21 @@ function Register() {
         title: '队长信息',
         type: 'object',
         displayType: 'column',
+        description: '队长信息已自动填写',
         required: true,
         properties: {
           name: {
             title: '姓名',
             type: 'string',
             required: true,
+            readOnly: true,
             props: {},
           },
           code: {
             title: '学号',
             type: 'string',
             required: true,
+            readOnly: true,
             props: {},
           },
         },
@@ -75,7 +79,11 @@ function Register() {
       duration: 50,
     })
     getTeamInfo(Number(id)).then((res) => {
-      console.log(res)
+      // console.log(res)
+      form.setValueByPath('leader', {
+        name: localStorage.getItem('name'),
+        code: localStorage.getItem('code'),
+      })
       if (res.data.errCode !== 2003) {
         setTeamInfo({
           teamName: res.data.data.teamName,
@@ -83,10 +91,6 @@ function Register() {
         })
         form.setValueByPath('numOfParti', res.data.data.teamMember.length)
         form.setValueByPath('input_teamName', res.data.data.teamName)
-        form.setValueByPath('leader', {
-          name: res.data.data.teamMember[0].name,
-          code: res.data.data.teamMember[0].code,
-        })
         for (let i = 1; i <= res.data.data.teamMember.length - 1; i++) {
           const formName = 'parti' + i
           form.setValueByPath(formName, {
@@ -99,19 +103,24 @@ function Register() {
           content: '😸️ 信息加载成功',
           key: 'loading',
         })
+      } else if (res.data.errMsg === '您还未报名该比赛') {
+        setLoading(false)
+        message.info({
+          content: '💡️ 请填写比赛信息',
+          key: 'loading',
+        })
       } else {
         setLoading(false)
         message.error({
           content: '🙀️ 信息加载错误，请联系管理员',
           key: 'loading',
-          duration: 20,
         })
       }
     })
   }
   useEffect(() => {
     getCompetitionSignInfo(Number(id)).then((res) => {
-      // console.log(res)
+      // // console.log(res)
       setCompetitionInfo({
         maxParti: res.data.data.maxTeamMembers,
         minParti: res.data.data.minTeamMembers,
@@ -119,7 +128,7 @@ function Register() {
     })
     storeTeamInfo()
   }, [])
-  console.log(teamInfo)
+  // console.log(teamInfo)
   const generateForm = (number: number) => {
     const participants: any[] = []
     for (let i = 1; i <= number - 1; i++) {
@@ -167,7 +176,7 @@ function Register() {
       })
       const teamName = formData.input_teamName
       const teamMember = []
-      teamMember.push(formData.leader)
+      // teamMember.push(formData.leader)
       for (let i = 1; i <= Number(formData.select_numOfParti) - 1; i++) {
         const formName = 'parti' + i
         teamMember.push(formData[formName])
@@ -200,7 +209,7 @@ function Register() {
    * @param values 改变的值
    */
   const valueChangeAction = (values: any) => {
-    // console.log(values)
+    // // console.log(values)
     if (values.select_numOfParti !== undefined) {
       setFormSchema({
         type: 'object',
@@ -228,19 +237,21 @@ function Register() {
             title: '队长信息',
             type: 'object',
             displayType: 'column',
-            description: '若单人参赛，只需要填写队长信息',
+            description: '队长信息已自动填写',
             required: true,
             properties: {
               name: {
                 title: '姓名',
                 type: 'string',
                 required: true,
+                readOnly: true,
                 props: {},
               },
               code: {
                 title: '学号',
                 type: 'string',
                 required: true,
+                readOnly: true,
                 props: {},
               },
             },
@@ -249,7 +260,7 @@ function Register() {
       })
       const number = Number(values.select_numOfParti)
       setCurParti(number)
-      // console.log(number)
+      // // console.log(number)
       const newEle = generateForm(number)
       newEle.forEach((element) => {
         setFormSchema((prev: any) => {
@@ -258,14 +269,17 @@ function Register() {
       })
     }
   }
-  const goBack = () => {
-    window.history.back()
+  const goBackToActivity = () => {
+    navigate('/activity/' + id)
   }
   const editAgain = () => {
     setMessageSent(false)
     storeTeamInfo()
   }
-  // console.log(formSchema)
+  const goBackToRegisterDetail = () => {
+    navigate('/activity/' + id + '/register-detail')
+  }
+  // // console.log(formSchema)
   return (
     <div>
       <TopBar activity="“挑战杯”创新创业大赛" />
@@ -282,21 +296,27 @@ function Register() {
                 style={{ maxWidth: '600px' }}
                 disabled={loading}
               />
-              <Button type="primary" onClick={form.submit} loading={loading} disabled={loading}>
+              <Button
+                type="primary"
+                onClick={form.submit}
+                loading={loading}
+                disabled={loading}
+                style={{ marginTop: '2rem' }}
+              >
                 提交
               </Button>
             </Fragment>
           ) : messageStatus === 'success' ? (
             <Result
               status="success"
-              title="😄️ 报名成功"
+              title="😄️ 信息提交成功"
               subTitle="你的报名信息已提交，祝你比赛顺利"
               extra={[
-                <Button type="primary" key="back" onClick={goBack}>
+                <Button type="primary" key="back" onClick={goBackToActivity}>
                   返回比赛详情
                 </Button>,
-                <Button key="re-edit" onClick={editAgain}>
-                  修改报名信息
+                <Button key="re-edit" onClick={goBackToRegisterDetail}>
+                  返回报名详情
                 </Button>,
               ]}
             />
@@ -306,7 +326,7 @@ function Register() {
               title="😭️ 提交时发生错误"
               subTitle={'错误代码：' + errCode + '，错误信息：' + errMsg + '，请及时联系管理员'}
               extra={[
-                <Button type="primary" onClick={goBack} key="back">
+                <Button type="primary" onClick={goBackToActivity} key="back">
                   返回比赛详情
                 </Button>,
                 <Button key="retry" onClick={editAgain}>

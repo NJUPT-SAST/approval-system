@@ -21,7 +21,9 @@ function TopBar(props?: { activity?: string }) {
     '/review': '活动评审',
     '/review/detail': '挑战杯',
     '/register': '活动报名',
+    '/register-detail': '报名参加详情',
     '/notice': '发布公告',
+    '/work-detail': '作品提交信息',
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)

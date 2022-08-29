@@ -1,10 +1,10 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Anchor, Button, Empty, List, Skeleton, Timeline } from 'antd'
 import Item from 'antd/lib/list/Item'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { getCompetitionNoticeList } from '../../api/public'
-import { getCompetitionInfo } from '../../api/user'
+import { getCompetitionInfo, getTeamInfo } from '../../api/user'
 import CompetitionNotice from '../../components/CompetitionNotice'
 import TopBar from '../../components/TopBar'
 import { competitionInfoType } from '../../type/apiTypes'
@@ -29,6 +29,7 @@ function ActivityDetail() {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   const userState = localStorage.getItem('userState')
   const [isLoading, setIsLoading] = useState(true)
+  const [isSigned, setIsSigned] = useState(false)
   const navigate = useNavigate()
   const { id } = useParams()
   // console.log(competitionDetail)
@@ -51,27 +52,32 @@ function ActivityDetail() {
       submitEnd: '载入中',
       cover: '',
     })
-    useEffect(() => {
+    useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionInfo(Number(id)).then((res) => {
-        console.log(res)
+        // console.log(res)
         setCompetitionDetail(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
         }, 100)
+      })
+      getTeamInfo(Number(id)).then((res) => {
+        if (res.data.errMsg !== '您还未报名该比赛') {
+          setIsSigned(true)
+        }
       })
     }, [])
     return competitionDetail
   }
 
   /**
-   *
+   * 获取比赛公告的hook
    * @param id 比赛的id
    * @returns 返回比赛比赛通知公告的state
    */
   const useGetCompetitionNotice = (id: number) => {
     const [competitionNoticeList, setCompetitionNoticeList] = useState([])
-    useEffect(() => {
+    useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionNoticeList(id).then((res) => {
         //console.log(res)
@@ -93,7 +99,11 @@ function ActivityDetail() {
       case 'admin':
         return '管理'
       case 'user':
-        return '报名'
+        if (isSigned) {
+          return '活动参加详情'
+        } else {
+          return '报名'
+        }
       case 'judge':
         return '评审'
       case 'approver':
@@ -124,7 +134,11 @@ function ActivityDetail() {
 
   const handleButtonAction = () => {
     if (userState === 'user') {
-      navigate('/activity/' + id + '/register')
+      if (isSigned) {
+        navigate('/activity/' + id + '/register-detail')
+      } else {
+        navigate('/activity/' + id + '/register')
+      }
     } else if (userState === 'judge') {
       navigate('/review/list?comId=' + id + '&page=1')
     } else if (userState === 'approver') {
@@ -141,6 +155,7 @@ function ActivityDetail() {
   }, [])
 
   const competitionNotice = useGetCompetitionNotice(Number(id))
+  //console.log(competitionNotice)
   const competitionDetail: competitionDetailType = useGetCompetitionDetail(Number(id))
 
   return (
@@ -168,9 +183,13 @@ function ActivityDetail() {
                   <div className="title">{competitionDetail.name}</div>
                 </Skeleton>
                 <div className="action-button">
-                  <Button type="primary" onClick={handleButtonAction}>
-                    {buttonContent()}
-                  </Button>
+                  {isLoading ? (
+                    <Skeleton.Button shape="square" active />
+                  ) : (
+                    <Button type="primary" onClick={handleButtonAction}>
+                      {buttonContent()}
+                    </Button>
+                  )}
                 </div>
               </div>
               <Skeleton active loading={isLoading} title={false}>
