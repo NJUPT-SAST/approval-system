@@ -1,8 +1,9 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Anchor, Button, Empty, List, Skeleton, Timeline } from 'antd'
+import { Anchor, Button, Empty, List, message, notification, Skeleton, Timeline } from 'antd'
 import Item from 'antd/lib/list/Item'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { getJudgeWorkTotal, getScoreWorkTotal } from '../../api/judge'
 import { getCompetitionNoticeList } from '../../api/public'
 import { getCompetitionInfo, getTeamInfo } from '../../api/user'
 import CompetitionNotice from '../../components/CompetitionNotice'
@@ -29,9 +30,21 @@ function ActivityDetail() {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   const userState = localStorage.getItem('userState')
   const [isLoading, setIsLoading] = useState(true)
+  const [entranceAvailable, setEntranceAvailable] = useState(false)
   const [isSigned, setIsSigned] = useState(false)
   const navigate = useNavigate()
   const { id } = useParams()
+  const btn = (
+    <Button
+      type="primary"
+      onClick={() => {
+        navigate('/review')
+        notification.close('no-item')
+      }}
+    >
+      马上前往
+    </Button>
+  )
   // console.log(competitionDetail)
 
   /**
@@ -61,11 +74,29 @@ function ActivityDetail() {
           setIsLoading(false)
         }, 100)
       })
-      getTeamInfo(Number(id)).then((res) => {
-        if (res.data.errMsg !== '您还未报名该比赛') {
-          setIsSigned(true)
-        }
-      })
+      if (userState === 'approver') {
+        getScoreWorkTotal(id).then((res) => {
+          console.log(res.data)
+          if (res.data.data !== 0) {
+            setEntranceAvailable(true)
+          }
+        })
+      }
+      if (userState === 'judge') {
+        getJudgeWorkTotal(id).then((res) => {
+          console.log(res.data)
+          if (res.data.data !== 0) {
+            setEntranceAvailable(true)
+          }
+        })
+      }
+      if (userState === 'user') {
+        getTeamInfo(Number(id)).then((res) => {
+          if (res.data.errMsg !== '您还未报名该比赛') {
+            setIsSigned(true)
+          }
+        })
+      }
     }, [])
     return competitionDetail
   }
@@ -105,9 +136,9 @@ function ActivityDetail() {
           return '报名'
         }
       case 'judge':
-        return '评审'
-      case 'approver':
         return '审批'
+      case 'approver':
+        return '评审'
       default:
         return '请先登录'
     }
@@ -132,6 +163,9 @@ function ActivityDetail() {
     }
   }
 
+  /**
+   * 处理点击按钮后的反应
+   */
   const handleButtonAction = () => {
     if (userState === 'user') {
       if (isSigned) {
@@ -140,9 +174,29 @@ function ActivityDetail() {
         navigate('/activity/' + id + '/register')
       }
     } else if (userState === 'judge') {
-      navigate('/review/list?comId=' + id + '&page=1')
+      if (entranceAvailable) {
+        navigate('/review/list?comId=' + id + '&page=1')
+      } else {
+        notification.warning({
+          message: '当前比赛没有需要审核的作品',
+          description: '请到审核列表查看所有需要审核的作品',
+          placement: 'top',
+          key: 'no-item',
+          btn: btn,
+        })
+      }
     } else if (userState === 'approver') {
-      navigate('/review/list?comId=' + id + '&page=1')
+      if (entranceAvailable) {
+        navigate('/review/list?comId=' + id + '&page=1')
+      } else {
+        notification.warning({
+          message: '当前比赛没有需要评审的作品',
+          description: '请到评审列表查看所有需要评审的作品',
+          placement: 'top',
+          key: 'no-item',
+          btn: btn,
+        })
+      }
     } else if (userState === 'admin') {
       navigate('/activity/' + id + '/manage', { state: { competitionId: id, competitionName: competitionDetail.name } })
     }

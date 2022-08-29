@@ -126,10 +126,25 @@ export const getScoreWork = (workId: number) => {
  */
 export const getScoreWorkTotal = (workId: number) => {
   const data = new FormData()
-  data.append('id', workId.toString())
+  data.append('comId', workId.toString())
   return apis({
     method: 'get',
-    url: '/score/program-info?id=' + workId,
+    url: '/score/total?comId=' + workId,
+    data: data,
+  })
+}
+
+/**
+ * 获取审批作品总数
+ * @param workId 作品id
+ * @return axios 对象
+ */
+export const getJudgeWorkTotal = (workId: number) => {
+  const data = new FormData()
+  data.append('comId', workId.toString())
+  return apis({
+    method: 'get',
+    url: '/review/total?comId=' + workId,
     data: data,
   })
 }
