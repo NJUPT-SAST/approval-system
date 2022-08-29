@@ -39,18 +39,18 @@ function ManageDetail() {
 
   const navigate = useNavigate()
   const [data, setData] = useState<DataType[]>([])
-  const location = useMyLocation<{ competitionId: number; competitionName: string }>()
+  const { state } = useMyLocation<{ competitionId: number; competitionName: string }>()
 
   //导出所有参赛队伍 可用于分配评委
   const exportCompetitionTeam = () => {
-    exportWorkFileDataToAssignScorer(location.state.competitionId)
+    exportWorkFileDataToAssignScorer(state.competitionId)
       .then((res) => {
         if (res.data.success) {
           const blob = new Blob([res.data])
           const downloadElement = document.createElement('a')
           const href = window.URL.createObjectURL(blob) //创建下载的链接
           downloadElement.href = href
-          downloadElement.download = location.state.competitionName + '参赛数据.xlsx' //下载后文件名
+          downloadElement.download = state.competitionName + '参赛数据.xlsx' //下载后文件名
           document.body.appendChild(downloadElement)
           downloadElement.click() //点击下载
           document.body.removeChild(downloadElement) //下载完成移除元素
@@ -58,7 +58,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 导出成功',
-              description: location.state.competitionName + ' 的参赛数据已导出',
+              description: state.competitionName + ' 的参赛数据已导出',
               top: 20,
               placement: 'top',
             })
@@ -67,7 +67,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.error({
               message: '😭️ 导出失败',
-              description: location.state.competitionName + ' 的参赛数据未能成功导出',
+              description: state.competitionName + ' 的参赛数据未能成功导出',
               top: 20,
               placement: 'top',
             })
@@ -78,7 +78,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: location.state.competitionName + ' 的参赛数据未能成功导出',
+            description: state.competitionName + ' 的参赛数据未能成功导出',
             top: 20,
             placement: 'top',
           })
@@ -87,7 +87,7 @@ function ManageDetail() {
   }
   //导出所有附件的信息
   const exportTeamFileInfo = () => {
-    exportTeamInfo(location.state.competitionId)
+    exportTeamInfo(state.competitionId)
       .then((res) => {
         if (res.data.success) {
           console.log(res)
@@ -95,7 +95,7 @@ function ManageDetail() {
           const downloadElement = document.createElement('a')
           const href = window.URL.createObjectURL(blob) //创建下载的链接
           downloadElement.href = href
-          downloadElement.download = location.state.competitionName + '附件.xlsx' //下载后文件名
+          downloadElement.download = state.competitionName + '附件.xlsx' //下载后文件名
           document.body.appendChild(downloadElement)
           downloadElement.click() //点击下载
           document.body.removeChild(downloadElement) //下载完成移除元素
@@ -103,7 +103,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 导出成功',
-              description: location.state.competitionName + ' 的所有附件已成功导出',
+              description: state.competitionName + ' 的所有附件已成功导出',
               top: 20,
               placement: 'top',
             })
@@ -112,7 +112,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.error({
               message: '😭️ 导出失败',
-              description: '未能成功导出 ' + location.state.competitionName + ' 的附件',
+              description: '未能成功导出 ' + state.competitionName + ' 的附件',
               top: 20,
               placement: 'top',
             })
@@ -123,7 +123,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: '未能成功导出 ' + location.state.competitionName + ' 的附件',
+            description: '未能成功导出 ' + state.competitionName + ' 的附件',
             top: 20,
             placement: 'top',
           })
@@ -132,14 +132,14 @@ function ManageDetail() {
   }
   //下载活动评审结果
   const exportCompetitionResult = () => {
-    exportJudgeResult(location.state.competitionId)
+    exportJudgeResult(state.competitionId)
       .then((res) => {
         if (res.data.success) {
           const blob = new Blob([res.data])
           const downloadElement = document.createElement('a')
           const href = window.URL.createObjectURL(blob) //创建下载的链接
           downloadElement.href = href
-          downloadElement.download = location.state.competitionName + '评审结果.xlsx' //下载后文件名
+          downloadElement.download = state.competitionName + '评审结果.xlsx' //下载后文件名
           document.body.appendChild(downloadElement)
           downloadElement.click() //点击下载
           document.body.removeChild(downloadElement) //下载完成移除元素
@@ -147,7 +147,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 导出成功',
-              description: '活动:' + location.state.competitionName + ' 的评审结果已成功导出',
+              description: '活动:' + state.competitionName + ' 的评审结果已成功导出',
               top: 20,
               placement: 'top',
             })
@@ -156,7 +156,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.error({
               message: '😭️ 导出失败',
-              description: '未能成功导出活动:' + location.state.competitionName + ' 的评审结果',
+              description: '未能成功导出活动:' + state.competitionName + ' 的评审结果',
               top: 20,
               placement: 'top',
             })
@@ -167,7 +167,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: '未能成功导出活动:' + location.state.competitionName + ' 的评审结果',
+            description: '未能成功导出活动:' + state.competitionName + ' 的评审结果',
             top: 20,
             placement: 'top',
           })
@@ -228,8 +228,9 @@ function ManageDetail() {
 
   useEffect(() => {
     setIsLoading(true)
-    getManageCompetitionList(location.state.competitionId, pageState.pageNumber, pageState.pageSize)
+    getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
       .then((res) => {
+        setIsLoading(false)
         setData(res.data.data.records)
         console.log(res.data.data)
         setPageState((pre) => {
@@ -237,10 +238,10 @@ function ManageDetail() {
           a.total = res.data.data.total
           return a
         })
-        setIsLoading(false)
       })
       .catch((error) => {
         setIsLoading(false)
+        console.log(error)
       })
   }, [pageState.pageNumber])
 
@@ -249,14 +250,14 @@ function ManageDetail() {
     <div className="manage-detail">
       <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="manage-detail-header">
-        <p className="manage-detail-title">{location.state.competitionName}</p>
+        <p className="manage-detail-title">{state.competitionName}</p>
         <Button
           type="primary"
           size="small"
           id="manage-detail-set"
           onClick={() => {
-            navigate('/activity/' + location.state.competitionId + '/manage/create', {
-              state: { competitionId: location.state.competitionId },
+            navigate('/activity/' + state.competitionId + '/manage/create', {
+              state: { competitionId: state.competitionId },
             })
           }}
         >
@@ -268,8 +269,8 @@ function ManageDetail() {
           id="manage-detail-notice"
           onClick={() => {
             console.log('now')
-            navigate('../manage/' + location.state.competitionId + '/notice', {
-              state: { competitionId: location.state.competitionId },
+            navigate('../manage/' + state.competitionId + '/notice', {
+              state: { competitionId: state.competitionId },
             })
           }}
         >
