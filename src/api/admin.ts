@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { competitionInfoType } from '../type/apiTypes'
 import { apis } from '.'
+import qs from 'qs'
 
 //经询问 比赛 与接口文档中的 活动 是同一个东西
 //故在该文件内 比赛 字段 指的是接口文档中的 活动 字段
@@ -29,7 +30,8 @@ export const createCompetitionInfo = (data: competitionInfoType, review_settings
 export const deleteCompetitionInfo = (competitionId: number) => {
   return apis({
     method: 'POST',
-    url: '/admin/com/delete?id=' + competitionId,
+    url: '/admin/com/delete',
+    data: qs.stringify({ comId: competitionId }),
   })
 }
 
@@ -81,9 +83,7 @@ export const getCompetitionList = (cur: number, limit: number) => {
  * @param
  * @return axios对象
  */
-export const assignJudge = (file: File) => {
-  const formData = new FormData()
-  formData.append('file', file)
+export const assignJudge = (formData: FormData) => {
   return apis({
     method: 'POST',
     url: '/admin/judge/assign',
@@ -187,6 +187,13 @@ export const editNotice = (noticeId: number, title: string, content: string, rol
       role: role,
       time: time,
     },
+  })
+}
+
+export const deleteCompetitionNotice = (NoticeId: number) => {
+  return apis({
+    method: 'POST',
+    url: '/admin/notice/del?id=' + NoticeId,
   })
 }
 

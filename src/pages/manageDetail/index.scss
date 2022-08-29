@@ -58,7 +58,7 @@ $vh_base: 1080;
     flex-direction: column;
     background-color: white;
     min-height: 780px;
-    margin: 0 vw(53) 0 vw(55);
+    margin: 0 vw(55) vw(80) vw(55);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     .manage-detail-top {
       min-height: vh(122);
@@ -72,11 +72,12 @@ $vh_base: 1080;
         margin-left: vw(19);
         margin-top: vh(67);
       }
-      #manage-detail-tips {
+      #manage-detail-uplord {
         float: left;
-        margin-left: vw(11);
-        margin-top: vh(84);
-        height: vh(14);
+        margin-left: vw(19);
+        margin-top: vh(67);
+        min-height:40px;
+        height: vh(50);
         color: rgba(153, 153, 153, 1);
         font-size: vh(12);
         font-weight: 500;
@@ -112,8 +113,9 @@ $vh_base: 1080;
         color: rgba(0, 0, 0, 0.85);
         font-size: 14px;
         line-height: 22px;
+        margin: 0 0 10px 0;
         font-weight: 700;
-        border-bottom: solid rgba(151, 151, 151, 1);
+        border-bottom: solid rgba(151, 151, 151, 0.6);
         .manage-detail-list-title-index {
           border-right: 2px solid rgba(81, 81, 81, 0.1);
           width: 10%;
@@ -130,32 +132,50 @@ $vh_base: 1080;
           width: 22%;
         }
       }
-      .manage-detail-list-content {
+      .manage-detail-list-content-body {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
+        min-height: 600px;
         width: 90%;
-        text-align: center;
-        height: 60px;
-        .manage-detail-list-content-index {
-          border-right: 2px solid rgba(81, 81, 81, 0.1);
-          width: 10%;
+        border-bottom: solid rgba(151, 151, 151, 0.6);
+        .manage-detail-list-content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          width: 100%;
+          text-align: center;
+          height: 60px;
+          .manage-detail-list-content-index {
+            border-right: 2px solid rgba(81, 81, 81, 0.1);
+            width: 10%;
+          }
+          .manage-detail-list-content-fileName {
+            border-right: 2px solid rgba(81, 81, 81, 0.1);
+            width: 45%;
+          }
+          .manage-detail-list-content-judges {
+            border-right: 2px solid rgba(81, 81, 81, 0.1);
+            width: 22%;
+          }
+          .manage-detail-list-content-export {
+            width: 22%;
+            color: rgba(42, 130, 228, 1);
+          }
         }
-        .manage-detail-list-content-fileName {
-          border-right: 2px solid rgba(81, 81, 81, 0.1);
-          width: 45%;
+        .manage-detail-list-content-odd {
+          background: rgba(240, 240, 240, 1);
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+          width: 100%;
         }
-        .manage-detail-list-content-judges {
-          border-right: 2px solid rgba(81, 81, 81, 0.1);
-          width: 22%;
-        }
-        .manage-detail-list-content-export {
-          width: 22%;
+        .manage-detail-list-content-even {
+          width: 100%;
         }
       }
     }
     .manage-detail-page {
-      height: 45px;
+      padding-top:10px;
+      height: 60px;
     }
   }
 }

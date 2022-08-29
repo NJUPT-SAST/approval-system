@@ -34,7 +34,7 @@ const TimeRanger: React.FC<propsType> = (props) => {
         ) : (
           <DatePicker
             showTime
-            value={moment(preEndTime, dataFormat)}
+            value={moment(preStartTime, dataFormat)}
             onOk={onStartTimeOk}
             showNow={false}
             placeholder="选择时间"

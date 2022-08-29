@@ -1,49 +1,70 @@
-import { Col, Space, Table, Button, Dropdown, Menu } from 'antd'
-import { DownOutlined, UserOutlined } from '@ant-design/icons'
+import { Dropdown, Menu, notification } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
+import { exportWorkFile } from '../../../../api/admin'
 import React from 'react'
 
 const DataTable: React.FC<any> = (props) => {
+  const menu = () => {
+    if (value.isAssignJudge === 1) {
+      const tempArray: any = []
+      for (let i = 0; i < value.judges.length; i++) {
+        tempArray.push({
+          label: value.judges[i],
+          key: i,
+          icon: <UserOutlined />,
+        })
+      }
+      return <Menu items={tempArray} />
+    } else return <Menu></Menu>
+  }
+  const { value, index, pageState } = props
   return (
-    <div className="manage-detail-list-content">
-      <span className="manage-detail-list-content-index"> 1</span>
-      <span className="manage-detail-list-content-fileName">测试 </span>
-      <span className="manage-detail-list-content-judges">Dropdown</span>
-      <span className="manage-detail-list-content-export">导出作品</span>
+    <div className={index % 2 === 0 ? 'manage-detail-list-content-odd' : 'manage-detail-list-content-even'}>
+      <div className="manage-detail-list-content">
+        <span className="manage-detail-list-content-index">
+          {' '}
+          {(pageState.pageNumber - 1) * pageState.pageSize + index + 1}
+        </span>
+        <span className="manage-detail-list-content-fileName">{value.fileName} </span>
+        <span className="manage-detail-list-content-judges">
+          {value.isAssignJudge === 1 ? (
+            <Dropdown.Button overlay={menu} icon={<UserOutlined />}>
+              已分配
+            </Dropdown.Button>
+          ) : (
+            <Dropdown.Button overlay={menu} disabled icon={<UserOutlined />}>
+              未分配
+            </Dropdown.Button>
+          )}
+        </span>
+        <span
+          className="manage-detail-list-content-export"
+          onClick={() => {
+            exportWorkFile(value.fileId).then((res) => {
+              const blob = new Blob([res.data])
+              const downloadElement = document.createElement('a')
+              const href = window.URL.createObjectURL(blob) //创建下载的链接
+              downloadElement.href = href
+              downloadElement.download = '作品' + value.fileName + '.zip' //下载后文件名
+              document.body.appendChild(downloadElement)
+              downloadElement.click() //点击下载
+              document.body.removeChild(downloadElement) //下载完成移除元素
+              window.URL.revokeObjectURL(href) //释放掉blob对象
+              setTimeout(() => {
+                notification.success({
+                  message: '😸️ 导出成功',
+                  description: '作品已成功导出',
+                  top: 20,
+                  placement: 'top',
+                })
+              }, 100)
+            })
+          }}
+        >
+          导出
+        </span>
+      </div>
     </div>
-    //     <Table
-    //       dataSource={props.data}
-    //       rowClassName={(record, index) => {
-    //         //奇偶行不同样式
-    //         return index % 2 === 0 ? 'manage-detail-list-odd' : 'manage-detail-list-even'
-    //       }}
-    //     >
-    //       <Column title="序号" key="1" dataIndex="index" />
-    //       <Column title="项目名称" key="2" dataIndex="fileName"></Column>
-    //       <Column
-    //         title="评委"
-    //         key="3"
-    //         dataIndex=""
-    //         render={(_: any, record: any) => {
-    //           return record.isAssignJudge === 1 ? (
-    //             <Dropdown.Button overlay={menu} disabled icon={<UserOutlined />}>
-    //               未分配
-    //             </Dropdown.Button>
-    //           ) : (
-    //             <Dropdown.Button overlay={menu} icon={<UserOutlined />}>
-    //               已分配
-    //             </Dropdown.Button>
-    //           )
-    //         }}
-    //       ></Column>
-    //       <Column
-    //         title="导出"
-    //         key="4"
-    //         dataIndex="export"
-    //         render={() => {
-    //           return <Button>导出</Button>
-    //         }}
-    //       />
-    //     </Table>
   )
 }
 
