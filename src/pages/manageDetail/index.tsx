@@ -36,7 +36,11 @@ function ManageDetail() {
     pageNumber: 1,
     pageSize: 10,
   })
-
+  const [regState, setRegState] = useState<{ regNum: number; revNum: number; subNum: number }>({
+    regNum: 0,
+    revNum: 0,
+    subNum: 0,
+  })
   const navigate = useNavigate()
   const [data, setData] = useState<DataType[]>([])
   const { state } = useMyLocation<{ competitionId: number; competitionName: string }>()
@@ -230,7 +234,7 @@ function ManageDetail() {
     setIsLoading(true)
     getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
       .then((res) => {
-        setIsLoading(false)
+        setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
         setData(res.data.data.records)
         console.log(res.data.data)
         setPageState((pre) => {
@@ -238,6 +242,7 @@ function ManageDetail() {
           a.total = res.data.data.total
           return a
         })
+        setIsLoading(false)
       })
       .catch((error) => {
         setIsLoading(false)
@@ -333,9 +338,9 @@ function ManageDetail() {
               }
             }}
           />
-          <StatisticsBox name="approve" num={73} />
-          <StatisticsBox name="submit" num={97} />
-          <StatisticsBox name="regist" num={219} />
+          <StatisticsBox name="approve" num={regState.revNum} />
+          <StatisticsBox name="submit" num={regState.subNum} />
+          <StatisticsBox name="regist" num={regState.regNum} />
         </div>
         <div className="manage-detail-list">
           <div className="manage-detail-list-title">
