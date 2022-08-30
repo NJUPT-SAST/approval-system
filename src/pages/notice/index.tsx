@@ -10,14 +10,14 @@ import TimeRanger from './timeRanger'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
-//创建or编辑公告，1为创建，2为编辑
+// 创建 or 编辑公告，1 为创建，2 为编辑
 function useMyLocation<T>() {
   return useLocation() as { state: T }
 }
 
 function Notice() {
   const navigate = useNavigate()
-  //面向对象
+  // 面向对象
   const roleChange = ({ target: { value } }: RadioChangeEvent) => {
     setPageState((pre) => {
       const a = { ...pre }
@@ -34,7 +34,7 @@ function Notice() {
     role: number
   }>()
 
-  //创建or编辑公告
+  // 创建 or 编辑公告
   const [createOrEdit, setCreateOrEdit] = useState<number>(1)
   const [pageState, setPageState] = useState<{
     competitionId: number
@@ -50,13 +50,13 @@ function Notice() {
     role: -1,
   })
 
-  //发布公告
+  // 发布公告
   const postNotice = () => {
     //api调用发布公告
     releaseNotice(pageState.competitionId, pageState.title, pageState.content, pageState.role, pageState.time)
       .then((res) => {
         if (res.data.success) {
-          navigate('../')
+          navigate(-1)
           setTimeout(() => {
             notification.success({
               message: '😸️ 发布成功',
@@ -85,7 +85,8 @@ function Notice() {
         }, 100)
       })
   }
-  //保存公告
+
+  // 保存公告
   const saveNotice = () => {
     console.log(pageState)
     editNotice(state.noticeId, pageState.title, pageState.content, pageState.role, pageState.time)
@@ -122,6 +123,7 @@ function Notice() {
       })
   }
 
+  // 删除公告
   const deleteNotice = () => {
     //调用api删除公告
     deleteCompetitionNotice(state.noticeId)
@@ -151,6 +153,11 @@ function Notice() {
       })
   }
 
+  /**
+   * 用于 TimeRanger 子组件，将时间保存在 state 中
+   *
+   * @param time
+   */
   const setTime = (time: string) => {
     setPageState((pre) => {
       const a = { ...pre }
@@ -178,6 +185,7 @@ function Notice() {
       })
     }
   }, [])
+
   return (
     <div className="activity-notice">
       <TopBar activity='"挑战杯"创新创业大赛' />
