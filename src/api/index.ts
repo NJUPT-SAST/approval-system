@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Location, useNavigate } from 'react-router-dom'
 
 export const apis = axios.create({
-  timeout: 2000,
+  timeout: 10000,
 })
 
 apis.interceptors.request.use((config: any) => {
@@ -26,6 +26,7 @@ apis.interceptors.response.use((res) => {
             localStorage.setItem('userState', 'offline')
             window.location.href = '/'
           },
+          key: 'unlogin',
         })
         break
       // case 1000:
