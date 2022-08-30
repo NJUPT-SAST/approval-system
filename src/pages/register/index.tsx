@@ -10,8 +10,8 @@ function Register() {
   const form = useForm()
   const { id } = useParams()
   const [messageSent, setMessageSent] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [messageStatus, setMessageStatus] = useState('null')
+  const [loading, setLoading] = useState(false)
   const [errCode, setErrCode] = useState(0)
   const [errMsg, setErrMsg] = useState('')
   const [competitionInfo, setCompetitionInfo] = useState({

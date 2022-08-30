@@ -104,21 +104,23 @@ export const getTeamInfo = (competitionId: number) => {
 /**
  * 上传审批作品
  * @param competitionId 比赛 id
- * @param name 作品名称
+ * @param name 输入框名
  * @param introduce 作品介绍
  * @param file 评审作品 仅允许zip格式
  * @returns axios对象
  */
-export const uplordWork = (competitionId: number, name: string, introduce: string, file: File) => {
+export const uploadWork = (competitionId: number, input: string, file: File, onProgress: any) => {
   const data = new FormData()
   data.append('id', competitionId.toString())
-  data.append('name', name)
-  data.append('introduce', introduce)
+  data.append('input', input)
   data.append('file', file)
   return apis({
     method: 'POST',
     url: '/user/com/upload',
     data: data,
+    onUploadProgress: ({ total, loaded }) => {
+      onProgress({ percent: Math.round((loaded / total) * 100).toFixed(2) }, file)
+    },
   })
 }
 
@@ -167,7 +169,7 @@ export const getWorkSchema = (competitionId: number) => {
  * @param data 没写描述
  * @returns axios对象
  */
-export const uploadWorkSchema = (competitionId: number, data: string) => {
+export const uploadWorkSchema = (competitionId: number, data: any) => {
   return apis({
     method: 'POST',
     url: '/user/com/uploadSchema/' + competitionId.toString(),
