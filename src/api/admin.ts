@@ -7,18 +7,19 @@ import qs from 'qs'
 //故在该文件内 比赛 字段 指的是接口文档中的 活动 字段
 
 /**
- * 设置比赛信息
+ * 创建比赛信息
  * @param data 见类型定义
  * @return axios对象
  */
-export const createCompetitionInfo = (data: competitionInfoType, review_settings: object) => {
+export const createCompetitionInfo = (data: competitionInfoType, review_settings: object, cover?: Blob) => {
+  const formData = new FormData()
+  if (cover) formData.append('cover', cover)
+  else formData.append('cover', '')
+  formData.append('competition', JSON.stringify({ review_settings: { ...review_settings }, ...data }))
   return apis({
     method: 'POST',
     url: '/admin/com/create',
-    data: {
-      review_settings: { ...review_settings },
-      ...data,
-    },
+    data: formData,
   })
 }
 

@@ -55,7 +55,7 @@ function ManageDetail() {
         const downloadElement = document.createElement('a')
         const href = window.URL.createObjectURL(blob) //创建下载的链接
         downloadElement.href = href
-        downloadElement.download = state.competitionName + '参赛数据.xlsx' //下载后文件名
+        downloadElement.download = state.competitionName + ' 的参赛数据.xlsx' //下载后文件名
         document.body.appendChild(downloadElement)
         downloadElement.click() //点击下载
         document.body.removeChild(downloadElement) //下载完成移除元素
@@ -63,7 +63,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.success({
             message: '😸️ 导出成功',
-            description: state.competitionName + ' 的参赛数据已导出',
+            description: '活动： ' + state.competitionName + ' 的参赛数据已导出',
             top: 20,
             placement: 'top',
           })
@@ -83,7 +83,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: state.competitionName + ' 的参赛数据未能成功导出',
+            description: '活动： ' + state.competitionName + ' 的参赛数据未能成功导出',
             top: 20,
             placement: 'top',
           })
@@ -100,7 +100,7 @@ function ManageDetail() {
         const downloadElement = document.createElement('a')
         const href = window.URL.createObjectURL(blob) //创建下载的链接
         downloadElement.href = href
-        downloadElement.download = state.competitionName + '附件.xlsx' //下载后文件名
+        downloadElement.download = state.competitionName + ' 的附件.xlsx' //下载后文件名
         document.body.appendChild(downloadElement)
         downloadElement.click() //点击下载
         document.body.removeChild(downloadElement) //下载完成移除元素
@@ -108,7 +108,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.success({
             message: '😸️ 导出成功',
-            description: state.competitionName + ' 的所有附件已成功导出',
+            description: '活动： ' + state.competitionName + ' 的所有附件已成功导出',
             top: 20,
             placement: 'top',
           })
@@ -136,7 +136,8 @@ function ManageDetail() {
         }, 100)
       })
   }
-  //下载活动评审结果
+
+  // 下载活动评审结果
   const exportCompetitionResult = () => {
     exportJudgeResult(state.competitionId)
       .then((res) => {
@@ -145,7 +146,7 @@ function ManageDetail() {
         const downloadElement = document.createElement('a')
         const href = window.URL.createObjectURL(blob) //创建下载的链接
         downloadElement.href = href
-        downloadElement.download = state.competitionName + '评审结果.xlsx' //下载后文件名
+        downloadElement.download = state.competitionName + ' 的评审结果.xlsx' //下载后文件名
         document.body.appendChild(downloadElement)
         downloadElement.click() //点击下载
         document.body.removeChild(downloadElement) //下载完成移除元素
@@ -153,7 +154,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.success({
             message: '😸️ 导出成功',
-            description: '活动:' + state.competitionName + ' 的评审结果已成功导出',
+            description: '活动： ' + state.competitionName + ' 的评审结果已成功导出',
             top: 20,
             placement: 'top',
           })
@@ -180,7 +181,8 @@ function ManageDetail() {
         }, 100)
       })
   }
-  //导入评审
+
+  // 导入评审
   const upLoadJudges = () => {
     if (uploadFile.has('file')) {
       assignJudge(uploadFile)
@@ -223,7 +225,8 @@ function ManageDetail() {
       }, 100)
     }
   }
-  //pageNum变化时
+
+  // pageNum 变化时
   const onPageNumChange: PaginationProps['onChange'] = (page) => {
     setPageState((pre) => {
       const a = { ...pre }

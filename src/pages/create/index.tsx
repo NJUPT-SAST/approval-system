@@ -45,7 +45,10 @@ function Create() {
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const location = useMyLocation<{ competitionId: number }>()
-  const [reviewSettings, setReviewSettings] = useState<{ key: number; value: string }[]>([{ key: 0, value: '' }])
+  const [reviewSettings, setReviewSettings] = useState<{ key: number; value: string }[]>([
+    { key: 0, value: '' },
+    { key: -1, value: '' },
+  ])
   //获取 code
   const userProfile = useRecoilValue(userProfileStore)
   //判断是修改还是创建 id为 -1 则为创建 否则为 修改
@@ -118,6 +121,7 @@ function Create() {
       return a
     })
   }
+
   /**
    * 团队比赛人数变化
    * @param value
@@ -198,8 +202,8 @@ function Create() {
       return a
     })
   }
-  // 发布公告
 
+  // 发布活动
   const postCompetition = () => {
     const reviewSetting_map: Map<number, string> = new Map([[reviewSettings[0].key, reviewSettings[0].value]])
     for (let i = 0; i < reviewerNum; i++) {
@@ -211,7 +215,7 @@ function Create() {
       //改成键值对形式
       createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
         .then((res) => {
-          if (res.data.success) {
+          if (res.data.success === true) {
             Navigate('../../activity/' + res.data.data)
             setTimeout(() => {
               notification.success({
@@ -225,7 +229,7 @@ function Create() {
             setTimeout(() => {
               notification.error({
                 message: '😭️ 发布失败',
-                description: res.data.data.errMsg,
+                description: res.data.errMsg,
                 top: 20,
                 placement: 'top',
               })
@@ -236,7 +240,7 @@ function Create() {
           setTimeout(() => {
             notification.error({
               message: '😭️ 发布失败',
-              description: '快检查一下哪里出错了',
+              description: error + '',
               top: 20,
               placement: 'top',
             })
@@ -260,7 +264,7 @@ function Create() {
             setTimeout(() => {
               notification.error({
                 message: '😭️ 发布失败',
-                description: '快检查一下哪里出错了',
+                description: res.data.errMsg,
                 top: 20,
                 placement: 'top',
               })
@@ -281,6 +285,7 @@ function Create() {
   // 允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
+  // 删除活动
   const deleteCompetition = () => {
     deleteCompetitionInfo(competitionId)
       .then((res) => {
@@ -326,6 +331,10 @@ function Create() {
             })
             if (array.length === 0) {
               array.push({ key: 0, value: '' })
+              array.push({ key: -1, value: '' })
+            }
+            if (array.length === 1) {
+              array.push({ key: -1, value: '' })
             }
             setReviewerNum(array.length)
             setReviewSettings(array)
@@ -373,9 +382,6 @@ function Create() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(reviewSettings)
-  })
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
