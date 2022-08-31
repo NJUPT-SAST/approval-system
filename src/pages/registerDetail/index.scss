@@ -36,23 +36,35 @@
       margin-bottom: 1rem;
     }
     .list {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
       .list-item {
-        margin-left: 2rem;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
+        border-width: 1px;
+        border-color: rgb(200, 200, 200);
+        border-style: solid;
+        padding-left: 2rem;
+        margin: 0 0 -1px -1px;
         display: flex;
-
+        align-items: center;
         .title {
           font-size: 1rem;
           font-weight: normal;
-          width: 5rem;
+          width: 8rem;
           text-align: center;
+          flex-shrink: 0;
+          padding-right: 2rem;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
         }
         .content {
+          border-width: 0 0 0 1px;
+          border-color: rgb(191, 191, 191);
+          border-style: solid;
           font-size: 1rem;
-          margin-left: 1rem;
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
         }
       }
     }
