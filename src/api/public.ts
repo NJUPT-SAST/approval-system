@@ -54,5 +54,6 @@ export const fileDownload = (url: string) => {
   return apis({
     method: 'get',
     url: '/com/file/download?url=' + url,
+    responseType: 'blob',
   })
 }

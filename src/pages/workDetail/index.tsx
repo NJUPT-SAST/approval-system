@@ -42,9 +42,9 @@ function WorkDetail() {
   const [loading, setLoading] = useState(false)
   const [errCode, setErrCode] = useState(0)
   const [errMsg, setErrMsg] = useState('')
-  const submitReadyData: string | { input: string; content: unknown }[] = []
   const [messageSent, setMessageSent] = useState(false)
   const [messageStatus, setMessageStatus] = useState('null')
+  const submitReadyData: string | { input: string; content: unknown }[] = []
   let localFileList: any
   const [fileList, setFileList] = useState<{
     [index: string]: {
@@ -222,7 +222,7 @@ function WorkDetail() {
     labelWidth: 120,
     properties: {
       是否为STITP项目: {
-        enum: ['a', 'b'],
+        enum: ['是', '否'],
         type: 'string',
         title: '是否为STITP项目',
         widget: 'radio',

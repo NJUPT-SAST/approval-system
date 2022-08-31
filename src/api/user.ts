@@ -147,7 +147,7 @@ export const deleteWork = (competitionId: number) => {
 export const getWorkInfo = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/user/com/workInfo/' + competitionId.toString(),
+    url: '/user/com/getSchema/' + competitionId.toString(),
   })
 }
 

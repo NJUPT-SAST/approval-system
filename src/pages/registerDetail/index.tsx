@@ -1,7 +1,8 @@
 import { Button, message, Skeleton } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCompetitionInfo, getTeamInfo } from '../../api/user'
+import { fileDownload } from '../../api/public'
+import { getCompetitionInfo, getTeamInfo, getWorkInfo } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
@@ -16,6 +17,13 @@ function RegisterDetail() {
     teamName: '加载中',
     teamMember: [{ name: '加载中', code: '加载中' }],
   })
+  const [workData, setWorkData] = useState<
+    {
+      input: string
+      content: string
+      isFile: boolean
+    }[]
+  >()
   const navigate = useNavigate()
 
   const storeTeamInfo = () => {
@@ -48,8 +56,12 @@ function RegisterDetail() {
         })
       }
     })
+    getWorkInfo(Number(id)).then((res) => {
+      console.log(res)
+      setWorkData(res.data.data)
+    })
   }
-
+  console.log(workData)
   /**
    * 获取比赛的详细信息
    * @param id 比赛的id
@@ -93,6 +105,73 @@ function RegisterDetail() {
     return competitionDetail
   }
   const competitionDetail = useGetCompetitionDetail(Number(id))
+
+  /**
+   * 判定是否为字符串
+   * @param str 字符串
+   * @returns bool
+   */
+  function validURL(str: string) {
+    //判断URL地址的正则表达式为:http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?
+    //下面的代码中应用了转义字符"\"输出一个字符"/"
+    const objExp = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/)
+    if (objExp.test(str) == true) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * 文件下载
+   * @param url 文件url
+   */
+  const downloadFile = (url: string) => {
+    message.loading({
+      content: '正在下载文件',
+      duration: 500,
+      key: 'downloading',
+    })
+    fileDownload(url).then((res) => {
+      const content = res.headers['content-disposition']
+      console.log('content', res)
+      const fileBlob = new Blob([res.data])
+      const url = window.URL.createObjectURL(fileBlob)
+      let filename = 'no-file'
+      const name1 = content.match(/filename=(.*);/) // 获取filename的值
+      const name2 = content.match(/filename\*=(.*)/) // 获取filename*的值
+      // name1 = decodeURIComponent(name1)
+      // name2 = decodeURIComponent(name2.substring(6)) // 下标6是UTF-8
+      if (name2 !== null) {
+        filename = decodeURIComponent(name2[0].substring(17))
+      } else {
+        if (name1 !== null) {
+          filename = decodeURIComponent(name1[0])
+        } else {
+          filename = 'no-file'
+        }
+      }
+      if (filename !== 'no-file') {
+        const a = document.createElement('a')
+        a.style.display = 'none'
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+        message.success({
+          content: '😁 下载成功',
+          key: 'downloading',
+        })
+      } else {
+        message.error({
+          content: '😞 下载发生了错误，请联系管理员',
+          key: 'downloading',
+        })
+      }
+    })
+  }
 
   const changeRegisterInfo = () => {
     navigate('/activity/' + id + '/register')
@@ -161,10 +240,24 @@ function RegisterDetail() {
           <div className="list-title-h1">作品提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
-              <div className="list-item">
-                <div className="title">附件1: </div>
-                <div className="content"></div>
-              </div>
+              {workData?.map((item, index) => {
+                if (item.isFile) {
+                  return (
+                    <div className="list-item" key={index + item.input}>
+                      <div className="title">{item.input} </div>
+                      <a onClick={() => downloadFile(item.content)}>
+                        <div className="content">点击下载文件</div>
+                      </a>
+                    </div>
+                  )
+                }
+                return (
+                  <div className="list-item" key={index + item.input}>
+                    <div className="title">{item.input} </div>
+                    <div className="content">{item.content}</div>
+                  </div>
+                )
+              })}
             </div>
           </Skeleton>
           <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
