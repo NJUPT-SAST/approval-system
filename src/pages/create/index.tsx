@@ -7,6 +7,7 @@ import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upl
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
+import { option, tempelate } from '../../store/formTemplate'
 import userProfileStore from '../../store/userProfile'
 import ReviewSet from './Components/reviewerSet'
 import TopBar from '../../components/TopBar'
@@ -41,7 +42,9 @@ const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 
 function Create() {
   //上传比赛照片
   //审批者数目
+  const [preSchema, setPreSchema] = useState<object | null>(null)
   const [reviewerNum, setReviewerNum] = useState<number>(2)
+  const { Option } = Select
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const location = useMyLocation<{ competitionId: number }>()
@@ -61,7 +64,7 @@ function Create() {
     submit_end_time: '', // 活动提交结束时间
     review_begin_time: '', // 评审开始时间
     review_end_time: '', // 评审结束时间
-    table: null, // 文档中的注释："表单schema，我不知道是啥"
+    table: {}, // 文档中的注释："表单schema，我不知道是啥"
     type: 0, // 0 个人 1 团队
     min_team_members: 1, // 默认值：1 值：1 团队人数限制
     max_team_members: 1, // 值：2 团队人数限制
@@ -338,6 +341,7 @@ function Create() {
             }
             setReviewerNum(array.length)
             setReviewSettings(array)
+            setPreSchema(res.data.data.table)
             setCompetitionInfo((pre) => {
               const a = { ...pre }
               a.cover = res.data.data.cover
@@ -350,6 +354,7 @@ function Create() {
               a.reg_end_time = res.data.data.reg_end_time
               a.review_begin_time = res.data.data.review_begin_time
               a.review_end_time = res.data.data.review_end_time
+              a.table = res.data.data.table
               if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
               else a.type = 1
               a.user_code = res.data.data.user_code
@@ -382,6 +387,9 @@ function Create() {
     }
   }, [])
 
+  useEffect(() => {
+    console.log(competitionInfo)
+  })
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
@@ -450,21 +458,54 @@ function Create() {
             <span id="activity-create-cover-tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
           </div>
         </div>
-        <div className="activity-create-name">
-          <span id="activity-create-name">比赛名称</span>
-          <Input
-            maxLength={15}
-            placeholder="清晰简洁，不得多于15字"
-            value={competitionInfo.name}
-            showCount={false}
-            onChange={(e) => {
-              setCompetitionInfo((pre) => {
-                const a = { ...pre }
-                a.name = e.target.value
-                return a
-              })
-            }}
-          />
+        <div className="activity-create-name-and-template">
+          <div className="activity-create-name">
+            <span id="activity-create-name">比赛名称</span>
+            <Input
+              maxLength={15}
+              placeholder="清晰简洁，不得多于15字"
+              value={competitionInfo.name}
+              showCount={false}
+              onChange={(e) => {
+                setCompetitionInfo((pre) => {
+                  const a = { ...pre }
+                  a.name = e.target.value
+                  return a
+                })
+              }}
+            />
+          </div>
+          <div className="activity-template-select">
+            <span id="activity-template-select">表单选择</span>
+            <Select
+              placeholder="请选择表单"
+              defaultValue={-1}
+              onChange={(value) => {
+                if (value === -1) {
+                  setCompetitionInfo((pre) => {
+                    const a = { ...pre }
+                    a.table = preSchema as object
+                    return a
+                  })
+                } else {
+                  setCompetitionInfo((pre) => {
+                    const a = { ...pre }
+                    a.table = tempelate[+value]
+                    return a
+                  })
+                }
+              }}
+            >
+              {option.map((value, index) => {
+                return (
+                  <Option key={'formTempelate ' + index} value={index}>
+                    {value}
+                  </Option>
+                )
+              })}
+              {preSchema === null ? <></> : <Option value={-1}>不修改</Option>}
+            </Select>
+          </div>
         </div>
         <div className="activity-create-type">
           <span id="activity-create-type">比赛类型</span>
@@ -533,48 +574,51 @@ function Create() {
           preEndTime={competitionInfo.review_end_time}
           setEndTime={setEndTime}
         />
-        <div className="activity-create-reviewer-setting">
-          <span className="activity-create-reviewer-code">默认审批者</span>
-          <Input
-            className="first"
-            placeholder="审批者学号"
-            value={reviewSettings ? reviewSettings[0].value : ''}
-            onChange={(e) => {
-              setReviewSettings((pre) => {
-                const a = [...pre]
-                a[0].value = e.target.value
-                return a
-              })
-            }}
-            showCount={false}
-          />
-          <PlusSquareOutlined
-            className="manage-create-icon"
-            onClick={() => {
-              setReviewerNum(reviewerNum + 1)
-              setReviewSettings((pre) => {
-                const a = [...pre]
-                a.push({ key: -1, value: '' })
-                return a
-              })
-            }}
-          />
-
-          {reviewerNum === 1 ? (
-            <></>
-          ) : (
-            <MinusSquareOutlined
-              className="manage-create-icon"
-              onClick={() => {
-                setReviewerNum(reviewerNum - 1)
+        <div className="activity-create-reviewer-setting-default">
+          <div className="activity-create-reviewer-setting-default-code">
+            <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
+            <Input
+              className="first"
+              placeholder="审批者学号"
+              value={reviewSettings ? reviewSettings[0].value : ''}
+              onChange={(e) => {
                 setReviewSettings((pre) => {
                   const a = [...pre]
-                  a.pop()
+                  a[0].value = e.target.value
+                  return a
+                })
+              }}
+              showCount={false}
+            />
+          </div>
+          <div className="activity-create-reviewer-setting-default-change-number">
+            <PlusSquareOutlined
+              className="manage-create-icon"
+              onClick={() => {
+                setReviewerNum(reviewerNum + 1)
+                setReviewSettings((pre) => {
+                  const a = [...pre]
+                  a.push({ key: -1, value: '' })
                   return a
                 })
               }}
             />
-          )}
+            {reviewerNum === 1 ? (
+              <></>
+            ) : (
+              <MinusSquareOutlined
+                className="manage-create-icon"
+                onClick={() => {
+                  setReviewerNum(reviewerNum - 1)
+                  setReviewSettings((pre) => {
+                    const a = [...pre]
+                    a.pop()
+                    return a
+                  })
+                }}
+              />
+            )}
+          </div>
         </div>
         <div className="other-setting">
           {reviewSettings.map((value, index) => {

@@ -18,7 +18,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 type DataType = {
   index: number
   comId: number
-  fileId: number
   fileName: string
   isAssignJudge: number
   judges: string[]

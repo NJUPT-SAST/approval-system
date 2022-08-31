@@ -215,3 +215,17 @@ export const getManageCompetitionList = (competitionId: number, pageNumber: numb
     url: '/admin/com/manager?comId=' + competitionId + '&pageNum=' + pageNumber + '&pageSize=' + pageSize,
   })
 }
+
+/**
+ * 导出附件
+ *
+ * @param competitionId 比赛Id
+ * @param userCode 队长学号
+ * @returns Axios 对象
+ */
+export const exportWorkFile = (competitionId: number, userCode: string) => {
+  return apis({
+    method: 'get',
+    url: '/admin/data/exportWork?comId=' + competitionId + '&userCode=' + userCode,
+  })
+}
