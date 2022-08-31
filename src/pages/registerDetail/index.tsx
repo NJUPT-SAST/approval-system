@@ -1,5 +1,5 @@
 import { CloudDownloadOutlined } from '@ant-design/icons'
-import { Button, message, Skeleton, Space } from 'antd'
+import { Button, Empty, message, notification, Skeleton, Space } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fileDownload } from '../../api/public'
@@ -26,6 +26,17 @@ function RegisterDetail() {
     }[]
   >()
   const navigate = useNavigate()
+  const btn = (
+    <Button
+      type="primary"
+      onClick={() => {
+        navigate('/activity/' + id + '/work-detail')
+        notification.close('no-item')
+      }}
+    >
+      马上前往
+    </Button>
+  )
 
   const storeTeamInfo = () => {
     setIsLoading(true)
@@ -60,6 +71,17 @@ function RegisterDetail() {
     getWorkInfo(Number(id)).then((res) => {
       console.log(res)
       setWorkData(res.data.data)
+      if (res.data.errMsg === '您还未上传作品') {
+        notification.warning({
+          message: '您还未上传作品',
+          description: '请记得提交您的作品哦，否则无法正常参赛',
+          placement: 'topRight',
+          top: 150,
+          duration: 50,
+          key: 'no-item',
+          btn: btn,
+        })
+      }
     })
   }
   console.log(workData)
@@ -241,29 +263,33 @@ function RegisterDetail() {
           <div className="list-title-h1">作品提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
-              {workData?.map((item, index) => {
-                if (item.isFile) {
+              {workData?.length === 0 || workData === null ? (
+                <Empty className="empty" description="还没过提交作品哦" />
+              ) : (
+                workData?.map((item, index) => {
+                  if (item.isFile) {
+                    return (
+                      <div className="list-item" key={index + item.input}>
+                        <div className="title">{item.input} </div>
+                        <a onClick={() => downloadFile(item.content)}>
+                          <div className="content">
+                            <Space>
+                              <CloudDownloadOutlined />
+                              点击下载文件
+                            </Space>
+                          </div>
+                        </a>
+                      </div>
+                    )
+                  }
                   return (
                     <div className="list-item" key={index + item.input}>
                       <div className="title">{item.input} </div>
-                      <a onClick={() => downloadFile(item.content)}>
-                        <div className="content">
-                          <Space>
-                            <CloudDownloadOutlined />
-                            点击下载文件
-                          </Space>
-                        </div>
-                      </a>
+                      <div className="content">{item.content}</div>
                     </div>
                   )
-                }
-                return (
-                  <div className="list-item" key={index + item.input}>
-                    <div className="title">{item.input} </div>
-                    <div className="content">{item.content}</div>
-                  </div>
-                )
-              })}
+                })
+              )}
             </div>
           </Skeleton>
           <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
