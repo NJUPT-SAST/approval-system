@@ -1,5 +1,5 @@
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Input, message, Result, Spin, Upload, UploadProps } from 'antd'
+import { Button, Input, message, notification, Result, Spin, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import FormRender, { useForm } from 'form-render'
 import React, { Fragment, ReactElement, useLayoutEffect, useState } from 'react'
@@ -55,7 +55,7 @@ function WorkDetail() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [errCode, setErrCode] = useState(0)
-  const [errMsg, setErrMsg] = useState('')
+  const [errMsg, setErrMsg] = useState('unknown')
   const [messageSent, setMessageSent] = useState(false)
   const [messageStatus, setMessageStatus] = useState('null')
   const [workData, setWorkData] = useState()
@@ -128,56 +128,81 @@ function WorkDetail() {
     })
   }
 
+  const getWorkSchemaData = () => {
+    setLoading(true)
+    message.loading({
+      content: '🤔 正在加载已填写的数据',
+      duration: 500,
+      key: 'loading',
+    })
+    setTimeout(() => {
+      message.loading({
+        content: '🤔 我还在努力加载中，请耐心等待',
+        key: 'loading',
+        duration: 500,
+      })
+    }, 10000)
+    setTimeout(() => {
+      setLoading(false)
+      setMessageSent(true)
+      setMessageStatus('error')
+      setErrCode(0)
+      setErrMsg('unknown')
+      message.error({
+        content: '😩 加载错误, 请联系管理员',
+        key: 'loading',
+      })
+    }, 20000)
+    getWorkInfo(Number(id)).then((res) => {
+      console.log(res)
+      setWorkData(res.data.data)
+      if (res.data.errMsg === '您还未上传作品') {
+        message.info({
+          content: '💡 请填写你的作品信息',
+          key: 'loading',
+        })
+      }
+      if (res.data.errCode === null) {
+        res.data.data.map((item: { input: string; isFile: boolean; content: string }, index: number) => {
+          form.setValueByPath(item.input, item.content)
+          if (item.isFile === true) {
+            setFileList((prev) => {
+              return {
+                ...prev,
+                [item.input]: [
+                  {
+                    name: getFileName(item.content),
+                    status: 'done',
+                    url: item.content,
+                  },
+                ],
+              }
+            })
+          }
+        })
+        message.success({
+          content: '😸 信息加载成功',
+          key: 'loading',
+        })
+        setLoading(false)
+        clearTimeout()
+      }
+    })
+  }
+
   const useGetWorkSchema = () => {
     const [schemaData, setSchemaData] = useState()
     useLayoutEffect(() => {
-      message.loading({
-        content: '🤔 正在加载已填写的数据',
-        duration: 500,
-        key: 'loading',
-      })
       getWorkSchema(Number(id)).then((res) => {
         // console.log(res)
         setSchemaData(res.data)
       })
-      getWorkInfo(Number(id)).then((res) => {
-        // console.log(res)
-        setWorkData(res.data.data)
-        if (res.data.errMsg === '您还未上传作品') {
-          message.info({
-            content: '💡 请填写你的作品信息',
-            key: 'loading',
-          })
-        }
-        if (res.data.errCode === null) {
-          message.success({
-            content: '😸 信息加载成功',
-            key: 'loading',
-          })
-          res.data.data.map((item: { input: string; isFile: boolean; content: string }, index: number) => {
-            form.setValueByPath(item.input, item.content)
-            if (item.isFile === true) {
-              setFileList((prev) => {
-                return {
-                  ...prev,
-                  [item.input]: [
-                    {
-                      name: getFileName(item.content),
-                      status: 'done',
-                      url: item.content,
-                    },
-                  ],
-                }
-              })
-            }
-          })
-        }
-      })
+      getWorkSchemaData()
     }, [])
     return schemaData
   }
   const remoteSchema: any = useGetWorkSchema()
-  console.log(remoteSchema)
+  // console.log(remoteSchema)
   /**
    * 自封装的upload组件
    * @param props 来自schema的必须参数
@@ -277,8 +302,11 @@ function WorkDetail() {
             downloadFile(file.url)
           }
         }}
+        disabled={loading}
       >
-        <Button icon={<UploadOutlined />}>点击上传文件</Button>
+        <Button icon={<UploadOutlined />} disabled={loading} loading={loading}>
+          {loading ? '正在加载已上传文件' : '点击上传文件'}
+        </Button>
       </Upload>
     )
   }
@@ -318,9 +346,6 @@ function WorkDetail() {
       getCompetitionInfo(Number(id)).then((res) => {
         // console.log(res)
         setCompetitionDetail(res.data.data)
-        setTimeout(() => {
-          setLoading(false)
-        }, 100)
       })
     }, [])
     return competitionDetail
@@ -346,8 +371,8 @@ function WorkDetail() {
         } else {
           setMessageSent(true)
           setMessageStatus('error')
-          setErrCode(res.data.data.errCode)
-          setErrMsg(res.data.data.errMsg)
+          setErrCode(res.data.errCode)
+          setErrMsg(res.data.errMsg)
         }
       })
     } else {
@@ -376,6 +401,7 @@ function WorkDetail() {
         widget: 'radio',
         required: true,
         enumNames: ['是', '否'],
+        order: 1,
       },
       申报书: {
         type: 'string',
@@ -386,6 +412,7 @@ function WorkDetail() {
           inputName: '申报书',
           accept: '.pdf',
         },
+        order: 2,
       },
       研究报告: {
         type: 'string',
@@ -396,6 +423,7 @@ function WorkDetail() {
           inputName: '研究报告',
           accept: '.pdf',
         },
+        order: 3,
       },
       作品简介书: {
         type: 'string',
@@ -406,8 +434,9 @@ function WorkDetail() {
           inputName: '作品简介书',
           accept: '.pdf',
         },
+        order: 4,
       },
-      作品名称: { type: 'string', props: {}, title: '作品名称', required: true },
+      作品名称: { type: 'string', props: {}, title: '作品名称', required: true, order: 1 },
       作品类别: {
         enum: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
         type: 'string',
@@ -415,8 +444,9 @@ function WorkDetail() {
         widget: 'select',
         required: true,
         enumNames: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
+        order: 5,
       },
-      作品简介: { type: 'string', props: {}, title: '作品简介', format: 'textarea', required: true },
+      作品简介: { type: 'string', props: {}, title: '作品简介', format: 'textarea', required: true, order: 6 },
     },
     displayType: 'column',
   }
@@ -425,6 +455,7 @@ function WorkDetail() {
   }
   const editAgain = () => {
     setMessageSent(false)
+    getWorkSchemaData()
   }
   const goBackToRegisterDetail = () => {
     navigate('/activity/' + id + '/register-detail')
@@ -454,7 +485,7 @@ function WorkDetail() {
             ) : (
               <Result
                 status="error"
-                title="😭️ 提交时发生错误"
+                title="😭️ 发生错误"
                 subTitle={'错误代码：' + errCode + '，错误信息：' + errMsg + '，请及时联系管理员'}
                 extra={[
                   <Button type="primary" onClick={goBackToActivity} key="back">
@@ -469,13 +500,14 @@ function WorkDetail() {
           ) : remoteSchema !== undefined ? (
             <Fragment>
               <FormRender
+                debug
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}
                 schema={remoteSchema.data}
                 onFinish={submitData}
               />
-              <Button type="primary" onClick={form.submit}>
+              <Button type="primary" onClick={form.submit} disabled={loading} loading={loading}>
                 提 交
               </Button>
             </Fragment>
