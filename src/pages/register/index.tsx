@@ -125,57 +125,111 @@ function Register() {
   useEffect(() => {
     getCompetitionSignInfo(Number(id)).then((res) => {
       console.log(res)
-      setCompetitionInfo({
-        maxParti: res.data.data.maxTeamMembers,
-        minParti: res.data.data.minTeamMembers,
-      })
-      setFormSchema({
-        type: 'object',
-        labelWidth: 151,
-        displayType: 'column',
-        properties: {
-          input_teamName: {
-            title: '队伍名称',
-            type: 'string',
-            displayType: 'column',
-            required: true,
-            labelWidth: 0,
-            props: {},
-          },
-          select_numOfParti: {
-            title: '参赛人数',
-            type: 'number',
-            widget: 'slider',
-            displayType: 'column',
-            description: '最少人数 ' + res.data.data.minTeamMembers + ' ；最多人数 ' + res.data.data.maxTeamMembers,
-            required: true,
-            placeholder: '',
-            min: res.data.data.minTeamMembers,
-            max: res.data.data.maxTeamMembers,
-            default: curParti,
-          },
-          leader: {
-            title: '队长信息',
-            type: 'object',
-            displayType: 'column',
-            description: '队长信息已自动填写',
-            properties: {
-              name: {
-                title: '姓名',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
-              code: {
-                title: '学号',
-                type: 'string',
-                readOnly: true,
-                props: {},
+      if (!res.data.data.isTeam) {
+        setCompetitionInfo({
+          maxParti: 1,
+          minParti: 1,
+        })
+        setFormSchema({
+          type: 'object',
+          labelWidth: 151,
+          displayType: 'column',
+          properties: {
+            input_teamName: {
+              title: '队伍名称',
+              type: 'string',
+              displayType: 'column',
+              required: true,
+              labelWidth: 0,
+              props: {},
+            },
+            select_numOfParti: {
+              title: '参赛人数',
+              type: 'number',
+              widget: 'slider',
+              displayType: 'column',
+              description: '最少人数 ' + 1 + ' ；最多人数 ' + 1,
+              required: true,
+              placeholder: '',
+              min: 1,
+              max: 1,
+              default: curParti,
+            },
+            leader: {
+              title: '队长信息',
+              type: 'object',
+              displayType: 'column',
+              description: '队长信息已自动填写',
+              properties: {
+                name: {
+                  title: '姓名',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                code: {
+                  title: '学号',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
               },
             },
           },
-        },
-      })
+        })
+      } else {
+        setCompetitionInfo({
+          maxParti: res.data.data.maxTeamMembers,
+          minParti: res.data.data.minTeamMembers,
+        })
+        setFormSchema({
+          type: 'object',
+          labelWidth: 151,
+          displayType: 'column',
+          properties: {
+            input_teamName: {
+              title: '队伍名称',
+              type: 'string',
+              displayType: 'column',
+              required: true,
+              labelWidth: 0,
+              props: {},
+            },
+            select_numOfParti: {
+              title: '参赛人数',
+              type: 'number',
+              widget: 'slider',
+              displayType: 'column',
+              description: '最少人数 ' + res.data.data.minTeamMembers + ' ；最多人数 ' + res.data.data.maxTeamMembers,
+              required: true,
+              placeholder: '',
+              min: res.data.data.minTeamMembers,
+              max: res.data.data.maxTeamMembers,
+              default: curParti,
+            },
+            leader: {
+              title: '队长信息',
+              type: 'object',
+              displayType: 'column',
+              description: '队长信息已自动填写',
+              properties: {
+                name: {
+                  title: '姓名',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                code: {
+                  title: '学号',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+              },
+            },
+          },
+        })
+      }
     })
     storeTeamInfo()
   }, [])
