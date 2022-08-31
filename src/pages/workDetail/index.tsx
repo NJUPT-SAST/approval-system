@@ -2,7 +2,7 @@ import { UploadOutlined } from '@ant-design/icons'
 import { Button, Input, message, Result, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import FormRender, { useForm } from 'form-render'
-import React, { Fragment, useLayoutEffect, useState } from 'react'
+import React, { Fragment, ReactElement, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fileDownload } from '../../api/public'
 import {
@@ -41,6 +41,12 @@ interface infoType {
       xhr: File
     },
   ]
+}
+interface itemRenderType {
+  originNode: ReactElement
+  file: UploadFile
+  fileList: object[]
+  actions: { download: any; preview: any; remove: any }
 }
 
 function WorkDetail() {
@@ -125,6 +131,11 @@ function WorkDetail() {
   const useGetWorkSchema = () => {
     const [schemaData, setSchemaData] = useState()
     useLayoutEffect(() => {
+      message.loading({
+        content: '🤔 正在加载已填写的数据',
+        duration: 500,
+        key: 'loading',
+      })
       getWorkSchema(Number(id)).then((res) => {
         // console.log(res)
         setSchemaData(res.data)
@@ -133,6 +144,10 @@ function WorkDetail() {
         // console.log(res)
         setWorkData(res.data.data)
         if (res.data.errCode === null) {
+          message.success({
+            content: '😸 信息加载成功',
+            key: 'loading',
+          })
           res.data.data.map((item: { input: string; isFile: boolean; content: string }, index: number) => {
             form.setValueByPath(item.input, item.content)
             if (item.isFile === true) {
@@ -142,7 +157,7 @@ function WorkDetail() {
                   [item.input]: [
                     {
                       name: getFileName(item.content),
-                      status: 'success',
+                      status: 'done',
                       url: item.content,
                     },
                   ],
@@ -172,6 +187,19 @@ function WorkDetail() {
         }
       })
     }
+    const onRemove = (inputName: string) => {
+      form.setValueByPath(inputName, null)
+      setFileList((prev) => {
+        return {
+          ...prev,
+          [inputName]: [],
+        }
+      })
+    }
+    const handleDownload = (file: string) => {
+      console.log(file)
+      // downloadFile()
+    }
     const localProps: any = {
       accept: props.accept,
       maxCount: '1',
@@ -198,6 +226,9 @@ function WorkDetail() {
           console.log('list updated')
           return { ...prev, [props.inputName]: newFileList }
         })
+        if (newFileList.length === 0) {
+          form.setValueByPath(props.inputName, null)
+        }
       },
       customRequest(options: any) {
         console.log('options', options)
@@ -221,10 +252,25 @@ function WorkDetail() {
       },
       headers: { Token: localStorage.getItem('token') },
       fileList: localFileList,
+      showUploadList: { showDownloadIcon: true },
+      onPreview(file: any) {
+        console.log(file)
+        downloadFile(file.url)
+      },
+      // onRemove: onRemove(props.inputName),
+      // onDownload: onDownload(fileList[props.inputName][0].url)
     }
     // console.log(fileList)
     return (
-      <Upload {...localProps}>
+      <Upload
+        {...localProps}
+        onDownload={(file) => {
+          console.log(file)
+          if (file.url !== undefined) {
+            downloadFile(file.url)
+          }
+        }}
+      >
         <Button icon={<UploadOutlined />}>点击上传文件</Button>
       </Upload>
     )
@@ -418,7 +464,13 @@ function WorkDetail() {
             )
           ) : schema !== undefined ? (
             <Fragment>
-              <FormRender widgets={{ customUpload: Uploader }} form={form} schema={localSchema} onFinish={submitData} />
+              <FormRender
+                widgets={{ customUpload: Uploader }}
+                form={form}
+                disabled={loading}
+                schema={localSchema}
+                onFinish={submitData}
+              />
               <Button type="primary" onClick={form.submit}>
                 提 交
               </Button>
