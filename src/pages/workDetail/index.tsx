@@ -376,6 +376,7 @@ function WorkDetail() {
         widget: 'radio',
         required: true,
         enumNames: ['是', '否'],
+        order: 1,
       },
       申报书: {
         type: 'string',
@@ -386,6 +387,7 @@ function WorkDetail() {
           inputName: '申报书',
           accept: '.pdf',
         },
+        order: 2,
       },
       研究报告: {
         type: 'string',
@@ -396,6 +398,7 @@ function WorkDetail() {
           inputName: '研究报告',
           accept: '.pdf',
         },
+        order: 3,
       },
       作品简介书: {
         type: 'string',
@@ -406,8 +409,9 @@ function WorkDetail() {
           inputName: '作品简介书',
           accept: '.pdf',
         },
+        order: 4,
       },
-      作品名称: { type: 'string', props: {}, title: '作品名称', required: true },
+      作品名称: { type: 'string', props: {}, title: '作品名称', required: true, order: 1 },
       作品类别: {
         enum: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
         type: 'string',
@@ -415,8 +419,9 @@ function WorkDetail() {
         widget: 'select',
         required: true,
         enumNames: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
+        order: 5,
       },
-      作品简介: { type: 'string', props: {}, title: '作品简介', format: 'textarea', required: true },
+      作品简介: { type: 'string', props: {}, title: '作品简介', format: 'textarea', required: true, order: 6 },
     },
     displayType: 'column',
   }
