@@ -108,7 +108,7 @@ function RegisterDetail() {
   const competitionDetail = useGetCompetitionDetail(Number(id))
 
   /**
-   * 判定是否为字符串
+   * 判定是否为网址
    * @param str 字符串
    * @returns bool
    */
