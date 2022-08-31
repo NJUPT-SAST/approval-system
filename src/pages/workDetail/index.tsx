@@ -143,6 +143,12 @@ function WorkDetail() {
       getWorkInfo(Number(id)).then((res) => {
         // console.log(res)
         setWorkData(res.data.data)
+        if (res.data.errMsg === '您还未上传作品') {
+          message.info({
+            content: '💡 请填写你的作品信息',
+            key: 'loading',
+          })
+        }
         if (res.data.errCode === null) {
           message.success({
             content: '😸 信息加载成功',
