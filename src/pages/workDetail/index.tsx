@@ -54,6 +54,7 @@ function WorkDetail() {
       url: string
     }[]
   }>({})
+
   const useGetWorkSchema = () => {
     const [schemaData, setSchemaData] = useState()
     useLayoutEffect(() => {
@@ -64,7 +65,12 @@ function WorkDetail() {
     }, [])
     return schemaData
   }
-
+  const schema: any = useGetWorkSchema()
+  /**
+   * 自封装的upload组件
+   * @param props 来自schema的必须参数
+   * @returns Uploader组件
+   */
   function Uploader(props: { competitionId: number; inputName: string; accept: string }) {
     if (fileList[props.inputName] !== undefined) {
       localFileList = fileList[props.inputName]
@@ -216,7 +222,6 @@ function WorkDetail() {
     formData.append('input', file)
   }
 
-  const schema: any = useGetWorkSchema()
   const localSchema: any = {
     type: 'object',
     labelWidth: 120,

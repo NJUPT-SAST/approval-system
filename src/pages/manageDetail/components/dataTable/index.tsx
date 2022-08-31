@@ -1,6 +1,6 @@
 import { Dropdown, Menu, notification } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import { downLordFile } from '../../../../api/public'
+import { fileDownload } from '../../../../api/public'
 import React from 'react'
 
 const DataTable: React.FC<any> = (props) => {
@@ -40,7 +40,7 @@ const DataTable: React.FC<any> = (props) => {
         <span
           className="manage-detail-list-content-export"
           onClick={() => {
-            downLordFile(value.fileId).then((res) => {
+            fileDownload(value.fileId).then((res) => {
               const blob = new Blob([res.data])
               const downloadElement = document.createElement('a')
               const href = window.URL.createObjectURL(blob) //创建下载的链接

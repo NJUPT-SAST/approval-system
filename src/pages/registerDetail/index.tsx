@@ -1,4 +1,5 @@
-import { Button, message, Skeleton } from 'antd'
+import { CloudDownloadOutlined } from '@ant-design/icons'
+import { Button, message, Skeleton, Space } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fileDownload } from '../../api/public'
@@ -195,11 +196,11 @@ function RegisterDetail() {
           <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
             <div className="list">
               <div className="list-item">
-                <div className="title">队伍名称: </div>
+                <div className="title">队伍名称</div>
                 <div className="content">{teamInfo.teamName}</div>
               </div>
               <div className="list-item">
-                <div className="title">参赛人数: </div>
+                <div className="title">参赛人数</div>
                 <div className="content">{teamInfo.teamMember.length} 人</div>
               </div>
             </div>
@@ -209,11 +210,11 @@ function RegisterDetail() {
             <div className="list-title-h2">队长信息</div>
             <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
               <div className="list-item">
-                <div className="title">姓名: </div>
+                <div className="title">姓名</div>
                 <div className="content">{teamInfo.teamMember[0].name}</div>
               </div>
               <div className="list-item">
-                <div className="title">学号: </div>
+                <div className="title">学号</div>
                 <div className="content">{teamInfo.teamMember[0].code}</div>
               </div>
             </Skeleton>
@@ -223,11 +224,11 @@ function RegisterDetail() {
               <div className="list" key={index}>
                 <div className="list-title-h2">队员{index + 1} 信息</div>
                 <div className="list-item">
-                  <div className="title">姓名: </div>
+                  <div className="title">姓名</div>
                   <div className="content">{item.name}</div>
                 </div>
                 <div className="list-item">
-                  <div className="title">学号: </div>
+                  <div className="title">学号</div>
                   <div className="content">{item.code}</div>
                 </div>
               </div>
@@ -246,7 +247,12 @@ function RegisterDetail() {
                     <div className="list-item" key={index + item.input}>
                       <div className="title">{item.input} </div>
                       <a onClick={() => downloadFile(item.content)}>
-                        <div className="content">点击下载文件</div>
+                        <div className="content">
+                          <Space>
+                            <CloudDownloadOutlined />
+                            点击下载文件
+                          </Space>
+                        </div>
                       </a>
                     </div>
                   )
