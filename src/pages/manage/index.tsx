@@ -23,7 +23,7 @@ interface DataType {
 }
 
 const Manage: React.FC = () => {
-  //路由
+  // 路由
   const Navigate = useNavigate()
   // 保存页码状态的 state
   const [pageState, setPageState] = useState<{ pageNumber: number; pageSize: number; total: number; records: [] }>({
@@ -32,7 +32,8 @@ const Manage: React.FC = () => {
     total: 0,
     records: [],
   })
-  //保存 是否在加载 的状态的 state
+
+  // 保存 是否在加载 的状态的 state
   const [isLoading, setIsLoading] = useState<boolean>(false)
   useEffect(() => {
     setIsLoading(true)
@@ -52,7 +53,8 @@ const Manage: React.FC = () => {
         console.log(error)
       })
   }, [pageState.pageNumber])
-  //页码
+
+  // 页码
   const onChange: PaginationProps['onChange'] = (page) => {
     setPageState((pre) => {
       const a = { ...pre }
@@ -60,13 +62,17 @@ const Manage: React.FC = () => {
       return a
     })
   }
-  //跳转到发布公告的界面
+
+  // 跳转到发布公告的界面
   const toPostNotice = (competitionId: number) => {
     Navigate('./' + competitionId + '/notice/', { state: { competitionId: competitionId } })
   }
+
   //跳转到编辑界面
   const toEditCompetition = (competitionId: number, name: string) => {
-    Navigate('../activity/' + competitionId + '/manage', { state: { competitionId: competitionId, name: name } })
+    Navigate('../activity/' + competitionId + '/manage', {
+      state: { competitionId: competitionId, competitionName: name },
+    })
   }
   //路由
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
