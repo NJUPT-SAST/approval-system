@@ -1,5 +1,5 @@
-import { UploadOutlined } from '@ant-design/icons'
-import { Button, Input, message, Result, Upload, UploadProps } from 'antd'
+import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
+import { Button, Input, message, Result, Spin, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import FormRender, { useForm } from 'form-render'
 import React, { Fragment, ReactElement, useLayoutEffect, useState } from 'react'
@@ -170,13 +170,14 @@ function WorkDetail() {
     }, [])
     return schemaData
   }
-  const schema: any = useGetWorkSchema()
+  const remoteSchema: any = useGetWorkSchema()
+  console.log(remoteSchema)
   /**
    * 自封装的upload组件
    * @param props 来自schema的必须参数
    * @returns Uploader组件
    */
-  function Uploader(props: { competitionId: number; inputName: string; accept: string }) {
+  function Uploader(props: { inputName: string; accept: string }) {
     if (fileList[props.inputName] !== undefined) {
       localFileList = fileList[props.inputName]
     } else {
@@ -233,7 +234,7 @@ function WorkDetail() {
       customRequest(options: any) {
         console.log('options', options)
         const { onSuccess, onError, file, onProgress } = options
-        uploadWork(Number(props.competitionId), props.inputName, file, onProgress).then((res) => {
+        uploadWork(Number(id), props.inputName, file, onProgress).then((res) => {
           console.log(res)
           if (res.data.errCode === null) {
             onSuccess(res, file)
@@ -376,7 +377,6 @@ function WorkDetail() {
         title: '申报书',
         required: true,
         props: {
-          competitionId: id,
           inputName: '申报书',
           accept: '.pdf',
         },
@@ -387,7 +387,6 @@ function WorkDetail() {
         title: '研究报告',
         required: true,
         props: {
-          competitionId: id,
           inputName: '研究报告',
           accept: '.pdf',
         },
@@ -398,7 +397,6 @@ function WorkDetail() {
         title: '作品简介书',
         required: true,
         props: {
-          competitionId: id,
           inputName: '作品简介书',
           accept: '.pdf',
         },
@@ -462,13 +460,13 @@ function WorkDetail() {
                 ]}
               />
             )
-          ) : schema !== undefined ? (
+          ) : remoteSchema !== undefined ? (
             <Fragment>
               <FormRender
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}
-                schema={localSchema}
+                schema={remoteSchema.data}
                 onFinish={submitData}
               />
               <Button type="primary" onClick={form.submit}>
@@ -476,7 +474,12 @@ function WorkDetail() {
               </Button>
             </Fragment>
           ) : (
-            <></>
+            <Spin
+              tip="^_^数据加载中……"
+              className="loading"
+              size="large"
+              indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />}
+            ></Spin>
           )}
         </div>
       </div>
