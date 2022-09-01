@@ -3,12 +3,17 @@ import { Button, Empty, message, notification, Skeleton, Space } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fileDownload } from '../../api/public'
-import { getCompetitionInfo, getTeamInfo, getWorkInfo } from '../../api/user'
+import { getCompetitionInfo, getCompetitionSignInfo, getTeamInfo, getWorkInfo } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
 function RegisterDetail() {
   const [isLoading, setIsLoading] = useState(false)
+  const [competitionInfo, setCompetitionInfo] = useState({
+    minParti: 1,
+    maxParti: 1,
+    isTeam: true,
+  })
   const { id } = useParams()
   const [teamInfo, setTeamInfo] = useState<{
     teamName: string
@@ -44,6 +49,22 @@ function RegisterDetail() {
       content: '🤔️ 正在获取已保存信息，请稍候',
       key: 'loading',
       duration: 50,
+    })
+    getCompetitionSignInfo(Number(id)).then((res) => {
+      console.log(res)
+      if (!res.data.data.isTeam) {
+        setCompetitionInfo({
+          maxParti: 1,
+          minParti: 1,
+          isTeam: false,
+        })
+      } else {
+        setCompetitionInfo({
+          maxParti: res.data.data.maxTeamMembers,
+          minParti: res.data.data.minTeamMembers,
+          isTeam: true,
+        })
+      }
     })
     getTeamInfo(Number(id)).then((res) => {
       // console.log(res)
@@ -218,9 +239,18 @@ function RegisterDetail() {
           <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
             <div className="list">
               <div className="list-item">
-                <div className="title">队伍名称</div>
-                <div className="content">{teamInfo.teamName}</div>
+                <div className="title">比赛类型</div>
+                <div className="content">{competitionInfo.isTeam ? '团队赛' : '个人赛'}</div>
               </div>
+              {competitionInfo.isTeam ? (
+                <div className="list-item">
+                  <div className="title">队伍名称</div>
+                  <div className="content">{teamInfo.teamName}</div>
+                </div>
+              ) : (
+                <></>
+              )}
+
               <div className="list-item">
                 <div className="title">参赛人数</div>
                 <div className="content">{teamInfo.teamMember.length} 人</div>

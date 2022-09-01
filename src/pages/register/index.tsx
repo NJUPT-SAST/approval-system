@@ -17,6 +17,7 @@ function Register() {
   const [competitionInfo, setCompetitionInfo] = useState({
     minParti: 1,
     maxParti: 1,
+    isTeam: true,
   })
   const navigate = useNavigate()
   const [curParti, setCurParti] = useState(1)
@@ -129,37 +130,18 @@ function Register() {
         setCompetitionInfo({
           maxParti: 1,
           minParti: 1,
+          isTeam: false,
         })
         setFormSchema({
           type: 'object',
           labelWidth: 151,
           displayType: 'column',
           properties: {
-            input_teamName: {
-              title: '队伍名称',
-              type: 'string',
-              displayType: 'column',
-              required: true,
-              labelWidth: 0,
-              props: {},
-            },
-            select_numOfParti: {
-              title: '参赛人数',
-              type: 'number',
-              widget: 'slider',
-              displayType: 'column',
-              description: '最少人数 ' + 1 + ' ；最多人数 ' + 1,
-              required: true,
-              placeholder: '',
-              min: 1,
-              max: 1,
-              default: curParti,
-            },
             leader: {
-              title: '队长信息',
+              title: '个人信息',
               type: 'object',
               displayType: 'column',
-              description: '队长信息已自动填写',
+              description: '信息已自动填写, 有误请到我的帐号修改',
               properties: {
                 name: {
                   title: '姓名',
@@ -181,6 +163,7 @@ function Register() {
         setCompetitionInfo({
           maxParti: res.data.data.maxTeamMembers,
           minParti: res.data.data.minTeamMembers,
+          isTeam: true,
         })
         setFormSchema({
           type: 'object',
