@@ -61,6 +61,8 @@ function WorkDetail() {
   const [workData, setWorkData] = useState()
   const submitReadyData: string | { input: string; content: unknown }[] = []
   let localFileList: any
+  let stillLoading: any
+  let loadingError: any
   const [fileList, setFileList] = useState<{
     [index: string]: {
       uid?: string
@@ -129,20 +131,22 @@ function WorkDetail() {
   }
 
   const getWorkSchemaData = () => {
+    clearTimeout(stillLoading)
+    clearTimeout(loadingError)
     setLoading(true)
     message.loading({
       content: '🤔 正在加载已填写的数据',
       duration: 500,
       key: 'loading',
     })
-    setTimeout(() => {
+    stillLoading = setTimeout(() => {
       message.loading({
         content: '🤔 我还在努力加载中，请耐心等待',
         key: 'loading',
         duration: 500,
       })
     }, 10000)
-    setTimeout(() => {
+    loadingError = setTimeout(() => {
       setLoading(false)
       setMessageSent(true)
       setMessageStatus('error')
@@ -185,7 +189,8 @@ function WorkDetail() {
           key: 'loading',
         })
         setLoading(false)
-        clearTimeout()
+        clearTimeout(stillLoading)
+        clearTimeout(loadingError)
       }
     })
   }
