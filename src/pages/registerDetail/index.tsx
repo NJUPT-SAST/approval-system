@@ -1,21 +1,47 @@
-import { Button, message, Skeleton } from 'antd'
+import { CloudDownloadOutlined } from '@ant-design/icons'
+import { Button, Empty, message, notification, Skeleton, Space } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCompetitionInfo, getTeamInfo } from '../../api/user'
+import { fileDownload } from '../../api/public'
+import { getCompetitionInfo, getCompetitionSignInfo, getTeamInfo, getWorkInfo } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 
 function RegisterDetail() {
   const [isLoading, setIsLoading] = useState(false)
+  const [competitionInfo, setCompetitionInfo] = useState({
+    minParti: 1,
+    maxParti: 1,
+    isTeam: true,
+  })
   const { id } = useParams()
   const [teamInfo, setTeamInfo] = useState<{
     teamName: string
     teamMember: any[]
+    teamNum?: number
   }>({
     teamName: '加载中',
     teamMember: [{ name: '加载中', code: '加载中' }],
   })
+  const [workData, setWorkData] = useState<
+    {
+      input: string
+      content: string
+      isFile: boolean
+    }[]
+  >()
   const navigate = useNavigate()
+  const btn = (
+    <Button
+      type="primary"
+      onClick={() => {
+        navigate('/activity/' + id + '/work-detail')
+        notification.close('no-item')
+      }}
+    >
+      马上前往
+    </Button>
+  )
 
   const storeTeamInfo = () => {
     setIsLoading(true)
@@ -24,12 +50,29 @@ function RegisterDetail() {
       key: 'loading',
       duration: 50,
     })
+    getCompetitionSignInfo(Number(id)).then((res) => {
+      console.log(res)
+      if (!res.data.data.isTeam) {
+        setCompetitionInfo({
+          maxParti: 1,
+          minParti: 1,
+          isTeam: false,
+        })
+      } else {
+        setCompetitionInfo({
+          maxParti: res.data.data.maxTeamMembers,
+          minParti: res.data.data.minTeamMembers,
+          isTeam: true,
+        })
+      }
+    })
     getTeamInfo(Number(id)).then((res) => {
       // console.log(res)
       if (res.data.errCode !== 2003) {
         setTeamInfo({
           teamName: res.data.data.teamName,
           teamMember: res.data.data.teamMember,
+          teamNum: res.data.data.teamMember.length,
         })
         setIsLoading(false)
         message.success({
@@ -46,8 +89,23 @@ function RegisterDetail() {
         })
       }
     })
+    getWorkInfo(Number(id)).then((res) => {
+      console.log(res)
+      setWorkData(res.data.data)
+      if (res.data.errMsg === '您还未上传作品') {
+        notification.warning({
+          message: '您还未上传作品',
+          description: '请记得提交您的作品哦，否则无法正常参赛',
+          placement: 'topRight',
+          top: 150,
+          duration: 50,
+          key: 'no-item',
+          btn: btn,
+        })
+      }
+    })
   }
-
+  console.log(workData)
   /**
    * 获取比赛的详细信息
    * @param id 比赛的id
@@ -92,6 +150,73 @@ function RegisterDetail() {
   }
   const competitionDetail = useGetCompetitionDetail(Number(id))
 
+  /**
+   * 判定是否为网址
+   * @param str 字符串
+   * @returns bool
+   */
+  function validURL(str: string) {
+    //判断URL地址的正则表达式为:http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?
+    //下面的代码中应用了转义字符"\"输出一个字符"/"
+    const objExp = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/)
+    if (objExp.test(str) == true) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * 文件下载
+   * @param url 文件url
+   */
+  const downloadFile = (url: string) => {
+    message.loading({
+      content: '正在下载文件',
+      duration: 500,
+      key: 'downloading',
+    })
+    fileDownload(url).then((res) => {
+      const content = res.headers['content-disposition']
+      console.log('content', res)
+      const fileBlob = new Blob([res.data])
+      const url = window.URL.createObjectURL(fileBlob)
+      let filename = 'no-file'
+      const name1 = content.match(/filename=(.*);/) // 获取filename的值
+      const name2 = content.match(/filename\*=(.*)/) // 获取filename*的值
+      // name1 = decodeURIComponent(name1)
+      // name2 = decodeURIComponent(name2.substring(6)) // 下标6是UTF-8
+      if (name2 !== null) {
+        filename = decodeURIComponent(name2[0].substring(17))
+      } else {
+        if (name1 !== null) {
+          filename = decodeURIComponent(name1[0])
+        } else {
+          filename = 'no-file'
+        }
+      }
+      if (filename !== 'no-file') {
+        const a = document.createElement('a')
+        a.style.display = 'none'
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+        message.success({
+          content: '😁 下载成功',
+          key: 'downloading',
+        })
+      } else {
+        message.error({
+          content: '😞 下载发生了错误，请联系管理员',
+          key: 'downloading',
+        })
+      }
+    })
+  }
+
   const changeRegisterInfo = () => {
     navigate('/activity/' + id + '/register')
   }
@@ -114,11 +239,20 @@ function RegisterDetail() {
           <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
             <div className="list">
               <div className="list-item">
-                <div className="title">队伍名称: </div>
-                <div className="content">{teamInfo.teamName}</div>
+                <div className="title">比赛类型</div>
+                <div className="content">{competitionInfo.isTeam ? '团队赛' : '个人赛'}</div>
               </div>
+              {competitionInfo.isTeam ? (
+                <div className="list-item">
+                  <div className="title">队伍名称</div>
+                  <div className="content">{teamInfo.teamName}</div>
+                </div>
+              ) : (
+                <></>
+              )}
+
               <div className="list-item">
-                <div className="title">参赛人数: </div>
+                <div className="title">参赛人数</div>
                 <div className="content">{teamInfo.teamMember.length} 人</div>
               </div>
             </div>
@@ -128,11 +262,11 @@ function RegisterDetail() {
             <div className="list-title-h2">队长信息</div>
             <Skeleton active title={false} loading={isLoading} style={{ width: '200px', marginLeft: '2rem' }}>
               <div className="list-item">
-                <div className="title">姓名: </div>
+                <div className="title">姓名</div>
                 <div className="content">{teamInfo.teamMember[0].name}</div>
               </div>
               <div className="list-item">
-                <div className="title">学号: </div>
+                <div className="title">学号</div>
                 <div className="content">{teamInfo.teamMember[0].code}</div>
               </div>
             </Skeleton>
@@ -140,13 +274,13 @@ function RegisterDetail() {
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             {teamInfo.teamMember.slice(1).map((item, index) => (
               <div className="list" key={index}>
-                <div className="list-title-h2">队员{index}信息</div>
+                <div className="list-title-h2">队员{index + 1} 信息</div>
                 <div className="list-item">
-                  <div className="title">姓名: </div>
+                  <div className="title">姓名</div>
                   <div className="content">{item.name}</div>
                 </div>
                 <div className="list-item">
-                  <div className="title">学号: </div>
+                  <div className="title">学号</div>
                   <div className="content">{item.code}</div>
                 </div>
               </div>
@@ -159,10 +293,33 @@ function RegisterDetail() {
           <div className="list-title-h1">作品提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
-              <div className="list-item">
-                <div className="title">附件1: </div>
-                <div className="content"></div>
-              </div>
+              {workData?.length === 0 || workData === null ? (
+                <Empty className="empty" description="还没过提交作品哦" />
+              ) : (
+                workData?.map((item, index) => {
+                  if (item.isFile) {
+                    return (
+                      <div className="list-item" key={index + item.input}>
+                        <div className="title">{item.input} </div>
+                        <a onClick={() => downloadFile(item.content)}>
+                          <div className="content">
+                            <Space>
+                              <CloudDownloadOutlined />
+                              点击下载文件
+                            </Space>
+                          </div>
+                        </a>
+                      </div>
+                    )
+                  }
+                  return (
+                    <div className="list-item" key={index + item.input}>
+                      <div className="title">{item.input} </div>
+                      <div className="content">{item.content}</div>
+                    </div>
+                  )
+                })
+              )}
             </div>
           </Skeleton>
           <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>

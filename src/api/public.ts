@@ -44,3 +44,16 @@ export const getCompetitionNoticeList = (competitionId: number) => {
     url: '/com/notice/list?id=' + competitionId.toString(),
   })
 }
+
+/**
+ * 下载上传的文件
+ * @param url 需要下载的文件url
+ * @returns axios对象
+ */
+export const fileDownload = (url: string) => {
+  return apis({
+    method: 'get',
+    url: '/com/file/download?url=' + url,
+    responseType: 'blob',
+  })
+}

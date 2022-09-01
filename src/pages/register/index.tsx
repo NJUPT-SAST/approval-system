@@ -10,13 +10,14 @@ function Register() {
   const form = useForm()
   const { id } = useParams()
   const [messageSent, setMessageSent] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [messageStatus, setMessageStatus] = useState('null')
+  const [loading, setLoading] = useState(false)
   const [errCode, setErrCode] = useState(0)
   const [errMsg, setErrMsg] = useState('')
   const [competitionInfo, setCompetitionInfo] = useState({
     minParti: 1,
     maxParti: 1,
+    isTeam: true,
   })
   const navigate = useNavigate()
   const [curParti, setCurParti] = useState(1)
@@ -34,7 +35,7 @@ function Register() {
         labelWidth: 0,
         props: {},
       },
-      numOfParti: {
+      select_numOfParti: {
         title: '参赛人数',
         type: 'number',
         widget: 'slider',
@@ -51,19 +52,16 @@ function Register() {
         type: 'object',
         displayType: 'column',
         description: '队长信息已自动填写',
-        required: true,
         properties: {
           name: {
             title: '姓名',
             type: 'string',
-            required: true,
             readOnly: true,
             props: {},
           },
           code: {
             title: '学号',
             type: 'string',
-            required: true,
             readOnly: true,
             props: {},
           },
@@ -81,15 +79,22 @@ function Register() {
     getTeamInfo(Number(id)).then((res) => {
       // console.log(res)
       form.setValueByPath('leader', {
-        name: localStorage.getItem('name'),
-        code: localStorage.getItem('code'),
+        name: localStorage.getItem('approval-system-name'),
+        code: localStorage.getItem('approval-system-code'),
       })
       if (res.data.errCode !== 2003) {
         setTeamInfo({
           teamName: res.data.data.teamName,
           teamMember: res.data.data.teamMember,
         })
-        form.setValueByPath('numOfParti', res.data.data.teamMember.length)
+        form.setValueByPath('select_numOfParti', res.data.data.teamMember.length)
+        setCurParti(res.data.data.teamMember.length)
+        const newEle = generateForm(res.data.data.teamMember.length)
+        newEle.forEach((element) => {
+          setFormSchema((prev: any) => {
+            return { ...prev, properties: { ...prev.properties, ...element } }
+          })
+        })
         form.setValueByPath('input_teamName', res.data.data.teamName)
         for (let i = 1; i <= res.data.data.teamMember.length - 1; i++) {
           const formName = 'parti' + i
@@ -120,11 +125,94 @@ function Register() {
   }
   useEffect(() => {
     getCompetitionSignInfo(Number(id)).then((res) => {
-      // // console.log(res)
-      setCompetitionInfo({
-        maxParti: res.data.data.maxTeamMembers,
-        minParti: res.data.data.minTeamMembers,
-      })
+      console.log(res)
+      if (!res.data.data.isTeam) {
+        setCompetitionInfo({
+          maxParti: 1,
+          minParti: 1,
+          isTeam: false,
+        })
+        setFormSchema({
+          type: 'object',
+          labelWidth: 151,
+          displayType: 'column',
+          properties: {
+            leader: {
+              title: '个人信息',
+              type: 'object',
+              displayType: 'column',
+              description: '信息已自动填写, 有误请到我的帐号修改',
+              properties: {
+                name: {
+                  title: '姓名',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                code: {
+                  title: '学号',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+              },
+            },
+          },
+        })
+      } else {
+        setCompetitionInfo({
+          maxParti: res.data.data.maxTeamMembers,
+          minParti: res.data.data.minTeamMembers,
+          isTeam: true,
+        })
+        setFormSchema({
+          type: 'object',
+          labelWidth: 151,
+          displayType: 'column',
+          properties: {
+            input_teamName: {
+              title: '队伍名称',
+              type: 'string',
+              displayType: 'column',
+              required: true,
+              labelWidth: 0,
+              props: {},
+            },
+            select_numOfParti: {
+              title: '参赛人数',
+              type: 'number',
+              widget: 'slider',
+              displayType: 'column',
+              description: '最少人数 ' + res.data.data.minTeamMembers + ' ；最多人数 ' + res.data.data.maxTeamMembers,
+              required: true,
+              placeholder: '',
+              min: res.data.data.minTeamMembers,
+              max: res.data.data.maxTeamMembers,
+              default: curParti,
+            },
+            leader: {
+              title: '队长信息',
+              type: 'object',
+              displayType: 'column',
+              description: '队长信息已自动填写',
+              properties: {
+                name: {
+                  title: '姓名',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                code: {
+                  title: '学号',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+              },
+            },
+          },
+        })
+      }
     })
     storeTeamInfo()
   }, [])
@@ -209,7 +297,7 @@ function Register() {
    * @param values 改变的值
    */
   const valueChangeAction = (values: any) => {
-    // // console.log(values)
+    console.log(values)
     if (values.select_numOfParti !== undefined) {
       setFormSchema({
         type: 'object',
@@ -226,31 +314,31 @@ function Register() {
           },
           select_numOfParti: {
             title: '参赛人数',
-            type: 'string',
-            enum: ['1', '2', '3', '4', '5', '6', '7', '8'],
-            enumNames: ['1', '2', '3', '4', '5', '6', '7', '8'],
-            widget: 'select',
-            default: '1',
+            type: 'number',
+            widget: 'slider',
+            displayType: 'column',
+            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
             required: true,
+            placeholder: '',
+            min: competitionInfo.minParti,
+            max: competitionInfo.maxParti,
+            default: curParti,
           },
           leader: {
             title: '队长信息',
             type: 'object',
             displayType: 'column',
             description: '队长信息已自动填写',
-            required: true,
             properties: {
               name: {
                 title: '姓名',
                 type: 'string',
-                required: true,
                 readOnly: true,
                 props: {},
               },
               code: {
                 title: '学号',
                 type: 'string',
-                required: true,
                 readOnly: true,
                 props: {},
               },
@@ -260,7 +348,7 @@ function Register() {
       })
       const number = Number(values.select_numOfParti)
       setCurParti(number)
-      // // console.log(number)
+      console.log(number)
       const newEle = generateForm(number)
       newEle.forEach((element) => {
         setFormSchema((prev: any) => {
