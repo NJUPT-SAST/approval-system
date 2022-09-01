@@ -32,6 +32,12 @@ $vh_base: 1080;
     margin-right: 3%;
     margin-left: auto;
     width: 300px;
+    .activity-create-header-buttons-post-cancel{
+      align-self: flex-end;
+      margin-right: 4%;
+      margin-left: auto;
+      width: 200px;
+    }
     .ant-btn-primary {
       min-width: 74px;
       margin:5px;
