@@ -61,7 +61,20 @@ $vh_base: 1080;
     margin: 0 vw(55) vw(80) vw(55);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     .manage-detail-top {
-      min-height: vh(122);
+      min-height: vh(124);
+      .manage-detail-file-upload {
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        width:100px;
+        height:auto;
+        #manage-detail-file-upload{
+          margin-left: vw(19);
+          margin-top: vh(67);
+        }
+        .ant-upload-list {
+        }
+      }
       #manage-detail-download-info {
         float: left;
         margin-left: vw(68);
@@ -76,7 +89,7 @@ $vh_base: 1080;
         float: left;
         margin-left: vw(19);
         margin-top: vh(67);
-        min-height:40px;
+        min-height: 40px;
         height: vh(50);
         color: rgba(153, 153, 153, 1);
         font-size: vh(12);
@@ -174,7 +187,7 @@ $vh_base: 1080;
       }
     }
     .manage-detail-page {
-      padding-top:10px;
+      padding-top: 10px;
       height: 60px;
     }
   }

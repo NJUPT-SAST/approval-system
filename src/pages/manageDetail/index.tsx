@@ -1,6 +1,7 @@
-import { Button, Result, Spin, notification, Pagination } from 'antd'
-import type { PaginationProps } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Button, Result, Spin, notification, Pagination, Upload } from 'antd'
+import type { PaginationProps, UploadProps } from 'antd'
+import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
+import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import './index.scss'
@@ -18,7 +19,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 type DataType = {
   index: number
   comId: number
-  fileId: number
   fileName: string
   isAssignJudge: number
   judges: string[]
@@ -29,7 +29,7 @@ function useMyLocation<T>() {
   return useLocation() as { state: T }
 }
 function ManageDetail() {
-  const [uploadFile, setUploadFile] = useState<FormData>(new FormData())
+  const [fileList, setFileList] = useState<any>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [pageState, setPageState] = useState<{ total: number; pageNumber: number; pageSize: number }>({
     total: 0,
@@ -184,8 +184,10 @@ function ManageDetail() {
 
   // 导入评审
   const upLoadJudges = () => {
-    if (uploadFile.has('file')) {
-      assignJudge(uploadFile)
+    if (fileList !== []) {
+      const formData = new FormData()
+      formData.append('file', fileList[0].originFileObj)
+      assignJudge(formData)
         .then((res) => {
           if (res.data.success) {
             setTimeout(() => {
@@ -235,6 +237,13 @@ function ManageDetail() {
     })
   }
 
+  //导入文件变化时
+  const handleFileChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+    if (info.file !== null) {
+      setFileList([...info.fileList])
+      console.log(info.fileList)
+    }
+  }
   useEffect(() => {
     setIsLoading(true)
     getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
@@ -278,7 +287,6 @@ function ManageDetail() {
           size="small"
           id="manage-detail-notice"
           onClick={() => {
-            console.log('now')
             navigate('../manage/' + state.competitionId + '/notice', {
               state: { competitionId: state.competitionId },
             })
@@ -320,17 +328,34 @@ function ManageDetail() {
           >
             下载参赛信息
           </Button>
+
           <Button
             type="primary"
             size="small"
-            id="manage-detail-reviewer"
             onClick={() => {
               upLoadJudges()
             }}
+            id="manage-detail-reviewer"
           >
             导入评委分配
           </Button>
-          <input
+
+          <div className="manage-detail-file-upload">
+            <Upload
+              fileList={fileList}
+              accept=".xlx,.xlsx"
+              name={'file'}
+              showUploadList={true}
+              beforeUpload={() => false}
+              onChange={handleFileChange}
+              maxCount={1}
+            >
+              <Button id="manage-detail-file-upload" type="primary" size="small" icon={<UploadOutlined />}>
+                选择文件
+              </Button>
+            </Upload>
+          </div>
+          {/* <input
             type="file"
             accept="application/ms-excel"
             name="fileName"
@@ -342,7 +367,7 @@ function ManageDetail() {
                 setUploadFile(formdata)
               }
             }}
-          />
+          /> */}
           <StatisticsBox name="approve" num={regState.revNum} />
           <StatisticsBox name="submit" num={regState.subNum} />
           <StatisticsBox name="regist" num={regState.regNum} />

@@ -26,14 +26,21 @@ $vh_base: 1080;
   }
   .activity-create-header-buttons {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-self: stretch;
     align-items: flex-end;
-    margin-right: 93px;
+    margin-right: 3%;
     margin-left: auto;
     width: 300px;
+    .activity-create-header-buttons-post-cancel{
+      align-self: flex-end;
+      margin-right: 4%;
+      margin-left: auto;
+      width: 200px;
+    }
     .ant-btn-primary {
       min-width: 74px;
+      margin:5px;
     }
     #activity-create-cancel {
       background-color: white;
@@ -90,16 +97,31 @@ $vh_base: 1080;
       }
     }
   }
-  .activity-create-name {
-    display: flex;
+  .activity-create-name-and-template {
     margin-left: 241px;
-    #activity-create-name {
-      height: 40px;
-      line-height: 40px;
-      width: 106px;
+    margin-bottom: 37px;
+    display: flex;
+    align-items: center;
+    .activity-create-name {
+      display: inline-block;
+      #activity-create-name {
+        display: inline-block;
+        width: 106px;
+      }
+      .ant-input {
+        width: 224px;
+      }
     }
-    .ant-input {
-      width: 263px;
+    .activity-template-select {
+      margin-left: 138px;
+      display: inline-block;
+      #activity-template-select {
+        display: inline-block;
+        width: 106px;
+      }
+      .ant-select {
+        width: 224px;
+      }
     }
   }
   .activity-create-type {
@@ -150,32 +172,58 @@ $vh_base: 1080;
       margin-left: 19px;
     }
   }
-  .other-setting{
+  .activity-create-reviewer-setting-default{
+    margin-left: 241px;
+    margin-bottom: 37px;
+    display: flex;
+    align-items: center;
+    .activity-create-reviewer-setting-default-code{
+      display: inline-block;
+      #activity-create-reviewer-setting-default-code{
+        display: inline-block;
+        width: 106px;
+      }
+    }
+    .activity-create-reviewer-setting-default-change-number{
+      margin-left: 138px;
+      display: inline-block;
+    }
+    .ant-input{
+      width: 224px;
+    }
+  }
+  .other-setting {
     flex-direction: column;
   }
-  .activity-create-reviewer-setting{
+  .activity-create-reviewer-setting {
+    margin-left: 241px;
+    margin-bottom: 37px;
     display: flex;
-    align-items: flex-start;
-    margin-left: 240px;
-    margin-bottom: 30px;
-    .activity-create-reviewer-faculty,.activity-create-reviewer-code{
-      width: 106px;
-      min-height: 14px;
-      color: rgba(128, 128, 128, 1);
-      padding: 5px 0 0 0;
+    align-items: center;
+    .activity-create-reviewer-setting-code {
+      display: inline-block;
+      #activity-create-reviewer-setting-code {
+        display: inline-block;
+        width: 106px;
+      }
     }
-    .first{
-      margin: 0 138px 0 0;
+    .activity-create-reviewer-setting-faculty {
+      margin-left: 138px;
+      display: inline-block;
+      #activity-create-reviewer-setting-faculty {
+        display: inline-block;
+        width: 106px;
+      }
     }
-    .last{
-      min-width: 224px;
+    .ant-select{
+      width: 224px;
     }
     .ant-input {
       width: 224px;
     }
   }
-  .manage-create-icon{
-    float:left;
+  .manage-create-icon {
+    float: left;
     margin: 2px;
     font-size: 28px;
   }

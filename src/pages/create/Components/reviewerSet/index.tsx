@@ -34,55 +34,59 @@ const ReviewSet: React.FC<reviewSetPropsType> = (props) => {
   const { Option } = Select
   return (
     <div className="activity-create-reviewer-setting">
-      <span className="activity-create-reviewer-code">审批者学号</span>
-      <Input
-        className="first"
-        placeholder="审批者学号"
-        value={value.value}
-        onChange={(e) => {
-          setValue(index, e.target.value)
-        }}
-        showCount={false}
-      />
-      <span className="activity-create-reviewer-faculty">审批学院代号</span>
-      {value.key === -1 ? (
-        <Select
-          className="last"
-          showSearch
-          placeholder="负责的审批的学院"
-          onSelect={(value: number) => setKey(index, value)}
-          filterOption={(input, option) =>
-            (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-          }
-        >
-          {a.map((value, index) => {
-            return (
-              <Option key={value + index} value={index + 1}>
-                {value}
-              </Option>
-            )
-          })}
-        </Select>
-      ) : (
-        <Select
-          className="last"
-          value={value.key}
-          showSearch
-          placeholder="负责的审批的学院"
-          onSelect={(value: number) => setKey(index, value)}
-          filterOption={(input, option) =>
-            (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-          }
-        >
-          {a.map((value, index) => {
-            return (
-              <Option key={value + index} value={index + 1}>
-                {value}
-              </Option>
-            )
-          })}
-        </Select>
-      )}
+      <div className="activity-create-reviewer-setting-code">
+        <span id="activity-create-reviewer-setting-code">审批者学号</span>
+        <Input
+          className="first"
+          placeholder="审批者学号"
+          value={value.value}
+          onChange={(e) => {
+            setValue(index, e.target.value)
+          }}
+          showCount={false}
+        />
+      </div>
+      <div className="activity-create-reviewer-setting-faculty">
+        <span id="activity-create-reviewer-setting-faculty">审批学院代号</span>
+        {value.key === -1 ? (
+          <Select
+            className="last"
+            showSearch
+            placeholder="负责的审批的学院"
+            onSelect={(value: number) => setKey(index, value)}
+            filterOption={(input, option) =>
+              (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+            }
+          >
+            {a.map((value, index) => {
+              return (
+                <Option key={value + index} value={index + 1}>
+                  {value}
+                </Option>
+              )
+            })}
+          </Select>
+        ) : (
+          <Select
+            className="last"
+            value={value.key}
+            showSearch
+            placeholder="负责的审批的学院"
+            onSelect={(value: number) => setKey(index, value)}
+            filterOption={(input, option) =>
+              (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+            }
+          >
+            {a.map((value, index) => {
+              return (
+                <Option key={value + index} value={index + 1}>
+                  {value}
+                </Option>
+              )
+            })}
+          </Select>
+        )}
+      </div>
     </div>
   )
 }

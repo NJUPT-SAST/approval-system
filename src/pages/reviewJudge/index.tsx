@@ -80,6 +80,7 @@ const ReviewJudge: React.FC = (props) => {
         result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
       }
       setDataList(result)
+      console.log(result)
     })
   }, [id])
   // document.querySelector('.navigation').addEventListener('scroll', handleScroll)
@@ -100,10 +101,13 @@ const ReviewJudge: React.FC = (props) => {
             <div className="navigation">
               <Anchor
                 targetOffset={targetOffset}
-                onClick={(e) => e.preventDefault()}
+                // onClick={(e) => e.preventDefault()}
+                // affix={false}
+                // showInkInFixed={true}
+                // onChange={(link) => console.log('Anchor:OnChange', link)}
                 // getContainer={() => document.querySelector('.message')}
               >
-                <Link href="#user-information" title="参赛者信息" />
+                <Link href="#user-information" title="参赛者信息" target="" />
                 <Link href="#show-work" title="作品展示" />
               </Anchor>
             </div>
@@ -139,6 +143,7 @@ const ReviewJudge: React.FC = (props) => {
                   </div>
                 ))}
               </ul>
+
               <div id="show-work" className="item">
                 <h2>指导老师：{dataList.teacher}</h2>
                 <h3>{dataList.introduce}</h3>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
-import { Button, Space, Table } from 'antd'
+import { Button, notification, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './index.scss'
@@ -41,6 +41,17 @@ function ReviewList() {
     const page = Number(params[1].split('=')[1])
     if (userState === 'approver') {
       getScoreWorkList(comId, page).then((res) => {
+        const result = res.data.data
+        if (result === null) {
+          setTimeout(() => {
+            notification.info({
+              message: '该页面没有数据,返回上一页',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+          navigate('/review')
+        }
         SetDataList(res.data.data)
         localStorage.setItem('listTotal', res.data.data.total)
         setLoading(false)
@@ -48,6 +59,16 @@ function ReviewList() {
     } else {
       getJudgeWorkList(comId, page).then((res) => {
         const result = res.data.data
+        if (result === null) {
+          setTimeout(() => {
+            notification.info({
+              message: '该页面没有数据,返回上一页',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+          navigate('/review')
+        }
         for (let i = 0; i < result.list.length; i++)
           result.list[i].isPass = result.list[i].isPass === 'true' ? '通过' : '未通过'
         SetDataList(result)

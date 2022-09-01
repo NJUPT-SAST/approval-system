@@ -1,6 +1,6 @@
 import { Dropdown, Menu, notification } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import { fileDownload } from '../../../../api/public'
+import { exportWorkFile } from '../../../../api/admin'
 import React from 'react'
 
 const DataTable: React.FC<any> = (props) => {
@@ -40,25 +40,36 @@ const DataTable: React.FC<any> = (props) => {
         <span
           className="manage-detail-list-content-export"
           onClick={() => {
-            fileDownload(value.fileId).then((res) => {
-              const blob = new Blob([res.data])
-              const downloadElement = document.createElement('a')
-              const href = window.URL.createObjectURL(blob) //创建下载的链接
-              downloadElement.href = href
-              downloadElement.download = '作品' + value.fileName + '.zip' //下载后文件名
-              document.body.appendChild(downloadElement)
-              downloadElement.click() //点击下载
-              document.body.removeChild(downloadElement) //下载完成移除元素
-              window.URL.revokeObjectURL(href) //释放掉blob对象
-              setTimeout(() => {
-                notification.success({
-                  message: '😸️ 导出成功',
-                  description: '作品已成功导出',
-                  top: 20,
-                  placement: 'top',
-                })
-              }, 100)
-            })
+            exportWorkFile(value.comId, value.userCode)
+              .then((res) => {
+                const blob = new Blob([res.data])
+                const downloadElement = document.createElement('a')
+                const href = window.URL.createObjectURL(blob) //创建下载的链接
+                downloadElement.href = href
+                downloadElement.download = '项目 ' + value.fileName + ' 的附件.zip' //下载后文件名
+                document.body.appendChild(downloadElement)
+                downloadElement.click() //点击下载
+                document.body.removeChild(downloadElement) //下载完成移除元素
+                window.URL.revokeObjectURL(href) //释放掉blob对象
+                setTimeout(() => {
+                  notification.success({
+                    message: '😸️ 导出成功',
+                    description: '作品已成功导出',
+                    top: 20,
+                    placement: 'top',
+                  })
+                }, 100)
+              })
+              .catch((error) => {
+                setTimeout(() => {
+                  notification.error({
+                    message: ' 导出失败',
+                    description: error + '',
+                    top: 20,
+                    placement: 'top',
+                  })
+                }, 100)
+              })
           }}
         >
           导出
