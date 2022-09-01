@@ -35,6 +35,7 @@ const ReviewApprover: React.FC = (props) => {
 
   // 提交表单
   const navigate = useNavigate()
+  // 处理提交事件
   const handleSubmit = () => {
     if (score! >= 0 && score! <= 100) {
       if (opinion !== null) {
@@ -159,8 +160,8 @@ const ReviewApprover: React.FC = (props) => {
             <div className="navigation">
               <Anchor
                 // target={() => document.getElementById('manage-content-main')}
+                // onClick={(e) => e.preventDefault()}
                 targetOffset={targetOffset}
-                getContainer={() => document.querySelector('.manage-content-main') as HTMLElement}
               >
                 <Link href="#team" title="导航" />
                 <Link href="#user-information" title="参赛者信息" />
