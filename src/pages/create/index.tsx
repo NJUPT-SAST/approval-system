@@ -19,12 +19,6 @@ function useMyLocation<T>() {
   return useLocation() as { state: T }
 }
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result as string))
-  reader.readAsDataURL(img)
-}
-
 const beforeImageUpload = (file: RcFile) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
   if (!isJpgOrPng) {
@@ -36,12 +30,20 @@ const beforeImageUpload = (file: RcFile) => {
   }
   return isJpgOrPng && isLt5M
 }
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader()
+  reader.addEventListener('load', () => callback(reader.result as string))
+  reader.readAsDataURL(img)
+}
+
 //团队比赛人数（最多15人）
 const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
 
 function Create() {
   //上传比赛照片
   //审批者数目
+  const [cover, setCover] = useState<Blob>()
   const [preSchema, setPreSchema] = useState<object | null>(null)
   const [reviewerNum, setReviewerNum] = useState<number>(2)
   const { Option } = Select
@@ -52,6 +54,7 @@ function Create() {
     { key: 0, value: '' },
     { key: -1, value: '' },
   ])
+  const [baseUrl, setBaseUrl] = useState<string>('')
   //获取 code
   const userProfile = useRecoilValue(userProfileStore)
   //判断是修改还是创建 id为 -1 则为创建 否则为 修改
@@ -75,28 +78,36 @@ function Create() {
   })
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true)
-      return
-    }
-
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false)
-        setCompetitionInfo((pre) => {
-          const a = pre
-          a.cover = url
-          return a
-        })
-      })
-    }
+    setLoading(true)
+    console.log(info.file)
+    setCover(info.file as RcFile)
+    getBase64(info.file.originFileObj as RcFile, (url) => {
+      setBaseUrl(url)
+      setLoading(false)
+    })
+    // if (info.file.status === 'uploading') {
+    //   console.log('loading')
+    //   return
+    // }
+    // if (info.file.status === 'done') {
+    //   console.log('done')
+    //   // Get this url from response in real world.
+    //   getBase64(info.file.originFileObj as RcFile, (url) => {
+    //     setLoading(false)
+    //     console.log(url)
+    //     setCompetitionInfo((pre) => {
+    //       const a = pre
+    //       a.cover = url
+    //       return a
+    //     })
+    //   })
+    // }
   }
-
+  // 用于antd组件
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>上传照片</div>
+      {/* <div style={{ marginTop: 8 }}>上传照片</div> */}
     </div>
   )
 
@@ -107,14 +118,12 @@ function Create() {
       setCompetitionInfo((pre) => {
         const a = { ...pre }
         a.max_team_members = 1
-        console.log(a.type)
         return a
       })
     } else {
       setCompetitionInfo((pre) => {
         const a = { ...pre }
         a.max_team_members = 2
-        console.log(a.type)
         return a
       })
     }
@@ -164,11 +173,10 @@ function Create() {
   }
 
   /**
-   *
+   *  设置结束时间
    * @param time 时间 格式为 YYYY-MM-DD HH:mm:ss
    * @param operation 分为 signUp submit review
    */
-  //设置结束时间
   const setEndTime = (time: string, operation: string) => {
     if (operation === 'signUp')
       setCompetitionInfo((pre) => {
@@ -190,6 +198,11 @@ function Create() {
       })
   }
 
+  /**
+   *
+   * @param index reviewSettings 的下标
+   * @param key 对应的键
+   */
   const setKey = (index: number, key: number) => {
     setReviewSettings((pre) => {
       const a = [...pre]
@@ -198,6 +211,11 @@ function Create() {
     })
   }
 
+  /**
+   *
+   * @param index
+   * @param value 对应的值
+   */
   const setValue = (index: number, value: string) => {
     setReviewSettings((pre) => {
       const a = [...pre]
@@ -216,7 +234,7 @@ function Create() {
     // -1 表示此时为创建活动
     if (competitionId === -1) {
       //改成键值对形式
-      createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
+      createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
         .then((res) => {
           if (res.data.success === true) {
             Navigate('../../activity/' + res.data.data)
@@ -342,9 +360,9 @@ function Create() {
             setReviewerNum(array.length)
             setReviewSettings(array)
             setPreSchema(res.data.data.table)
+            setBaseUrl(res.data.data.cover)
             setCompetitionInfo((pre) => {
               const a = { ...pre }
-              a.cover = res.data.data.cover
               a.introduce = res.data.data.introduce
               a.is_review = res.data.data.is_review
               a.max_team_members = res.data.data.max_team_members
@@ -387,9 +405,11 @@ function Create() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(competitionInfo)
-  })
+  // useEffect(() => {
+  //   console.log('cober' + cover)
+  //   console.log(competitionInfo.cover)
+  // })
+
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
@@ -411,25 +431,27 @@ function Create() {
               删除
             </Button>
           )}
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => {
-              postCompetition()
-            }}
-          >
-            发布
-          </Button>
-          <Button
-            type="primary"
-            size="small"
-            id="activity-create-cancel"
-            onClick={() => {
-              Navigate(-1)
-            }}
-          >
-            取消
-          </Button>
+          <div className="activity-create-header-buttons-post-cancel">
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => {
+                postCompetition()
+              }}
+            >
+              发布
+            </Button>
+            <Button
+              type="primary"
+              size="small"
+              id="activity-create-cancel"
+              onClick={() => {
+                Navigate(-1)
+              }}
+            >
+              取消
+            </Button>
+          </div>
         </div>
       </div>
       <div className="activity-create-body">
@@ -437,24 +459,20 @@ function Create() {
           <span id="activity-create-cover-title">比赛封面</span>
           <Upload
             name="avatar"
+            accept=".jpg,.jpeg,.png,.gif"
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            //todo 修改上传地址
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            customRequest={() => {
+              return 0
+            }}
+            // action=""
             beforeUpload={beforeImageUpload}
             onChange={handleImageChange}
           >
-            {competitionInfo.cover === '' ? (
-              uploadButton
-            ) : (
-              <img src={competitionInfo.cover} alt="avatar" style={{ width: '100%' }} />
-            )}
+            {baseUrl === '' ? uploadButton : <img src={baseUrl} alt="avatar" style={{ width: '100%' }} />}
           </Upload>
           <div className="activity-create-cover-upload">
-            <Button type="primary" size="small" id="activity-create-cancel">
-              点击上传
-            </Button>
             <span id="activity-create-cover-tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
           </div>
         </div>
@@ -479,7 +497,7 @@ function Create() {
             <span id="activity-template-select">表单选择</span>
             <Select
               placeholder="请选择表单"
-              defaultValue={-1}
+              defaultValue={location.state ? -1 : 0}
               onChange={(value) => {
                 if (value === -1) {
                   setCompetitionInfo((pre) => {
