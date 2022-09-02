@@ -128,6 +128,34 @@ function WorkDetail() {
     })
   }
 
+  const useGetWorkSchema = () => {
+    const [schemaData, setSchemaData] = useState()
+    useLayoutEffect(() => {
+      getWorkSchema(Number(id)).then((res) => {
+        // console.log(res)
+        if (JSON.stringify(res.data.data) !== '{}') {
+          console.log(JSON.stringify(res.data.data))
+          setSchemaData(res.data)
+        } else {
+          clearTimeout(stillLoading)
+          clearTimeout(loadingError)
+          message.error({
+            content: '😩 服务器返回了空数据',
+            key: 'loading',
+          })
+          setErrCode(3)
+          setErrMsg('该比赛没有作品提交表单')
+          setMessageSent(true)
+          setMessageStatus('error')
+        }
+      })
+      getWorkSchemaData()
+    }, [])
+    return schemaData
+  }
+  const remoteSchema: any = useGetWorkSchema()
+  console.log(remoteSchema)
+
   const getWorkSchemaData = () => {
     clearTimeout(stillLoading)
     clearTimeout(loadingError)
@@ -158,8 +186,11 @@ function WorkDetail() {
     getWorkInfo(Number(id)).then((res) => {
       console.log(res)
       setWorkData(res.data.data)
-      if (res.data.data !== null) {
-        if (res.data.errMsg === '您还未上传作品') {
+      if (res.data.data === null) {
+        if (res.data.errMsg === '您还未上传作品' && JSON.stringify(remoteSchema) !== '{}') {
+          setLoading(false)
+          clearTimeout(stillLoading)
+          clearTimeout(loadingError)
           message.info({
             content: '💡 请填写你的作品信息',
             key: 'loading',
@@ -195,33 +226,6 @@ function WorkDetail() {
     })
   }
 
-  const useGetWorkSchema = () => {
-    const [schemaData, setSchemaData] = useState()
-    useLayoutEffect(() => {
-      getWorkSchema(Number(id)).then((res) => {
-        // console.log(res)
-        if (JSON.stringify(res.data.data) !== '{}') {
-          console.log(JSON.stringify(res.data.data))
-          setSchemaData(res.data)
-        } else {
-          clearTimeout(stillLoading)
-          clearTimeout(loadingError)
-          message.error({
-            content: '😩 服务器返回了空数据',
-            key: 'loading',
-          })
-          setErrCode(3)
-          setErrMsg('该比赛没有作品提交表单')
-          setMessageSent(true)
-          setMessageStatus('error')
-        }
-      })
-      getWorkSchemaData()
-    }, [])
-    return schemaData
-  }
-  const remoteSchema: any = useGetWorkSchema()
-  console.log(remoteSchema)
   /**
    * 自封装的upload组件
    * @param props 来自schema的必须参数
