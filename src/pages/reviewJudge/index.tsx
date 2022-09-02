@@ -76,11 +76,21 @@ const ReviewJudge: React.FC = (props) => {
     setId(Number(search.slice(1).split('&')[0].split('=')[1]))
     getJudgeWorkInfo(id).then((res) => {
       const result = res.data.data
-      for (let i = 0; i < res.data.data.memberList.length; i++) {
-        result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+      if (result.memberList[0].isCaptain) {
+        for (let i = 0; i < res.data.data.memberList.length; i++) {
+          result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+        }
+        setDataList(result)
+        console.log(result)
+      } else {
+        setTimeout(() => {
+          notification.info({
+            message: '此页面没有数据',
+            top: 20,
+            placement: 'top',
+          })
+        }, 1000)
       }
-      setDataList(result)
-      console.log(result)
     })
   }, [id])
   // document.querySelector('.navigation').addEventListener('scroll', handleScroll)

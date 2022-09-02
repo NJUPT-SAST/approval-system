@@ -89,10 +89,20 @@ const ReviewApprover: React.FC = (props) => {
     setId(Number(search.slice(1).split('&')[0].split('=')[1]))
     getScoreWork(id).then((res) => {
       const result = res.data.data
-      for (let i = 0; i < res.data.data.memberList.length; i++) {
-        result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+      if (result.memberList[0].isCaptain) {
+        for (let i = 0; i < res.data.data.memberList.length; i++) {
+          result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+        }
+        setDataList(result)
+      } else {
+        setTimeout(() => {
+          notification.info({
+            message: '该页面没有数据',
+            top: 20,
+            placement: 'top',
+          })
+        }, 1000)
       }
-      setDataList(result)
     })
   }, [id])
   // 定义表格数据类型和表头内容
