@@ -1,4 +1,4 @@
-# 南京邮电大学比赛管理系统前端
+# 南京邮电大学比赛管理系统前端 [![构建状态](https://sast-frontend.coding.net/badges/approve-system/job/1442058/build.svg)](https://sast-frontend.coding.net/p/approve-system/ci/job)
 
 ## 前置准备
 
