@@ -176,45 +176,52 @@ function RegisterDetail() {
       duration: 500,
       key: 'downloading',
     })
-    fileDownload(url).then((res) => {
-      const content = res.headers['content-disposition']
-      console.log('content', res)
-      const fileBlob = new Blob([res.data])
-      const url = window.URL.createObjectURL(fileBlob)
-      let filename = 'no-file'
-      const name1 = content.match(/filename=(.*);/) // 获取filename的值
-      const name2 = content.match(/filename\*=(.*)/) // 获取filename*的值
-      // name1 = decodeURIComponent(name1)
-      // name2 = decodeURIComponent(name2.substring(6)) // 下标6是UTF-8
-      if (name2 !== null) {
-        filename = decodeURIComponent(name2[0].substring(17))
-      } else {
-        if (name1 !== null) {
-          filename = decodeURIComponent(name1[0])
+    fileDownload(url)
+      .then((res) => {
+        const content = res.headers['content-disposition']
+        console.log('content', res)
+        const fileBlob = new Blob([res.data])
+        const url = window.URL.createObjectURL(fileBlob)
+        let filename = 'no-file'
+        const name1 = content.match(/filename=(.*);/) // 获取filename的值
+        const name2 = content.match(/filename\*=(.*)/) // 获取filename*的值
+        // name1 = decodeURIComponent(name1)
+        // name2 = decodeURIComponent(name2.substring(6)) // 下标6是UTF-8
+        if (name2 !== null) {
+          filename = decodeURIComponent(name2[0].substring(17))
         } else {
-          filename = 'no-file'
+          if (name1 !== null) {
+            filename = decodeURIComponent(name1[0])
+          } else {
+            filename = 'no-file'
+          }
         }
-      }
-      if (filename !== 'no-file') {
-        const a = document.createElement('a')
-        a.style.display = 'none'
-        a.href = url
-        a.download = filename
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        URL.revokeObjectURL(url)
-        message.success({
-          content: '😁 下载成功',
-          key: 'downloading',
-        })
-      } else {
+        if (filename !== 'no-file') {
+          const a = document.createElement('a')
+          a.style.display = 'none'
+          a.href = url
+          a.download = filename
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+          URL.revokeObjectURL(url)
+          message.success({
+            content: '😁 下载成功',
+            key: 'downloading',
+          })
+        } else {
+          message.error({
+            content: '😞 下载发生了错误，请联系管理员',
+            key: 'downloading',
+          })
+        }
+      })
+      .catch((err) => {
         message.error({
           content: '😞 下载发生了错误，请联系管理员',
           key: 'downloading',
         })
-      }
-    })
+      })
   }
 
   const changeRegisterInfo = () => {
