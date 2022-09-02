@@ -36,3 +36,8 @@ jobs:
            -v -X POST  'https://sast-frontend.coding.net/api/cci/job/1442058/trigger' \
            -H 'Content-Type: application/json' \
            -d '{"ref": "master","envs": []}'
+         curl -X POST \
+           --fail \
+           -F token=406be436c22d24efed2a9c3920c0a8 \
+           -F ref=master \
+           https://git.qingyou.ren/api/v4/projects/112/trigger/pipeline
