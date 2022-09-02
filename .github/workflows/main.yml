@@ -27,11 +27,10 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: curl -X POST \
+        run: curl -X POST 'https://git.qingyou.ren/api/v4/projects/112/trigger/pipeline' \
            --fail \
            -F token=406be436c22d24efed2a9c3920c0a8 \
-           -F ref=master \
-           'https://git.qingyou.ren/api/v4/projects/112/trigger/pipeline'
+           -F ref=master
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
