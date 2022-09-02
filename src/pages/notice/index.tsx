@@ -26,6 +26,7 @@ function Notice() {
     })
   }
   const { state } = useMyLocation<{
+    competitionName: string
     competitionId: number
     noticeId: number
     time: string
@@ -188,7 +189,7 @@ function Notice() {
 
   return (
     <div className="activity-notice">
-      <TopBar activity='"挑战杯"创新创业大赛' />
+      <TopBar activity={state.competitionName} />
       <p id="activity-notice-header">{createOrEdit === 1 ? '发布公告' : '编辑公告'}</p>
       <div className="activity-notice-body">
         <div className="activity-notice-title">
