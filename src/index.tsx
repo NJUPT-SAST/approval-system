@@ -17,6 +17,7 @@ Sentry.init({
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
+  release: 'approve-system@' + process.env.npm_package_version,
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

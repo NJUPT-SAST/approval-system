@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  merge_group:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: curl -X POST --fail -F "token=406be436c22d24efed2a9c3920c0a8" -F "ref=master" https://git.qingyou.ren/api/v4/projects/112/trigger/pipeline
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          curl -u pt3m4khhax9k:4ec857f782b29a2a12e752ef01e03273c40e1ba0 \
+           -v -X POST  'https://sast-frontend.coding.net/api/cci/job/1442058/trigger' \
+           -H 'Content-Type: application/json' \
+           -d '{"ref": "master","envs": []}'
+

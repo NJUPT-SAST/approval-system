@@ -28,19 +28,17 @@ interface infoType {
     uid: string
     xhr: File
   }
-  fileList: [
-    {
-      name: string
-      originFileObj: File
-      percent: number
-      response: Record<string, unknown>
-      size: number
-      status: string
-      type: string
-      uid: string
-      xhr: File
-    },
-  ]
+  fileList: {
+    name: string
+    originFileObj: File
+    percent: number
+    response: Record<string, unknown>
+    size: number
+    status: string
+    type: string
+    uid: string
+    xhr: File
+  }[]
 }
 interface itemRenderType {
   originNode: ReactElement
@@ -61,6 +59,8 @@ function WorkDetail() {
   const [workData, setWorkData] = useState()
   const submitReadyData: string | { input: string; content: unknown }[] = []
   let localFileList: any
+  let stillLoading: any
+  let loadingError: any
   const [fileList, setFileList] = useState<{
     [index: string]: {
       uid?: string
@@ -128,21 +128,51 @@ function WorkDetail() {
     })
   }
 
+  const useGetWorkSchema = () => {
+    const [schemaData, setSchemaData] = useState()
+    useLayoutEffect(() => {
+      getWorkSchema(Number(id)).then((res) => {
+        // console.log(res)
+        if (JSON.stringify(res.data.data) !== '{}') {
+          console.log(JSON.stringify(res.data.data))
+          setSchemaData(res.data)
+        } else {
+          clearTimeout(stillLoading)
+          clearTimeout(loadingError)
+          message.error({
+            content: '😩 服务器返回了空数据',
+            key: 'loading',
+          })
+          setErrCode(3)
+          setErrMsg('该比赛没有作品提交表单')
+          setMessageSent(true)
+          setMessageStatus('error')
+        }
+      })
+      getWorkSchemaData()
+    }, [])
+    return schemaData
+  }
+  const remoteSchema: any = useGetWorkSchema()
+  console.log(remoteSchema)
+
   const getWorkSchemaData = () => {
+    clearTimeout(stillLoading)
+    clearTimeout(loadingError)
     setLoading(true)
     message.loading({
       content: '🤔 正在加载已填写的数据',
       duration: 500,
       key: 'loading',
     })
-    setTimeout(() => {
+    stillLoading = setTimeout(() => {
       message.loading({
         content: '🤔 我还在努力加载中，请耐心等待',
         key: 'loading',
         duration: 500,
       })
     }, 10000)
-    setTimeout(() => {
+    loadingError = setTimeout(() => {
       setLoading(false)
       setMessageSent(true)
       setMessageStatus('error')
@@ -156,11 +186,16 @@ function WorkDetail() {
     getWorkInfo(Number(id)).then((res) => {
       console.log(res)
       setWorkData(res.data.data)
-      if (res.data.errMsg === '您还未上传作品') {
-        message.info({
-          content: '💡 请填写你的作品信息',
-          key: 'loading',
-        })
+      if (res.data.data === null) {
+        if (res.data.errMsg === '您还未上传作品' && JSON.stringify(remoteSchema) !== '{}') {
+          setLoading(false)
+          clearTimeout(stillLoading)
+          clearTimeout(loadingError)
+          message.info({
+            content: '💡 请填写你的作品信息',
+            key: 'loading',
+          })
+        }
       }
       if (res.data.errCode === null) {
         res.data.data.map((item: { input: string; isFile: boolean; content: string }, index: number) => {
@@ -185,24 +220,12 @@ function WorkDetail() {
           key: 'loading',
         })
         setLoading(false)
-        clearTimeout()
+        clearTimeout(stillLoading)
+        clearTimeout(loadingError)
       }
     })
   }
 
-  const useGetWorkSchema = () => {
-    const [schemaData, setSchemaData] = useState()
-    useLayoutEffect(() => {
-      getWorkSchema(Number(id)).then((res) => {
-        // console.log(res)
-        setSchemaData(res.data)
-      })
-      getWorkSchemaData()
-    }, [])
-    return schemaData
-  }
-  const remoteSchema: any = useGetWorkSchema()
-  // console.log(remoteSchema)
   /**
    * 自封装的upload组件
    * @param props 来自schema的必须参数
@@ -239,6 +262,10 @@ function WorkDetail() {
         localFileList = fileList[props.inputName]
         console.log('onChange', info)
         let newFileList = [...info.fileList]
+
+        if (info.fileList.length !== 0) {
+          newFileList = [info.file]
+        }
 
         // // 1. Limit the number of uploaded files
         // // Only to show two recent uploaded files, and old ones will be replaced by the new
@@ -292,7 +319,7 @@ function WorkDetail() {
       // onRemove: onRemove(props.inputName),
       // onDownload: onDownload(fileList[props.inputName][0].url)
     }
-    // console.log(fileList)
+    console.log('filelist:', fileList)
     return (
       <Upload
         {...localProps}
@@ -460,6 +487,17 @@ function WorkDetail() {
   const goBackToRegisterDetail = () => {
     navigate('/activity/' + id + '/register-detail')
   }
+  const EditAgainButton = () => {
+    if (errCode !== 3) {
+      return (
+        <Button key="retry" onClick={editAgain}>
+          重新尝试提交
+        </Button>
+      )
+    } else {
+      return <></>
+    }
+  }
   // console.log(schema)
   return (
     <div>
@@ -491,16 +529,14 @@ function WorkDetail() {
                   <Button type="primary" onClick={goBackToActivity} key="back">
                     返回比赛详情
                   </Button>,
-                  <Button key="retry" onClick={editAgain}>
-                    重新尝试提交
-                  </Button>,
+                  <EditAgainButton key="editAgain" />,
                 ]}
               />
             )
           ) : remoteSchema !== undefined ? (
             <Fragment>
               <FormRender
-                debug
+                // debug
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}

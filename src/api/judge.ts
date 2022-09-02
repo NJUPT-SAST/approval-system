@@ -59,9 +59,6 @@ export const getJudgeWorkList = (comId: number, page: number) => {
  */
 export const getJudgeWorkInfo = (workId: number) => {
   const data = new FormData()
-  if (workId === undefined) {
-    workId = 1
-  }
   data.append('id', workId!.toString())
   return apis({
     method: 'get',
