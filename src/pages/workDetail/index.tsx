@@ -532,7 +532,7 @@ function WorkDetail() {
           ) : remoteSchema !== undefined ? (
             <Fragment>
               <FormRender
-                debug
+                // debug
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}
