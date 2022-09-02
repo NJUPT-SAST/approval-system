@@ -28,19 +28,17 @@ interface infoType {
     uid: string
     xhr: File
   }
-  fileList: [
-    {
-      name: string
-      originFileObj: File
-      percent: number
-      response: Record<string, unknown>
-      size: number
-      status: string
-      type: string
-      uid: string
-      xhr: File
-    },
-  ]
+  fileList: {
+    name: string
+    originFileObj: File
+    percent: number
+    response: Record<string, unknown>
+    size: number
+    status: string
+    type: string
+    uid: string
+    xhr: File
+  }[]
 }
 interface itemRenderType {
   originNode: ReactElement
@@ -261,6 +259,10 @@ function WorkDetail() {
         console.log('onChange', info)
         let newFileList = [...info.fileList]
 
+        if (info.fileList.length !== 0) {
+          newFileList = [info.file]
+        }
+
         // // 1. Limit the number of uploaded files
         // // Only to show two recent uploaded files, and old ones will be replaced by the new
         newFileList = newFileList.slice(-2)
@@ -313,7 +315,7 @@ function WorkDetail() {
       // onRemove: onRemove(props.inputName),
       // onDownload: onDownload(fileList[props.inputName][0].url)
     }
-    // console.log(fileList)
+    console.log('filelist:', fileList)
     return (
       <Upload
         {...localProps}
@@ -530,6 +532,7 @@ function WorkDetail() {
           ) : remoteSchema !== undefined ? (
             <Fragment>
               <FormRender
+                // debug
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}
