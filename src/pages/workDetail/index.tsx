@@ -160,11 +160,13 @@ function WorkDetail() {
     getWorkInfo(Number(id)).then((res) => {
       console.log(res)
       setWorkData(res.data.data)
-      if (res.data.errMsg === '您还未上传作品') {
-        message.info({
-          content: '💡 请填写你的作品信息',
-          key: 'loading',
-        })
+      if (res.data.data !== null) {
+        if (res.data.errMsg === '您还未上传作品') {
+          message.info({
+            content: '💡 请填写你的作品信息',
+            key: 'loading',
+          })
+        }
       }
       if (res.data.errCode === null) {
         res.data.data.map((item: { input: string; isFile: boolean; content: string }, index: number) => {
@@ -200,14 +202,28 @@ function WorkDetail() {
     useLayoutEffect(() => {
       getWorkSchema(Number(id)).then((res) => {
         // console.log(res)
-        setSchemaData(res.data)
+        if (JSON.stringify(res.data.data) !== '{}') {
+          console.log(JSON.stringify(res.data.data))
+          setSchemaData(res.data)
+        } else {
+          clearTimeout(stillLoading)
+          clearTimeout(loadingError)
+          message.error({
+            content: '😩 服务器返回了空数据',
+            key: 'loading',
+          })
+          setErrCode(3)
+          setErrMsg('该比赛没有作品提交表单')
+          setMessageSent(true)
+          setMessageStatus('error')
+        }
       })
       getWorkSchemaData()
     }, [])
     return schemaData
   }
   const remoteSchema: any = useGetWorkSchema()
-  // console.log(remoteSchema)
+  console.log(remoteSchema)
   /**
    * 自封装的upload组件
    * @param props 来自schema的必须参数
@@ -465,6 +481,17 @@ function WorkDetail() {
   const goBackToRegisterDetail = () => {
     navigate('/activity/' + id + '/register-detail')
   }
+  const EditAgainButton = () => {
+    if (errCode !== 3) {
+      return (
+        <Button key="retry" onClick={editAgain}>
+          重新尝试提交
+        </Button>
+      )
+    } else {
+      return <></>
+    }
+  }
   // console.log(schema)
   return (
     <div>
@@ -496,16 +523,13 @@ function WorkDetail() {
                   <Button type="primary" onClick={goBackToActivity} key="back">
                     返回比赛详情
                   </Button>,
-                  <Button key="retry" onClick={editAgain}>
-                    重新尝试提交
-                  </Button>,
+                  <EditAgainButton key="editAgain" />,
                 ]}
               />
             )
           ) : remoteSchema !== undefined ? (
             <Fragment>
               <FormRender
-                debug
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}
