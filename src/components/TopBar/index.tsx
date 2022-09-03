@@ -24,6 +24,7 @@ function TopBar(props?: { activity?: string }) {
     '/register-detail': '报名参加详情',
     '/notice': '发布公告',
     '/work-detail': '作品提交信息',
+    '/edit': '修改公告',
   }
   const location = useLocation()
   const pathSnippets = location.pathname.split('/').filter((i) => i)
