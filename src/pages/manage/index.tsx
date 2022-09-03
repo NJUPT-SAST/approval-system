@@ -64,8 +64,10 @@ const Manage: React.FC = () => {
   }
 
   // 跳转到发布公告的界面
-  const toPostNotice = (competitionId: number) => {
-    Navigate('./' + competitionId + '/notice/', { state: { competitionId: competitionId } })
+  const toPostNotice = (competitionName: string, competitionId: number) => {
+    Navigate('./' + competitionId + '/notice/', {
+      state: { competitionName: competitionName, competitionId: competitionId },
+    })
   }
 
   //跳转到编辑界面

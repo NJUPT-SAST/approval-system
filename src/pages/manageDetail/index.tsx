@@ -184,7 +184,7 @@ function ManageDetail() {
 
   // 导入评审
   const upLoadJudges = () => {
-    if (fileList !== []) {
+    if (fileList.length === 1) {
       const formData = new FormData()
       formData.append('file', fileList[0].originFileObj)
       assignJudge(formData)
@@ -239,7 +239,7 @@ function ManageDetail() {
 
   //导入文件变化时
   const handleFileChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file !== null) {
+    if (info.file !== undefined) {
       setFileList([...info.fileList])
       console.log(info.fileList)
     }
@@ -248,6 +248,7 @@ function ManageDetail() {
     setIsLoading(true)
     getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
       .then((res) => {
+        // console.log(res.data)
         setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
         setData(res.data.data.records)
         console.log(res.data.data)
@@ -267,7 +268,7 @@ function ManageDetail() {
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   return (
     <div className="manage-detail">
-      <TopBar activity='"挑战杯"创新创业比赛' />
+      <TopBar activity={state.competitionName} />
       <div className="manage-detail-header">
         <p className="manage-detail-title">{state.competitionName}</p>
         <Button
@@ -275,7 +276,7 @@ function ManageDetail() {
           size="small"
           id="manage-detail-set"
           onClick={() => {
-            navigate('/activity/' + state.competitionId + '/manage/create', {
+            navigate('/activity/' + state.competitionId + '/manage/edit', {
               state: { competitionId: state.competitionId },
             })
           }}
@@ -288,7 +289,7 @@ function ManageDetail() {
           id="manage-detail-notice"
           onClick={() => {
             navigate('../manage/' + state.competitionId + '/notice', {
-              state: { competitionId: state.competitionId },
+              state: { competitionName: state.competitionName, competitionId: state.competitionId },
             })
           }}
         >
