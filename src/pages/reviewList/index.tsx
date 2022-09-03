@@ -51,11 +51,10 @@ function ReviewList() {
             })
           }, 100)
           navigate('/review')
-        } else {
-          SetDataList(res.data.data)
-          localStorage.setItem('listTotal', res.data.data.total)
-          setLoading(false)
         }
+        SetDataList(res.data.data)
+        localStorage.setItem('listTotal', res.data.data.total)
+        setLoading(false)
       })
     } else {
       getJudgeWorkList(comId, page).then((res) => {
@@ -69,13 +68,12 @@ function ReviewList() {
             })
           }, 100)
           navigate('/review')
-        } else {
-          for (let i = 0; i < result.list.length; i++)
-            result.list[i].isPass = result.list[i].isPass === 'true' ? '通过' : '未通过'
-          SetDataList(result)
-          localStorage.setItem('listTotal', res.data.data.total)
-          setLoading(false)
         }
+        for (let i = 0; i < result.list.length; i++)
+          result.list[i].isPass = result.list[i].isPass === 'true' ? '通过' : '未通过'
+        SetDataList(result)
+        localStorage.setItem('listTotal', res.data.data.total)
+        setLoading(false)
       })
     }
   }, [pageNum])
