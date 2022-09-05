@@ -3,7 +3,7 @@ import { notification } from 'antd'
 import { exportWorkFileDataToAssignScorer } from '../../../api/admin'
 type ManageItemType = {
   index: number
-  toPostNotice: (competition: number) => void
+  toPostNotice: (competitionName: string, competitionId: number) => void
   toEditCompetition: (competition: number, name: string) => void
   value: {
     id: number //活动id
@@ -74,7 +74,7 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
         <span
           className="manage-body-item-post-notice"
           onClick={() => {
-            toPostNotice(value.id)
+            toPostNotice(value.name, value.id)
           }}
         >
           发布公告
