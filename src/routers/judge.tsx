@@ -20,20 +20,9 @@ const judge: RouteObject[] = [
       { path: 'inbox', element: <Inbox /> },
       { path: 'activity', element: <Activity /> },
       { path: 'activity/:id', element: <ActivityDetail /> },
-      {
-        path: 'review',
-        element: <Review />,
-        children: [
-          {
-            path: 'detail',
-            element: <ReviewJudge />,
-          },
-          {
-            path: 'list',
-            element: <ReviewList />,
-          },
-        ],
-      },
+      { path: 'review', element: <Review /> },
+      { path: 'review/detail/:id', element: <ReviewJudge /> },
+      { path: 'review/list/:comId/:page', element: <ReviewList /> },
       { path: '*', element: <NoMatch /> },
     ],
   },

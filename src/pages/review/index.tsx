@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { Space, Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
-import { Link, useLocation, Route, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import './index.scss'
-import ReviewList from '../reviewList'
 import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
 import { DataListType } from '../../type/judgeTypes'
-import ReviewApprover from '../reviewApprover'
-import ReviewJudge from '../reviewJudge'
 
 // 获取本地存储数据，判断登陆人员身份
 const userState = localStorage.getItem('userState')
@@ -31,7 +28,6 @@ const Review: React.FC = () => {
   const [dataList, SetDataList] = useState<any>({})
   const [loading, setLoading] = useState(true)
 
-  const navigate = useNavigate()
   // 获取子组件中的页数
   const getpageNum = (current: number) => {
     setPageNum(current)
@@ -48,6 +44,7 @@ const Review: React.FC = () => {
       getJudgeCompetitionList(pageNum).then((res) => {
         SetDataList(res.data.data)
         setLoading(false)
+        console.log('shuchu')
       })
     } else {
       setLoading(true)
@@ -57,54 +54,42 @@ const Review: React.FC = () => {
       })
     }
   }, [pageNum])
-  console.log(dataList)
-
-  const list = <ReviewList />
-  const detail = userState === 'approver' ? <ReviewApprover /> : <ReviewJudge />
-  if (pathname === '/review') {
-    // 渲染子组件
-    const approverTable = (
-      <ApproverReview
-        loading={loading}
-        getPageNum={getpageNum}
-        list={dataList.list}
-        pageNum={dataList.pageNum}
-        total={dataList.total}
-        pageSize={dataList.pageSize}
-      />
+  // const detail = userState === 'approver' ? <ReviewApprover /> : <ReviewJudge />
+  // 渲染子组件
+  const approverTable = (
+    <ApproverReview
+      loading={loading}
+      getPageNum={getpageNum}
+      list={dataList.list}
+      pageNum={dataList.pageNum}
+      total={dataList.total}
+      pageSize={dataList.pageSize}
+    />
+  )
+  const judgeTable = (
+    <JudgeReview
+      loading={loading}
+      getPageNum={getpageNum}
+      list={dataList.list}
+      pageNum={dataList.pageNum}
+      total={dataList.total}
+      pageSize={dataList.pageSize}
+    />
+  )
+  if (userState === 'approver') {
+    return (
+      <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
+        <TopBar />
+        {approverTable}
+      </div>
     )
-    const judgeTable = (
-      <JudgeReview
-        loading={loading}
-        getPageNum={getpageNum}
-        list={dataList.list}
-        pageNum={dataList.pageNum}
-        total={dataList.total}
-        pageSize={dataList.pageSize}
-      />
-    )
-    if (userState === 'approver') {
-      return (
-        <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
-          <TopBar />
-          {approverTable}
-        </div>
-      )
-    } else {
-      return (
-        <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
-          <TopBar />
-          {judgeTable}
-        </div>
-      )
-    }
-  } else if (pathname === '/review/list') {
-    return <>{list}</>
-  } else if (pathname === '/review/detail') {
-    return <>{detail}</>
   } else {
-    navigate('/')
-    return null
+    return (
+      <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
+        <TopBar />
+        {judgeTable}
+      </div>
+    )
   }
 }
 
@@ -163,11 +148,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Link
-            to={{
-              pathname: `/review/list?comId=` + id + '&page=' + current,
-            }}
-          >
+          <Link to={`/review/list/${id}/${current}`}>
             <Button className="count" type="primary">
               审批
             </Button>
@@ -269,11 +250,7 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Link
-            to={{
-              pathname: `/review/list?comId=` + id + '&page=' + current,
-            }}
-          >
+          <Link to={`/review/list/${id}/${current}`}>
             <Button className="count" type="primary">
               评审
             </Button>

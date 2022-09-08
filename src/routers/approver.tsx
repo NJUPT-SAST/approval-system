@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import Home from '../pages/home'
 import Account from '../pages/account'
@@ -20,20 +20,9 @@ const approver: RouteObject[] = [
       { path: 'inbox', element: <Inbox /> },
       { path: 'activity', element: <Activity /> },
       { path: 'activity/:id', element: <ActivityDetail /> },
-      {
-        path: 'review',
-        element: <Review />,
-        children: [
-          {
-            path: 'detail',
-            element: <ReviewApprover />,
-          },
-          {
-            path: 'list',
-            element: <ReviewList />,
-          },
-        ],
-      },
+      { path: 'review', element: <Review /> },
+      { path: 'review/detail/:id', element: <ReviewApprover /> },
+      { path: 'review/list/:comId/:page', element: <ReviewList /> },
       { path: '*', element: <NoMatch /> },
     ],
   },

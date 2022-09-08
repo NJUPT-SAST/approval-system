@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { Button, notification, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import './index.scss'
 import { getScoreWorkList, getJudgeWorkList } from '../../api/judge'
 
@@ -16,7 +16,7 @@ interface DataType {
 
 // 渲染主界面
 function ReviewList() {
-  const { pathname, search } = useLocation()
+  const { comId, page } = useParams()
   const navigate = useNavigate()
   // 当前页
   const [pageNum, setPageNum] = useState(1)
@@ -28,19 +28,14 @@ function ReviewList() {
   // 获取子组件中的页数
   const getpageNum = (current: number) => {
     setPageNum(current)
-    const params = search.slice(1).split('&')
-    const comId = Number(params[0].split('=')[1])
-    navigate(`/review/list?comId=${comId}&page=${current}`)
+    navigate(`/review/list/${comId}/${current}`)
   }
 
   // 获取表格数据
   useEffect(() => {
     setLoading(true)
-    const params = search.slice(1).split('&')
-    const comId = Number(params[0].split('=')[1])
-    const page = Number(params[1].split('=')[1])
     if (userState === 'approver') {
-      getScoreWorkList(comId, page).then((res) => {
+      getScoreWorkList(Number(comId), Number(page)).then((res) => {
         const result = res.data.data
         if (result === null) {
           setTimeout(() => {
@@ -57,7 +52,7 @@ function ReviewList() {
         setLoading(false)
       })
     } else {
-      getJudgeWorkList(comId, page).then((res) => {
+      getJudgeWorkList(Number(comId), Number(page)).then((res) => {
         const result = res.data.data
         if (result === null) {
           setTimeout(() => {
@@ -147,11 +142,7 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Link
-            to={{
-              pathname: `/review/detail?id=` + id,
-            }}
-          >
+          <Link to={`/review/detail/${id}`}>
             <Button className="count" type="primary">
               {rolestate}
             </Button>

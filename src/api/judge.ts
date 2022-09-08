@@ -59,7 +59,7 @@ export const getJudgeWorkList = (comId: number, page: number) => {
  */
 export const getJudgeWorkInfo = (workId: number) => {
   const data = new FormData()
-  data.append('id', workId!.toString())
+  // data.append('id', workId.toString())
   return apis({
     method: 'get',
     url: '/review/program-info?id=' + workId,
@@ -74,7 +74,7 @@ export const getJudgeWorkInfo = (workId: number) => {
  */
 export const getScoreCompetitionList = (page: number) => {
   const data = new FormData()
-  data.append('page', page.toString())
+  // data.append('page', page.toString())
   return apis({
     method: 'get',
     url: '/score/competition-list?page=' + page,
