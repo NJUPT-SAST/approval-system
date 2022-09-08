@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Anchor, Button, Radio, Input, notification } from 'antd'
 import { getJudgeWorkInfo } from '../../api/judge'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { uploadWorkJudgeInfo } from '../../api/judge'
 import TopBar from '../../components/TopBar'
 import './index.scss'
@@ -9,11 +9,10 @@ import './index.scss'
 const { Link } = Anchor
 
 const ReviewJudge: React.FC = (props) => {
-  const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
   // 获取作品id
-  const { search } = useLocation()
+  const { id } = useParams()
+  const [current, setCurrent] = useState(1)
 
-  const [id, setId] = useState<any>(1)
   const [isPass, setIsPass] = useState(false)
   const [opinion, setOpinion] = useState('')
 
@@ -34,8 +33,8 @@ const ReviewJudge: React.FC = (props) => {
   const navigate = useNavigate()
   const handleSubmit = () => {
     if (opinion !== '') {
-      uploadWorkJudgeInfo(id, isPass!, opinion!).then(() => {
-        if (id === total) {
+      uploadWorkJudgeInfo(current, isPass!, opinion!).then(() => {
+        if (current === total) {
           setTimeout(() => {
             notification.info({
               message: '😸️ 审批完成',
@@ -44,7 +43,7 @@ const ReviewJudge: React.FC = (props) => {
               placement: 'top',
             })
           }, 300)
-        } else if (id > total) {
+        } else if (current > total) {
           navigate('/review/detail?id=' + total)
         } else {
           setTimeout(() => {
@@ -55,8 +54,7 @@ const ReviewJudge: React.FC = (props) => {
               placement: 'top',
             })
           }, 100)
-          setId(id + 1)
-          navigate('/review/detail?id=' + (id + 1))
+          navigate('/review/detail/' + (current + 1))
         }
       })
     } else {
@@ -73,8 +71,8 @@ const ReviewJudge: React.FC = (props) => {
 
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
-    setId(Number(search.slice(1).split('&')[0].split('=')[1]))
-    getJudgeWorkInfo(id).then((res) => {
+    setCurrent(Number(id))
+    getJudgeWorkInfo(current).then((res) => {
       const result = res.data.data
       for (let i = 0; i < res.data.data.memberList.length; i++) {
         result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
@@ -100,12 +98,12 @@ const ReviewJudge: React.FC = (props) => {
           <div className="message">
             <div className="navigation">
               <Anchor
-                targetOffset={targetOffset}
-                // onClick={(e) => e.preventDefault()}
-                // affix={false}
-                // showInkInFixed={true}
-                // onChange={(link) => console.log('Anchor:OnChange', link)}
-                // getContainer={() => document.querySelector('.message')}
+              // targetOffset={targetOffset}
+              // onClick={(e) => e.preventDefault()}
+              // affix={false}
+              // showInkInFixed={true}
+              // onChange={(link) => console.log('Anchor:OnChange', link)}
+              // getContainer={() => document.querySelector('.message')}
               >
                 <Link href="#user-information" title="参赛者信息" target="" />
                 <Link href="#show-work" title="作品展示" />

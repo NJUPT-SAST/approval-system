@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Table, Anchor, Button, Pagination, notification } from 'antd'
+import { Input, Table, Anchor, Button, notification } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { getScoreWork } from '../../api/judge'
 import './index.scss'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import { uploadWorkScoreInfo } from '../../api/judge'
 
@@ -17,8 +17,8 @@ const ReviewApprover: React.FC = (props) => {
 
   const { TextArea } = Input
   // 获取作品id
-  const { search } = useLocation()
-  const [id, setId] = useState<any>()
+  const { id } = useParams()
+  const [current, setCurrent] = useState(1)
 
   // 对输入数据进行限制和处理
   const [isError, setIsError] = useState(false)
@@ -39,7 +39,7 @@ const ReviewApprover: React.FC = (props) => {
   const handleSubmit = () => {
     if (score! >= 0 && score! <= 100) {
       if (opinion !== null) {
-        uploadWorkScoreInfo(id, score!, opinion!).then(() => {
+        uploadWorkScoreInfo(current + 1, score!, opinion!).then(() => {
           setTimeout(() => {
             notification.info({
               message: '✅ 提交成功',
@@ -48,9 +48,8 @@ const ReviewApprover: React.FC = (props) => {
               placement: 'top',
             })
           }, 100)
-          setId(id + 1)
-          navigate('/review/detail?id=' + (id + 1))
-          if (id === total) {
+          navigate('/review/detail/' + (current + 1))
+          if (current === total) {
             setTimeout(() => {
               notification.info({
                 message: '😸️ 审批完成',
@@ -59,8 +58,8 @@ const ReviewApprover: React.FC = (props) => {
                 placement: 'top',
               })
             }, 300)
-          } else if (id > total) {
-            navigate('/review/detail?id=' + total)
+          } else if (current > total) {
+            navigate('/review/detail/' + total)
           }
         })
       } else {
@@ -86,13 +85,25 @@ const ReviewApprover: React.FC = (props) => {
   }
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
-    setId(Number(search.slice(1).split('&')[0].split('=')[1]))
-    getScoreWork(id).then((res) => {
+    setCurrent(Number(id))
+    getScoreWork(current).then((res) => {
       const result = res.data.data
-      for (let i = 0; i < res.data.data.memberList.length; i++) {
-        result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+      if (res.data.data !== null) {
+        for (let i = 0; i < res.data.data.memberList.length; i++) {
+          result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+        }
+        setDataList(result)
+      } else {
+        notification.info({
+          message: '页面加载失败',
+          description: '此页面无数据',
+          top: 20,
+          placement: 'top',
+        })
+        setTimeout(() => {
+          navigate('/review')
+        }, 300)
       }
-      setDataList(result)
     })
   }, [id])
   // 定义表格数据类型和表头内容
