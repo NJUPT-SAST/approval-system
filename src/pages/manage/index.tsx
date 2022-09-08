@@ -1,5 +1,6 @@
-import { Button, Pagination, Spin, Result, Alert } from 'antd'
+import { Button, Pagination, Spin, Result, Alert, Table } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
+import type { ColumnsType } from 'antd/es/table'
 import type { PaginationProps } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getCompetitionList } from '../../api/admin'
@@ -9,18 +10,159 @@ import ManageItem from './components/manageItem'
 import './index.scss'
 
 interface DataType {
-  key: number //
-  index: number //
-  name: string //
-  start: string //
-  end: string //
-  des: string //
-  reviewer: string //
-  state: string //
-  regist: number //
-  submit: number //
-  finish: number //
+  id: number
+  name: string
+  beginTime: string
+  endTime: string
+  introduce: string
+  reviewer: string
+  status: string
+  regNum: number
+  subNum: number
+  revNum: number
 }
+
+const columns: ColumnsType<DataType> = [
+  {
+    title: '序号',
+    dataIndex: 'id',
+    width: '30',
+    ellipsis: true,
+  },
+  {
+    title: '活动名称',
+    dataIndex: 'name',
+    width: '60',
+    ellipsis: true,
+  },
+  {
+    title: '开始日期',
+    dataIndex: 'beginTime',
+    width: '40',
+    ellipsis: true,
+  },
+  {
+    title: '结束日期',
+    dataIndex: 'endTime',
+    width: '40',
+    ellipsis: true,
+  },
+  {
+    title: '比赛简介',
+    dataIndex: 'introduce',
+    width: '60',
+    ellipsis: true,
+  },
+  {
+    title: '审批人员',
+    dataIndex: 'regNum',
+    width: '40',
+    ellipsis: true,
+  },
+  {
+    title: '活动状态',
+    dataIndex: 'status',
+    width: '50',
+    ellipsis: true,
+  },
+  {
+    title: '已报名队伍',
+    dataIndex: 'regNum',
+    width: '40',
+    ellipsis: true,
+  },
+  {
+    title: '已提交材料数',
+    dataIndex: 'subNum',
+    width: '40',
+    ellipsis: true,
+  },
+  {
+    title: '审批完毕数',
+    dataIndex: 'revNum',
+    width: '40',
+    ellipsis: true,
+  },
+  {
+    title: '导出Excel',
+    dataIndex: 'id',
+    width: '40',
+    render: () => {
+      return (
+        <span
+        //   onClick={() => {
+        //     exportWorkFileDataToAssignScorer().then(
+        //       (res) => {
+        //         const blob = new Blob([res.data])
+        //         const downloadElement = document.createElement('a')
+        //         const href = window.URL.createObjectURL(blob) //创建下载的链接
+        //         downloadElement.href = href
+        //         downloadElement.download = value.name + '参赛数据.xlsx' //下载后文件名
+        //         document.body.appendChild(downloadElement)
+        //         downloadElement.click() //点击下载
+        //         document.body.removeChild(downloadElement) //下载完成移除元素
+        //         window.URL.revokeObjectURL(href) //释放掉blob对象
+        //         setTimeout(() => {
+        //           notification.success({
+        //             message: '😸️ 导出成功',
+        //             description: value.name + '的参赛数据已导出',
+        //             top: 20,
+        //             placement: 'top',
+        //           })
+        //         }, 100)
+        //       },
+        //       (error) => {
+        //         setTimeout(() => {
+        //           notification.error({
+        //             message: '😭️ 导出失败',
+        //             description: value.name + '的参赛数据未能成功导出',
+        //             top: 20,
+        //             placement: 'top',
+        //           })
+        //         }, 100)
+        //       },
+        //     )
+        //   }
+        // }
+        >
+          导出
+        </span>
+      )
+    },
+  },
+  {
+    title: '发布公告',
+    dataIndex: 'id',
+    width: '40',
+    render: () => {
+      return (
+        <span
+        // onClick={() => {
+        //   toPostNotice(value.name, value.id)
+        // }}
+        >
+          发布公告
+        </span>
+      )
+    },
+  },
+  {
+    title: '编辑活动',
+    dataIndex: 'id',
+    width: '40',
+    render: () => {
+      return (
+        <span
+        // onClick={() => {
+        //   toEditCompetition(value.id, value.name)
+        // }}
+        >
+          编辑
+        </span>
+      )
+    },
+  },
+]
 
 const Manage: React.FC = () => {
   // 路由
@@ -128,6 +270,11 @@ const Manage: React.FC = () => {
               })
             )}
           </div>
+          {/* <div className='table-container'>
+          <Table pagination={false} columns={columns} dataSource={pageState.records} />
+          </div>
+          若启用改模块，需要将 234 行代码到 272 行代码注释掉 
+          */}
           <div className="manage-body-page">
             <Pagination
               current={pageState.pageNumber}
