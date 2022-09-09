@@ -3,13 +3,14 @@
 name: Sentry
 env:
   SENTRY_AUTH_TOKEN: cf9a731e2562427b8a57f569a717d0c3f025ed1aa9934b728c25585cf183bffc # From internal integration: approve-system Release Integration
-  SENTRY_ORG: sast
+  SENTRY_ORG: njuptf2e
   SENTRY_PROJECT: approve-system
 
 
 # Controls when the workflow will run
 on: 
   push:
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
