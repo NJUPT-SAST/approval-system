@@ -11,7 +11,7 @@ const { Link } = Anchor
 const ReviewJudge: React.FC = (props) => {
   // 获取作品id
   const { id } = useParams()
-  const [current, setCurrent] = useState(1)
+  console.log(id)
 
   const [isPass, setIsPass] = useState(false)
   const [opinion, setOpinion] = useState('')
@@ -33,30 +33,32 @@ const ReviewJudge: React.FC = (props) => {
   const navigate = useNavigate()
   const handleSubmit = () => {
     if (opinion !== '') {
-      uploadWorkJudgeInfo(current, isPass!, opinion!).then(() => {
-        if (current === total) {
-          setTimeout(() => {
-            notification.info({
-              message: '😸️ 审批完成',
-              description: '这是最后一个',
-              top: 20,
-              placement: 'top',
-            })
-          }, 300)
-        } else if (current > total) {
-          navigate('/review/detail?id=' + total)
-        } else {
-          setTimeout(() => {
-            notification.info({
-              message: '✅ 提交成功',
-              description: '自动跳转下一个',
-              top: 20,
-              placement: 'top',
-            })
-          }, 100)
-          navigate('/review/detail/' + (current + 1))
-        }
+      uploadWorkJudgeInfo(Number(id), isPass!, opinion!).then(() => {
+        // if (Number(id) === total) {
+        //   setTimeout(() => {
+        //     notification.info({
+        //       message: '😸️ 审批完成',
+        //       description: '这是最后一个',
+        //       top: 20,
+        //       placement: 'top',
+        //     })
+        //   }, 300)
+        // } else if (current > total) {
+        //   navigate('/review/detail?id=' + total)
+        // } else {
+        setTimeout(() => {
+          notification.info({
+            message: '✅ 提交成功',
+            description: '自动跳转下一个',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+        // navigate('/review/detail/' + (current + 1))
+        window.history.back()
       })
+      // }
+      // })
     } else {
       setTimeout(() => {
         notification.info({
@@ -71,8 +73,7 @@ const ReviewJudge: React.FC = (props) => {
 
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
-    setCurrent(Number(id))
-    getJudgeWorkInfo(current).then((res) => {
+    getJudgeWorkInfo(Number(id)).then((res) => {
       const result = res.data.data
       for (let i = 0; i < res.data.data.memberList.length; i++) {
         result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'

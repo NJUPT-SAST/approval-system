@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import { Button, notification, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import './index.scss'
 import { getScoreWorkList, getJudgeWorkList } from '../../api/judge'
 
@@ -105,7 +105,8 @@ interface IProgramList {
 const ProgramList: React.FC<IProgramList> = (props: any) => {
   const [current, setCurrent] = useState(1)
   const { role, getPageNum, list, pageSize, total, loading } = props
-  const [id, setId] = useState(1)
+  // const [id, setId] = useState(0)
+  const navigate = useNavigate()
   const rolestate = role === 'approver' ? '评审' : '审批'
 
   // 修改页面内容
@@ -142,11 +143,11 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
       render: () => (
         // render 返回一个组件
         <Space size="middle">
-          <Link to={`/review/detail/${id}`}>
-            <Button className="count" type="primary">
-              {rolestate}
-            </Button>
-          </Link>
+          {/* <Link to={`/review/detail/${id}`}> */}
+          <Button className="count" type="primary">
+            {rolestate}
+          </Button>
+          {/* </Link> */}
         </Space>
       ),
     },
@@ -168,7 +169,9 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
               onRow={(record) => {
                 return {
                   onClick: () => {
-                    setId(record.id)
+                    // setId(record.id)
+                    console.log(record.id)
+                    navigate(`/review/detail/${record.id}`)
                   },
                 }
               }}
