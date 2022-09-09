@@ -75,59 +75,6 @@
     line-height: 22px;
     font-weight: 700;
     border-bottom: solid rgba(151, 151, 151, 1);
-    .manage-body-title-ID {
-      //max-width: 45px;
-      width: 2.5%;
-    }
-    .manage-body-title-name {
-      //max-width: 140px;
-      width: 12%;
-    }
-    .manage-body-title-begin-time {
-      //max-width: 95px;
-      width: 6.8%;
-    }
-    .manage-body-title-end-time {
-      //max-width: 95px;
-      width: 6.8%;
-    }
-    .manage-body-title-introduce {
-      //max-width: 185px;
-      width: 13.2%;
-    }
-    .manage-body-title-review-state {
-      //max-width: 130px;
-      width: 9.3%;
-    }
-    .manage-body-title-competition-state {
-      //max-width: 70px;
-      width: 5%;
-    }
-    .manage-body-title-team-number {
-      //max-width: 85px;
-      width: 6.1%;
-    }
-    .manage-body-title-work-number {
-      //max-width: 105px;
-      width: 7.5%;
-    }
-    .manage-body-title-judged-number {
-      //max-width: 115px;
-      margin: 0 70px 0 0;
-      width: 8.2%;
-    }
-    .manage-body-title-export {
-      //max-width: 80px;
-      width: 5.9%;
-    }
-    .manage-body-title-post-notice {
-      //max-width: 90px;
-      width: 6.4%;
-    }
-    .manage-body-title-edit-competition {
-      //max-width: 90px;
-      width: 6.4%;
-    }
   }
   //表格的项
   .manage-body-items {
@@ -173,63 +120,6 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-      }
-      .manage-body-item-ID {
-        padding: 0;
-        //max-width: 45px;
-        width: 2.5%;
-      }
-      .manage-body-item-name {
-        //max-width: 150px;
-        width: 12%;
-      }
-      .manage-body-item-begin-time {
-        //max-width: 95px;
-        width: 6.8%;
-      }
-      .manage-body-item-end-time {
-        //max-width: 95px;
-        width: 6.8%;
-      }
-      .manage-body-item-introduce {
-        //max-width: 185px;
-        width: 13.2%;
-      }
-      .manage-body-item-review-state {
-        //max-width: 130px;
-        width: 9.3%;
-      }
-      .manage-body-item-competition-state {
-        //max-width: 70px;
-        width: 5%;
-      }
-      .manage-body-item-team-number {
-        //max-width: 85px;
-        width: 6.1%;
-      }
-      .manage-body-item-work-number {
-        //max-width: 105px;
-        width: 7.5%;
-      }
-      .manage-body-item-judged-number {
-        //max-width: 115px;
-        margin: 0 70px 0 0;
-        width: 8.2%;
-      }
-      .manage-body-item-export {
-        //max-width: 80px;
-        width: 5.9%;
-        color: rgba(42, 130, 228, 1);
-      }
-      .manage-body-item-post-notice {
-        //max-width: 90px;
-        width: 6.4%;
-        color: rgba(42, 130, 228, 1);
-      }
-      .manage-body-item-edit-competition {
-        //max-width: 90px;
-        width: 6.4%;
-        color: rgba(42, 130, 228, 1);
       }
     }
   }

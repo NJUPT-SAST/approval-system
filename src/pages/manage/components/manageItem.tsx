@@ -23,18 +23,18 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
   return (
     <div className={index % 2 === 0 ? 'manage-body-odd' : 'manage-body-even'}>
       <div className="manage-body-item">
-        <span className="manage-body-item-ID">{value.id}</span>
-        <span className="manage-body-item-name">{value.name}</span>
-        <span className="manage-body-item-begin-time">{value.beginTime.substring(0, 10)}</span>
-        <span className="manage-body-item-end-time">{value.endTime.substring(0, 10)}</span>
-        <span className="manage-body-item-introduce">{value.introduce}</span>
-        <span className="manage-body-item-review-state">{value.reviewer}</span>
-        <span className="manage-body-item-competition-state">{value.status}</span>
-        <span className="manage-body-item-team-number">{value.regNum}</span>
-        <span className="manage-body-item-work-number">{value.subNum}</span>
-        <span className="manage-body-item-judged-number">{value.revNum}</span>
+        <span style={{ width: '2.5%' }}>{value.id}</span>
+        <span style={{ width: '12%' }}>{value.name}</span>
+        <span style={{ width: '6.8%' }}>{value.beginTime.substring(0, 10)}</span>
+        <span style={{ width: '6.8%' }}>{value.endTime.substring(0, 10)}</span>
+        <span style={{ width: '13.2%' }}>{value.introduce}</span>
+        <span style={{ width: '9.3%' }}>{value.reviewer}</span>
+        <span style={{ width: '5%' }}>{value.status}</span>
+        <span style={{ width: '6.1%' }}>{value.regNum}</span>
+        <span style={{ width: '7.5%' }}>{value.subNum}</span>
+        <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>{value.revNum}</span>
         <span
-          className="manage-body-item-export"
+          style={{ width: '5.9%', color: 'rgba(42, 130, 228, 1)' }}
           onClick={() => {
             exportWorkFileDataToAssignScorer(value.id).then(
               (res) => {
@@ -72,7 +72,7 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
           导出
         </span>
         <span
-          className="manage-body-item-post-notice"
+          style={{ width: '6.4%', color: 'rgba(42, 130, 228, 1)' }}
           onClick={() => {
             toPostNotice(value.name, value.id)
           }}
@@ -80,7 +80,7 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
           发布公告
         </span>
         <span
-          className="manage-body-item-edit-competition"
+          style={{ width: '6.4%', color: 'rgba(42, 130, 228, 1)' }}
           onClick={() => {
             toEditCompetition(value.id, value.name)
           }}

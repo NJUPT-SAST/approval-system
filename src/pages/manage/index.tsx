@@ -9,6 +9,7 @@ import TopBar from '../../components/TopBar'
 import ManageItem from './components/manageItem'
 import './index.scss'
 
+// 下面是 antd Table 组件的一些属性
 interface DataType {
   id: number
   name: string
@@ -21,109 +22,65 @@ interface DataType {
   subNum: number
   revNum: number
 }
-
+// 使用时需要设置 width 属性
 const columns: ColumnsType<DataType> = [
   {
     title: '序号',
     dataIndex: 'id',
-    width: '30',
     ellipsis: true,
   },
   {
     title: '活动名称',
     dataIndex: 'name',
-    width: '60',
     ellipsis: true,
   },
   {
     title: '开始日期',
     dataIndex: 'beginTime',
-    width: '40',
     ellipsis: true,
   },
   {
     title: '结束日期',
     dataIndex: 'endTime',
-    width: '40',
     ellipsis: true,
   },
   {
     title: '比赛简介',
     dataIndex: 'introduce',
-    width: '60',
     ellipsis: true,
   },
   {
     title: '审批人员',
     dataIndex: 'regNum',
-    width: '40',
     ellipsis: true,
   },
   {
     title: '活动状态',
     dataIndex: 'status',
-    width: '50',
     ellipsis: true,
   },
   {
     title: '已报名队伍',
     dataIndex: 'regNum',
-    width: '40',
     ellipsis: true,
   },
   {
     title: '已提交材料数',
     dataIndex: 'subNum',
-    width: '40',
     ellipsis: true,
   },
   {
     title: '审批完毕数',
     dataIndex: 'revNum',
-    width: '40',
     ellipsis: true,
   },
   {
     title: '导出Excel',
     dataIndex: 'id',
-    width: '40',
     render: () => {
       return (
         <span
-        //   onClick={() => {
-        //     exportWorkFileDataToAssignScorer().then(
-        //       (res) => {
-        //         const blob = new Blob([res.data])
-        //         const downloadElement = document.createElement('a')
-        //         const href = window.URL.createObjectURL(blob) //创建下载的链接
-        //         downloadElement.href = href
-        //         downloadElement.download = value.name + '参赛数据.xlsx' //下载后文件名
-        //         document.body.appendChild(downloadElement)
-        //         downloadElement.click() //点击下载
-        //         document.body.removeChild(downloadElement) //下载完成移除元素
-        //         window.URL.revokeObjectURL(href) //释放掉blob对象
-        //         setTimeout(() => {
-        //           notification.success({
-        //             message: '😸️ 导出成功',
-        //             description: value.name + '的参赛数据已导出',
-        //             top: 20,
-        //             placement: 'top',
-        //           })
-        //         }, 100)
-        //       },
-        //       (error) => {
-        //         setTimeout(() => {
-        //           notification.error({
-        //             message: '😭️ 导出失败',
-        //             description: value.name + '的参赛数据未能成功导出',
-        //             top: 20,
-        //             placement: 'top',
-        //           })
-        //         }, 100)
-        //       },
-        //     )
-        //   }
-        // }
+        //这里应该有一个 axios 请求，用于请求导出文件
         >
           导出
         </span>
@@ -133,13 +90,10 @@ const columns: ColumnsType<DataType> = [
   {
     title: '发布公告',
     dataIndex: 'id',
-    width: '40',
     render: () => {
       return (
         <span
-        // onClick={() => {
-        //   toPostNotice(value.name, value.id)
-        // }}
+        // 这里应有一个 路由跳转，跳转至公告界面
         >
           发布公告
         </span>
@@ -149,13 +103,10 @@ const columns: ColumnsType<DataType> = [
   {
     title: '编辑活动',
     dataIndex: 'id',
-    width: '40',
     render: () => {
       return (
         <span
-        // onClick={() => {
-        //   toEditCompetition(value.id, value.name)
-        // }}
+        // 这里应有一个路由跳转 跳转至对应的 manageDetail 组件
         >
           编辑
         </span>
@@ -232,19 +183,19 @@ const Manage: React.FC = () => {
       <div className="manage-body-no-repeat">
         <div className="manage-body-list">
           <div className="manage-body-title">
-            <span className="manage-body-title-ID">序号</span>
-            <span className="manage-body-title-name">名称</span>
-            <span className="manage-body-title-begin-time">开始日期</span>
-            <span className="manage-body-title-end-time">结束日期</span>
-            <span className="manage-body-title-introduce">比赛简介</span>
-            <span className="manage-body-title-review-state">审批人员</span>
-            <span className="manage-body-title-competition-state">活动状态</span>
-            <span className="manage-body-title-team-number">已报名队伍</span>
-            <span className="manage-body-title-work-number">已提交材料数</span>
-            <span className="manage-body-title-judged-number">审批完毕数</span>
-            <span className="manage-body-title-export">导出Excel</span>
-            <span className="manage-body-title-post-notice">发布公告</span>
-            <span className="manage-body-title-edit-competition">编辑活动</span>
+            <span style={{ width: '2.5%' }}>序号</span>
+            <span style={{ width: '12%' }}>名称</span>
+            <span style={{ width: '6.8%' }}>开始日期</span>
+            <span style={{ width: '6.8%' }}>结束日期</span>
+            <span style={{ width: '13.2%' }}>比赛简介</span>
+            <span style={{ width: '9.3%' }}>审批人员</span>
+            <span style={{ width: '5%' }}>活动状态</span>
+            <span style={{ width: '6.1%' }}>已报名队伍</span>
+            <span style={{ width: '7.5%' }}>已提交材料数</span>
+            <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审批完毕数</span>
+            <span style={{ width: '5.9%' }}>导出Excel</span>
+            <span style={{ width: '6.4%' }}>发布公告</span>
+            <span style={{ width: '6.4%' }}>编辑活动</span>
           </div>
           <div className="manage-body-items">
             {isLoading ? (

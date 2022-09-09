@@ -21,12 +21,9 @@ const DataTable: React.FC<any> = (props) => {
   return (
     <div className={index % 2 === 0 ? 'manage-detail-list-content-odd' : 'manage-detail-list-content-even'}>
       <div className="manage-detail-list-content">
-        <span className="manage-detail-list-content-index">
-          {' '}
-          {(pageState.pageNumber - 1) * pageState.pageSize + index + 1}
-        </span>
-        <span className="manage-detail-list-content-fileName">{value.fileName} </span>
-        <span className="manage-detail-list-content-judges">
+        <span style={{ width: '10%' }}> {(pageState.pageNumber - 1) * pageState.pageSize + index + 1}</span>
+        <span style={{ width: '45%' }}>{value.fileName} </span>
+        <span style={{ width: '22%' }}>
           {value.isAssignJudge === 1 ? (
             <Dropdown.Button overlay={menu} icon={<UserOutlined />}>
               已分配
@@ -37,8 +34,8 @@ const DataTable: React.FC<any> = (props) => {
             </Dropdown.Button>
           )}
         </span>
-        <span
-          className="manage-detail-list-content-export"
+        <div
+          style={{ width: '22%', color: 'rgba(42, 130, 228, 1)' }}
           onClick={() => {
             exportWorkFile(value.comId, value.userCode)
               .then((res) => {
@@ -73,7 +70,7 @@ const DataTable: React.FC<any> = (props) => {
           }}
         >
           导出
-        </span>
+        </div>
       </div>
     </div>
   )
