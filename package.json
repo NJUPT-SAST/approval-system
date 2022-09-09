@@ -23,6 +23,7 @@
     "inquirer": "^8.2.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-pdf-js": "^5.1.0",
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.4",

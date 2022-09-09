@@ -1278,6 +1278,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bundled-es-modules/pdfjs-dist@2.1.266-rc":
+  version "2.1.266-rc"
+  resolved "https://registry.yarnpkg.com/@bundled-es-modules/pdfjs-dist/-/pdfjs-dist-2.1.266-rc.tgz#d77562dcec57b94f9533e1a774b30a3880fd583b"
+  integrity sha512-idli/i9GA7hUW8uRIs2Y48m5QHKRv3PaVxlM1VEoOuzWoF2qLdtOepOpIy3BTblakDNt2f/gINPN7X/v9DBKoQ==
+
 "@craco/craco@^5.5.0":
   version "5.9.0"
   resolved "https://registry.npmmirror.com/@craco/craco/-/craco-5.9.0.tgz#dcd34330b558596a4841374743071b7fa041dce9"
@@ -10007,6 +10012,13 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmmirror.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-pdf-js@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-pdf-js/-/react-pdf-js-5.1.0.tgz#58d6858cb31c596fb0d69e37bf7f7c4ad93170cf"
+  integrity sha512-l/norbM4BocUJcD0o46b5U4XWTZI1FN1+wfhosPKGy0cJ3T7Ck7GGfr3KXsH5ljc8lyifZPMAm6Rvsbe8OzBbQ==
+  dependencies:
+    "@bundled-es-modules/pdfjs-dist" "2.1.266-rc"
 
 react-refresh@^0.11.0:
   version "0.11.0"

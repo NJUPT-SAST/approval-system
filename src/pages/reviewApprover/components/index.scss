@@ -1,0 +1,22 @@
+.flieContent{
+  width: 100%;
+  height: calc(100% - 42px);
+}
+.filePdf{
+  width: 100%;
+  height: calc(100% - 84px);
+  display: flex;
+  justify-content: center;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.filePdfFooter{
+  height: 42px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.filePdfPage{
+  margin: 0 10px;
+}

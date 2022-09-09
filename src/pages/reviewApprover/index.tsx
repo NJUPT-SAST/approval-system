@@ -6,8 +6,7 @@ import './index.scss'
 import { useNavigate, useParams } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import { uploadWorkScoreInfo } from '../../api/judge'
-import { render } from '@testing-library/react'
-import Item from 'antd/lib/list/Item'
+import Pdf from './components/index'
 
 const { Link } = Anchor
 
@@ -34,6 +33,8 @@ const ReviewApprover: React.FC = (props) => {
     accessories: [],
     texts: [],
   })
+  // pdf是否隐藏
+  const [show, setShow] = useState(false)
 
   // 提交表单
   const navigate = useNavigate()
@@ -196,10 +197,22 @@ const ReviewApprover: React.FC = (props) => {
               <div id="show-work" className="item accessorices">
                 {dataList.accessories.map((item: any, index: number) => {
                   return (
-                    <a href={item.url} key={index}>
-                      {item.file}
-                    </a>
+                    <div key={index}>
+                      <a
+                        href={item.url}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setShow(true)
+                        }}
+                      >
+                        {item.file}
+                      </a>
+                      {show ? <Pdf url={item.url} /> : <p></p>}
+                    </div>
                   )
+                  // <a href={item.url} key={index}>
+                  //   {item.file}
+                  // </a>
                 })}
               </div>
               <div id="attach-message" className="item texts">
