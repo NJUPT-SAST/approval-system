@@ -375,10 +375,10 @@ function ManageDetail() {
         </div>
         <div className="manage-detail-list">
           <div className="manage-detail-list-title">
-            <div className="manage-detail-list-title-index">序号</div>
-            <div className="manage-detail-list-title-fileName">项目名称</div>
-            <div className="manage-detail-list-title-judges">评委</div>
-            <div className="manage-detail-list-title-export">导出</div>
+            <span style={{ width: '10%' }}>序号</span>
+            <span style={{ width: '45%' }}>项目名称</span>
+            <span style={{ width: '22%' }}>评委</span>
+            <div style={{ width: '22%', color: 'rgba(42, 130, 228, 1)' }}>导出</div>
           </div>
           <div className="manage-detail-list-content-body">
             {isLoading ? (

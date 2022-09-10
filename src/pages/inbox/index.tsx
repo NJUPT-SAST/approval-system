@@ -9,7 +9,7 @@ import './index.scss'
 
 const maxNumber = 1
 export const MessageContext = React.createContext(message)
-export const AllFoldContext = React.createContext({ fold: false, unfold: false })
+export const AllFoldContext = React.createContext({ fold: true, unfold: false })
 const Inbox: React.FC = () => {
   const messageStateStorage = window.localStorage
   //用来存储状态的 依赖项应为信息最大数目？
@@ -33,7 +33,7 @@ const Inbox: React.FC = () => {
     if (messageStateStorage.getItem('everyInboxMessageState') === null) {
       const a = new Array<{ fold: boolean; read: boolean }>(maxNumber)
       for (let i = 0; i < maxNumber; i++) {
-        a[i] = { fold: false, read: false }
+        a[i] = { fold: true, read: false }
       }
     }
     //填充
@@ -43,14 +43,14 @@ const Inbox: React.FC = () => {
       const b = JSON.parse(b_str)
       a = [...a, ...b]
       for (let i = 0; i < maxNumber; i++) {
-        if (a[i] === null) a[i] = { fold: false, read: false }
+        if (a[i] === null) a[i] = { fold: true, read: false }
       }
     }
   }, [])
   //临时存储
   const readState_str: string =
     messageStateStorage.getItem('allReadState') ??
-    JSON.stringify({ allRead: true, haveReadNumber: maxNumber, maxNumber: maxNumber })
+    JSON.stringify({ allRead: false, haveReadNumber: 0, maxNumber: maxNumber })
   const foldState_str: string =
     messageStateStorage.getItem('allFoldState') ??
     JSON.stringify({ allFold: true, haveFoldNumber: maxNumber, maxNumber: maxNumber })
@@ -59,7 +59,7 @@ const Inbox: React.FC = () => {
     (() => {
       const a = new Array<{ fold: boolean; read: boolean }>(maxNumber)
       for (let i = 0; i < maxNumber; i++) {
-        a[i] = { fold: true, read: true }
+        a[i] = { fold: true, read: false }
       }
       return JSON.stringify(a)
     })()
@@ -86,9 +86,10 @@ const Inbox: React.FC = () => {
         const a = { ...preState }
         if (a.haveReadNumber === maxNumber) {
           a.allRead = false
-          messageStateStorage.setItem('inboxPoint', 'off')
+          //红点出现
+          messageStateStorage.setItem('inboxPoint', 'on')
           messageStateStorage.setItem('allRead', 'false')
-          setuserPointState({ point: 'off' })
+          setuserPointState({ point: 'on' })
         }
         a.haveReadNumber--
         messageStateStorage.setItem('allReadState', JSON.stringify(a))
@@ -102,9 +103,9 @@ const Inbox: React.FC = () => {
         a.haveReadNumber++
         if (a.haveReadNumber === maxNumber) {
           a.allRead = true
-          messageStateStorage.setItem('inboxPoint', 'on')
+          messageStateStorage.setItem('inboxPoint', 'off')
           messageStateStorage.setItem('allRead', 'true')
-          setuserPointState({ point: 'on' })
+          setuserPointState({ point: 'off' })
         }
         messageStateStorage.setItem('allReadState', JSON.stringify(a))
         return a
@@ -113,7 +114,7 @@ const Inbox: React.FC = () => {
   }
 
   const controlAllFoldState = (messageState: boolean) => {
-    //发生点击事件时状态为fold 那么展开 折叠数目减一 如果展开前数目为最大数目 则切换全部折叠 状态为false
+    //发生点击事件时状态为fold 那么展开 折叠数目减一 如果展开前数目为最大数目 则切换全部折叠 状态为 false
     if (messageState) {
       //===true
       setAllFoldState((preState) => {
@@ -164,10 +165,10 @@ const Inbox: React.FC = () => {
                   a.allRead = true
                   a.haveReadNumber = a.maxNumber
                   messageStateStorage.setItem('allReadState', JSON.stringify(a))
-                  messageStateStorage.setItem('inboxPoint', 'on')
+                  messageStateStorage.setItem('inboxPoint', 'off')
                   return a
                 })
-                setuserPointState({ point: 'on' })
+                setuserPointState({ point: 'off' })
                 setChildState((preState) => {
                   const a = [...preState]
 
