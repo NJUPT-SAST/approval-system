@@ -80,7 +80,7 @@ function Create() {
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     setLoading(true)
     console.log(info.file)
-    setCover(info.file as RcFile)
+    setCover(info.file.originFileObj as RcFile)
     getBase64(info.file.originFileObj as RcFile, (url) => {
       setBaseUrl(url)
       setLoading(false)
@@ -268,7 +268,7 @@ function Create() {
           }, 100)
         })
     } else {
-      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
+      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
         .then((res) => {
           console.log(res)
           if (res.data.success) {
@@ -302,7 +302,6 @@ function Create() {
         })
     }
   }
-
   // 允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
@@ -375,6 +374,7 @@ function Create() {
               a.table = res.data.data.table
               if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
               else a.type = 1
+              a.cover = res.data.data.cover
               a.user_code = res.data.data.user_code
               a.submit_begin_time = res.data.data.submit_begin_time
               a.submit_end_time = res.data.data.submit_end_time
@@ -470,7 +470,11 @@ function Create() {
             beforeUpload={beforeImageUpload}
             onChange={handleImageChange}
           >
-            {baseUrl === '' ? uploadButton : <img src={baseUrl} alt="avatar" style={{ width: '100%' }} />}
+            {baseUrl === '' ? (
+              uploadButton
+            ) : (
+              <img src={baseUrl === '' ? competitionInfo.cover : baseUrl} alt="avatar" style={{ width: '100%' }} />
+            )}
           </Upload>
           <div className="activity-create-cover-upload">
             <span id="activity-create-cover-tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
