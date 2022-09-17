@@ -44,7 +44,6 @@ const Review: React.FC = () => {
       getJudgeCompetitionList(pageNum).then((res) => {
         SetDataList(res.data.data)
         setLoading(false)
-        console.log('shuchu')
       })
     } else {
       setLoading(true)

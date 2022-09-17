@@ -6,6 +6,7 @@ import './index.scss'
 import { useNavigate, useParams } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import { uploadWorkScoreInfo } from '../../api/judge'
+import Pdf from './components/index'
 
 const { Link } = Anchor
 
@@ -13,12 +14,11 @@ const ReviewApprover: React.FC = (props) => {
   const [targetOffset, setTargetOffset] = useState<number | undefined>(undefined)
 
   // 定义显示数据
-  const total = Number(localStorage.getItem('listTotal'))
 
   const { TextArea } = Input
   // 获取作品id
   const { id } = useParams()
-  const [current, setCurrent] = useState(1)
+  console.log(id)
 
   // 对输入数据进行限制和处理
   const [isError, setIsError] = useState(false)
@@ -30,8 +30,11 @@ const ReviewApprover: React.FC = (props) => {
     teacher: '',
     memberNum: 0,
     memberList: [],
-    accessories: '',
+    accessories: [],
+    texts: [],
   })
+  // pdf是否隐藏
+  const [show, setShow] = useState(false)
 
   // 提交表单
   const navigate = useNavigate()
@@ -39,28 +42,29 @@ const ReviewApprover: React.FC = (props) => {
   const handleSubmit = () => {
     if (score! >= 0 && score! <= 100) {
       if (opinion !== null) {
-        uploadWorkScoreInfo(current + 1, score!, opinion!).then(() => {
+        uploadWorkScoreInfo(Number(id), score!, opinion!).then(() => {
           setTimeout(() => {
             notification.info({
               message: '✅ 提交成功',
-              description: '自动跳转下一个',
+              description: '自动返回列表',
               top: 20,
               placement: 'top',
             })
           }, 100)
-          navigate('/review/detail/' + (current + 1))
-          if (current === total) {
-            setTimeout(() => {
-              notification.info({
-                message: '😸️ 审批完成',
-                description: '这是最后一个',
-                top: 20,
-                placement: 'top',
-              })
-            }, 300)
-          } else if (current > total) {
-            navigate('/review/detail/' + total)
-          }
+          window.history.back()
+          //   navigate('/review/detail/' + (current + 1))
+          //   if (current === total) {
+          //     setTimeout(() => {
+          //       notification.info({
+          //         message: '😸️ 审批完成',
+          //         description: '这是最后一个',
+          //         top: 20,
+          //         placement: 'top',
+          //       })
+          //     }, 300)
+          //   } else if (current > total) {
+          //     navigate('/review/detail/' + total)
+          //   }
         })
       } else {
         setTimeout(() => {
@@ -85,9 +89,10 @@ const ReviewApprover: React.FC = (props) => {
   }
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
-    setCurrent(Number(id))
-    getScoreWork(current).then((res) => {
+    getScoreWork(Number(id)).then((res) => {
       const result = res.data.data
+      console.log(res.data.data)
+
       if (res.data.data !== null) {
         for (let i = 0; i < res.data.data.memberList.length; i++) {
           result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
@@ -182,19 +187,42 @@ const ReviewApprover: React.FC = (props) => {
             </div>
             <div className="content">
               <div id="team" className="item">
-                <h3>队伍: {dataList.title}</h3>
+                <h3>队伍: {dataList.teamName}</h3>
               </div>
               <div id="user-information" className="item">
                 <h3>
                   <Table<DataType> dataSource={dataList.memberList} columns={columns} />
                 </h3>
               </div>
-              <div id="show-work" className="item">
-                <h3>{dataList.introduce}</h3>
+              <div id="show-work" className="item accessorices">
+                {dataList.accessories.map((item: any, index: number) => {
+                  return (
+                    <div key={index}>
+                      <a
+                        href={item.url}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setShow(true)
+                        }}
+                      >
+                        {item.file}
+                      </a>
+                      {show ? <Pdf url={item.url} /> : <p></p>}
+                    </div>
+                  )
+                  // <a href={item.url} key={index}>
+                  //   {item.file}
+                  // </a>
+                })}
               </div>
-              <div id="attach-message" className="item">
-                <h3>{dataList.accessories}</h3>
-                <a href="javascript;">附件</a>
+              <div id="attach-message" className="item texts">
+                {dataList.texts.map((item: any, index: number) => {
+                  return (
+                    <li key={index}>
+                      {item.input}:{item.content}
+                    </li>
+                  )
+                })}
               </div>
             </div>
           </div>
