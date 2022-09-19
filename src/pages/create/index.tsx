@@ -414,7 +414,7 @@ function Create() {
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="activity-create-header">
-        <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1>
+        {/* <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1> */}
         <div className="activity-create-header-buttons">
           {/* //todo 发布时校验比赛简介字数大于100 */}
           {competitionId === -1 ? (

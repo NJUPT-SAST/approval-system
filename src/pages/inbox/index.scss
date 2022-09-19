@@ -6,13 +6,13 @@
   margin: 0 auto;
   .inbox-button-nav {
     align-self: flex-end;
-    height: 92px;
+    height: 90px;
     .inbox-button {
       height: 32px;
-      width: 305px; //button*3 + margin*2 = 274
+      width: 279px; //button*3 + margin*3 = 279
       flex-direction: row;
       float: right;
-      margin: 26px 0px 34px 0px;
+      margin: 40px 0px 38px 0px;
       .inbox-message-control-button {
         margin-right: 5px;
       }
@@ -23,7 +23,7 @@
     width: 100%;
     max-width: 1370px;
     height: 13px;
-    margin-top: 20px;
+    margin-top: 0px;
     padding-top: 4px;
     border-radius: 5px 5px 0px 0px;
     background-color: rgb(220, 220, 220);

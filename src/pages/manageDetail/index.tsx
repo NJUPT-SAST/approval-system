@@ -190,6 +190,7 @@ function ManageDetail() {
       assignJudge(formData)
         .then((res) => {
           if (res.data.success) {
+            setFileList([])
             setTimeout(() => {
               notification.success({
                 message: '😸️ 导入成功',
@@ -241,7 +242,7 @@ function ManageDetail() {
   const handleFileChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file !== undefined) {
       setFileList([...info.fileList])
-      console.log(info.fileList)
+      // console.log(info.fileList)
     }
   }
   useEffect(() => {
@@ -270,7 +271,7 @@ function ManageDetail() {
     <div className="manage-detail">
       <TopBar activity={state.competitionName} />
       <div className="manage-detail-header">
-        <p className="manage-detail-title">{state.competitionName}</p>
+        {/* <p className="manage-detail-title">{state.competitionName}</p> */}
         <Button
           type="primary"
           size="small"

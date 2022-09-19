@@ -175,8 +175,8 @@ const Manage: React.FC = () => {
     <div>
       <TopBar />
       <div className="manage-header">
-        <h1 id="manage-header-title">活动管理</h1>
-        <Button type="primary" size="small" onClick={() => Navigate('./create')}>
+        {/* <h1 id="manage-header-title">活动管理</h1> */}
+        <Button type="primary" onClick={() => Navigate('./create')}>
           创建活动
         </Button>
       </div>
