@@ -79,7 +79,7 @@ function Create() {
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     setLoading(true)
-    console.log(info.file)
+    // console.log(info.file)
     setCover(info.file.originFileObj as RcFile)
     getBase64(info.file.originFileObj as RcFile, (url) => {
       setBaseUrl(url)
@@ -230,7 +230,7 @@ function Create() {
     for (let i = 0; i < reviewerNum; i++) {
       reviewSetting_map.set(reviewSettings[i].key, reviewSettings[i].value)
     }
-    console.log(Object.fromEntries(reviewSetting_map.entries()))
+    // console.log(Object.fromEntries(reviewSetting_map.entries()))
     // -1 表示此时为创建活动
     if (competitionId === -1) {
       //改成键值对形式
@@ -270,7 +270,7 @@ function Create() {
     } else {
       editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           if (res.data.success) {
             Navigate('../../activity/' + res.data.data)
             setTimeout(() => {
@@ -344,6 +344,7 @@ function Create() {
       setCompetitionId(location.state.competitionId)
       viewCompetitionInfo(location.state.competitionId)
         .then((res) => {
+          console.log(res.data.data.table)
           if (res.data.success) {
             const array: { key: number; value: string }[] = []
             Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
@@ -402,6 +403,12 @@ function Create() {
             })
           }, 100)
         })
+    } else {
+      setCompetitionInfo((pre) => {
+        const a = { ...pre }
+        a.table = tempelate[0]
+        return a
+      })
     }
   }, [])
 
