@@ -161,7 +161,7 @@ const ReviewApprover: React.FC = (props) => {
 
   return (
     <div className="reviewApprover-main">
-      <TopBar />
+      <TopBar activity="评审" />
       <div className="manage-content-body">
         <div className="manage-content-header">
           <h1 className="manage-content-title">评审</h1>

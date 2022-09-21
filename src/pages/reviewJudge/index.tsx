@@ -85,7 +85,7 @@ const ReviewJudge: React.FC = (props) => {
   // document.querySelector('.navigation').addEventListener('scroll', handleScroll)
   return (
     <div className="reviewJudge-main">
-      <TopBar />
+      <TopBar activity="审批" />
       <div className="manage-content-body">
         <div className="manage-content-header">
           <h1 className="manage-content-title">审批</h1>
