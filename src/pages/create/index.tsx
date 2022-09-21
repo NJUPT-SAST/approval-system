@@ -79,8 +79,8 @@ function Create() {
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     setLoading(true)
-    console.log(info.file)
-    setCover(info.file as RcFile)
+    // console.log(info.file)
+    setCover(info.file.originFileObj as RcFile)
     getBase64(info.file.originFileObj as RcFile, (url) => {
       setBaseUrl(url)
       setLoading(false)
@@ -230,7 +230,7 @@ function Create() {
     for (let i = 0; i < reviewerNum; i++) {
       reviewSetting_map.set(reviewSettings[i].key, reviewSettings[i].value)
     }
-    console.log(Object.fromEntries(reviewSetting_map.entries()))
+    // console.log(Object.fromEntries(reviewSetting_map.entries()))
     // -1 表示此时为创建活动
     if (competitionId === -1) {
       //改成键值对形式
@@ -268,9 +268,9 @@ function Create() {
           }, 100)
         })
     } else {
-      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()))
+      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           if (res.data.success) {
             Navigate('../../activity/' + res.data.data)
             setTimeout(() => {
@@ -302,7 +302,6 @@ function Create() {
         })
     }
   }
-
   // 允许报名白名单 意义不明
   const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
@@ -345,6 +344,7 @@ function Create() {
       setCompetitionId(location.state.competitionId)
       viewCompetitionInfo(location.state.competitionId)
         .then((res) => {
+          console.log(res.data.data.table)
           if (res.data.success) {
             const array: { key: number; value: string }[] = []
             Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
@@ -375,6 +375,7 @@ function Create() {
               a.table = res.data.data.table
               if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
               else a.type = 1
+              a.cover = res.data.data.cover
               a.user_code = res.data.data.user_code
               a.submit_begin_time = res.data.data.submit_begin_time
               a.submit_end_time = res.data.data.submit_end_time
@@ -402,6 +403,12 @@ function Create() {
             })
           }, 100)
         })
+    } else {
+      setCompetitionInfo((pre) => {
+        const a = { ...pre }
+        a.table = tempelate[0]
+        return a
+      })
     }
   }, [])
 
@@ -414,7 +421,7 @@ function Create() {
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="activity-create-header">
-        <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1>
+        {/* <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1> */}
         <div className="activity-create-header-buttons">
           {/* //todo 发布时校验比赛简介字数大于100 */}
           {competitionId === -1 ? (
@@ -470,7 +477,11 @@ function Create() {
             beforeUpload={beforeImageUpload}
             onChange={handleImageChange}
           >
-            {baseUrl === '' ? uploadButton : <img src={baseUrl} alt="avatar" style={{ width: '100%' }} />}
+            {baseUrl === '' ? (
+              uploadButton
+            ) : (
+              <img src={baseUrl === '' ? competitionInfo.cover : baseUrl} alt="avatar" style={{ width: '100%' }} />
+            )}
           </Upload>
           <div className="activity-create-cover-upload">
             <span id="activity-create-cover-tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>

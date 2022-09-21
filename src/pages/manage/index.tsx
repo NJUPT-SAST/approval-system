@@ -1,5 +1,6 @@
-import { Button, Pagination, Spin, Result, Alert } from 'antd'
+import { Button, Pagination, Spin, Result, Alert, Table } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
+import type { ColumnsType } from 'antd/es/table'
 import type { PaginationProps } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getCompetitionList } from '../../api/admin'
@@ -8,19 +9,111 @@ import TopBar from '../../components/TopBar'
 import ManageItem from './components/manageItem'
 import './index.scss'
 
+// 下面是 antd Table 组件的一些属性
 interface DataType {
-  key: number //
-  index: number //
-  name: string //
-  start: string //
-  end: string //
-  des: string //
-  reviewer: string //
-  state: string //
-  regist: number //
-  submit: number //
-  finish: number //
+  id: number
+  name: string
+  beginTime: string
+  endTime: string
+  introduce: string
+  reviewer: string
+  status: string
+  regNum: number
+  subNum: number
+  revNum: number
 }
+// 使用时需要设置 width 属性
+const columns: ColumnsType<DataType> = [
+  {
+    title: '序号',
+    dataIndex: 'id',
+    ellipsis: true,
+  },
+  {
+    title: '活动名称',
+    dataIndex: 'name',
+    ellipsis: true,
+  },
+  {
+    title: '开始日期',
+    dataIndex: 'beginTime',
+    ellipsis: true,
+  },
+  {
+    title: '结束日期',
+    dataIndex: 'endTime',
+    ellipsis: true,
+  },
+  {
+    title: '比赛简介',
+    dataIndex: 'introduce',
+    ellipsis: true,
+  },
+  {
+    title: '审批人员',
+    dataIndex: 'regNum',
+    ellipsis: true,
+  },
+  {
+    title: '活动状态',
+    dataIndex: 'status',
+    ellipsis: true,
+  },
+  {
+    title: '已报名队伍',
+    dataIndex: 'regNum',
+    ellipsis: true,
+  },
+  {
+    title: '已提交材料数',
+    dataIndex: 'subNum',
+    ellipsis: true,
+  },
+  {
+    title: '审批完毕数',
+    dataIndex: 'revNum',
+    ellipsis: true,
+  },
+  {
+    title: '导出Excel',
+    dataIndex: 'id',
+    render: () => {
+      return (
+        <span
+        //这里应该有一个 axios 请求，用于请求导出文件
+        >
+          导出
+        </span>
+      )
+    },
+  },
+  {
+    title: '发布公告',
+    dataIndex: 'id',
+    render: () => {
+      return (
+        <span
+        // 这里应有一个 路由跳转，跳转至公告界面
+        >
+          发布公告
+        </span>
+      )
+    },
+  },
+  {
+    title: '编辑活动',
+    dataIndex: 'id',
+    render: () => {
+      return (
+        <span
+        // 这里应有一个路由跳转 跳转至对应的 manageDetail 组件
+        >
+          编辑
+        </span>
+      )
+    },
+  },
+]
 
 const Manage: React.FC = () => {
   // 路由
@@ -82,27 +175,27 @@ const Manage: React.FC = () => {
     <div>
       <TopBar />
       <div className="manage-header">
-        <h1 id="manage-header-title">活动管理</h1>
-        <Button type="primary" size="small" onClick={() => Navigate('./create')}>
+        {/* <h1 id="manage-header-title">活动管理</h1> */}
+        <Button type="primary" onClick={() => Navigate('./create')}>
           创建活动
         </Button>
       </div>
       <div className="manage-body-no-repeat">
         <div className="manage-body-list">
           <div className="manage-body-title">
-            <span className="manage-body-title-ID">序号</span>
-            <span className="manage-body-title-name">名称</span>
-            <span className="manage-body-title-begin-time">开始日期</span>
-            <span className="manage-body-title-end-time">结束日期</span>
-            <span className="manage-body-title-introduce">比赛简介</span>
-            <span className="manage-body-title-review-state">审批人员</span>
-            <span className="manage-body-title-competition-state">活动状态</span>
-            <span className="manage-body-title-team-number">已报名队伍</span>
-            <span className="manage-body-title-work-number">已提交材料数</span>
-            <span className="manage-body-title-judged-number">审批完毕数</span>
-            <span className="manage-body-title-export">导出Excel</span>
-            <span className="manage-body-title-post-notice">发布公告</span>
-            <span className="manage-body-title-edit-competition">编辑活动</span>
+            <span style={{ width: '2.5%' }}>序号</span>
+            <span style={{ width: '12%' }}>名称</span>
+            <span style={{ width: '6.8%' }}>开始日期</span>
+            <span style={{ width: '6.8%' }}>结束日期</span>
+            <span style={{ width: '13.2%' }}>比赛简介</span>
+            <span style={{ width: '9.3%' }}>审批人员</span>
+            <span style={{ width: '5%' }}>活动状态</span>
+            <span style={{ width: '6.1%' }}>已报名队伍</span>
+            <span style={{ width: '7.5%' }}>已提交材料数</span>
+            <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审批完毕数</span>
+            <span style={{ width: '5.9%' }}>导出Excel</span>
+            <span style={{ width: '6.4%' }}>发布公告</span>
+            <span style={{ width: '6.4%' }}>编辑活动</span>
           </div>
           <div className="manage-body-items">
             {isLoading ? (
@@ -128,6 +221,11 @@ const Manage: React.FC = () => {
               })
             )}
           </div>
+          {/* <div className='table-container'>
+          <Table pagination={false} columns={columns} dataSource={pageState.records} />
+          </div>
+          若启用改模块，需要将 234 行代码到 272 行代码注释掉 
+          */}
           <div className="manage-body-page">
             <Pagination
               current={pageState.pageNumber}

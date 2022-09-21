@@ -68,7 +68,7 @@ function ActivityDetail() {
     useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionInfo(Number(id)).then((res) => {
-        // console.log(res)
+        console.log(res)
         setCompetitionDetail(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -111,7 +111,7 @@ function ActivityDetail() {
     useLayoutEffect(() => {
       setIsLoading(true)
       getCompetitionNoticeList(id).then((res) => {
-        //console.log(res)
+        // console.log(res)
         setCompetitionNoticeList(res.data.data)
         setTimeout(() => {
           setIsLoading(false)

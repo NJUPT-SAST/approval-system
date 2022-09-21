@@ -2,8 +2,11 @@ import { message, notification } from 'antd'
 import axios from 'axios'
 import { Location, useNavigate } from 'react-router-dom'
 
+const baseUrl = process.env.NODE_ENV === 'development' ? '' : '/api'
+
 export const apis = axios.create({
   timeout: 10000,
+  baseURL: baseUrl,
 })
 
 apis.interceptors.request.use((config: any) => {
@@ -39,11 +42,11 @@ apis.interceptors.response.use((res) => {
       //     })
       //   break
       // default:
-      //   notification.error({
-      //     message: '⚠️️ 发生错误，请告知管理员',
-      //     description: res.data,
-      //     top: 20,
-      //     placement: 'top',
+      //   console.log(res)
+      //   message.error({
+      //     content: '⚠️️ 发生错误，请告知管理员',
+      //     duration: 5,
+      //     key:'error'
       //   })
       //   break
     }
