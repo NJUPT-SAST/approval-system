@@ -42,11 +42,11 @@ apis.interceptors.response.use((res) => {
       //     })
       //   break
       // default:
-      //   notification.error({
-      //     message: '⚠️️ 发生错误，请告知管理员',
-      //     description: res.data,
-      //     top: 20,
-      //     placement: 'top',
+      //   console.log(res)
+      //   message.error({
+      //     content: '⚠️️ 发生错误，请告知管理员',
+      //     duration: 5,
+      //     key:'error'
       //   })
       //   break
     }

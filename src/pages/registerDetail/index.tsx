@@ -98,14 +98,14 @@ function RegisterDetail() {
           description: '请记得提交您的作品哦，否则无法正常参赛',
           placement: 'topRight',
           top: 150,
-          duration: 50,
+          duration: 5,
           key: 'no-item',
           btn: btn,
         })
       }
     })
   }
-  console.log(workData)
+  console.log('workdata:', workData)
   /**
    * 获取比赛的详细信息
    * @param id 比赛的id
@@ -300,7 +300,7 @@ function RegisterDetail() {
           <div className="list-title-h1">作品提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
-              {workData?.length === 0 || workData === null ? (
+              {workData?.length === 0 || workData === null || workData === undefined ? (
                 <Empty className="empty" description="还没过提交作品哦" />
               ) : (
                 workData?.map((item, index) => {
