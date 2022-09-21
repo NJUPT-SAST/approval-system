@@ -90,6 +90,7 @@ function ManageDetail() {
         }, 100)
       })
   }
+
   //导出所有附件的信息
   const exportTeamFileInfo = () => {
     exportTeamInfo(state.competitionId)
@@ -182,6 +183,26 @@ function ManageDetail() {
       })
   }
 
+  const getList = (competitionId: number, pageNumber: number, pageSize: number) => {
+    getManageCompetitionList(competitionId, pageNumber, pageSize)
+      .then((res) => {
+        // console.log(res.data)
+        setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
+        setData(res.data.data.records)
+        // console.log(res.data.data)
+        setPageState((pre) => {
+          const a = { ...pre }
+          a.total = res.data.data.total
+          return a
+        })
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        // console.log(error)
+      })
+  }
+
   // 导入评审
   const upLoadJudges = () => {
     if (fileList.length === 1) {
@@ -191,6 +212,12 @@ function ManageDetail() {
         .then((res) => {
           if (res.data.success) {
             setFileList([])
+            getList(state.competitionId, 1, pageState.pageSize)
+            setPageState((pre) => {
+              const a = { ...pre }
+              a.pageNumber = 1
+              return a
+            })
             setTimeout(() => {
               notification.success({
                 message: '😸️ 导入成功',
@@ -247,23 +274,24 @@ function ManageDetail() {
   }
   useEffect(() => {
     setIsLoading(true)
-    getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
-      .then((res) => {
-        // console.log(res.data)
-        setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
-        setData(res.data.data.records)
-        console.log(res.data.data)
-        setPageState((pre) => {
-          const a = { ...pre }
-          a.total = res.data.data.total
-          return a
-        })
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        setIsLoading(false)
-        console.log(error)
-      })
+    getList(state.competitionId, pageState.pageNumber, pageState.pageSize)
+    // getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
+    //   .then((res) => {
+    //     // console.log(res.data)
+    //     setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
+    //     setData(res.data.data.records)
+    //     console.log(res.data.data)
+    //     setPageState((pre) => {
+    //       const a = { ...pre }
+    //       a.total = res.data.data.total
+    //       return a
+    //     })
+    //     setIsLoading(false)
+    //   })
+    //   .catch((error) => {
+    //     setIsLoading(false)
+    //     console.log(error)
+    //   })
   }, [pageState.pageNumber])
 
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
