@@ -144,10 +144,10 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     {
       key: '7',
       title: '操作',
-      render: () => (
+      render: (_, record) => (
         // render 返回一个组件
         <Space size="middle">
-          <Link to={`/review/list/${id}/${current}`}>
+          <Link to={`/review/list/${record.id}/${current}`}>
             <Button className="count" type="primary">
               审批
             </Button>
@@ -246,10 +246,10 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
     {
       key: '7',
       title: '操作',
-      render: () => (
+      render: (_, record) => (
         // render 返回一个组件
         <Space size="middle">
-          <Link to={`/review/list/${id}/${current}`}>
+          <Link to={`/review/list/${record.id}/${current}`}>
             <Button className="count" type="primary">
               评审
             </Button>
