@@ -27,6 +27,7 @@ cache:
   paths:
     - node_module/
     - production.tar.gz
+    - build/
 
 stages:          # List of stages for jobs, and their order of execution
   - build
@@ -66,4 +67,5 @@ deploy-job:      # This job runs in the deploy stage.
     - sentry-cli releases new "$VERSION"
     - sentry-cli releases set-commits "$VERSION" --auto
     - sentry-cli releases finalize "$VERSION"
+    - sentry-cli releases files "$VERSION" upload-sourcemaps /build/static/js
       
