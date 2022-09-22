@@ -10,7 +10,7 @@ $vh_base: 1080;
 }
 
 .activity-create-header {
-  height: 94px;
+  height: 72px;
   display: flex;
   align-items: flex-end;
   #activity-create-header-title {
@@ -32,7 +32,7 @@ $vh_base: 1080;
     margin-right: 3%;
     margin-left: auto;
     width: 300px;
-    .activity-create-header-buttons-post-cancel{
+    .activity-create-header-buttons-post-cancel {
       align-self: flex-end;
       margin-right: 4%;
       margin-left: auto;
@@ -40,7 +40,8 @@ $vh_base: 1080;
     }
     .ant-btn-primary {
       min-width: 74px;
-      margin:5px;
+      margin: 5px;
+      margin-bottom: 20px;
     }
     #activity-create-cancel {
       background-color: white;
@@ -49,182 +50,185 @@ $vh_base: 1080;
   }
 }
 
-.activity-create-body {
+.activity-create-content {
+  margin: 0px 111px 27px 76px;
+  background-color: white;
   min-width: vw(1483);
   min-height: 800px;
-  margin: 19px 111px 27px 76px;
-  background-color: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  font-family: HarmonyOS Sans SC;
-  color: rgba(0, 0, 0, 0.65);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
-  .activity-create-cover {
-    margin-left: 241px;
+  .activity-create-steps {
+    margin: 42px 0 0 20px;
+    float: left;
+    height: 100px;
+    width: 180px;
+  }
+  .activity-create-body {
+    margin-left: 260px;
+    border-radius: 5px;
+    margin-left: 15%;
     display: flex;
-    align-items: flex-end;
-    margin-top: 42px;
-    margin-bottom: 33px;
-    #activity-create-cover-title {
-      align-self: flex-start;
-      width: 106px;
-      height: 20px;
-    }
-    .ant-upload-select-picture-card {
-      margin-bottom: 0;
-    }
-    .ant-upload-picture-card-wrapper {
-      width: auto;
-    }
-    .ant-upload {
-      width: 125px;
-      height: 125px;
-    }
-    .activity-create-cover-upload {
-      margin-left: 29px;
+    flex-direction: column;
+    font-family: HarmonyOS Sans SC;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    .activity-create-cover {
       display: flex;
-      #activity-create-cover-tips {
-        margin-left: 20px;
-        height: 22px;
-        color: rgba(128, 128, 128, 1);
-        font-size: 14px;
-        line-height: 22px;
-        font-weight: 400;
+      align-items: flex-end;
+      margin-top: 42px;
+      margin-bottom: 33px;
+      #activity-create-cover-title {
+        align-self: flex-start;
+        width: 106px;
+        height: 20px;
+      }
+      .ant-upload-select-picture-card {
+        margin-bottom: 0;
+      }
+      .ant-upload-picture-card-wrapper {
+        width: auto;
+      }
+      .ant-upload {
+        width: 125px;
+        height: 125px;
+      }
+      .activity-create-cover-upload {
+        margin-left: 29px;
+        display: flex;
+        #activity-create-cover-tips {
+          margin-left: 20px;
+          height: 22px;
+          color: rgba(128, 128, 128, 1);
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 400;
+        }
       }
     }
-  }
-  .activity-create-name-and-template {
-    margin-left: 241px;
-    margin-bottom: 37px;
-    display: flex;
-    align-items: center;
-    .activity-create-name {
-      display: inline-block;
-      #activity-create-name {
+    .activity-create-name-and-template {
+      margin-bottom: 37px;
+      display: flex;
+      align-items: center;
+      .activity-create-name {
         display: inline-block;
+        #activity-create-name {
+          display: inline-block;
+          width: 106px;
+        }
+        .ant-input {
+          width: 224px;
+        }
+      }
+      .activity-template-select {
+        margin-left: 138px;
+        display: inline-block;
+        #activity-template-select {
+          display: inline-block;
+          width: 106px;
+        }
+        .ant-select {
+          width: 224px;
+        }
+      }
+    }
+    .activity-create-type {
+      margin-bottom: 20px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      #activity-create-type {
         width: 106px;
+      }
+      .ant-radio-wrapper {
+        width: 72px;
+        margin-right: 0;
+      }
+      .ant-radio-group {
+        display: flex;
+        width: 164px;
+        justify-content: space-between;
+      }
+      #activity-create-type-tips {
+        width: 134px;
+        min-height: 14px;
+        color: rgba(128, 128, 128, 1);
+      }
+      .ant-select {
+        margin-left: 103px;
+      }
+    }
+    .activity-create-des {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 23px;
+      margin-bottom: 30px;
+      #activity-create-des {
+        width: 106px;
+      }
+      .ant-input {
+        width: 692px;
+        height: 119px;
+      }
+    }
+    .activity-create-white {
+      #activity-create-white-tips {
+        color: rgba(191, 191, 191, 1);
+        margin-left: 19px;
+      }
+    }
+    .activity-create-reviewer-setting-default {
+      margin-bottom: 37px;
+      display: flex;
+      align-items: center;
+      .activity-create-reviewer-setting-default-code {
+        display: inline-block;
+        #activity-create-reviewer-setting-default-code {
+          display: inline-block;
+          width: 106px;
+        }
+      }
+      .activity-create-reviewer-setting-default-change-number {
+        margin-left: 138px;
+        display: inline-block;
       }
       .ant-input {
         width: 224px;
       }
     }
-    .activity-template-select {
-      margin-left: 138px;
-      display: inline-block;
-      #activity-template-select {
+    .other-setting {
+      flex-direction: column;
+    }
+    .activity-create-reviewer-setting {
+      margin-bottom: 37px;
+      display: flex;
+      align-items: center;
+      .activity-create-reviewer-setting-code {
         display: inline-block;
-        width: 106px;
+        #activity-create-reviewer-setting-code {
+          display: inline-block;
+          width: 106px;
+        }
+      }
+      .activity-create-reviewer-setting-faculty {
+        margin-left: 138px;
+        display: inline-block;
+        #activity-create-reviewer-setting-faculty {
+          display: inline-block;
+          width: 106px;
+        }
       }
       .ant-select {
         width: 224px;
       }
-    }
-  }
-  .activity-create-type {
-    margin-left: 241px;
-    margin-top: 19px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    #activity-create-type {
-      width: 106px;
-    }
-    .ant-radio-wrapper {
-      width: 72px;
-      margin-right: 0;
-    }
-    .ant-radio-group {
-      display: flex;
-      width: 164px;
-      justify-content: space-between;
-    }
-    #activity-create-type-tips {
-      width: 134px;
-      min-height: 14px;
-      color: rgba(128, 128, 128, 1);
-    }
-    .ant-select {
-      margin-left: 103px;
-    }
-  }
-  .activity-create-des {
-    display: flex;
-    align-items: flex-start;
-    margin-left: 241px;
-    margin-top: 23px;
-    margin-bottom: 30px;
-    #activity-create-des {
-      width: 106px;
-    }
-    .ant-input {
-      width: 692px;
-      height: 119px;
-    }
-  }
-  .activity-create-white {
-    margin-left: 213px;
-    #activity-create-white-tips {
-      color: rgba(191, 191, 191, 1);
-      margin-left: 19px;
-    }
-  }
-  .activity-create-reviewer-setting-default{
-    margin-left: 241px;
-    margin-bottom: 37px;
-    display: flex;
-    align-items: center;
-    .activity-create-reviewer-setting-default-code{
-      display: inline-block;
-      #activity-create-reviewer-setting-default-code{
-        display: inline-block;
-        width: 106px;
+      .ant-input {
+        width: 224px;
       }
     }
-    .activity-create-reviewer-setting-default-change-number{
-      margin-left: 138px;
-      display: inline-block;
+    .manage-create-icon {
+      float: left;
+      margin: 2px;
+      font-size: 28px;
     }
-    .ant-input{
-      width: 224px;
-    }
-  }
-  .other-setting {
-    flex-direction: column;
-  }
-  .activity-create-reviewer-setting {
-    margin-left: 241px;
-    margin-bottom: 37px;
-    display: flex;
-    align-items: center;
-    .activity-create-reviewer-setting-code {
-      display: inline-block;
-      #activity-create-reviewer-setting-code {
-        display: inline-block;
-        width: 106px;
-      }
-    }
-    .activity-create-reviewer-setting-faculty {
-      margin-left: 138px;
-      display: inline-block;
-      #activity-create-reviewer-setting-faculty {
-        display: inline-block;
-        width: 106px;
-      }
-    }
-    .ant-select{
-      width: 224px;
-    }
-    .ant-input {
-      width: 224px;
-    }
-  }
-  .manage-create-icon {
-    float: left;
-    margin: 2px;
-    font-size: 28px;
   }
 }

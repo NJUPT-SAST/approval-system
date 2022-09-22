@@ -190,7 +190,6 @@ function Notice() {
   return (
     <div className="activity-notice">
       <TopBar activity={state.competitionName} />
-      <p id="activity-notice-header">{createOrEdit === 1 ? '发布公告' : '编辑公告'}</p>
       <div className="activity-notice-body">
         <div className="activity-notice-title">
           <p id="activity-notice-title">公告标题：</p>

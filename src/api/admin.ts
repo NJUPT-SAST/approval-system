@@ -235,5 +235,6 @@ export const exportWorkFile = (competitionId: number, userCode: string) => {
   return apis({
     method: 'get',
     url: '/admin/data/exportWork?comId=' + competitionId + '&userCode=' + userCode,
+    responseType: 'blob',
   })
 }

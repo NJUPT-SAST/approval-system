@@ -11,6 +11,7 @@ import Register from '../pages/register'
 import ManageDetail from '../pages/manageDetail'
 import Notice from '../pages/notice'
 import Create from '../pages/create'
+import Edit from '../pages/edit'
 
 const admin: RouteObject[] = [
   {
@@ -27,7 +28,8 @@ const admin: RouteObject[] = [
       { path: 'activity/:id/manage', element: <ManageDetail /> },
       { path: 'activity/:id/notice/:id', element: <Notice /> },
       { path: 'manage/:id/notice', element: <Notice /> },
-      { path: 'activity/:id/manage/edit', element: <Create /> },
+      { path: 'activity/:id/manage/edit', element: <Edit /> },
+      { path: 'activity/:id/manage/edit/whitelist', element: <></> },
       { path: 'manage/create', element: <Create /> },
       { path: '*', element: <NoMatch /> },
     ],

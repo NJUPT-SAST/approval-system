@@ -1,6 +1,6 @@
 import { Button, Result, Spin, notification, Pagination, Upload } from 'antd'
 import type { PaginationProps, UploadProps } from 'antd'
-import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
+import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
@@ -292,7 +292,7 @@ function ManageDetail() {
     //     setIsLoading(false)
     //     console.log(error)
     //   })
-  }, [pageState.pageNumber])
+  }, [pageState.pageNumber, pageState.pageSize, state.competitionId])
 
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   return (
@@ -407,7 +407,7 @@ function ManageDetail() {
             <span style={{ width: '10%' }}>序号</span>
             <span style={{ width: '45%' }}>项目名称</span>
             <span style={{ width: '22%' }}>评委</span>
-            <div style={{ width: '22%', color: 'rgba(42, 130, 228, 1)' }}>导出</div>
+            <div style={{ width: '22%' }}>导出全部文件</div>
           </div>
           <div className="manage-detail-list-content-body">
             {isLoading ? (

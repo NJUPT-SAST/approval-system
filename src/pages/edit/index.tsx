@@ -9,10 +9,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { option, tempelate } from '../../store/formTemplate'
 import userProfileStore from '../../store/userProfile'
-import ReviewSet from './Components/reviewerSet'
+import ReviewSet from '../create/Components/reviewerSet'
 import TopBar from '../../components/TopBar'
-import './index.scss'
-import TimeRanger from './TimeRanger'
+import TimeRanger from '../create/TimeRanger'
 
 // 替代泛型
 function useMyLocation<T>() {
@@ -40,8 +39,7 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 //团队比赛人数（最多15人）
 const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
 
-function Create() {
-  //上传比赛照片
+const Edit: React.FC<any> = () => {
   //审批者数目
   const { Step } = Steps
   const [currentStep, setCurrentStep] = useState<number>(0)
@@ -59,8 +57,8 @@ function Create() {
   const [baseUrl, setBaseUrl] = useState<string>('')
   //获取 code
   const userProfile = useRecoilValue(userProfileStore)
-  //判断是修改还是创建 id为 -1 则为创建 否则为 修改
-  const [competitionId, setCompetitionId] = useState<number>(-1)
+
+  const [competitionId, setCompetitionId] = useState<number>(location.state.competitionId)
   const [competitionInfo, setCompetitionInfo] = useState<competitionInfoType>({
     name: '', // 比赛名称
     reg_begin_time: '', // 报名开始时间
@@ -78,6 +76,10 @@ function Create() {
     introduce: '', // 比赛介绍
     cover: '', //封面url
   })
+
+  const handleStepChange = (value: number) => {
+    setCurrentStep(value)
+  }
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     setLoading(true)
@@ -226,86 +228,45 @@ function Create() {
     })
   }
 
-  // 发布活动
-  const postCompetition = () => {
+  const editCompetition = () => {
     const reviewSetting_map: Map<number, string> = new Map([[reviewSettings[0].key, reviewSettings[0].value]])
     for (let i = 0; i < reviewerNum; i++) {
       reviewSetting_map.set(reviewSettings[i].key, reviewSettings[i].value)
     }
     // console.log(Object.fromEntries(reviewSetting_map.entries()))
-    // -1 表示此时为创建活动
-    if (competitionId === -1) {
-      //改成键值对形式
-      createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
-        .then((res) => {
-          if (res.data.success === true) {
-            Navigate('../../activity/' + res.data.data)
-            setTimeout(() => {
-              notification.success({
-                message: '😸️ 发布成功',
-                description: '快去看看新活动吧',
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
-          } else {
-            setTimeout(() => {
-              notification.error({
-                message: '😭️ 发布失败',
-                description: res.data.errMsg,
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
-          }
-        })
-        .catch((error) => {
+    editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
+      .then((res) => {
+        // console.log(res)
+        if (res.data.success) {
+          Navigate('../../activity/' + res.data.data)
           setTimeout(() => {
-            notification.error({
-              message: '😭️ 发布失败',
-              description: error + '',
+            notification.success({
+              message: '😸️ 发布成功',
+              description: '快去看看新活动吧',
               top: 20,
               placement: 'top',
             })
           }, 100)
-        })
-    } else {
-      editCompetitionInfo(competitionId, competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
-        .then((res) => {
-          // console.log(res)
-          if (res.data.success) {
-            Navigate('../../activity/' + res.data.data)
-            setTimeout(() => {
-              notification.success({
-                message: '😸️ 发布成功',
-                description: '快去看看新活动吧',
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
-          } else
-            setTimeout(() => {
-              notification.error({
-                message: '😭️ 发布失败',
-                description: res.data.errMsg,
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
-        })
-        .catch((error) => {
+        } else
           setTimeout(() => {
             notification.error({
               message: '😭️ 发布失败',
+              description: res.data.errMsg,
               top: 20,
               placement: 'top',
             })
           }, 100)
-        })
-    }
+      })
+      .catch((error) => {
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 发布失败',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      })
   }
-  // 允许报名白名单 意义不明
-  const [allowWhite, setAllowWhite] = useState<boolean>(false)
 
   // 删除活动
   const deleteCompetition = () => {
@@ -342,93 +303,76 @@ function Create() {
   }
 
   useEffect(() => {
-    if (location.state) {
-      setCompetitionId(location.state.competitionId)
-      viewCompetitionInfo(location.state.competitionId)
-        .then((res) => {
-          console.log(res.data.data.table)
-          if (res.data.success) {
-            const array: { key: number; value: string }[] = []
-            Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
-              array.push({ key: +key, value: res.data.data.review_settings[key] })
-            })
-            if (array.length === 0) {
-              array.push({ key: 0, value: '' })
-              array.push({ key: -1, value: '' })
-            }
-            if (array.length === 1) {
-              array.push({ key: -1, value: '' })
-            }
-            setReviewerNum(array.length)
-            setReviewSettings(array)
-            setPreSchema(res.data.data.table)
-            setBaseUrl(res.data.data.cover)
-            setCompetitionInfo((pre) => {
-              const a = { ...pre }
-              a.introduce = res.data.data.introduce
-              a.is_review = res.data.data.is_review
-              a.max_team_members = res.data.data.max_team_members
-              a.min_team_members = res.data.data.min_team_members
-              a.name = res.data.data.name
-              a.reg_begin_time = res.data.data.reg_begin_time
-              a.reg_end_time = res.data.data.reg_end_time
-              a.review_begin_time = res.data.data.review_begin_time
-              a.review_end_time = res.data.data.review_end_time
-              a.table = res.data.data.table
-              if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
-              else a.type = 1
-              a.cover = res.data.data.cover
-              a.user_code = res.data.data.user_code
-              a.submit_begin_time = res.data.data.submit_begin_time
-              a.submit_end_time = res.data.data.submit_end_time
-              return a
-            })
-          } else {
-            Navigate(-1)
-            setTimeout(() => {
-              notification.error({
-                message: '😭️ 获取活动信息失败',
-                description: res.data.data.errMsg,
-                top: 20,
-                placement: 'top',
-              })
-            }, 100)
+    setCompetitionId(location.state.competitionId)
+    viewCompetitionInfo(location.state.competitionId)
+      .then((res) => {
+        console.log(res.data.data.table)
+        if (res.data.success) {
+          const array: { key: number; value: string }[] = []
+          Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
+            array.push({ key: +key, value: res.data.data.review_settings[key] })
+          })
+          if (array.length === 0) {
+            array.push({ key: 0, value: '' })
+            array.push({ key: -1, value: '' })
           }
-        })
-        .catch((error) => {
+          if (array.length === 1) {
+            array.push({ key: -1, value: '' })
+          }
+          setReviewerNum(array.length)
+          setReviewSettings(array)
+          setPreSchema(res.data.data.table)
+          setBaseUrl(res.data.data.cover)
+          setCompetitionInfo((pre) => {
+            const a = { ...pre }
+            a.introduce = res.data.data.introduce
+            a.is_review = res.data.data.is_review
+            a.max_team_members = res.data.data.max_team_members
+            a.min_team_members = res.data.data.min_team_members
+            a.name = res.data.data.name
+            a.reg_begin_time = res.data.data.reg_begin_time
+            a.reg_end_time = res.data.data.reg_end_time
+            a.review_begin_time = res.data.data.review_begin_time
+            a.review_end_time = res.data.data.review_end_time
+            a.table = res.data.data.table
+            if (res.data.data.type === 'SINGLE_COMPETITION') a.type = 0
+            else a.type = 1
+            a.cover = res.data.data.cover
+            a.user_code = res.data.data.user_code
+            a.submit_begin_time = res.data.data.submit_begin_time
+            a.submit_end_time = res.data.data.submit_end_time
+            return a
+          })
+        } else {
           Navigate(-1)
           setTimeout(() => {
             notification.error({
               message: '😭️ 获取活动信息失败',
+              description: res.data.data.errMsg,
               top: 20,
               placement: 'top',
             })
           }, 100)
-        })
-    } else {
-      setCompetitionInfo((pre) => {
-        const a = { ...pre }
-        a.table = tempelate[0]
-        return a
+        }
       })
-    }
+      .catch((error) => {
+        Navigate(-1)
+        setTimeout(() => {
+          notification.error({
+            message: '😭️ 获取活动信息失败',
+            top: 20,
+            placement: 'top',
+          })
+        }, 100)
+      })
   }, [])
-
-  // useEffect(() => {
-  //   console.log('cober' + cover)
-  //   console.log(competitionInfo.cover)
-  // })
 
   return (
     <div>
       <TopBar activity='"挑战杯"创新创业比赛' />
       <div className="activity-create-header">
-        {/* <h1 id="activity-create-header-title">{competitionId === -1 ? '创建活动' : '修改活动'}</h1> */}
-        <div className="activity-create-header-buttons">
-          {/* //todo 发布时校验比赛简介字数大于100 */}
-          {/* {competitionId === -1 ? (
-            <></>
-          ) : (
+        {currentStep === 0 ? (
+          <div className="activity-create-header-buttons">
             <Button
               type="primary"
               size="small"
@@ -439,14 +383,13 @@ function Create() {
             >
               删除
             </Button>
-          )} */}
-          {currentStep === 0 ? (
+
             <div className="activity-create-header-buttons-post-cancel">
               <Button
                 type="primary"
                 size="small"
                 onClick={() => {
-                  postCompetition()
+                  editCompetition()
                 }}
               >
                 发布
@@ -462,14 +405,14 @@ function Create() {
                 取消
               </Button>
             </div>
-          ) : (
-            <></>
-          )}
-        </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="activity-create-content">
         <div className="activity-create-steps">
-          <Steps size="small" current={currentStep} direction="vertical">
+          <Steps size="small" onChange={handleStepChange} current={currentStep} direction="vertical">
             <Step title="步骤 1" description="设置比赛信息" />
             <Step title="步骤 2" description="设置白名单" />
           </Steps>
@@ -522,7 +465,7 @@ function Create() {
                 <span id="activity-template-select">表单选择</span>
                 <Select
                   placeholder="请选择表单"
-                  defaultValue={location.state ? -1 : 0}
+                  defaultValue={-1}
                   onChange={(value) => {
                     if (value === -1) {
                       setCompetitionInfo((pre) => {
@@ -546,7 +489,7 @@ function Create() {
                       </Option>
                     )
                   })}
-                  {preSchema === null ? <></> : <Option value={-1}>不修改</Option>}
+                  <Option value={-1}>不修改</Option>
                 </Select>
               </div>
             </div>
@@ -678,19 +621,17 @@ function Create() {
                   )
               })}
             </div>
-
             {/* <div className="activity-create-white">
-          <Radio
-            checked={allowWhite}
-            onClick={() => {
-              setAllowWhite(!allowWhite)
-            }}
-          >
-            允许报名白名单
-          </Radio>
-          {allowWhite ? <span id="activity-create-white-tips">每条内容请单列一行</span> : <></>}
-        </div>
-          */}
+                        <Radio
+                            checked={allowWhite}
+                            onClick={() => {
+                                setAllowWhite(!allowWhite)
+                            }}
+                        >
+                            允许报名白名单
+                        </Radio>
+                        {allowWhite ? <span id="activity-create-white-tips">每条内容请单列一行</span> : <></>}
+                    </div> */}
           </div>
         ) : (
           <></>
@@ -699,5 +640,4 @@ function Create() {
     </div>
   )
 }
-
-export default Create
+export default Edit
