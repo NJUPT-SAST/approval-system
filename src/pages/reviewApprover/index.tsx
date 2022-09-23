@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Table, Anchor, Button, notification } from 'antd'
+import { Input, Table, Anchor, Button, notification, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { getScoreWork } from '../../api/judge'
 import './index.scss'
 import { useNavigate, useParams } from 'react-router-dom'
 import TopBar from '../../components/TopBar'
 import { uploadWorkScoreInfo } from '../../api/judge'
-import Pdf from './components/index'
+// import Pdf from './components/index'
+import { fileDownload } from '../../api/public'
+import { DownloadOutlined } from '@ant-design/icons'
 
 const { Link } = Anchor
 
@@ -38,6 +40,63 @@ const ReviewApprover: React.FC = (props) => {
 
   // 提交表单
   const navigate = useNavigate()
+  /**
+   * 文件下载
+   * @param url 文件url
+   */
+  const downloadFile = (url: string) => {
+    message.loading({
+      content: '正在下载文件',
+      duration: 500,
+      key: 'downloading',
+    })
+    fileDownload(url)
+      .then((res) => {
+        const content = res.headers['content-disposition']
+        console.log('content', res)
+        const fileBlob = new Blob([res.data])
+        const url = window.URL.createObjectURL(fileBlob)
+        let filename = 'no-file'
+        const name1 = content.match(/filename=(.*);/) // 获取filename的值
+        const name2 = content.match(/filename\*=(.*)/) // 获取filename*的值
+        // name1 = decodeURIComponent(name1)
+        // name2 = decodeURIComponent(name2.substring(6)) // 下标6是UTF-8
+        if (name2 !== null) {
+          filename = decodeURIComponent(name2[0].substring(17))
+        } else {
+          if (name1 !== null) {
+            filename = decodeURIComponent(name1[0])
+          } else {
+            filename = 'no-file'
+          }
+        }
+        if (filename !== 'no-file') {
+          const a = document.createElement('a')
+          a.style.display = 'none'
+          a.href = url
+          a.download = filename
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+          URL.revokeObjectURL(url)
+          message.success({
+            content: '😁 下载成功',
+            key: 'downloading',
+          })
+        } else {
+          message.error({
+            content: '😞 下载发生了错误，请联系管理员',
+            key: 'downloading',
+          })
+        }
+      })
+      .catch((err) => {
+        message.error({
+          content: '😞 下载发生了错误，请联系管理员',
+          key: 'downloading',
+        })
+      })
+  }
   // 处理提交事件
   const handleSubmit = () => {
     if (score! >= 0 && score! <= 100) {
@@ -51,7 +110,7 @@ const ReviewApprover: React.FC = (props) => {
               placement: 'top',
             })
           }, 100)
-          window.history.back()
+
           //   navigate('/review/detail/' + (current + 1))
           //   if (current === total) {
           //     setTimeout(() => {
@@ -91,11 +150,13 @@ const ReviewApprover: React.FC = (props) => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
     getScoreWork(Number(id)).then((res) => {
       const result = res.data.data
-      console.log(res.data.data)
 
       if (res.data.data !== null) {
+        result.memberList.unshift(res.data.data.captain)
+        // console.log(result.memberList)
+
         for (let i = 0; i < res.data.data.memberList.length; i++) {
-          result.memberList[i].isCaptain = result.memberList[i].isCaptain ? '队长' : '队员'
+          result.memberList[i].isCaptain = i === 0 ? '队长' : '队员'
         }
         setDataList(result)
       } else {
@@ -113,13 +174,8 @@ const ReviewApprover: React.FC = (props) => {
   }, [id])
   // 定义表格数据类型和表头内容
   interface DataType {
-    isCaptain: string
+    code: string
     name: string
-    studentId: string
-    grade: string
-    major: string
-    academy: string
-    tel: number
   }
   const columns: ColumnsType<DataType> = [
     {
@@ -134,28 +190,8 @@ const ReviewApprover: React.FC = (props) => {
     },
     {
       title: '学号',
-      dataIndex: 'studentId',
+      dataIndex: 'code',
       key: '3',
-    },
-    {
-      title: '年级',
-      dataIndex: 'grade',
-      key: '4',
-    },
-    {
-      title: '专业',
-      dataIndex: 'major',
-      key: '5',
-    },
-    {
-      title: '学院',
-      dataIndex: 'academy',
-      key: '6',
-    },
-    {
-      title: '电话号码',
-      dataIndex: 'tel',
-      key: '7',
     },
   ]
 
@@ -176,53 +212,84 @@ const ReviewApprover: React.FC = (props) => {
             <div className="navigation">
               <Anchor
                 // target={() => document.getElementById('manage-content-main')}
-                // onClick={(e) => e.preventDefault()}
+                onClick={(e) => e.preventDefault()}
                 targetOffset={targetOffset}
               >
-                <Link href="#team" title="导航" />
+                <Link href="#team" title="队伍名称" />
                 <Link href="#user-information" title="参赛者信息" />
-                <Link href="#show-work" title="作品展示" />
                 <Link href="#attach-message" title="文字展示" />
+                <Link href="#show-work" title="作品展示" />
               </Anchor>
             </div>
             <div className="content">
               <div id="team" className="item">
+                <h1 style={{ fontSize: '25px' }}>队伍名称</h1>
                 <h3>队伍: {dataList.teamName}</h3>
               </div>
+
               <div id="user-information" className="item">
+                <h1 style={{ fontSize: '25px' }}>参赛者信息</h1>
                 <h3>
                   <Table<DataType> dataSource={dataList.memberList} columns={columns} />
                 </h3>
               </div>
-              <div id="show-work" className="item accessorices">
-                {dataList.accessories.map((item: any, index: number) => {
-                  return (
-                    // <div key={index}>
-                    //   <a
-                    //     href={item.url}
-                    //     onClick={(e) => {
-                    //       e.preventDefault()
-                    //       setShow(true)
-                    //     }}
-                    //   >
-                    //     {item.file}
-                    //   </a>
-                    //   {show ? <Pdf url={item.url} /> : <p></p>}
-                    // </div>
-                    <a href={item.url} key={index}>
-                      {item.file}
-                    </a>
-                  )
-                })}
+
+              <div id="attach-message" className="item">
+                <h1 style={{ fontSize: '25px' }}>文字展示</h1>
+                <div className="texts">
+                  {dataList.texts.map((item: any, index: number) => {
+                    return (
+                      <li key={index}>
+                        {item.input}:{item.content}
+                      </li>
+                    )
+                  })}
+                </div>
               </div>
-              <div id="attach-message" className="item texts">
-                {dataList.texts.map((item: any, index: number) => {
-                  return (
-                    <li key={index}>
-                      {item.input}:{item.content}
-                    </li>
-                  )
-                })}
+
+              <div id="show-work" className="item">
+                <h1 style={{ fontSize: '25px' }}>作品展示</h1>
+                <div className="accessorices">
+                  {dataList.accessories.map((item: any, index: number) => {
+                    return (
+                      // <div key={index}>
+                      //   <a
+                      //     href={item.url}
+                      //     onClick={(e) => {
+                      //       e.preventDefault()
+                      //       setShow(true)
+                      //     }}
+                      //   >
+                      //     {item.file}
+                      //   </a>
+                      //   {show ? <Pdf url={item.url} /> : <p></p>}
+                      // </div>
+                      <div key={index}>
+                        <a
+                          href={item.url}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            downloadFile(item.url)
+                          }}
+                        >
+                          {item.file}
+                        </a>
+                        <Button
+                          style={{ marginLeft: '30px', marginTop: '10px' }}
+                          type="primary"
+                          shape="round"
+                          icon={<DownloadOutlined />}
+                          size={'large'}
+                          onClick={() => {
+                            downloadFile(item.url)
+                          }}
+                        >
+                          下载附件
+                        </Button>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           </div>

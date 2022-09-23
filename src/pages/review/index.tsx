@@ -142,7 +142,9 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
       title: '待审批数',
       render(value, record, index) {
         return (
-          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+          <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
+            {list[index].totalNum - list[index].completedNum}
+          </td>
         )
       },
     },
@@ -164,10 +166,10 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     {
       key: '7',
       title: '操作',
-      render: () => (
+      render: (_, record) => (
         // render 返回一个组件
         <Space size="middle">
-          <Link to={`/review/list/${id}/${current}`}>
+          <Link to={`/review/list/${record.id}/${current}`}>
             <Button className="count" type="primary">
               审批
             </Button>
@@ -244,7 +246,9 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
       // className: 'redPoint',
       render(value, record, index) {
         return (
-          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+          <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
+            {list[index].totalNum - list[index].completedNum}
+          </td>
         )
       },
     },
@@ -266,10 +270,10 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
     {
       key: '7',
       title: '操作',
-      render: () => (
+      render: (_, record) => (
         // render 返回一个组件
         <Space size="middle">
-          <Link to={`/review/list/${id}/${current}`}>
+          <Link to={`/review/list/${record.id}/${current}`}>
             <Button className="count" type="primary">
               评审
             </Button>

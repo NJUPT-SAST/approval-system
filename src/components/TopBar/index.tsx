@@ -20,6 +20,7 @@ function TopBar(props?: { activity?: string }) {
     '/account': '我的帐号',
     '/review': '活动评审',
     '/list': '比赛',
+    '/detail': '活动列表',
     '/register': '活动报名',
     '/register-detail': '报名参加详情',
     '/notice': '发布公告',
