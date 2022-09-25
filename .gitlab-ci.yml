@@ -29,11 +29,11 @@ cache:
     - production.tar.gz
     - build/
 
-stages:          # List of stages for jobs, and their order of execution
+stages: # List of stages for jobs, and their order of execution
   - build
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
+build-job: # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo 安装最新版node
@@ -48,8 +48,8 @@ build-job:       # This job runs in the build stage, which runs first.
     - tar -zcvf production.tar.gz build
 
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy-job: # This job runs in the deploy stage.
+  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh/
     - echo "$PRIVATE_KEY" >> ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
@@ -68,4 +68,7 @@ deploy-job:      # This job runs in the deploy stage.
     - sentry-cli releases set-commits "$VERSION" --auto
     - sentry-cli releases finalize "$VERSION"
     - sentry-cli releases files "$VERSION" upload-sourcemaps /build/static/js
+<<<<<<< HEAD
+=======
       
+>>>>>>> master

@@ -1,6 +1,7 @@
 import { Button, Result, Spin, notification, Pagination, Upload } from 'antd'
+import { useParams } from 'react-router-dom'
 import type { PaginationProps, UploadProps } from 'antd'
-import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
+import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
@@ -25,10 +26,14 @@ type DataType = {
 }
 
 // 用于替代 location 的泛型
-function useMyLocation<T>() {
-  return useLocation() as { state: T }
+
+function useMyParams<T>() {
+  return useParams() as unknown as { id: string }
 }
+
 function ManageDetail() {
+  const { id } = useMyParams<{ id: string }>()
+  const [competitionName, setCompetitionName] = useState<string>('加载中')
   const [fileList, setFileList] = useState<any>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [pageState, setPageState] = useState<{ total: number; pageNumber: number; pageSize: number }>({
@@ -43,11 +48,10 @@ function ManageDetail() {
   })
   const navigate = useNavigate()
   const [data, setData] = useState<DataType[]>([])
-  const { state } = useMyLocation<{ competitionId: number; competitionName: string }>()
 
   //导出所有参赛队伍 可用于分配评委
   const exportCompetitionTeam = () => {
-    exportWorkFileDataToAssignScorer(state.competitionId)
+    exportWorkFileDataToAssignScorer(+id)
       .then((res) => {
         console.log(res)
         // if (res.data.success) {
@@ -55,7 +59,7 @@ function ManageDetail() {
         const downloadElement = document.createElement('a')
         const href = window.URL.createObjectURL(blob) //创建下载的链接
         downloadElement.href = href
-        downloadElement.download = state.competitionName + ' 的参赛数据.xlsx' //下载后文件名
+        downloadElement.download = competitionName + ' 的参赛数据.xlsx' //下载后文件名
         document.body.appendChild(downloadElement)
         downloadElement.click() //点击下载
         document.body.removeChild(downloadElement) //下载完成移除元素
@@ -63,7 +67,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.success({
             message: '😸️ 导出成功',
-            description: '活动： ' + state.competitionName + ' 的参赛数据已导出',
+            description: '活动： ' + competitionName + ' 的参赛数据已导出',
             top: 20,
             placement: 'top',
           })
@@ -72,7 +76,7 @@ function ManageDetail() {
         //   setTimeout(() => {
         //     notification.error({
         //       message: '😭️ 导出失败',
-        //       description: state.competitionName + ' 的参赛数据未能成功导出',
+        //       description: competitionName + ' 的参赛数据未能成功导出',
         //       top: 20,
         //       placement: 'top',
         //     })
@@ -83,16 +87,17 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: '活动： ' + state.competitionName + ' 的参赛数据未能成功导出',
+            description: '活动： ' + competitionName + ' 的参赛数据未能成功导出',
             top: 20,
             placement: 'top',
           })
         }, 100)
       })
   }
+
   //导出所有附件的信息
   const exportTeamFileInfo = () => {
-    exportTeamInfo(state.competitionId)
+    exportTeamInfo(+id)
       .then((res) => {
         // if (res.data.success) {
         console.log(res)
@@ -100,7 +105,7 @@ function ManageDetail() {
         const downloadElement = document.createElement('a')
         const href = window.URL.createObjectURL(blob) //创建下载的链接
         downloadElement.href = href
-        downloadElement.download = state.competitionName + ' 的附件.xlsx' //下载后文件名
+        downloadElement.download = competitionName + ' 的附件.xlsx' //下载后文件名
         document.body.appendChild(downloadElement)
         downloadElement.click() //点击下载
         document.body.removeChild(downloadElement) //下载完成移除元素
@@ -108,7 +113,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.success({
             message: '😸️ 导出成功',
-            description: '活动： ' + state.competitionName + ' 的所有附件已成功导出',
+            description: '活动： ' + competitionName + ' 的所有附件已成功导出',
             top: 20,
             placement: 'top',
           })
@@ -118,7 +123,7 @@ function ManageDetail() {
         //     setTimeout(() => {
         //       notification.error({
         //         message: '😭️ 导出失败',
-        //         description: '未能成功导出 ' + state.competitionName + ' 的附件',
+        //         description: '未能成功导出 ' + competitionName + ' 的附件',
         //         top: 20,
         //         placement: 'top',
         //       })
@@ -129,7 +134,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: '未能成功导出 ' + state.competitionName + ' 的附件',
+            description: '未能成功导出 ' + competitionName + ' 的附件',
             top: 20,
             placement: 'top',
           })
@@ -139,14 +144,14 @@ function ManageDetail() {
 
   // 下载活动评审结果
   const exportCompetitionResult = () => {
-    exportJudgeResult(state.competitionId)
+    exportJudgeResult(+id)
       .then((res) => {
         // if (res.data.success) {
         const blob = new Blob([res.data])
         const downloadElement = document.createElement('a')
         const href = window.URL.createObjectURL(blob) //创建下载的链接
         downloadElement.href = href
-        downloadElement.download = state.competitionName + ' 的评审结果.xlsx' //下载后文件名
+        downloadElement.download = competitionName + ' 的评审结果.xlsx' //下载后文件名
         document.body.appendChild(downloadElement)
         downloadElement.click() //点击下载
         document.body.removeChild(downloadElement) //下载完成移除元素
@@ -154,7 +159,7 @@ function ManageDetail() {
         setTimeout(() => {
           notification.success({
             message: '😸️ 导出成功',
-            description: '活动： ' + state.competitionName + ' 的评审结果已成功导出',
+            description: '活动： ' + competitionName + ' 的评审结果已成功导出',
             top: 20,
             placement: 'top',
           })
@@ -163,7 +168,7 @@ function ManageDetail() {
         //   setTimeout(() => {
         //     notification.error({
         //       message: '😭️ 导出失败',
-        //       description: '未能成功导出活动:' + state.competitionName + ' 的评审结果',
+        //       description: '未能成功导出活动:' + competitionName + ' 的评审结果',
         //       top: 20,
         //       placement: 'top',
         //     })
@@ -174,11 +179,32 @@ function ManageDetail() {
         setTimeout(() => {
           notification.error({
             message: '😭️ 导出失败',
-            description: '未能成功导出活动:' + state.competitionName + ' 的评审结果',
+            description: '未能成功导出活动:' + competitionName + ' 的评审结果',
             top: 20,
             placement: 'top',
           })
         }, 100)
+      })
+  }
+
+  const getList = (competitionId: number, pageNumber: number, pageSize: number) => {
+    getManageCompetitionList(competitionId, pageNumber, pageSize)
+      .then((res) => {
+        // console.log(res.data)
+        setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
+        setData(res.data.data.records)
+        setCompetitionName(res.data.data.comName)
+        // console.log(res.data.data)
+        setPageState((pre) => {
+          const a = { ...pre }
+          a.total = res.data.data.total
+          return a
+        })
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        setIsLoading(false)
+        // console.log(error)
       })
   }
 
@@ -191,6 +217,12 @@ function ManageDetail() {
         .then((res) => {
           if (res.data.success) {
             setFileList([])
+            getList(+id, 1, pageState.pageSize)
+            setPageState((pre) => {
+              const a = { ...pre }
+              a.pageNumber = 1
+              return a
+            })
             setTimeout(() => {
               notification.success({
                 message: '😸️ 导入成功',
@@ -237,48 +269,48 @@ function ManageDetail() {
       return a
     })
   }
-
   //导入文件变化时
   const handleFileChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file !== undefined) {
       setFileList([...info.fileList])
-      // console.log(info.fileList)
+      console.log(info.fileList)
     }
   }
   useEffect(() => {
     setIsLoading(true)
-    getManageCompetitionList(state.competitionId, pageState.pageNumber, pageState.pageSize)
-      .then((res) => {
-        // console.log(res.data)
-        setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
-        setData(res.data.data.records)
-        console.log(res.data.data)
-        setPageState((pre) => {
-          const a = { ...pre }
-          a.total = res.data.data.total
-          return a
-        })
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        setIsLoading(false)
-        console.log(error)
-      })
-  }, [pageState.pageNumber])
+    getList(+id, pageState.pageNumber, pageState.pageSize)
+    // getManageCompetitionList(+id, pageState.pageNumber, pageState.pageSize)
+    //   .then((res) => {
+    //     // console.log(res.data)
+    //     setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
+    //     setData(res.data.data.records)
+    //     console.log(res.data.data)
+    //     setPageState((pre) => {
+    //       const a = { ...pre }
+    //       a.total = res.data.data.total
+    //       return a
+    //     })
+    //     setIsLoading(false)
+    //   })
+    //   .catch((error) => {
+    //     setIsLoading(false)
+    //     console.log(error)
+    //   })
+  }, [pageState.pageNumber, pageState.pageSize, id])
 
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   return (
     <div className="manage-detail">
-      <TopBar activity={state.competitionName} />
+      <TopBar activity={competitionName} />
       <div className="manage-detail-header">
-        {/* <p className="manage-detail-title">{state.competitionName}</p> */}
+        {/* <p className="manage-detail-title">{competitionName}</p> */}
         <Button
           type="primary"
           size="small"
           id="manage-detail-set"
           onClick={() => {
-            navigate('/activity/' + state.competitionId + '/manage/edit', {
-              state: { competitionId: state.competitionId },
+            navigate('/activity/' + id + '/manage/edit', {
+              state: { competitionId: +id, competitionName: competitionName },
             })
           }}
         >
@@ -289,8 +321,8 @@ function ManageDetail() {
           size="small"
           id="manage-detail-notice"
           onClick={() => {
-            navigate('../manage/' + state.competitionId + '/notice', {
-              state: { competitionName: state.competitionName, competitionId: state.competitionId },
+            navigate('../activity/' + id + '/notice', {
+              state: { competitionName: competitionName, competitionId: +id },
             })
           }}
         >
@@ -379,7 +411,7 @@ function ManageDetail() {
             <span style={{ width: '10%' }}>序号</span>
             <span style={{ width: '45%' }}>项目名称</span>
             <span style={{ width: '22%' }}>评委</span>
-            <div style={{ width: '22%', color: 'rgba(42, 130, 228, 1)' }}>导出</div>
+            <div style={{ width: '22%' }}>导出全部文件</div>
           </div>
           <div className="manage-detail-list-content-body">
             {isLoading ? (

@@ -1,6 +1,6 @@
-import { Button, Pagination, Spin, Result, Alert, Table } from 'antd'
+import { Button, Pagination, Spin, Result } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import type { ColumnsType } from 'antd/es/table'
+// import type { ColumnsType } from 'antd/es/table'
 import type { PaginationProps } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getCompetitionList } from '../../api/admin'
@@ -10,110 +10,110 @@ import ManageItem from './components/manageItem'
 import './index.scss'
 
 // 下面是 antd Table 组件的一些属性
-interface DataType {
-  id: number
-  name: string
-  beginTime: string
-  endTime: string
-  introduce: string
-  reviewer: string
-  status: string
-  regNum: number
-  subNum: number
-  revNum: number
-}
+// interface DataType {
+//   id: number
+//   name: string
+//   beginTime: string
+//   endTime: string
+//   introduce: string
+//   reviewer: string
+//   status: string
+//   regNum: number
+//   subNum: number
+//   revNum: number
+// }
 // 使用时需要设置 width 属性
-const columns: ColumnsType<DataType> = [
-  {
-    title: '序号',
-    dataIndex: 'id',
-    ellipsis: true,
-  },
-  {
-    title: '活动名称',
-    dataIndex: 'name',
-    ellipsis: true,
-  },
-  {
-    title: '开始日期',
-    dataIndex: 'beginTime',
-    ellipsis: true,
-  },
-  {
-    title: '结束日期',
-    dataIndex: 'endTime',
-    ellipsis: true,
-  },
-  {
-    title: '比赛简介',
-    dataIndex: 'introduce',
-    ellipsis: true,
-  },
-  {
-    title: '审批人员',
-    dataIndex: 'regNum',
-    ellipsis: true,
-  },
-  {
-    title: '活动状态',
-    dataIndex: 'status',
-    ellipsis: true,
-  },
-  {
-    title: '已报名队伍',
-    dataIndex: 'regNum',
-    ellipsis: true,
-  },
-  {
-    title: '已提交材料数',
-    dataIndex: 'subNum',
-    ellipsis: true,
-  },
-  {
-    title: '审批完毕数',
-    dataIndex: 'revNum',
-    ellipsis: true,
-  },
-  {
-    title: '导出Excel',
-    dataIndex: 'id',
-    render: () => {
-      return (
-        <span
-        //这里应该有一个 axios 请求，用于请求导出文件
-        >
-          导出
-        </span>
-      )
-    },
-  },
-  {
-    title: '发布公告',
-    dataIndex: 'id',
-    render: () => {
-      return (
-        <span
-        // 这里应有一个 路由跳转，跳转至公告界面
-        >
-          发布公告
-        </span>
-      )
-    },
-  },
-  {
-    title: '编辑活动',
-    dataIndex: 'id',
-    render: () => {
-      return (
-        <span
-        // 这里应有一个路由跳转 跳转至对应的 manageDetail 组件
-        >
-          编辑
-        </span>
-      )
-    },
-  },
-]
+// const columns: ColumnsType<DataType> = [
+//   {
+//     title: '序号',
+//     dataIndex: 'id',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '活动名称',
+//     dataIndex: 'name',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '开始日期',
+//     dataIndex: 'beginTime',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '结束日期',
+//     dataIndex: 'endTime',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '比赛简介',
+//     dataIndex: 'introduce',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '审批人员',
+//     dataIndex: 'regNum',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '活动状态',
+//     dataIndex: 'status',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '已报名队伍',
+//     dataIndex: 'regNum',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '已提交材料数',
+//     dataIndex: 'subNum',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '审批完毕数',
+//     dataIndex: 'revNum',
+//     ellipsis: true,
+//   },
+//   {
+//     title: '导出Excel',
+//     dataIndex: 'id',
+//     render: () => {
+//       return (
+//         <span
+//         //这里应该有一个 axios 请求，用于请求导出文件
+//         >
+//           导出
+//         </span>
+//       )
+//     },
+//   },
+//   {
+//     title: '发布公告',
+//     dataIndex: 'id',
+//     render: () => {
+//       return (
+//         <span
+//         // 这里应有一个 路由跳转，跳转至公告界面
+//         >
+//           发布公告
+//         </span>
+//       )
+//     },
+//   },
+//   {
+//     title: '编辑活动',
+//     dataIndex: 'id',
+//     render: () => {
+//       return (
+//         <span
+//         // 这里应有一个路由跳转 跳转至对应的 manageDetail 组件
+//         >
+//           编辑
+//         </span>
+//       )
+//     },
+//   },
+// ]
 
 const Manage: React.FC = () => {
   // 路由
@@ -145,7 +145,7 @@ const Manage: React.FC = () => {
         setIsLoading(false)
         console.log(error)
       })
-  }, [pageState.pageNumber])
+  }, [pageState.pageNumber, pageState.pageSize])
 
   // 页码
   const onChange: PaginationProps['onChange'] = (page) => {
@@ -158,17 +158,11 @@ const Manage: React.FC = () => {
 
   // 跳转到发布公告的界面
   const toPostNotice = (competitionName: string, competitionId: number) => {
-    Navigate('./' + competitionId + '/notice/', {
+    Navigate('../activity/' + competitionId + '/notice', {
       state: { competitionName: competitionName, competitionId: competitionId },
     })
   }
 
-  //跳转到编辑界面
-  const toEditCompetition = (competitionId: number, name: string) => {
-    Navigate('../activity/' + competitionId + '/manage', {
-      state: { competitionId: competitionId, competitionName: name },
-    })
-  }
   //路由
   const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
   return (
@@ -195,7 +189,7 @@ const Manage: React.FC = () => {
             <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审批完毕数</span>
             <span style={{ width: '5.9%' }}>导出Excel</span>
             <span style={{ width: '6.4%' }}>发布公告</span>
-            <span style={{ width: '6.4%' }}>编辑活动</span>
+            <span style={{ width: '6.4%' }}>管理活动</span>
           </div>
           <div className="manage-body-items">
             {isLoading ? (
@@ -215,7 +209,6 @@ const Manage: React.FC = () => {
                     key={pageState.pageNumber + ' ' + index}
                     value={value}
                     toPostNotice={toPostNotice}
-                    toEditCompetition={toEditCompetition}
                   />
                 )
               })

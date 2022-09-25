@@ -10,27 +10,25 @@ $vh_base: 1080;
 }
 
 .activity-notice {
-  #activity-notice-header {
-    display: inline-block;
-    width: 223px;
-    height: 71px;
-    margin-top: 12px;
-    margin-bottom: 0;
-    color: rgba(0, 0, 0, 0.85);
-    font-size: 36px;
-    line-height: 71px;
-    font-weight: 500;
-    text-align: center;
-    font-family: HarmonyOS Sans SC;
-  }
+  // #activity-notice-header {
+  //   display: inline-block;
+  //   width: 223px;
+  //   height: 71px;
+  //   margin-top: 12px;
+  //   margin-bottom: 0;
+  //   color: rgba(0, 0, 0, 0.85);
+  //   font-size: 36px;
+  //   line-height: 71px;
+  //   font-weight: 500;
+  //   text-align: center;
+  //   font-family: HarmonyOS Sans SC;
+  // }
   .activity-notice-body {
+    margin: 72px 5% 20px 5%;
     display: flex;
     flex-direction: column;
-    min-width: vw(1562);
-    min-height: 851px;
-    margin-left: 64px;
-    margin-right: 44px;
-    margin-bottom: 16px;
+    min-width: vw(1462);
+    min-height: 751px;
     background-color: white;
     font-size: 24px;
     line-height: 22px;
@@ -44,7 +42,7 @@ $vh_base: 1080;
       align-items: flex-start;
       margin-left: 143px;
       margin-top: 66px;
-      margin-right: 156px;
+      max-width: 800px;
       #activity-notice-title {
         width: 140px;
         height: 22px;
@@ -56,7 +54,7 @@ $vh_base: 1080;
         height: 44px;
       }
     }
-    .activity-notice-time-ranger{
+    .activity-notice-time-ranger {
       display: flex;
       flex-direction: row;
       margin-top: 22px;
@@ -72,7 +70,7 @@ $vh_base: 1080;
       flex-direction: column;
       margin-top: 22px;
       margin-left: 143px;
-      margin-right: 156px;
+      max-width: 800px;
       p {
         margin-bottom: 9px;
       }

@@ -6,6 +6,7 @@ import './index.scss'
 type NoticeType = {
   viewer: number //角色 0代表普通学生 1表示评委 2表示审批人 3表示管理员
   comId: number //活动id
+  comName: string
   noticeId: number //公告Id
   title: string //公告标题
   content: string //公告内容
@@ -15,8 +16,9 @@ type NoticeType = {
 const CompetitionNotice: React.FC<NoticeType> = (props) => {
   //控制公告的折叠状态 true表示折叠 false表示未折叠
   const [foldState, setFoldState] = useState(true)
-  const Navigate = useNavigate()
-  const { role, viewer, noticeId, comId, title, content, time } = props
+  const navigate = useNavigate()
+  const { comName, role, viewer, noticeId, comId, title, content, time } = props
+  console.log(comName)
   return (
     <>
       <div className="competition-notice-nav">
@@ -50,8 +52,9 @@ const CompetitionNotice: React.FC<NoticeType> = (props) => {
                   <Button
                     type="primary"
                     onClick={() => {
-                      Navigate('./notice/' + noticeId, {
+                      navigate('./notice?noticeId=' + noticeId, {
                         state: {
+                          competitionName: comName,
                           title: title,
                           content: content,
                           time: time,

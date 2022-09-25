@@ -1,10 +1,10 @@
 import React from 'react'
 import { notification } from 'antd'
+import ManangeSelect from './manageSelect'
 import { exportWorkFileDataToAssignScorer } from '../../../api/admin'
 type ManageItemType = {
   index: number
   toPostNotice: (competitionName: string, competitionId: number) => void
-  toEditCompetition: (competition: number, name: string) => void
   value: {
     id: number //活动id
     name: string //活动名字
@@ -19,22 +19,43 @@ type ManageItemType = {
   }
 }
 const ManageItem: React.FC<ManageItemType> = (props) => {
-  const { index, value, toEditCompetition, toPostNotice } = props
+  const { index, value, toPostNotice } = props
   return (
     <div className={index % 2 === 0 ? 'manage-body-odd' : 'manage-body-even'}>
       <div className="manage-body-item">
-        <span style={{ width: '2.5%' }}>{value.id}</span>
-        <span style={{ width: '12%' }}>{value.name}</span>
-        <span style={{ width: '6.8%' }}>{value.beginTime.substring(0, 10)}</span>
-        <span style={{ width: '6.8%' }}>{value.endTime.substring(0, 10)}</span>
-        <span style={{ width: '13.2%' }}>{value.introduce}</span>
-        <span style={{ width: '9.3%' }}>{value.reviewer}</span>
-        <span style={{ width: '5%' }}>{value.status}</span>
-        <span style={{ width: '6.1%' }}>{value.regNum}</span>
-        <span style={{ width: '7.5%' }}>{value.subNum}</span>
-        <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>{value.revNum}</span>
+        <span title={value.id + ''} className="manage-body-item-content" style={{ width: '2.5%' }}>
+          {value.id}
+        </span>
+        <span title={value.name} className="manage-body-item-content" style={{ width: '12%' }}>
+          {value.name}
+        </span>
+        <span title={value.beginTime.substring(0, 10)} className="manage-body-item-content" style={{ width: '6.8%' }}>
+          {value.beginTime.substring(0, 10)}
+        </span>
+        <span title={value.endTime.substring(0, 10)} className="manage-body-item-content" style={{ width: '6.8%' }}>
+          {value.endTime.substring(0, 10)}
+        </span>
+        <span className="manage-body-item-content" style={{ width: '13.2%' }}>
+          {value.introduce}
+        </span>
+        <span className="manage-body-item-content" style={{ width: '9.3%' }}>
+          {value.reviewer}
+        </span>
+        <span className="manage-body-item-content" style={{ width: '5%' }}>
+          {value.status}
+        </span>
+        <span className="manage-body-item-content" style={{ width: '6.1%' }}>
+          {value.regNum}
+        </span>
+        <span className="manage-body-item-content" style={{ width: '7.5%' }}>
+          {value.subNum}
+        </span>
+        <span className="manage-body-item-content" style={{ width: '8.2%', margin: '0 70px 0 0' }}>
+          {value.revNum}
+        </span>
         <span
-          style={{ width: '5.9%', color: 'rgba(42, 130, 228, 1)' }}
+          className="manage-body-item-content"
+          style={{ width: '5.9%', color: 'rgba(42, 130, 228, 1)', cursor: 'pointer' }}
           onClick={() => {
             exportWorkFileDataToAssignScorer(value.id).then(
               (res) => {
@@ -72,21 +93,25 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
           导出
         </span>
         <span
-          style={{ width: '6.4%', color: 'rgba(42, 130, 228, 1)' }}
+          className="manage-body-item-content"
+          style={{ width: '6.4%', color: 'rgba(42, 130, 228, 1)', cursor: 'pointer' }}
           onClick={() => {
             toPostNotice(value.name, value.id)
           }}
         >
           发布公告
         </span>
-        <span
-          style={{ width: '6.4%', color: 'rgba(42, 130, 228, 1)' }}
-          onClick={() => {
-            toEditCompetition(value.id, value.name)
-          }}
-        >
-          编辑
-        </span>
+        <ManangeSelect competitionId={value.id} competitionName={value.name} />
+        {/* <Popover content={<ManangeSelect competitionId={value.id} competitionName={value.name} />}>
+          <span
+            style={{ width: '6.4%', color: 'rgba(42, 130, 228, 1)', cursor: 'pointer' }}
+            // onClick={() => {
+            //   toEditCompetition(value.id, value.name)
+            // }}
+          >
+            管理
+          </span>
+        </Popover> */}
       </div>
     </div>
   )
