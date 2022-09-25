@@ -171,82 +171,81 @@ const ReviewJudge: React.FC = (props) => {
               </Anchor>
             </div>
             <div className="content">
-              <ul id="user-information" className="item">
-                <h2 style={{ fontSize: '32px' }}>参赛者信息</h2>
-                <div className="udata">
-                  {dataList.memberList.map((item: any, index: any) => (
-                    <div style={{ marginLeft: '20px' }} key={index}>
-                      <li>
-                        <span>姓名:</span>
-                        {item.name}
-                      </li>
-                      <li>
-                        <span>学号:</span>
-                        {item.code}
-                      </li>
-                      <li>
-                        <span>职务:</span>
-                        {item.isCaptain}
-                      </li>
+              <div id="user-information" className="item">
+                <h2 className="list-title-h1">参赛者信息</h2>
+
+                {dataList.memberList.map((item: any, index: any) => (
+                  <div className="list" key={index}>
+                    <div className="list-item">
+                      <div className="title">姓名:</div>
+                      <div className="content">{item.name}</div>
                     </div>
-                  ))}
-                </div>
-              </ul>
+                    <div className="list-item">
+                      <div className="title">学号:</div>
+                      <div className="content">{item.code}</div>
+                    </div>
+                    <div className="list-item">
+                      <div className="title">职务:</div>
+                      <div className="content">{item.isCaptain}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div id="show-work" className="item">
                 {/* <h2>指导老师：{dataList.texts}</h2> */}
-                <h2 style={{ marginLeft: '40px', fontSize: '32px' }}>作品展示</h2>
-                <div className="texts">
+                <div className="list-title-h1">作品展示</div>
+                <div className="list">
                   {dataList.texts.map((item: any, index: number) => {
                     return (
-                      <h1 key={index}>
-                        <span style={{ marginLeft: '35px' }}>{item.input}:</span>
-                        <span>{item.content}</span>
-                      </h1>
-                    )
-                  })}
-                  {/* <h3>{dataList.introduce}</h3> */}
-                  {/* <a href="javascript;">{dataList.accessories}</a> */}
-                  {dataList.accessories.map((item: any, index: number) => {
-                    return (
-                      // <div key={index}>
-                      //   <a
-                      //     href={item.url}
-                      //     onClick={(e) => {
-                      //       e.preventDefault()
-                      //       setShow(true)
-                      //     }}
-                      //   >
-                      //     {item.file}
-                      //   </a>
-                      //   {show ? <Pdf url={item.url} /> : <p></p>}
-                      // </div>
-
-                      <div key={index} style={{ marginLeft: '35px' }}>
-                        <a
-                          href={item.url}
-                          onClick={(e) => {
-                            e.preventDefault()
-                            downloadFile(item.url)
-                          }}
-                        >
-                          {item.file}
-                        </a>
-                        <Button
-                          style={{ marginLeft: '30px', marginTop: '10px' }}
-                          type="primary"
-                          shape="round"
-                          icon={<DownloadOutlined />}
-                          size={'large'}
-                          onClick={() => {
-                            downloadFile(item.url)
-                          }}
-                        >
-                          下载附件
-                        </Button>
+                      <div className="list-item" key={index}>
+                        <div className="title">{item.input}:</div>
+                        <div className="content">{item.content}</div>
                       </div>
                     )
                   })}
                 </div>
+                {/* <h3>{dataList.introduce}</h3> */}
+                {/* <a href="javascript;">{dataList.accessories}</a> */}
+                {dataList.accessories.map((item: any, index: number) => {
+                  return (
+                    // <div key={index}>
+                    //   <a
+                    //     href={item.url}
+                    //     onClick={(e) => {
+                    //       e.preventDefault()
+                    //       setShow(true)
+                    //     }}
+                    //   >
+                    //     {item.file}
+                    //   </a>
+                    //   {show ? <Pdf url={item.url} /> : <p></p>}
+                    // </div>
+
+                    <div key={index} style={{ marginLeft: '35px' }}>
+                      <a
+                        href={item.url}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          downloadFile(item.url)
+                        }}
+                      >
+                        {item.file}
+                      </a>
+                      <Button
+                        style={{ marginLeft: '30px', marginTop: '10px' }}
+                        type="primary"
+                        shape="round"
+                        icon={<DownloadOutlined />}
+                        size={'large'}
+                        onClick={() => {
+                          downloadFile(item.url)
+                        }}
+                      >
+                        下载附件
+                      </Button>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>

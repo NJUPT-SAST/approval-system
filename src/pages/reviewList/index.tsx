@@ -22,6 +22,7 @@ function ReviewList() {
   const [pageNum, setPageNum] = useState(1)
   // 页面数据
   const [dataList, SetDataList] = useState<any>({})
+  console.log(dataList)
   const userState = localStorage.getItem('userState')
 
   const [loading, setLoading] = useState(true)
