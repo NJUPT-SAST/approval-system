@@ -1,0 +1,65 @@
+$vm_base: 1920;
+$vh_base: 1080;
+
+@function vw($px) {
+  @return calc($px / $vm_base) * 100vw;
+}
+
+@function vh($px) {
+  @return calc($px / $vh_base) * 100vh;
+}
+
+.whiteList-bar {
+  height: 72px;
+  width: 100%;
+}
+.whiteList-container {
+  border-radius: 5px;
+  margin: 0px 76px 27px 76px;
+  background-color: white;
+  min-width: vw(1483);
+  min-height: 800px;
+  .whiteList-something {
+    margin: 42px 0 0 20px;
+    float: left;
+    height: 100px;
+    width: 180px;
+  }
+  .whiteList-container-body {
+    border-radius: 5px;
+    margin-left: 180px;
+    width: auto;
+    min-height: 800px;
+    display: flex;
+    flex-direction: column;
+    #check-box {
+      margin: 40px 0 40px 0;
+      height: 30px;
+      width: 200px;
+      align-items: center;
+      span {
+        font-weight: 700;
+        justify-self: center;
+        font-size: 16px;
+      }
+    }
+    .whiteList-download {
+      font-size: 16px;
+      display: flex;
+      flex-direction: row;
+      .whiteList-download-before {
+        width: 200px;
+      }
+      .whiteList-download-after {
+        height: 40px;
+        color: rgba(42, 130, 228, 1);
+        cursor:pointer;
+      }
+    }
+    .whiteList-upload {
+        margin: 60px 0 60px 0;
+        width: 650px;
+        height:400px;
+    }
+  }
+}

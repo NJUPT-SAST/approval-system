@@ -51,7 +51,8 @@ $vh_base: 1080;
 }
 
 .activity-create-content {
-  margin: 0px 111px 27px 76px;
+  margin: 0px 76px 27px 76px;
+  border-radius: 5px;
   background-color: white;
   min-width: vw(1483);
   min-height: 800px;
@@ -63,8 +64,6 @@ $vh_base: 1080;
     width: 180px;
   }
   .activity-create-body {
-    margin-left: 260px;
-    border-radius: 5px;
     margin-left: 15%;
     display: flex;
     flex-direction: column;

@@ -49,7 +49,7 @@ const Edit: React.FC<any> = () => {
   const { Option } = Select
   const Navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
-  const location = useMyLocation<{ competitionId: number }>()
+  const { state } = useMyLocation<{ competitionId: number; competitionName: string }>()
   const [reviewSettings, setReviewSettings] = useState<{ key: number; value: string }[]>([
     { key: 0, value: '' },
     { key: -1, value: '' },
@@ -58,7 +58,7 @@ const Edit: React.FC<any> = () => {
   //获取 code
   const userProfile = useRecoilValue(userProfileStore)
 
-  const [competitionId, setCompetitionId] = useState<number>(location.state.competitionId)
+  const [competitionId, setCompetitionId] = useState<number>(state.competitionId)
   const [competitionInfo, setCompetitionInfo] = useState<competitionInfoType>({
     name: '', // 比赛名称
     reg_begin_time: '', // 报名开始时间
@@ -303,8 +303,8 @@ const Edit: React.FC<any> = () => {
   }
 
   useEffect(() => {
-    setCompetitionId(location.state.competitionId)
-    viewCompetitionInfo(location.state.competitionId)
+    setCompetitionId(state.competitionId)
+    viewCompetitionInfo(state.competitionId)
       .then((res) => {
         console.log(res.data.data.table)
         if (res.data.success) {
@@ -330,6 +330,7 @@ const Edit: React.FC<any> = () => {
             a.max_team_members = res.data.data.max_team_members
             a.min_team_members = res.data.data.min_team_members
             a.name = res.data.data.name
+            a.is_review = res.data.data.is_review
             a.reg_begin_time = res.data.data.reg_begin_time
             a.reg_end_time = res.data.data.reg_end_time
             a.review_begin_time = res.data.data.review_begin_time
@@ -369,7 +370,7 @@ const Edit: React.FC<any> = () => {
 
   return (
     <div>
-      <TopBar activity='"挑战杯"创新创业比赛' />
+      <TopBar activity={state.competitionName} />
       <div className="activity-create-header">
         {currentStep === 0 ? (
           <div className="activity-create-header-buttons">
