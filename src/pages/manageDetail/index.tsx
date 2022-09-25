@@ -26,9 +26,6 @@ type DataType = {
 }
 
 // 用于替代 location 的泛型
-function useMyLocation<T>() {
-  return useLocation() as { state: T }
-}
 
 function useMyParams<T>() {
   return useParams() as unknown as { id: string }
@@ -51,7 +48,6 @@ function ManageDetail() {
   })
   const navigate = useNavigate()
   const [data, setData] = useState<DataType[]>([])
-  const { state } = useMyLocation<{ competitionId: number; competitionName: string }>()
 
   //导出所有参赛队伍 可用于分配评委
   const exportCompetitionTeam = () => {
@@ -197,7 +193,7 @@ function ManageDetail() {
         // console.log(res.data)
         setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
         setData(res.data.data.records)
-        setCompetitionName(res.data.data.name)
+        setCompetitionName(res.data.data.comName)
         // console.log(res.data.data)
         setPageState((pre) => {
           const a = { ...pre }
@@ -277,7 +273,7 @@ function ManageDetail() {
   const handleFileChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file !== undefined) {
       setFileList([...info.fileList])
-      // console.log(info.fileList)
+      console.log(info.fileList)
     }
   }
   useEffect(() => {

@@ -30,7 +30,7 @@ const admin: RouteObject[] = [
       { path: 'activity/:id/notice/:noticeId', element: <Notice /> },
       { path: 'activity/:id/notice', element: <Notice /> },
       { path: 'activity/:id/manage/edit', element: <Edit /> },
-      { path: 'activity/:id/manage/edit/whitelist', element: <WhiteList /> },
+      { path: 'activity/:id/manage/editWhiteList', element: <WhiteList /> },
       { path: 'manage/create', element: <Create /> },
       { path: '*', element: <NoMatch /> },
     ],

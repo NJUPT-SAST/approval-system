@@ -15,7 +15,7 @@ export const createCompetitionInfo = (data: competitionInfoType, review_settings
   const formData = new FormData()
   if (cover) formData.append('cover', cover)
   else formData.append('cover', '')
-  formData.append('competition', JSON.stringify({ review_settings: { ...review_settings }, ...data }))
+  formData.append('competition', JSON.stringify({ review_settings: { ...review_settings }, isWhiteList: 0, ...data }))
   return apis({
     method: 'POST',
     url: '/admin/com/create',
@@ -236,5 +236,26 @@ export const exportWorkFile = (competitionId: number, userCode: string) => {
     method: 'get',
     url: '/admin/data/exportWork?comId=' + competitionId + '&userCode=' + userCode,
     responseType: 'blob',
+  })
+}
+/**
+ * 设置白名单
+ *
+ * @param competitionId 比赛Id
+ * @param isWhiteList 是否添加白名单
+ * @param file 文件
+ * @returns Axios 对象
+ */
+export const editWhiteList = (competitionId: number, isWhiteList: boolean, file?: Blob) => {
+  const formData = new FormData()
+  if (isWhiteList && file) {
+    formData.append('file', file)
+  }
+  formData.append('isWhiteList', isWhiteList.toString())
+  formData.append('comId', competitionId + '')
+  return apis({
+    method: 'POST',
+    url: '/admin/com/whitelist',
+    data: formData,
   })
 }

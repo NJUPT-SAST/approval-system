@@ -1,23 +1,38 @@
-import React, { useState } from 'react'
+import React from 'react'
 import type { UploadProps } from 'antd'
-import { Checkbox, Space, Upload, message } from 'antd'
-import { CloudDownloadOutlined, InboxOutlined } from '@ant-design/icons'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
+import { Checkbox, Upload } from 'antd'
+import { InboxOutlined } from '@ant-design/icons'
 
-const WhiteListdetail: React.FC = () => {
-  const [checked, setChecked] = useState<boolean>(false)
-  let postFile: any
-  const onChange = (e: CheckboxChangeEvent) => {
-    setChecked(e.target.checked)
-  }
+type WhiteListdetailProps = {
+  fileList: any
+  checked: boolean
+  handleFileChange: (info: UploadChangeParam<UploadFile<any>>) => void
+  onChange: (e: CheckboxChangeEvent) => void
+}
+
+const WhiteListdetail: React.FC<WhiteListdetailProps> = (props) => {
+  const { fileList, checked, handleFileChange, onChange } = props
   const { Dragger } = Upload
+  // const handleFileChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+  //   if (info.file !== undefined) {
+  //     setFileList([...info.fileList])
+  //   }
+  // }
+  // const handleFileDrop = (e) => {
+  //   console.log()
+  // }
+  // useEffect(() => {
+  //   console.log(fileList)
+  // })
   const uploadProps = {
+    name: 'file',
     accept: '.csv, .xlsx, .xlx',
-    customRequest: () => {
-      postFile().then((res: any) => {
-        console.log(res)
-      })
-    },
+    fileList: fileList,
+    showUploadList: true,
+    beforeUpload: () => false,
+    onChange: handleFileChange,
     maxCount: 1,
   }
 
@@ -39,7 +54,17 @@ const WhiteListdetail: React.FC = () => {
       {checked ? (
         <>
           <div className="whiteList-upload">
-            <Dragger {...uploadProps}>
+            <Dragger
+              {...uploadProps}
+              // name='file'
+              // accept = '.csv, .xlsx, .xlx'
+              // fileList={ fileList}
+              // showUploadList={true}
+              // onRemove = {()=>{setFileList([])}}
+              // beforeUpload ={() => false}
+              // onChange ={handleFileChange}
+              // maxCount =  {1}
+            >
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
               </p>

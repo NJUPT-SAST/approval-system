@@ -16,7 +16,7 @@ const ManangeSelect: React.FC<propsType> = (props) => {
     })
   }
   const toEditWhiteList = () => {
-    navigate('../activity/' + competitionId + '/manage/edit/whiteList', {
+    navigate('../activity/' + competitionId + '/manage/editWhiteList', {
       state: { competitionId: competitionId, competitionName: competitionName },
     })
   }

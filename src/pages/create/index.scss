@@ -12,6 +12,7 @@ $vh_base: 1080;
 .activity-create-header {
   height: 72px;
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
   #activity-create-header-title {
     margin-left: 62px;
@@ -23,6 +24,20 @@ $vh_base: 1080;
     line-height: 36px;
     font-weight: 500;
     display: inline-block;
+  }
+  .activity-create-button-post-whiteList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 0 76px 0 76px;
+    height: 72px;
+    width: auto;
+    .whiteList-compelete-button {
+      height: 72px;
+      .ant-btn {
+        margin-top: 20px;
+      }
+    }
   }
   .activity-create-header-buttons {
     display: flex;

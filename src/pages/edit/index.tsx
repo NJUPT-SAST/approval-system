@@ -273,7 +273,7 @@ const Edit: React.FC<any> = () => {
     deleteCompetitionInfo(competitionId)
       .then((res) => {
         if (res.data.success) {
-          Navigate('../../activity/')
+          Navigate('../../manage/')
           setTimeout(() => {
             notification.success({
               message: '😸️ 删除成功',
@@ -372,257 +372,246 @@ const Edit: React.FC<any> = () => {
     <div>
       <TopBar activity={state.competitionName} />
       <div className="activity-create-header">
-        {currentStep === 0 ? (
-          <div className="activity-create-header-buttons">
+        <div className="activity-create-header-buttons">
+          <Button
+            type="primary"
+            size="small"
+            danger
+            onClick={() => {
+              deleteCompetition()
+            }}
+          >
+            删除
+          </Button>
+
+          <div className="activity-create-header-buttons-post-cancel">
             <Button
               type="primary"
               size="small"
-              danger
               onClick={() => {
-                deleteCompetition()
+                editCompetition()
               }}
             >
-              删除
+              发布
             </Button>
-
-            <div className="activity-create-header-buttons-post-cancel">
-              <Button
-                type="primary"
-                size="small"
-                onClick={() => {
-                  editCompetition()
-                }}
-              >
-                发布
-              </Button>
-              <Button
-                type="primary"
-                size="small"
-                id="activity-create-cancel"
-                onClick={() => {
-                  Navigate(-1)
-                }}
-              >
-                取消
-              </Button>
-            </div>
+            <Button
+              type="primary"
+              size="small"
+              id="activity-create-cancel"
+              onClick={() => {
+                Navigate(-1)
+              }}
+            >
+              取消
+            </Button>
           </div>
-        ) : (
-          <></>
-        )}
+        </div>
       </div>
       <div className="activity-create-content">
-        <div className="activity-create-steps">
-          <Steps size="small" onChange={handleStepChange} current={currentStep} direction="vertical">
-            <Step title="步骤 1" description="设置比赛信息" />
-            <Step title="步骤 2" description="设置白名单" />
-          </Steps>
-        </div>
-        {currentStep === 0 ? (
-          <div className="activity-create-body">
-            <div className="activity-create-cover">
-              <span id="activity-create-cover-title">比赛封面</span>
-              <Upload
-                name="avatar"
-                accept=".jpg,.jpeg,.png,.gif"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                customRequest={() => {
-                  return 0
-                }}
-                // action=""
-                beforeUpload={beforeImageUpload}
-                onChange={handleImageChange}
-              >
-                {baseUrl === '' ? (
-                  uploadButton
-                ) : (
-                  <img src={baseUrl === '' ? competitionInfo.cover : baseUrl} alt="avatar" style={{ width: '100%' }} />
-                )}
-              </Upload>
-              <div className="activity-create-cover-upload">
-                <span id="activity-create-cover-tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
-              </div>
-            </div>
-            <div className="activity-create-name-and-template">
-              <div className="activity-create-name">
-                <span id="activity-create-name">比赛名称</span>
-                <Input
-                  maxLength={15}
-                  placeholder="清晰简洁，不得多于15字"
-                  value={competitionInfo.name}
-                  showCount={false}
-                  onChange={(e) => {
-                    setCompetitionInfo((pre) => {
-                      const a = { ...pre }
-                      a.name = e.target.value
-                      return a
-                    })
-                  }}
-                />
-              </div>
-              <div className="activity-template-select">
-                <span id="activity-template-select">表单选择</span>
-                <Select
-                  placeholder="请选择表单"
-                  defaultValue={-1}
-                  onChange={(value) => {
-                    if (value === -1) {
-                      setCompetitionInfo((pre) => {
-                        const a = { ...pre }
-                        a.table = preSchema as object
-                        return a
-                      })
-                    } else {
-                      setCompetitionInfo((pre) => {
-                        const a = { ...pre }
-                        a.table = tempelate[+value]
-                        return a
-                      })
-                    }
-                  }}
-                >
-                  {option.map((value, index) => {
-                    return (
-                      <Option key={'formTempelate ' + index} value={index}>
-                        {value}
-                      </Option>
-                    )
-                  })}
-                  <Option value={-1}>不修改</Option>
-                </Select>
-              </div>
-            </div>
-            <div className="activity-create-type">
-              <span id="activity-create-type">比赛类型</span>
-              <Radio.Group onChange={onTypeChange} value={competitionInfo.type}>
-                <Radio value={0}>单人</Radio>
-                <Radio value={1}>团队</Radio>
-              </Radio.Group>
-              <span id="activity-create-type-tips">（不可超过15人）</span>
-              {/* 当比赛类型选中团队时才出现 */}
-              {competitionInfo.type === 1 ? (
-                <Select
-                  showSearch
-                  defaultValue={competitionInfo.max_team_members.toString()}
-                  placeholder="最大人数"
-                  optionFilterProp="children"
-                  onChange={onTeamMemberNumChange}
-                  filterOption={(input, option) =>
-                    (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-                  }
-                >
-                  {teamMemberNumArray.map((value) => {
-                    return (
-                      <Select.Option value={value} key={value}>
-                        {value}
-                      </Select.Option>
-                    )
-                  })}
-                </Select>
+        <div className="activity-create-body">
+          <div className="activity-create-cover">
+            <span id="activity-create-cover-title">比赛封面</span>
+            <Upload
+              name="avatar"
+              accept=".jpg,.jpeg,.png,.gif"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              customRequest={() => {
+                return 0
+              }}
+              // action=""
+              beforeUpload={beforeImageUpload}
+              onChange={handleImageChange}
+            >
+              {baseUrl === '' ? (
+                uploadButton
               ) : (
-                <></>
+                <img src={baseUrl === '' ? competitionInfo.cover : baseUrl} alt="avatar" style={{ width: '100%' }} />
               )}
+            </Upload>
+            <div className="activity-create-cover-upload">
+              <span id="activity-create-cover-tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
             </div>
-            <div className="activity-create-des">
-              <span id="activity-create-des">比赛简介</span>
-              <TextArea
-                value={competitionInfo.introduce}
-                onChange={(e) =>
+          </div>
+          <div className="activity-create-name-and-template">
+            <div className="activity-create-name">
+              <span id="activity-create-name">比赛名称</span>
+              <Input
+                maxLength={15}
+                placeholder="清晰简洁，不得多于15字"
+                value={competitionInfo.name}
+                showCount={false}
+                onChange={(e) => {
                   setCompetitionInfo((pre) => {
                     const a = { ...pre }
-                    a.introduce = e.target.value
+                    a.name = e.target.value
                     return a
                   })
-                }
-                placeholder="不少于100字，不超过3000字"
-                maxLength={3000}
+                }}
               />
             </div>
-            <TimeRanger
-              operation="signUp"
-              preStartTime={competitionInfo.reg_begin_time}
-              setStartTime={setStartTime}
-              preEndTime={competitionInfo.reg_end_time}
-              setEndTime={setEndTime}
-            />
-            <TimeRanger
-              operation="submit"
-              preStartTime={competitionInfo.submit_begin_time}
-              setStartTime={setStartTime}
-              preEndTime={competitionInfo.submit_end_time}
-              setEndTime={setEndTime}
-            />
-            <TimeRanger
-              operation="review"
-              preStartTime={competitionInfo.review_begin_time}
-              setStartTime={setStartTime}
-              preEndTime={competitionInfo.review_end_time}
-              setEndTime={setEndTime}
-            />
-            <div className="activity-create-reviewer-setting-default">
-              <div className="activity-create-reviewer-setting-default-code">
-                <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
-                <Input
-                  className="first"
-                  placeholder="审批者学号"
-                  value={reviewSettings ? reviewSettings[0].value : ''}
-                  onChange={(e) => {
-                    setReviewSettings((pre) => {
-                      const a = [...pre]
-                      a[0].value = e.target.value
+            <div className="activity-template-select">
+              <span id="activity-template-select">表单选择</span>
+              <Select
+                placeholder="请选择表单"
+                defaultValue={-1}
+                onChange={(value) => {
+                  if (value === -1) {
+                    setCompetitionInfo((pre) => {
+                      const a = { ...pre }
+                      a.table = preSchema as object
                       return a
                     })
-                  }}
-                  showCount={false}
-                />
-              </div>
-              <div className="activity-create-reviewer-setting-default-change-number">
-                <PlusSquareOutlined
+                  } else {
+                    setCompetitionInfo((pre) => {
+                      const a = { ...pre }
+                      a.table = tempelate[+value]
+                      return a
+                    })
+                  }
+                }}
+              >
+                {option.map((value, index) => {
+                  return (
+                    <Option key={'formTempelate ' + index} value={index}>
+                      {value}
+                    </Option>
+                  )
+                })}
+                <Option value={-1}>不修改</Option>
+              </Select>
+            </div>
+          </div>
+          <div className="activity-create-type">
+            <span id="activity-create-type">比赛类型</span>
+            <Radio.Group onChange={onTypeChange} value={competitionInfo.type}>
+              <Radio value={0}>单人</Radio>
+              <Radio value={1}>团队</Radio>
+            </Radio.Group>
+            <span id="activity-create-type-tips">（不可超过15人）</span>
+            {/* 当比赛类型选中团队时才出现 */}
+            {competitionInfo.type === 1 ? (
+              <Select
+                showSearch
+                defaultValue={competitionInfo.max_team_members.toString()}
+                placeholder="最大人数"
+                optionFilterProp="children"
+                onChange={onTeamMemberNumChange}
+                filterOption={(input, option) =>
+                  (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {teamMemberNumArray.map((value) => {
+                  return (
+                    <Select.Option value={value} key={value}>
+                      {value}
+                    </Select.Option>
+                  )
+                })}
+              </Select>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="activity-create-des">
+            <span id="activity-create-des">比赛简介</span>
+            <TextArea
+              value={competitionInfo.introduce}
+              onChange={(e) =>
+                setCompetitionInfo((pre) => {
+                  const a = { ...pre }
+                  a.introduce = e.target.value
+                  return a
+                })
+              }
+              placeholder="不少于100字，不超过3000字"
+              maxLength={3000}
+            />
+          </div>
+          <TimeRanger
+            operation="signUp"
+            preStartTime={competitionInfo.reg_begin_time}
+            setStartTime={setStartTime}
+            preEndTime={competitionInfo.reg_end_time}
+            setEndTime={setEndTime}
+          />
+          <TimeRanger
+            operation="submit"
+            preStartTime={competitionInfo.submit_begin_time}
+            setStartTime={setStartTime}
+            preEndTime={competitionInfo.submit_end_time}
+            setEndTime={setEndTime}
+          />
+          <TimeRanger
+            operation="review"
+            preStartTime={competitionInfo.review_begin_time}
+            setStartTime={setStartTime}
+            preEndTime={competitionInfo.review_end_time}
+            setEndTime={setEndTime}
+          />
+          <div className="activity-create-reviewer-setting-default">
+            <div className="activity-create-reviewer-setting-default-code">
+              <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
+              <Input
+                className="first"
+                placeholder="审批者学号"
+                value={reviewSettings ? reviewSettings[0].value : ''}
+                onChange={(e) => {
+                  setReviewSettings((pre) => {
+                    const a = [...pre]
+                    a[0].value = e.target.value
+                    return a
+                  })
+                }}
+                showCount={false}
+              />
+            </div>
+            <div className="activity-create-reviewer-setting-default-change-number">
+              <PlusSquareOutlined
+                className="manage-create-icon"
+                onClick={() => {
+                  setReviewerNum(reviewerNum + 1)
+                  setReviewSettings((pre) => {
+                    const a = [...pre]
+                    a.push({ key: -1, value: '' })
+                    return a
+                  })
+                }}
+              />
+              {reviewerNum === 1 ? (
+                <></>
+              ) : (
+                <MinusSquareOutlined
                   className="manage-create-icon"
                   onClick={() => {
-                    setReviewerNum(reviewerNum + 1)
+                    setReviewerNum(reviewerNum - 1)
                     setReviewSettings((pre) => {
                       const a = [...pre]
-                      a.push({ key: -1, value: '' })
+                      a.pop()
                       return a
                     })
                   }}
                 />
-                {reviewerNum === 1 ? (
-                  <></>
-                ) : (
-                  <MinusSquareOutlined
-                    className="manage-create-icon"
-                    onClick={() => {
-                      setReviewerNum(reviewerNum - 1)
-                      setReviewSettings((pre) => {
-                        const a = [...pre]
-                        a.pop()
-                        return a
-                      })
-                    }}
+              )}
+            </div>
+          </div>
+          <div className="other-setting">
+            {reviewSettings.map((value, index) => {
+              if (value.key === 0) return <></>
+              else
+                return (
+                  <ReviewSet
+                    setKey={setKey}
+                    setValue={setValue}
+                    key={value.key + ' ' + index}
+                    value={value}
+                    index={index}
                   />
-                )}
-              </div>
-            </div>
-            <div className="other-setting">
-              {reviewSettings.map((value, index) => {
-                if (value.key === 0) return <></>
-                else
-                  return (
-                    <ReviewSet
-                      setKey={setKey}
-                      setValue={setValue}
-                      key={value.key + ' ' + index}
-                      value={value}
-                      index={index}
-                    />
-                  )
-              })}
-            </div>
-            {/* <div className="activity-create-white">
+                )
+            })}
+          </div>
+          {/* <div className="activity-create-white">
                         <Radio
                             checked={allowWhite}
                             onClick={() => {
@@ -633,10 +622,7 @@ const Edit: React.FC<any> = () => {
                         </Radio>
                         {allowWhite ? <span id="activity-create-white-tips">每条内容请单列一行</span> : <></>}
                     </div> */}
-          </div>
-        ) : (
-          <></>
-        )}
+        </div>
       </div>
     </div>
   )
