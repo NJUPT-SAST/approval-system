@@ -86,7 +86,7 @@ function ReviewList() {
   )
   return (
     <div className="manage">
-      <TopBar />
+      <TopBar activity="活动项目列表" />
       {table}
     </div>
   )

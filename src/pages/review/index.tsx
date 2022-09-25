@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
-import { Space, Button, Table } from 'antd'
+import { Space, Button, Table, notification } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, useLocation } from 'react-router-dom'
 import './index.scss'
@@ -42,14 +42,34 @@ const Review: React.FC = () => {
     if (userState === 'judge') {
       setLoading(true)
       getJudgeCompetitionList(pageNum).then((res) => {
-        SetDataList(res.data.data)
-        setLoading(false)
+        if (res.data.data === null) {
+          window.history.back()
+          notification.info({
+            message: '没有数据',
+            description: '返回主页',
+            top: 20,
+            placement: 'top',
+          })
+        } else {
+          SetDataList(res.data.data)
+          setLoading(false)
+        }
       })
     } else {
       setLoading(true)
       getScoreCompetitionList(pageNum).then((res) => {
-        SetDataList(res.data.data)
-        setLoading(false)
+        if (res.data.data === null) {
+          window.history.back()
+          notification.info({
+            message: '没有数据',
+            description: '返回主页',
+            top: 20,
+            placement: 'top',
+          })
+        } else {
+          SetDataList(res.data.data)
+          setLoading(false)
+        }
       })
     }
   }, [pageNum])
@@ -122,7 +142,9 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
       title: '待审批数',
       render(value, record, index) {
         return (
-          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+          <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
+            {list[index].totalNum - list[index].completedNum}
+          </td>
         )
       },
     },
@@ -224,7 +246,9 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
       // className: 'redPoint',
       render(value, record, index) {
         return (
-          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>{list[index].totalNum}</td>
+          <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
+            {list[index].totalNum - list[index].completedNum}
+          </td>
         )
       },
     },

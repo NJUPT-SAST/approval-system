@@ -68,3 +68,7 @@ deploy-job: # This job runs in the deploy stage.
     - sentry-cli releases set-commits "$VERSION" --auto
     - sentry-cli releases finalize "$VERSION"
     - sentry-cli releases files "$VERSION" upload-sourcemaps /build/static/js
+<<<<<<< HEAD
+=======
+      
+>>>>>>> master
