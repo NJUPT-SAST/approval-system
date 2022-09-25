@@ -1,9 +1,3 @@
-# This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
 # This is a sample GitLab CI/CD configuration file that should run without any modifications.
 # It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
 # it uses echo commands to simulate the pipeline execution.
@@ -12,16 +6,13 @@
 # Stages run in sequential order, but jobs within stages run in parallel.
 #
 # For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-
 variables:
   REMOTE_ACTION_SH: |
     cd /www/wwwroot/approve.mxte.cc/
     tar -zxvf production.tar.gz -C ./
     rm -rf ./production.tar.gz
-
 default:
   image: node:boron
-
 cache:
   key: node-cache
   paths:
@@ -29,11 +20,10 @@ cache:
     - production.tar.gz
     - build/
 
-stages: # List of stages for jobs, and their order of execution
+stages:          # List of stages for jobs, and their order of execution
   - build
   - deploy
-
-build-job: # This job runs in the build stage, which runs first.
+build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo 安装最新版node
@@ -46,10 +36,8 @@ build-job: # This job runs in the build stage, which runs first.
     - CI=false yarn build
     - ls
     - tar -zcvf production.tar.gz build
-
-
-deploy-job: # This job runs in the deploy stage.
-  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh/
     - echo "$PRIVATE_KEY" >> ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
@@ -68,7 +56,3 @@ deploy-job: # This job runs in the deploy stage.
     - sentry-cli releases set-commits "$VERSION" --auto
     - sentry-cli releases finalize "$VERSION"
     - sentry-cli releases files "$VERSION" upload-sourcemaps /build/static/js
-<<<<<<< HEAD
-=======
-      
->>>>>>> master
