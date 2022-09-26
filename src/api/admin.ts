@@ -15,7 +15,7 @@ export const createCompetitionInfo = (data: competitionInfoType, review_settings
   const formData = new FormData()
   if (cover) formData.append('cover', cover)
   else formData.append('cover', '')
-  formData.append('competition', JSON.stringify({ review_settings: { ...review_settings }, isWhiteList: 0, ...data }))
+  formData.append('competition', JSON.stringify({ review_settings: { ...review_settings }, is_white_list: 0, ...data }))
   return apis({
     method: 'POST',
     url: '/admin/com/create',
