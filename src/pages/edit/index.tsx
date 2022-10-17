@@ -41,8 +41,6 @@ const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 
 
 const Edit: React.FC<any> = () => {
   //审批者数目
-  const { Step } = Steps
-  const [currentStep, setCurrentStep] = useState<number>(0)
   const [cover, setCover] = useState<Blob>()
   const [preSchema, setPreSchema] = useState<object | null>(null)
   const [reviewerNum, setReviewerNum] = useState<number>(2)
@@ -72,14 +70,10 @@ const Edit: React.FC<any> = () => {
     min_team_members: 1, // 默认值：1 值：1 团队人数限制
     max_team_members: 1, // 值：2 团队人数限制
     user_code: userProfile.code, // 值：1 活动负责人id
-    is_review: 1, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
+    is_review: 0, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
     introduce: '', // 比赛介绍
     cover: '', //封面url
   })
-
-  const handleStepChange = (value: number) => {
-    setCurrentStep(value)
-  }
 
   const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     setLoading(true)
@@ -307,20 +301,26 @@ const Edit: React.FC<any> = () => {
     viewCompetitionInfo(state.competitionId)
       .then((res) => {
         console.log(res.data.data.table)
+        const array: { key: number; value: string }[] = []
         if (res.data.success) {
-          const array: { key: number; value: string }[] = []
-          Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
-            array.push({ key: +key, value: res.data.data.review_settings[key] })
-          })
-          if (array.length === 0) {
+          if (res.data.data.is_review === true) {
+            Object.getOwnPropertyNames(res.data.data.review_settings).forEach((key, index) => {
+              array.push({ key: +key, value: res.data.data.review_settings[key] })
+            })
+            if (array.length === 0) {
+              array.push({ key: 0, value: '' })
+              array.push({ key: -1, value: '' })
+            }
+            if (array.length === 1) {
+              array.push({ key: -1, value: '' })
+            }
+            setReviewerNum(array.length)
+            setReviewSettings(array)
+          } else if (res.data.data.is_review === false) {
             array.push({ key: 0, value: '' })
-            array.push({ key: -1, value: '' })
+            setReviewerNum(array.length)
+            setReviewSettings(array)
           }
-          if (array.length === 1) {
-            array.push({ key: -1, value: '' })
-          }
-          setReviewerNum(array.length)
-          setReviewSettings(array)
           setPreSchema(res.data.data.table)
           setBaseUrl(res.data.data.cover)
           setCompetitionInfo((pre) => {
@@ -330,7 +330,8 @@ const Edit: React.FC<any> = () => {
             a.max_team_members = res.data.data.max_team_members
             a.min_team_members = res.data.data.min_team_members
             a.name = res.data.data.name
-            a.is_review = res.data.data.is_review
+            if (res.data.data.is_review === false) a.is_review = 0
+            else a.is_review = 1
             a.reg_begin_time = res.data.data.reg_begin_time
             a.reg_end_time = res.data.data.reg_end_time
             a.review_begin_time = res.data.data.review_begin_time
@@ -367,6 +368,12 @@ const Edit: React.FC<any> = () => {
         }, 100)
       })
   }, [])
+
+  useEffect(() => {
+    console.log(reviewerNum)
+    console.log(competitionInfo.is_review)
+    console.log(reviewSettings)
+  })
 
   return (
     <div>
@@ -551,36 +558,63 @@ const Edit: React.FC<any> = () => {
             setEndTime={setEndTime}
           />
           <div className="activity-create-reviewer-setting-default">
-            <div className="activity-create-reviewer-setting-default-code">
-              <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
-              <Input
-                className="first"
-                placeholder="审批者学号"
-                value={reviewSettings ? reviewSettings[0].value : ''}
-                onChange={(e) => {
-                  setReviewSettings((pre) => {
-                    const a = [...pre]
-                    a[0].value = e.target.value
-                    return a
-                  })
-                }}
-                showCount={false}
-              />
-            </div>
+            {competitionInfo.is_review === 1 ? (
+              <div className="activity-create-reviewer-setting-default-code">
+                <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
+                <Input
+                  className="first"
+                  placeholder="审批者学号"
+                  value={reviewSettings ? reviewSettings[0].value : ''}
+                  onChange={(e) => {
+                    setReviewSettings((pre) => {
+                      const a = [...pre]
+                      a[0].value = e.target.value
+                      return a
+                    })
+                  }}
+                  showCount={false}
+                />
+              </div>
+            ) : (
+              <>
+                <div style={{ width: '330px' }}>如需添加审批者请点击左方按钮</div>
+              </>
+            )}
             <div className="activity-create-reviewer-setting-default-change-number">
               <PlusSquareOutlined
                 className="manage-create-icon"
                 onClick={() => {
-                  setReviewerNum(reviewerNum + 1)
-                  setReviewSettings((pre) => {
-                    const a = [...pre]
-                    a.push({ key: -1, value: '' })
-                    return a
-                  })
+                  if (competitionInfo.is_review === 1) {
+                    setReviewerNum(reviewerNum + 1)
+                    setReviewSettings((pre) => {
+                      const a = [...pre]
+                      a.push({ key: -1, value: '' })
+                      return a
+                    })
+                  } else if (competitionInfo.is_review === 0) {
+                    setCompetitionInfo((pre) => {
+                      const a = { ...pre }
+                      a.is_review = 1
+                      return a
+                    })
+                  }
                 }}
               />
               {reviewerNum === 1 ? (
-                <></>
+                competitionInfo.is_review === 1 ? (
+                  <MinusSquareOutlined
+                    className="manage-create-icon"
+                    onClick={() => {
+                      setCompetitionInfo((pre) => {
+                        const a = { ...pre }
+                        a.is_review = 0
+                        return a
+                      })
+                    }}
+                  />
+                ) : (
+                  <></>
+                )
               ) : (
                 <MinusSquareOutlined
                   className="manage-create-icon"
