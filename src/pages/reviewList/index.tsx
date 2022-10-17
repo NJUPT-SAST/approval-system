@@ -66,7 +66,7 @@ function ReviewList() {
           navigate('/review')
         }
         for (let i = 0; i < result.list.length; i++)
-          result.list[i].isPass = result.list[i].isPass === 'true' ? '通过' : '未通过'
+          result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
         SetDataList(result)
         localStorage.setItem('listTotal', res.data.data.total)
         setLoading(false)
