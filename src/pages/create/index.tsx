@@ -79,7 +79,7 @@ function Create() {
     min_team_members: 1, // 默认值：1 值：1 团队人数限制
     max_team_members: 1, // 值：2 团队人数限制
     user_code: userProfile.code, // 值：1 活动负责人id
-    is_review: 0, // 0 <= 值 <= 1 是否已在审批 0 表审批 1 未审批
+    is_review: 1, // 0 <= 值 <= 1 表示是否需要审批 0代表不需要 1代表需要
     introduce: '', // 比赛介绍
     cover: '', //封面url
   })
@@ -500,6 +500,9 @@ function Create() {
   //   console.log('cober' + cover)
   //   console.log(competitionInfo.cover)
   // })
+  useEffect(() => {
+    console.log(competitionInfo.is_review)
+  })
 
   return (
     <div>
@@ -707,36 +710,63 @@ function Create() {
               setEndTime={setEndTime}
             />
             <div className="activity-create-reviewer-setting-default">
-              <div className="activity-create-reviewer-setting-default-code">
-                <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
-                <Input
-                  className="first"
-                  placeholder="审批者学号"
-                  value={reviewSettings ? reviewSettings[0].value : ''}
-                  onChange={(e) => {
-                    setReviewSettings((pre) => {
-                      const a = [...pre]
-                      a[0].value = e.target.value
-                      return a
-                    })
-                  }}
-                  showCount={false}
-                />
-              </div>
+              {competitionInfo.is_review === 1 ? (
+                <div className="activity-create-reviewer-setting-default-code">
+                  <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
+                  <Input
+                    className="first"
+                    placeholder="审批者学号"
+                    value={reviewSettings ? reviewSettings[0].value : ''}
+                    onChange={(e) => {
+                      setReviewSettings((pre) => {
+                        const a = [...pre]
+                        a[0].value = e.target.value
+                        return a
+                      })
+                    }}
+                    showCount={false}
+                  />
+                </div>
+              ) : (
+                <>
+                  <div style={{ width: '330px' }}>如需添加审批者请点击左方按钮</div>
+                </>
+              )}
               <div className="activity-create-reviewer-setting-default-change-number">
                 <PlusSquareOutlined
                   className="manage-create-icon"
                   onClick={() => {
-                    setReviewerNum(reviewerNum + 1)
-                    setReviewSettings((pre) => {
-                      const a = [...pre]
-                      a.push({ key: -1, value: '' })
-                      return a
-                    })
+                    if (competitionInfo.is_review === 1) {
+                      setReviewerNum(reviewerNum + 1)
+                      setReviewSettings((pre) => {
+                        const a = [...pre]
+                        a.push({ key: -1, value: '' })
+                        return a
+                      })
+                    } else if (competitionInfo.is_review === 0) {
+                      setCompetitionInfo((pre) => {
+                        const a = { ...pre }
+                        a.is_review = 1
+                        return a
+                      })
+                    }
                   }}
                 />
                 {reviewerNum === 1 ? (
-                  <></>
+                  competitionInfo.is_review === 1 ? (
+                    <MinusSquareOutlined
+                      className="manage-create-icon"
+                      onClick={() => {
+                        setCompetitionInfo((pre) => {
+                          const a = { ...pre }
+                          a.is_review = 0
+                          return a
+                        })
+                      }}
+                    />
+                  ) : (
+                    <></>
+                  )
                 ) : (
                   <MinusSquareOutlined
                     className="manage-create-icon"

@@ -15,7 +15,14 @@ export const createCompetitionInfo = (data: competitionInfoType, review_settings
   const formData = new FormData()
   if (cover) formData.append('cover', cover)
   else formData.append('cover', '')
-  formData.append('competition', JSON.stringify({ review_settings: { ...review_settings }, is_white_ist: 0, ...data }))
+  if (data.is_review === 1) {
+    formData.append(
+      'competition',
+      JSON.stringify({ review_settings: { ...review_settings }, is_white_list: 0, ...data }),
+    )
+  } else {
+    formData.append('competition', JSON.stringify({ review_settings: {}, is_white_list: 0, ...data }))
+  }
   return apis({
     method: 'POST',
     url: '/admin/com/create',
@@ -52,10 +59,14 @@ export const editCompetitionInfo = (
   const formData = new FormData()
   if (cover) formData.append('cover', cover)
   else formData.append('cover', '')
-  formData.append(
-    'competition',
-    JSON.stringify({ id: competitionId, review_settings: { ...review_settings }, ...data }),
-  )
+  if (data.is_review === 1) {
+    formData.append(
+      'competition',
+      JSON.stringify({ id: competitionId, review_settings: { ...review_settings }, ...data }),
+    )
+  } else {
+    formData.append('competition', JSON.stringify({ id: competitionId, review_settings: {}, ...data }))
+  }
   return apis({
     method: 'POST',
     url: '/admin/com/edit',
