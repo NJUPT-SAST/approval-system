@@ -102,13 +102,14 @@ const ReviewApprover: React.FC = (props) => {
     if (score! >= 0 && score! <= 100) {
       if (opinion !== null) {
         uploadWorkScoreInfo(Number(id), score!, opinion!).then(() => {
+          notification.info({
+            message: '✅ 提交成功',
+            description: '自动返回列表',
+            top: 20,
+            placement: 'top',
+          })
           setTimeout(() => {
-            notification.info({
-              message: '✅ 提交成功',
-              description: '自动返回列表',
-              top: 20,
-              placement: 'top',
-            })
+            window.history.back()
           }, 100)
 
           //   navigate('/review/detail/' + (current + 1))
