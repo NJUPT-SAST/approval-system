@@ -7,10 +7,11 @@ import { apis } from '.'
  * @param validateCode 输入的验证码内容
  * @param studentId 学号
  */
-export const login = (captcha: string, validateCode: string, studentId: string) => {
+export const login = (captcha: string, validateCode: string, studentId: string, password: string) => {
   const data = new FormData()
   data.append('validateCode', validateCode)
   data.append('code', studentId)
+  data.append('password', password)
   return apis({
     method: 'POST',
     url: '/login',

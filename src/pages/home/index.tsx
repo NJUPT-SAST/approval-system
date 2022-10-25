@@ -39,8 +39,8 @@ const Home = () => {
 
   //点击登录时将会执行下面的 onFinish函数
   const onFinish = (values: any) => {
-    // console.log('Received values of form: ', values)
-    login(validateCodeId, values.validate, values.username).then((res) => {
+    console.log('Received values of form: ', values)
+    login(validateCodeId, values.validate, values.username, values.password).then((res) => {
       // console.log(res)
       if (res.data.success) {
         localStorage.setItem('token', res.data.data.token)
@@ -100,7 +100,7 @@ const Home = () => {
       } else {
         setTimeout(() => {
           notification.error({
-            message: '😭️ 登录失败, 请刷新重试',
+            message: '😭️ 登录失败',
             description: res.data.errMsg,
             top: 20,
             placement: 'top',
