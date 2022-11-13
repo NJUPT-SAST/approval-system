@@ -14,6 +14,7 @@ function RegisterDetail() {
     maxParti: 1,
     isTeam: true,
   })
+  const [canSubmit, setCanSubmit] = useState(false)
   const { id } = useParams()
   const [teamInfo, setTeamInfo] = useState<{
     teamName: string
@@ -51,7 +52,7 @@ function RegisterDetail() {
       duration: 50,
     })
     getCompetitionSignInfo(Number(id)).then((res) => {
-      console.log(res)
+      // console.log(res)
       if (!res.data.data.isTeam) {
         setCompetitionInfo({
           maxParti: 1,
@@ -90,7 +91,7 @@ function RegisterDetail() {
       }
     })
     getWorkInfo(Number(id)).then((res) => {
-      console.log(res)
+      // console.log(res)
       setWorkData(res.data.data)
       if (res.data.errMsg === '您还未上传作品') {
         notification.warning({
