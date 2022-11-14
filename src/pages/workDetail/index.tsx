@@ -267,14 +267,14 @@ function WorkDetail() {
           newFileList = [info.file]
         }
 
-        // // 1. Limit the number of uploaded files
-        // // Only to show two recent uploaded files, and old ones will be replaced by the new
+        // 限制文件上传数量
+        // 只显示最新上传的文件
         newFileList = newFileList.slice(-2)
 
-        // 2. Read from response and show file link
+        // 从文件链接列表读链接
         newFileList = newFileList.map((file: any) => {
           if (file.response) {
-            // Component will show file.url as link
+            // 以文件链接作为url
             file.url = file.response.url
           }
           return file
@@ -416,67 +416,6 @@ function WorkDetail() {
     }
     formData.append('input', file)
   }
-
-  const localSchema: any = {
-    type: 'object',
-    labelWidth: 120,
-    properties: {
-      是否为STITP项目: {
-        enum: ['是', '否'],
-        type: 'string',
-        title: '是否为STITP项目',
-        widget: 'radio',
-        required: true,
-        enumNames: ['是', '否'],
-        order: 1,
-      },
-      申报书: {
-        type: 'string',
-        widget: 'customUpload',
-        title: '申报书',
-        required: true,
-        props: {
-          inputName: '申报书',
-          accept: '.pdf',
-        },
-        order: 2,
-      },
-      研究报告: {
-        type: 'string',
-        widget: 'customUpload',
-        title: '研究报告',
-        required: true,
-        props: {
-          inputName: '研究报告',
-          accept: '.pdf',
-        },
-        order: 3,
-      },
-      作品简介书: {
-        type: 'string',
-        widget: 'customUpload',
-        title: '作品简介书',
-        required: true,
-        props: {
-          inputName: '作品简介书',
-          accept: '.pdf',
-        },
-        order: 4,
-      },
-      作品名称: { type: 'string', props: {}, title: '作品名称', required: true, order: 1 },
-      作品类别: {
-        enum: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
-        type: 'string',
-        title: '作品类别',
-        widget: 'select',
-        required: true,
-        enumNames: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
-        order: 5,
-      },
-      作品简介: { type: 'string', props: {}, title: '作品简介', format: 'textarea', required: true, order: 6 },
-    },
-    displayType: 'column',
-  }
   const goBackToActivity = () => {
     navigate('/activity/' + id)
   }
@@ -535,6 +474,10 @@ function WorkDetail() {
             )
           ) : remoteSchema !== undefined ? (
             <Fragment>
+              <div className="form-notice">
+                红色星号（<span className="red">*</span>
+                ）代表该选项必填，为了保证您顺利参赛，请按照比赛举办方要求仔细填写本表单提交作品信息
+              </div>
               <FormRender
                 // debug
                 widgets={{ customUpload: Uploader }}

@@ -1,4 +1,5 @@
 import { CloudDownloadOutlined } from '@ant-design/icons'
+import { loadModule } from '@sentry/utils'
 import { Button, Empty, message, notification, Skeleton, Space } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -8,13 +9,21 @@ import TopBar from '../../components/TopBar'
 import './index.scss'
 
 function RegisterDetail() {
+  /**
+   * 时间格式 普通时间戳转换时间
+   * @param value 时间戳
+   */
+  function changeTime(value: any) {
+    return new Date(value.format('YYYY-MM-DD HH:mm:ss')).getTime()
+  }
   const [isLoading, setIsLoading] = useState(false)
   const [competitionInfo, setCompetitionInfo] = useState({
     minParti: 1,
     maxParti: 1,
     isTeam: true,
   })
-  const [canSubmit, setCanSubmit] = useState(false)
+  const [beforeSubmitTime, setBeforeSubmitTime] = useState(false)
+  const [afterSubmitTime, setAfterSubmitTime] = useState(false)
   const { id } = useParams()
   const [teamInfo, setTeamInfo] = useState<{
     teamName: string
@@ -141,6 +150,16 @@ function RegisterDetail() {
       setIsLoading(true)
       getCompetitionInfo(Number(id)).then((res) => {
         console.log(res)
+        const submitBeg = Date.parse(res.data.data.submitBegin)
+        const submitEnd = Date.parse(res.data.data.submitEnd)
+        const nowTime = Date.parse(new Date().toString())
+        if (nowTime - submitBeg < 0) {
+          setBeforeSubmitTime(true)
+        }
+        if (nowTime - submitEnd > 0) {
+          setAfterSubmitTime(true)
+        }
+        console.log(submitBeg, submitEnd)
         setCompetitionDetail(res.data.data)
         setTimeout(() => {
           setIsLoading(false)
@@ -150,7 +169,7 @@ function RegisterDetail() {
     return competitionDetail
   }
   const competitionDetail = useGetCompetitionDetail(Number(id))
-
+  console.log(beforeSubmitTime || !afterSubmitTime)
   /**
    * 判定是否为网址
    * @param str 字符串
@@ -294,15 +313,15 @@ function RegisterDetail() {
               </div>
             ))}
           </Skeleton>
-          <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeRegisterInfo}>
+          <Button type="primary" disabled={isLoading} style={{ marginTop: '1rem' }} onClick={changeRegisterInfo}>
             修改报名信息
           </Button>
           <div className="space"></div>
           <div className="list-title-h1">作品提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
-              {workData?.length === 0 || workData === null || workData === undefined ? (
-                <Empty className="empty" description="还没过提交作品哦" />
+              {workData?.length === 0 || workData === null || workData === undefined || beforeSubmitTime === true ? (
+                <Empty className="empty" description={beforeSubmitTime ? '还没提交过作品哦' : '还没到作品提交时间哦'} />
               ) : (
                 workData?.map((item, index) => {
                   if (item.isFile) {
@@ -330,9 +349,22 @@ function RegisterDetail() {
               )}
             </div>
           </Skeleton>
-          <Button type="primary" style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
-            修改作品信息
-          </Button>
+          {!beforeSubmitTime ? (
+            afterSubmitTime ? (
+              <>
+                <Button type="primary" disabled style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
+                  修改作品信息
+                </Button>
+                <div style={{ color: 'gray', fontSize: '12px', marginTop: '.2rem' }}>&nbsp; &nbsp;已经超过提交时间</div>
+              </>
+            ) : (
+              <Button type="primary" disabled={isLoading} style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
+                修改作品信息
+              </Button>
+            )
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </Fragment>
