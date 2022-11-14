@@ -1,9 +1,11 @@
 import './index.scss'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import TopBar from '../../components/TopBar'
-import { getUserProfile } from '../../api/user'
-import { Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { useRecoilState } from 'recoil'
+import userProfileStore from '../../store/userProfile'
+// import { getUserProfile } from '../../api/user'
+// import { Spin } from 'antd'
+// import { LoadingOutlined } from '@ant-design/icons'
 // import { useNavigate, useSearchParams } from 'react-router-dom'
 // import { message, Upload, Button, Form, Input, Select } from 'antd'
 // import type { UploadChangeParam } from 'antd/lib/upload/'
@@ -15,12 +17,12 @@ interface InfoItem {
   content: string
 }
 
-interface userApiData {
-  name: string
-  code: string
-  major: string
-  faculty: string
-}
+// interface userApiData {
+//   name: string
+//   code: string
+//   major: string
+//   faculty: string
+// }
 
 // const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 //   const reader = new FileReader()
@@ -142,38 +144,42 @@ function Main() {
   //     })
   //   }
   // }
-  const [isLoading, setIsLoading] = useState(true)
-  const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
+  const userProfile = useRecoilState(userProfileStore)
+  // const [isLoading, setIsLoading] = useState(false)
+  // const loadingIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />
 
-  const [personalInfo, setPersonalInfo] = useState<Record<string, InfoItem>>({
+
+  // const [personalInfo, setPersonalInfo] = useState<Record<string, InfoItem>>({
+  const personalInfo: Record<string, InfoItem> = {
     name: {
       title: '姓名',
-      content: '',
+      content: `${userProfile[0].name}`,
     },
     grade: {
       title: '年级',
-      content: '',
+      content: `20${userProfile[0].code.charAt(1)}${userProfile[0].code.charAt(2)}级`
     },
     faculty: {
       title: '学院',
-      content: '',
+      content: `${userProfile[0].faculty}`,
     },
     major: {
       title: '专业',
-      content: '',
+      content: `${userProfile[0].major}`,
     },
-  })
+  }
 
-  const [accountInfo, setAccountInfo] = useState<Record<string, InfoItem>>({
+  // const [accountInfo, setAccountInfo] = useState<Record<string, InfoItem>>({
+  const accountInfo: Record<string, InfoItem> = {
     account: {
       title: '账号',
-      content: '',
+      content: `${userProfile[0].code}`,
     },
     password: {
       title: '密码',
       content: '*********',
     },
-  })
+  }
 
   const InfoItem = (props: { title: string; content: string }) => (
     <div className="info-item">
@@ -182,114 +188,114 @@ function Main() {
     </div>
   )
 
-  useEffect(() => {
-    const code = localStorage.getItem('code')
-    let userInfo: userApiData | string | null = code ? sessionStorage.getItem(code) : null
+  // useEffect(() => {
+  //   const code = localStorage.getItem('code')
+  //   let userInfo: userApiData | string | null = code ? sessionStorage.getItem(code) : null
 
-    async function getUserInfo() {
-      if (userInfo) return
+  //   async function getUserInfo() {
+  //     if (userInfo) return
 
-      try {
-        const res = (await getUserProfile()).data
+  //     try {
+  //       const res = (await getUserProfile()).data
 
-        if (res.success) {
-          userInfo = JSON.stringify(res.data)
-          sessionStorage.setItem(res.data.code, userInfo)
-        }
-      } catch {
-        console.log('请求网络失败')
-      }
-    }
+  //       if (res.success) {
+  //         userInfo = JSON.stringify(res.data)
+  //         sessionStorage.setItem(res.data.code, userInfo)
+  //       }
+  //     } catch {
+  //       console.log('请求网络失败')
+  //     }
+  //   }
 
-    getUserInfo().then(() => {
-      userInfo = JSON.parse(userInfo as string) as userApiData
+  //   getUserInfo().then(() => {
+  //     userInfo = JSON.parse(userInfo as string) as userApiData
 
-      const {
-        code = 'B21021021',
-        name = '王小明',
-        major = '软件工程',
-        faculty = '计算机学院、软件学院、网络空间安全学院',
-      } = userInfo
+  //     const {
+  //       code = 'B21021021',
+  //       name = '王小明',
+  //       major = '软件工程',
+  //       faculty = '计算机学院、软件学院、网络空间安全学院',
+  //     } = userInfo
 
-      // 初始化数据
-      setAccountInfo({
-        ...accountInfo,
-        account: Object.assign({}, accountInfo.account, {
-          content: code,
-        }),
-      })
+  //     // 初始化数据
+  //     setAccountInfo({
+  //       ...accountInfo,
+  //       account: Object.assign({}, accountInfo.account, {
+  //         content: code,
+  //       }),
+  //     })
 
-      setPersonalInfo({
-        ...personalInfo,
-        name: Object.assign({}, personalInfo.name, {
-          content: name,
-        }),
-        major: Object.assign({}, personalInfo.major, {
-          content: major,
-        }),
-        grade: Object.assign({}, personalInfo.grade, {
-          content: codeToGrade(code),
-        }),
-        faculty: Object.assign({}, personalInfo.faculty, {
-          content: faculty,
-        }),
-      })
+  //     setPersonalInfo({
+  //       ...personalInfo,
+  //       name: Object.assign({}, personalInfo.name, {
+  //         content: name,
+  //       }),
+  //       major: Object.assign({}, personalInfo.major, {
+  //         content: major,
+  //       }),
+  //       grade: Object.assign({}, personalInfo.grade, {
+  //         content: codeToGrade(code),
+  //       }),
+  //       faculty: Object.assign({}, personalInfo.faculty, {
+  //         content: faculty,
+  //       }),
+  //     })
 
-      setIsLoading(false)
-    })
+  //     setIsLoading(false)
+  //   })
 
-    // B21150124
-    function codeToGrade(code: string): string {
-      let reulst = '未知'
-      const newYear = new Date().getFullYear() - 2000
+  //   // B21150124
+  //   function codeToGrade(code: string): string {
+  //     let reulst = '未知'
+  //     const newYear = new Date().getFullYear() - 2000
 
-      if (code.length === 9) {
-        let year: number | string = code.slice(1, 3)
-        year = year.length === 2 ? parseInt(year) : 18
+  //     if (code.length === 9) {
+  //       let year: number | string = code.slice(1, 3)
+  //       year = year.length === 2 ? parseInt(year) : 18
 
-        switch (newYear - year) {
-          case 0:
-            reulst = '大一'
-            break
-          case 1:
-            reulst = '大二'
-            break
-          case 2:
-            reulst = '大三'
-            break
-          case 3:
-            reulst = '大四'
-            break
+  //       switch (newYear - year) {
+  //         case 0:
+  //           reulst = '大一'
+  //           break
+  //         case 1:
+  //           reulst = '大二'
+  //           break
+  //         case 2:
+  //           reulst = '大三'
+  //           break
+  //         case 3:
+  //           reulst = '大四'
+  //           break
 
-          default:
-            break
-        }
-      }
+  //         default:
+  //           break
+  //       }
+  //     }
 
-      return reulst
-    }
-  }, [])
+  //     return reulst
+  //   }
+  // }, [])
 
   return (
     <>
       <TopBar />
       <div className="account">
-        {isLoading ? (
+        {/* {isLoading ? (
           <div className="loading">
             <Spin tip="^_^信息加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
           </div>
-        ) : (
+        ) : ( */}
           <div className="account-wrap">
             {/* 头像部分内容 */}
             {/* <div className="upload-avatar">
               <Upload {...uploadProps} listType="picture-card" className="avatar-uploader" onChange={handleChange}>
                 {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
               </Upload>
-  
+
               <Upload {...uploadProps} listType="picture" onChange={handleChange}>
                 <Button type="primary">点击上传</Button>
               </Upload>
-  
+
               <span className="tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
             </div> */}
             <div className="personal-info">
@@ -315,7 +321,7 @@ function Main() {
               </Button> */}
             </div>
           </div>
-        )}
+        {/* )} */}
       </div>
     </>
   )

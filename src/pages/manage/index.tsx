@@ -132,7 +132,7 @@ const Manage: React.FC = () => {
     setIsLoading(true)
     getCompetitionList(pageState.pageNumber, pageState.pageSize)
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         setPageState((pre) => {
           const a = { ...pre }
           a.total = res.data.data.total
@@ -143,7 +143,7 @@ const Manage: React.FC = () => {
       })
       .catch((error) => {
         setIsLoading(false)
-        console.log(error)
+        // console.log(error)
       })
   }, [pageState.pageNumber, pageState.pageSize])
 
@@ -217,7 +217,7 @@ const Manage: React.FC = () => {
           {/* <div className='table-container'>
           <Table pagination={false} columns={columns} dataSource={pageState.records} />
           </div>
-          若启用改模块，需要将 234 行代码到 272 行代码注释掉 
+          若启用改模块，需要将 234 行代码到 272 行代码注释掉
           */}
           <div className="manage-body-page">
             <Pagination

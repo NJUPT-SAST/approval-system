@@ -220,7 +220,7 @@ function ActivityDetail() {
           {isLoading ? (
             <Skeleton.Avatar shape="square" active className="cover-loading" />
           ) : (
-            <img src={competitionDetail.cover} className="cover" alt="cover" />
+              <img src={`http://${competitionDetail.cover} `} className="cover" alt="cover" />
           )}
           <div className="activity-content-body">
             <div className="navigator">
