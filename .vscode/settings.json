@@ -40,5 +40,10 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "cSpell.words": ["antd"]
+  "cSpell.words": [
+    "antd"
+  ],
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "master"
+  ]
 }

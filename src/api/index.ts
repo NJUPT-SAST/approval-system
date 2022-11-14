@@ -2,10 +2,9 @@ import { message, notification } from 'antd'
 import axios from 'axios'
 import { Location, useNavigate } from 'react-router-dom'
 
-const baseUrl = process.env.NODE_ENV === 'development' ? '' : '/api'
+const baseUrl = process.env.NODE_ENV === 'development' ? '/api' : '/api'
 
 export const apis = axios.create({
-  timeout: 10000,
   baseURL: baseUrl,
 })
 
