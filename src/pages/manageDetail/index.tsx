@@ -1,4 +1,4 @@
-import { Button, Result, Spin, notification, Pagination, Upload } from 'antd'
+import { Button, Result, Spin, notification, Pagination, Upload, message } from 'antd'
 import { useParams } from 'react-router-dom'
 import type { PaginationProps, UploadProps } from 'antd'
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface'
@@ -28,7 +28,7 @@ type DataType = {
 // 用于替代 location 的泛型
 
 function useMyParams<T>() {
-  return useParams() as unknown as { id: string }
+  return useParams() as unknown as T
 }
 
 function ManageDetail() {
@@ -49,141 +49,156 @@ function ManageDetail() {
   const navigate = useNavigate()
   const [data, setData] = useState<DataType[]>([])
 
+  const loading = (content: string) => {
+    notification.info({
+      message: `${content},请稍等`,
+      key: 'loading',
+      duration: 200,
+      placement: 'top',
+    })
+  }
+
   //导出所有参赛队伍 可用于分配评委
   const exportCompetitionTeam = () => {
+    loading('参赛队伍导出中')
     exportWorkFileDataToAssignScorer(+id)
       .then((res) => {
         console.log(res)
-        // if (res.data.success) {
-        const blob = new Blob([res.data])
-        const downloadElement = document.createElement('a')
-        const href = window.URL.createObjectURL(blob) //创建下载的链接
-        downloadElement.href = href
-        downloadElement.download = competitionName + ' 的参赛数据.xlsx' //下载后文件名
-        document.body.appendChild(downloadElement)
-        downloadElement.click() //点击下载
-        document.body.removeChild(downloadElement) //下载完成移除元素
-        window.URL.revokeObjectURL(href) //释放掉blob对象
-        setTimeout(() => {
-          notification.success({
-            message: '😸️ 导出成功',
-            description: '活动： ' + competitionName + ' 的参赛数据已导出',
-            top: 20,
-            placement: 'top',
-          })
-        }, 100)
-        // } else {
-        //   setTimeout(() => {
-        //     notification.error({
-        //       message: '😭️ 导出失败',
-        //       description: competitionName + ' 的参赛数据未能成功导出',
-        //       top: 20,
-        //       placement: 'top',
-        //     })
-        //   }, 100)
-        // }
+        if (res.status === 200) {
+          const blob = new Blob([res.data])
+          const downloadElement = document.createElement('a')
+          const href = window.URL.createObjectURL(blob) //创建下载的链接
+          downloadElement.href = href
+          downloadElement.download = competitionName + ' 的参赛数据.xlsx' //下载后文件名
+          document.body.appendChild(downloadElement)
+          downloadElement.click() //点击下载
+          document.body.removeChild(downloadElement) //下载完成移除元素
+          window.URL.revokeObjectURL(href) //释放掉blob对象
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 导出成功',
+              description: '活动： ' + competitionName + ' 的参赛数据已导出',
+              top: 20,
+              key: 'loading',
+              placement: 'top',
+            })
+          }, 100)
+        } else {
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 导出失败',
+              description: '参赛数据未能成功导出',
+              top: 20,
+              key: 'loading',
+              placement: 'top',
+            })
+          }, 100)
+        }
       })
       .catch((error) => {
-        setTimeout(() => {
-          notification.error({
-            message: '😭️ 导出失败',
-            description: '活动： ' + competitionName + ' 的参赛数据未能成功导出',
-            top: 20,
-            placement: 'top',
-          })
-        }, 100)
+        notification.error({
+          message: '😭️ 请求失败',
+          top: 20,
+          key: 'loading',
+          placement: 'top',
+        })
+        return;
       })
   }
 
   //导出所有附件的信息
   const exportTeamFileInfo = () => {
+    loading('附件导出中')
     exportTeamInfo(+id)
       .then((res) => {
-        // if (res.data.success) {
-        console.log(res)
-        const blob = new Blob([res.data])
-        const downloadElement = document.createElement('a')
-        const href = window.URL.createObjectURL(blob) //创建下载的链接
-        downloadElement.href = href
-        downloadElement.download = competitionName + ' 的附件.xlsx' //下载后文件名
-        document.body.appendChild(downloadElement)
-        downloadElement.click() //点击下载
-        document.body.removeChild(downloadElement) //下载完成移除元素
-        window.URL.revokeObjectURL(href) //释放掉blob对象
-        setTimeout(() => {
-          notification.success({
-            message: '😸️ 导出成功',
-            description: '活动： ' + competitionName + ' 的所有附件已成功导出',
-            top: 20,
-            placement: 'top',
-          })
-        }, 100)
-        //   } else {
-        //     console.log(res)
-        //     setTimeout(() => {
-        //       notification.error({
-        //         message: '😭️ 导出失败',
-        //         description: '未能成功导出 ' + competitionName + ' 的附件',
-        //         top: 20,
-        //         placement: 'top',
-        //       })
-        //     }, 100)
-        //   }
+        if (res.status === 200) {
+          console.log(res.status)
+          const blob = new Blob([res.data])
+          const downloadElement = document.createElement('a')
+          const href = window.URL.createObjectURL(blob) //创建下载的链接
+          downloadElement.href = href
+          downloadElement.download = competitionName + ' 的附件.xlsx' //下载后文件名
+          document.body.appendChild(downloadElement)
+          downloadElement.click() //点击下载
+          document.body.removeChild(downloadElement) //下载完成移除元素
+          window.URL.revokeObjectURL(href) //释放掉blob对象
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 导出成功',
+              description: '活动： ' + competitionName + ' 的所有附件已成功导出',
+              top: 20,
+              key: 'loading',
+              placement: 'top',
+            })
+          }, 100)
+        } else {
+          console.log(res)
+          setTimeout(() => {
+            notification.error({
+              message: '😭️ 导出失败',
+              description: '未能成功导出的附件',
+              top: 20,
+              key: 'loading',
+              placement: 'top',
+            })
+          }, 100)
+        }
       })
       .catch((error) => {
-        setTimeout(() => {
-          notification.error({
-            message: '😭️ 导出失败',
-            description: '未能成功导出 ' + competitionName + ' 的附件',
-            top: 20,
-            placement: 'top',
-          })
-        }, 100)
+        notification.error({
+          message: '😭️ 请求失败',
+          top: 20,
+          key: 'loading',
+          placement: 'top',
+        })
+        return;
       })
   }
 
   // 下载活动评审结果
   const exportCompetitionResult = () => {
+    loading('评审结果下载中')
     exportJudgeResult(+id)
       .then((res) => {
-        // if (res.data.success) {
-        const blob = new Blob([res.data])
-        const downloadElement = document.createElement('a')
-        const href = window.URL.createObjectURL(blob) //创建下载的链接
-        downloadElement.href = href
-        downloadElement.download = competitionName + ' 的评审结果.xlsx' //下载后文件名
-        document.body.appendChild(downloadElement)
-        downloadElement.click() //点击下载
-        document.body.removeChild(downloadElement) //下载完成移除元素
-        window.URL.revokeObjectURL(href) //释放掉blob对象
-        setTimeout(() => {
-          notification.success({
-            message: '😸️ 导出成功',
-            description: '活动： ' + competitionName + ' 的评审结果已成功导出',
-            top: 20,
-            placement: 'top',
-          })
-        }, 100)
-        // } else {
-        //   setTimeout(() => {
-        //     notification.error({
-        //       message: '😭️ 导出失败',
-        //       description: '未能成功导出活动:' + competitionName + ' 的评审结果',
-        //       top: 20,
-        //       placement: 'top',
-        //     })
-        //   }, 100)
-        // }
+        if (res.status === 200) {
+          const blob = new Blob([res.data])
+          const downloadElement = document.createElement('a')
+          const href = window.URL.createObjectURL(blob) //创建下载的链接
+          downloadElement.href = href
+          downloadElement.download = competitionName + ' 的评审结果.xlsx' //下载后文件名
+          document.body.appendChild(downloadElement)
+          downloadElement.click() //点击下载
+          document.body.removeChild(downloadElement) //下载完成移除元素
+          window.URL.revokeObjectURL(href) //释放掉blob对象
+          setTimeout(() => {
+            notification.success({
+              message: '😸️ 导出成功',
+              description: '活动： ' + competitionName + ' 的评审结果已成功导出',
+              top: 20,
+              key: 'loading',
+              placement: 'top',
+            })
+          }, 100)
+        } else {
+          setTimeout(() => {
+            notification.error({
+              key: 'loading',
+              message: '😭️ 导出失败',
+              description: '未能成功导出活动:' + competitionName + ' 的评审结果',
+              top: 20,
+              placement: 'top',
+            })
+          }, 100)
+        }
       })
       .catch((error) => {
-        setTimeout(() => {
-          notification.error({
-            message: '😭️ 导出失败',
-            description: '未能成功导出活动:' + competitionName + ' 的评审结果',
-            top: 20,
-            placement: 'top',
-          })
-        }, 100)
+        notification.error({
+          message: '😭️ 请求失败',
+          top: 20,
+          key: 'loading',
+          placement: 'top',
+        })
+        return
       })
   }
 
@@ -205,11 +220,18 @@ function ManageDetail() {
       .catch((error) => {
         setIsLoading(false)
         // console.log(error)
+        notification.error({
+          message: '😭️ 请求失败',
+          top: 20,
+          key: 'loading',
+          placement: 'top',
+        })
       })
   }
 
   // 导入评审
   const upLoadJudges = () => {
+    loading('导入中')
     if (fileList.length === 1) {
       const formData = new FormData()
       formData.append('file', fileList[0].originFileObj)
@@ -217,6 +239,7 @@ function ManageDetail() {
         .then((res) => {
           if (res.data.success) {
             setFileList([])
+            console.log(res.data)
             getList(+id, 1, pageState.pageSize)
             setPageState((pre) => {
               const a = { ...pre }
@@ -227,6 +250,7 @@ function ManageDetail() {
               notification.success({
                 message: '😸️ 导入成功',
                 top: 20,
+                key: 'loading',
                 placement: 'top',
               })
             }, 100)
@@ -242,19 +266,20 @@ function ManageDetail() {
           }
         })
         .catch((error) => {
-          setTimeout(() => {
-            notification.error({
-              message: '😭️ 导入失败',
-              top: 20,
-              placement: 'top',
-            })
-          }, 100)
+          notification.error({
+            message: '😭️ 导入失败',
+            top: 20,
+            key: 'loading',
+            placement: 'top',
+          })
+          return
         })
     } else {
       setTimeout(() => {
         notification.error({
           message: '请先上传文件！',
           top: 20,
+          key: 'loading',
           placement: 'top',
         })
       }, 100)

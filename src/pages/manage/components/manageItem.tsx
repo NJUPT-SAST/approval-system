@@ -57,37 +57,55 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
           className="manage-body-item-content"
           style={{ width: '5.9%', color: 'rgba(42, 130, 228, 1)', cursor: 'pointer' }}
           onClick={() => {
+            notification.info({
+              message: '😸️ 导出中',
+              top: 20,
+              key: 'loading',
+              placement: 'top',
+            })
             exportWorkFileDataToAssignScorer(value.id).then(
               (res) => {
-                const blob = new Blob([res.data])
-                const downloadElement = document.createElement('a')
-                const href = window.URL.createObjectURL(blob) //创建下载的链接
-                downloadElement.href = href
-                downloadElement.download = value.name + '参赛数据.xlsx' //下载后文件名
-                document.body.appendChild(downloadElement)
-                downloadElement.click() //点击下载
-                document.body.removeChild(downloadElement) //下载完成移除元素
-                window.URL.revokeObjectURL(href) //释放掉blob对象
-                setTimeout(() => {
-                  notification.success({
-                    message: '😸️ 导出成功',
-                    description: value.name + '的参赛数据已导出',
-                    top: 20,
-                    placement: 'top',
-                  })
-                }, 100)
+                if (res.status === 200) {
+                  const blob = new Blob([res.data])
+                  const downloadElement = document.createElement('a')
+                  const href = window.URL.createObjectURL(blob) //创建下载的链接
+                  downloadElement.href = href
+                  downloadElement.download = value.name + '参赛数据.xlsx' //下载后文件名
+                  document.body.appendChild(downloadElement)
+                  downloadElement.click() //点击下载
+                  document.body.removeChild(downloadElement) //下载完成移除元素
+                  window.URL.revokeObjectURL(href) //释放掉blob对象
+                  setTimeout(() => {
+                    notification.success({
+                      message: '😸️ 导出成功',
+                      description: value.name + '的参赛数据已导出',
+                      top: 20,
+                      key: 'loading',
+                      placement: 'top',
+                    })
+                  }, 100)
+                } else {
+                  setTimeout(() => {
+                    notification.error({
+                      message: '😭️ 导出失败',
+                      description: value.name + '的参赛数据未能成功导出',
+                      top: 20,
+                      key: 'loading',
+                      placement: 'top',
+                    })
+                  }, 100)
+                }
+
               },
-              (error) => {
-                setTimeout(() => {
-                  notification.error({
-                    message: '😭️ 导出失败',
-                    description: value.name + '的参赛数据未能成功导出',
-                    top: 20,
-                    placement: 'top',
-                  })
-                }, 100)
-              },
-            )
+            ).catch((error) => {
+              notification.error({
+                message: '😭️ 请求失败',
+                top: 20,
+                key: 'loading',
+                placement: 'top',
+              })
+              return
+            },)
           }}
         >
           导出
