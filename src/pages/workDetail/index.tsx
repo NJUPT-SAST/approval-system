@@ -309,7 +309,7 @@ function WorkDetail() {
           }
         })
       },
-      headers: { Token: localStorage.getItem('token') },
+      headers: { Token: localStorage.getItem('approval-system-token') },
       fileList: localFileList,
       showUploadList: { showDownloadIcon: true },
       onPreview(file: any) {

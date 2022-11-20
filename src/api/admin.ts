@@ -181,7 +181,7 @@ export const releaseNotice = (competitionId: number, title: string, content: str
 export const exportTeamInfo = (competitionId: number) => {
   return apis({
     method: 'get',
-    url: '/admin/data/exportFile?comId=' + competitionId,
+    url: '/admin/data/exportComInfo?comId=' + competitionId,
     responseType: 'blob',
   })
 }

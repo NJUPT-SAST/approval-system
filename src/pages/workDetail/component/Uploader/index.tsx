@@ -23,7 +23,7 @@ function Uploader(props: any) {
         }
       })
     },
-    headers: { Token: localStorage.getItem('token') },
+    headers: { Token: localStorage.getItem('approval-system-token') },
   }
   return (
     <Upload {...localProps}>

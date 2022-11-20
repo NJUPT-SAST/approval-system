@@ -64,7 +64,7 @@ function ManageDetail() {
     exportWorkFileDataToAssignScorer(+id)
       .then((res) => {
         console.log(res)
-        if (res.status === 200) {
+        if (res.data.type !== "application/json") {
           const blob = new Blob([res.data])
           const downloadElement = document.createElement('a')
           const href = window.URL.createObjectURL(blob) //创建下载的链接
@@ -77,7 +77,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 导出成功',
-              description: '活动： ' + competitionName + ' 的参赛数据已导出',
+              description: '参赛数据已成功导出！',
               top: 20,
               key: 'loading',
               placement: 'top',
@@ -106,12 +106,12 @@ function ManageDetail() {
       })
   }
 
-  //导出所有附件的信息
+  //导出所有参赛的信息
   const exportTeamFileInfo = () => {
-    loading('附件导出中')
+    loading('参赛信息导出中')
     exportTeamInfo(+id)
       .then((res) => {
-        if (res.status === 200) {
+        if (res.data.type !== "application/json") {
           console.log(res.status)
           const blob = new Blob([res.data])
           const downloadElement = document.createElement('a')
@@ -125,18 +125,18 @@ function ManageDetail() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 导出成功',
-              description: '活动： ' + competitionName + ' 的所有附件已成功导出',
+              description: '参赛信息已成功导出！',
               top: 20,
               key: 'loading',
               placement: 'top',
             })
           }, 100)
         } else {
-          console.log(res)
+          // console.log(res)
           setTimeout(() => {
             notification.error({
               message: '😭️ 导出失败',
-              description: '未能成功导出的附件',
+              description: '未能成功导出参赛信息',
               top: 20,
               key: 'loading',
               placement: 'top',
@@ -160,7 +160,7 @@ function ManageDetail() {
     loading('评审结果下载中')
     exportJudgeResult(+id)
       .then((res) => {
-        if (res.status === 200) {
+        if (res.data.type !== "application/json") {
           const blob = new Blob([res.data])
           const downloadElement = document.createElement('a')
           const href = window.URL.createObjectURL(blob) //创建下载的链接
@@ -173,7 +173,7 @@ function ManageDetail() {
           setTimeout(() => {
             notification.success({
               message: '😸️ 导出成功',
-              description: '活动： ' + competitionName + ' 的评审结果已成功导出',
+              description: '评审结果已成功导出！',
               top: 20,
               key: 'loading',
               placement: 'top',
@@ -184,7 +184,7 @@ function ManageDetail() {
             notification.error({
               key: 'loading',
               message: '😭️ 导出失败',
-              description: '未能成功导出活动:' + competitionName + ' 的评审结果',
+              description: '未能成功导出评审结果',
               top: 20,
               placement: 'top',
             })
@@ -371,7 +371,7 @@ function ManageDetail() {
             exportTeamFileInfo()
           }}
         >
-          导出附件信息
+          导出参赛信息
         </Button>
       </div>
 
