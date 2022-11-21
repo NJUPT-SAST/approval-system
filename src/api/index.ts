@@ -9,8 +9,8 @@ export const apis = axios.create({
 })
 
 apis.interceptors.request.use((config: any) => {
-  if (localStorage.getItem('token') !== null) {
-    config.headers['Token'] = localStorage.getItem('token')
+  if (localStorage.getItem('approval-system-token') !== null) {
+    config.headers['Token'] = localStorage.getItem('approval-system-token')
   }
   return config
 })
@@ -23,13 +23,27 @@ apis.interceptors.response.use((res) => {
           // description: '请重新登录',
           // top: 20,
           // placement: 'top',
-          onClose() {
-            localStorage.clear()
-            localStorage.setItem('userState', 'offline')
-            window.location.href = '/'
-          },
           key: 'unlogin',
         })
+        ;(function () {
+          localStorage.clear()
+          localStorage.setItem('userState', 'offline')
+          window.location.href = '/'
+        })()
+        break
+      case 1005:
+        message.loading({
+          content: '⚠️️ 登录已过期,正在重定向到登录页',
+          // description: '请重新登录',
+          // top: 20,
+          // placement: 'top',
+          key: 'unlogin',
+        })
+        ;(function () {
+          localStorage.clear()
+          localStorage.setItem('userState', 'offline')
+          window.location.href = '/'
+        })()
         break
       // case 1000:
       //   console.log(res.data.errMsg)

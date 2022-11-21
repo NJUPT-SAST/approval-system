@@ -43,9 +43,11 @@ const DataTable: React.FC<any> = (props) => {
               key: 'loading',
               placement: 'top',
             })
+            // localStorage.setItem('approval-system-token', '')
             exportWorkFile(value.comId, value.userCode)
               .then((res) => {
-                if (res.status === 200) {
+                // console.log(res)
+                if (res.data.type !== "application/json") {
                   const blob = new Blob([res.data], { type: 'application/zip' })
                   const downloadElement = document.createElement('a')
                   const href = window.URL.createObjectURL(blob) //创建下载的链接
@@ -58,7 +60,7 @@ const DataTable: React.FC<any> = (props) => {
                   setTimeout(() => {
                     notification.success({
                       message: '😸️ 导出成功',
-                      description: '作品已成功导出',
+                      description: '作品已成功导出！',
                       top: 20,
                       key: 'loading',
                       placement: 'top',

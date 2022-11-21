@@ -43,7 +43,7 @@ const Home = () => {
     login(validateCodeId, values.validate, values.username, values.password).then((res) => {
       // console.log(res)
       if (res.data.success) {
-        localStorage.setItem('token', res.data.data.token)
+        localStorage.setItem('approval-system-token', res.data.data.token)
         getUserProfile().then((res) => {
           if (res.data.success) {
             setUserProfile((pre) => {

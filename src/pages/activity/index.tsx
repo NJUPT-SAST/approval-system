@@ -23,7 +23,7 @@ function Activity() {
     pageNum: 0,
     pageSize: 0,
     records: [],
-    total: 1,
+    total: 0,
   })
   const [searchKeyword, setSearchKeyword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -42,18 +42,31 @@ function Activity() {
     if (ifSearch.current) {
       searchCompetition(searchKeyword, pageOpt.page, pageOpt.pageSize).then((res) => {
         // console.log(res)
-        setActivities(res.data.data)
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 100)
+        if (res.data.success) {
+          setActivities(res.data.data)
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 100)
+        } else {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 100)
+        }
+
       })
     } else {
       getAllCompetitionList(pageOpt.page, pageOpt.pageSize).then((res) => {
         // console.log(res)
-        setActivities(res.data.data)
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 100)
+        if (res.data.success) {
+          setActivities(res.data.data)
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 100)
+        } else {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 100)
+        }
       })
     }
   }, [pageOpt])
