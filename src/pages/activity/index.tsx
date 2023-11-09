@@ -92,7 +92,7 @@ function Activity() {
       <Card
         hoverable
         className="activity-card"
-        cover={<img alt="activity cover" src={`http://${props.coverUrl}`} height="180px" style={{ objectFit: 'cover' }} />}
+        cover={<img alt="activity cover" src={`${props.coverUrl}`} height="180px" style={{ objectFit: 'cover' }} />}
         onClick={handleNavigateActivityDetail}
       >
         <Meta title={props.title} description={props.description} className="activity-content" />

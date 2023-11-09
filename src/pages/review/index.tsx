@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
-import { Space, Button, Table, notification } from 'antd'
+import { Space, Button, Table, notification, Empty } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, useLocation } from 'react-router-dom'
 import './index.scss'
@@ -43,13 +43,15 @@ const Review: React.FC = () => {
       setLoading(true)
       getJudgeCompetitionList(pageNum).then((res) => {
         if (res.data.data === null) {
-          window.history.back()
-          notification.info({
-            message: '没有数据',
-            description: '返回主页',
-            top: 20,
-            placement: 'top',
-          })
+          // window.history.back()
+          // notification.info({
+          //   message: '没有数据',
+          //   description: '返回主页',
+          //   top: 20,
+          //   placement: 'top',
+          // })
+          SetDataList(res.data.data)
+          setLoading(false)
         } else {
           SetDataList(res.data.data)
           setLoading(false)
@@ -59,13 +61,15 @@ const Review: React.FC = () => {
       setLoading(true)
       getScoreCompetitionList(pageNum).then((res) => {
         if (res.data.data === null) {
-          window.history.back()
-          notification.info({
-            message: '没有数据',
-            description: '返回主页',
-            top: 20,
-            placement: 'top',
-          })
+          // window.history.back()
+          // notification.info({
+          //   message: '没有数据',
+          //   description: '返回主页',
+          //   top: 20,
+          //   placement: 'top',
+          // })
+          SetDataList(res.data.data)
+          setLoading(false)
         } else {
           SetDataList(res.data.data)
           setLoading(false)
@@ -75,38 +79,32 @@ const Review: React.FC = () => {
   }, [pageNum])
   // const detail = userState === 'approver' ? <ReviewApprover /> : <ReviewJudge />
   // 渲染子组件
-  const approverTable = (
-    <ApproverReview
-      loading={loading}
-      getPageNum={getpageNum}
-      list={dataList.list}
-      pageNum={dataList.pageNum}
-      total={dataList.total}
-      pageSize={dataList.pageSize}
-    />
-  )
-  const judgeTable = (
-    <JudgeReview
-      loading={loading}
-      getPageNum={getpageNum}
-      list={dataList.list}
-      pageNum={dataList.pageNum}
-      total={dataList.total}
-      pageSize={dataList.pageSize}
-    />
-  )
   if (userState === 'approver') {
     return (
       <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
         <TopBar />
-        {approverTable}
+        {dataList === null ? <Empty style={{ height: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }} description='暂时不需要评审哦' /> : <ApproverReview
+          loading={loading}
+          getPageNum={getpageNum}
+          list={dataList.list}
+          pageNum={dataList.pageNum}
+          total={dataList.total}
+          pageSize={dataList.pageSize}
+        />}
       </div>
     )
   } else {
     return (
       <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
         <TopBar />
-        {judgeTable}
+        {dataList === null ? <Empty style={{ height: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }} description='暂时不需要评审哦' /> : <JudgeReview
+          loading={loading}
+          getPageNum={getpageNum}
+          list={dataList.list}
+          pageNum={dataList.pageNum}
+          total={dataList.total}
+          pageSize={dataList.pageSize}
+        />}
       </div>
     )
   }
@@ -142,8 +140,8 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
       title: '待审批数',
       render(value, record, index) {
         return (
-          <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
-            {list[index].totalNum - list[index].completedNum}
+          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
+            {list[index].totalNum}
           </td>
         )
       },

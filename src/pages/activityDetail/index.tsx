@@ -175,7 +175,7 @@ function ActivityDetail() {
       }
     } else if (userState === 'judge') {
       if (entranceAvailable) {
-        navigate('/review/list?comId=' + id + '&page=1')
+        navigate('/review/list/' + id + '/1')
       } else {
         notification.warning({
           message: '当前比赛没有需要审核的作品',
@@ -220,7 +220,7 @@ function ActivityDetail() {
           {isLoading ? (
             <Skeleton.Avatar shape="square" active className="cover-loading" />
           ) : (
-              <img src={`http://${competitionDetail.cover} `} className="cover" alt="cover" />
+            <img src={`${competitionDetail.cover} `} className="cover" alt="cover" />
           )}
           <div className="activity-content-body">
             <div className="navigator">

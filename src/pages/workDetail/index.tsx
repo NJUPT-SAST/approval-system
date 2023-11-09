@@ -293,7 +293,7 @@ function WorkDetail() {
         console.log('options', options)
         const { onSuccess, onError, file, onProgress } = options
         uploadWork(Number(id), props.inputName, file, onProgress).then((res) => {
-          console.log(res)
+          console.log('upload res: ',res)
           if (res.data.errCode === null) {
             onSuccess(res, file)
             message.success({
@@ -302,7 +302,7 @@ function WorkDetail() {
             setFileList((prev) => {
               return {
                 ...prev,
-                [props.inputName]: [{ ...prev[props.inputName][0], status: 'done' }],
+                [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
               }
             })
             form.setValueByPath(props.inputName, res.data.data.url)
