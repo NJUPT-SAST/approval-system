@@ -35,7 +35,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "preinstall": "npx only-allow yarn",
+    "preinstall": "npx only-allow pnpm",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
