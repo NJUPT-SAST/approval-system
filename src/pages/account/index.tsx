@@ -158,14 +158,14 @@ function Main() {
     grade: {
       title: '年级',
       content: `20${userProfile[0].code.charAt(1)}${userProfile[0].code.charAt(2)}级`
-    },
-    faculty: {
-      title: '学院',
-      content: `${userProfile[0].faculty}`,
-    },
-    major: {
-      title: '专业',
-      content: `${userProfile[0].major}`,
+      // },
+      // faculty: {
+      //   title: '学院',
+      //   content: `${userProfile[0].college}`,
+      // },
+      // major: {
+      //   title: '专业',
+      //   content: `${userProfile[0].major}`,
     },
   }
 
@@ -175,10 +175,10 @@ function Main() {
       title: '账号',
       content: `${userProfile[0].code}`,
     },
-    password: {
-      title: '密码',
-      content: '*********',
-    },
+    // password: {
+    //   title: '密码',
+    //   content: '*********',
+    // },
   }
 
   const InfoItem = (props: { title: string; content: string }) => (
@@ -285,9 +285,9 @@ function Main() {
             <Spin tip="^_^信息加载中……" className="loading" size="large" indicator={loadingIcon}></Spin>
           </div>
         ) : ( */}
-          <div className="account-wrap">
-            {/* 头像部分内容 */}
-            {/* <div className="upload-avatar">
+        <div className="account-wrap">
+          {/* 头像部分内容 */}
+          {/* <div className="upload-avatar">
               <Upload {...uploadProps} listType="picture-card" className="avatar-uploader" onChange={handleChange}>
                 {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
               </Upload>
@@ -298,29 +298,29 @@ function Main() {
 
               <span className="tips">仅支持JPG、GIF、PNG格式，文件小于5M</span>
             </div> */}
-            <div className="personal-info">
-              <p className="info-title">个人信息</p>
-              <div className="info-wrap">
-                {Object.keys(personalInfo).map((key, index) => (
-                  <InfoItem key={index} title={personalInfo[key].title} content={personalInfo[key].content} />
-                ))}
-              </div>
-              {/* <Button className="personal-btn" type="primary" onClick={() => navigate('/account?type=edit')}>
+          <div className="personal-info">
+            <p className="info-title">个人信息</p>
+            <div className="info-wrap">
+              {Object.keys(personalInfo).map((key, index) => (
+                <InfoItem key={index} title={personalInfo[key].title} content={personalInfo[key].content} />
+              ))}
+            </div>
+            {/* <Button className="personal-btn" type="primary" onClick={() => navigate('/account?type=edit')}>
                 编辑
               </Button> */}
+          </div>
+          <div className="account-info">
+            <p className="info-title">账号信息</p>
+            <div className="info-wrap">
+              {Object.keys(accountInfo).map((key, index) => (
+                <InfoItem key={index} title={accountInfo[key].title} content={accountInfo[key].content} />
+              ))}
             </div>
-            <div className="account-info">
-              <p className="info-title">账号信息</p>
-              <div className="info-wrap">
-                {Object.keys(accountInfo).map((key, index) => (
-                  <InfoItem key={index} title={accountInfo[key].title} content={accountInfo[key].content} />
-                ))}
-              </div>
-              {/* <Button className="account-btn" type="primary" onClick={() => navigate('/account?type=pass')}>
+            {/* <Button className="account-btn" type="primary" onClick={() => navigate('/account?type=pass')}>
                 修改密码
               </Button> */}
-            </div>
           </div>
+        </div>
         {/* )} */}
       </div>
     </>

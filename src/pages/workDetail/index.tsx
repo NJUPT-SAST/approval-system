@@ -154,7 +154,7 @@ function WorkDetail() {
     return schemaData
   }
   const remoteSchema: any = useGetWorkSchema()
-  console.log(remoteSchema)
+  // console.log(remoteSchema)
 
   const getWorkSchemaData = () => {
     clearTimeout(stillLoading)
@@ -279,7 +279,7 @@ function WorkDetail() {
           }
           return file
         })
-        console.log('new list', newFileList)
+        // console.log('new list', newFileList)
 
         setFileList((prev: any) => {
           console.log('list updated')
@@ -293,7 +293,7 @@ function WorkDetail() {
         console.log('options', options)
         const { onSuccess, onError, file, onProgress } = options
         uploadWork(Number(id), props.inputName, file, onProgress).then((res) => {
-          console.log('upload res: ',res)
+          console.log('upload res: ', res)
           if (res.data.errCode === null) {
             onSuccess(res, file)
             message.success({
@@ -319,10 +319,31 @@ function WorkDetail() {
       // onRemove: onRemove(props.inputName),
       // onDownload: onDownload(fileList[props.inputName][0].url)
     }
-    console.log('filelist:', fileList)
+    // console.log('filelist:', fileList)
     return (
       <Upload
         {...localProps}
+        customRequest={(options) => {
+          console.log('options', options)
+          const { onSuccess, onError, file, onProgress } = options
+          uploadWork(Number(id), props.inputName, file as File, onProgress).then((res) => {
+            console.log('upload res: ', res)
+            if (res.data.errCode === null) {
+              if (onSuccess)
+                onSuccess(res)
+              message.success({
+                content: (file as File).name + ' 上传成功',
+              })
+              setFileList((prev) => {
+                return {
+                  ...prev,
+                  [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
+                }
+              })
+              form.setValueByPath(props.inputName, res.data.data.url)
+            }
+          })
+        }}
         onDownload={(file) => {
           console.log(file)
           if (file.url !== undefined) {

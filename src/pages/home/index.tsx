@@ -50,12 +50,14 @@ const Home = () => {
               const a = { ...pre }
               a.code = res.data.data.code
               localStorage.setItem('approval-system-code', res.data.data.code)
-              a.faculty = res.data.data.faculty
-              localStorage.setItem('approval-system-faculty', res.data.data.faculty)
+              a.college = res.data.data.college
+              localStorage.setItem('approval-system-college', res.data.data.college)
               a.name = res.data.data.name
               localStorage.setItem('approval-system-name', res.data.data.name)
-              a.major = res.data.data.major
-              localStorage.setItem('approval-system-major', res.data.data.major)
+              a.major = res.data.data.major ?? '未知'
+              localStorage.setItem('approval-system-major', res.data.data.major ? res.data.data.major : '未知')
+              a.contact = res.data.data.contact ?? '未知'
+              localStorage.setItem('approval-system-contact', res.data.data.contact ? res.data.data.contact : '未知')
               return a
             })
             setTimeout(() => {

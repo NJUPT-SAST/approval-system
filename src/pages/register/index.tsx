@@ -65,6 +65,24 @@ function Register() {
             readOnly: true,
             props: {},
           },
+          college: {
+            title: '学院',
+            type: 'string',
+            readOnly: true,
+            props: {},
+          },
+          major: {
+            title: '专业',
+            type: 'string',
+            readOnly: true,
+            props: {},
+          },
+          contact: {
+            title: '联系方式',
+            type: 'string',
+            readOnly: true,
+            props: {},
+          }
         },
       },
     },
@@ -81,6 +99,9 @@ function Register() {
       form.setValueByPath('leader', {
         name: localStorage.getItem('approval-system-name'),
         code: localStorage.getItem('approval-system-code'),
+        college: localStorage.getItem('approval-system-college'),
+        major: localStorage.getItem('approval-system-major'),
+        contact: localStorage.getItem('approval-system-contact'),
       })
       if (res.data.errCode !== 2003) {
         setTeamInfo({
@@ -155,6 +176,24 @@ function Register() {
                   readOnly: true,
                   props: {},
                 },
+                college: {
+                  title: '学院',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                major: {
+                  title: '专业',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                contact: {
+                  title: '联系方式',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                }
               },
             },
           },
@@ -208,6 +247,24 @@ function Register() {
                   readOnly: true,
                   props: {},
                 },
+                college: {
+                  title: '学院',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                major: {
+                  title: '专业',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                },
+                contact: {
+                  title: '联系方式',
+                  type: 'string',
+                  readOnly: true,
+                  props: {},
+                }
               },
             },
           },
@@ -223,6 +280,9 @@ function Register() {
       const formName = 'parti' + i
       const inputName = 'name'
       const inputName2 = 'code'
+      const inputName3 = 'college'
+      const inputName4 = 'major'
+      const inputName5 = 'contact'
       participants.push({
         [formName]: {
           title: '队员' + i + '信息',
@@ -239,8 +299,62 @@ function Register() {
               title: '学号',
               type: 'string',
               required: true,
+              rules: [
+                {
+                  pattern: /^([BPQF](1[89]|2[0-6])(0[0-9]|1[0-7])([0-2]\d|3[01])\d{2}|\d{11})/,
+                  message: '请输入正确的学号',
+                },
+              ],
               props: {},
             },
+            [inputName3]: {
+              title: '学院',
+              type: 'string',
+              widget: 'select',
+              required: true,
+              props: {
+                options: [
+                  { label: '通信与信息工程学院', value: '通信与信息工程学院' },
+                  { label: '电子与光学工程学院、柔性电子 （未来技术）学院', value: '电子与光学工程学院、柔性电子 （未来技术）学院' },
+                  { label: '集成电路科学与工程学院', value: '集成电路科学与工程学院' },
+                  { label: '计算机学院、软件学院、网络空间安全学院', value: '计算机学院、软件学院、网络空间安全学院' },
+                  { label: '信息材料与纳米技术研究院、材料科学与工程学院', value: '信息材料与纳米技术研究院、材料科学与工程学院' },
+                  { label: '自动化学院、人工智能学院', value: '自动化学院、人工智能学院' },
+                  { label: '材料与工程学院', value: '材料与工程学院' },
+                  { label: '化学与生命科学学院', value: '化学与生命科学学院' },
+                  { label: '物联网学院', value: '物联网学院' },
+                  { label: '地理与生物信息学院', value: '地理与生物信息学院' },
+                  { label: '现代邮政学院', value: '现代邮政学院' },
+                  { label: '传媒与艺术学院', value: '传媒与艺术学院' },
+                  { label: '管理学院', value: '管理学院' },
+                  { label: '经济学院', value: '经济学院' },
+                  { label: '马克思主义学院', value: '马克思主义学院' },
+                  { label: '社会与人口学院', value: '社会与人口学院' },
+                  { label: '外国语学院', value: '外国语学院' },
+                  { label: '教育科学与技术学院', value: '教育科学与技术学院' },
+                  { label: '贝尔英才学院', value: '贝尔英才学院' },
+                  { label: '海外教育学院', value: '海外教育学院' },
+                ]
+              },
+            },
+            [inputName4]: {
+              title: '专业',
+              type: 'string',
+              required: true,
+              props: {},
+            },
+            [inputName5]: {
+              title: '联系方式（手机号码）',
+              type: 'string',
+              required: true,
+              rules: [
+                {
+                  pattern: /^1[3456789]\d{9}$/,
+                  message: '请输入正确的手机号码',
+                },
+              ],
+              props: {},
+            }
           },
         },
       })
@@ -297,7 +411,7 @@ function Register() {
    * @param values 改变的值
    */
   const valueChangeAction = (values: any) => {
-    console.log(values)
+    console.log('值更新', values)
     if (values.select_numOfParti !== undefined) {
       setFormSchema({
         type: 'object',
@@ -342,6 +456,24 @@ function Register() {
                 readOnly: true,
                 props: {},
               },
+              college: {
+                title: '学院',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              },
+              major: {
+                title: '专业',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              },
+              contact: {
+                title: '联系方式',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              }
             },
           },
         },

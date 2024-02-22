@@ -205,7 +205,7 @@ function ManageDetail() {
   const getList = (competitionId: number, pageNumber: number, pageSize: number) => {
     getManageCompetitionList(competitionId, pageNumber, pageSize)
       .then((res) => {
-        // console.log(res.data)
+        console.log(res.data)
         setRegState({ regNum: res.data.data.regNum, subNum: res.data.data.subNum, revNum: res.data.data.revNum })
         setData(res.data.data.records)
         setCompetitionName(res.data.data.comName)

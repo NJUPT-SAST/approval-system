@@ -18,6 +18,7 @@ const DataTable: React.FC<any> = (props) => {
     } else return <Menu></Menu>
   }
   const { value, index, pageState } = props
+  console.log(value)
   return (
     <div className={index % 2 === 0 ? 'manage-detail-list-content-odd' : 'manage-detail-list-content-even'}>
       <div className="manage-detail-list-content">
