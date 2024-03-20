@@ -5,7 +5,7 @@
 #### 环境
 
 - Node >= 16 (低于 16 版本会有不可预知问题,运行项目前应先升级 node 版本)
-- Yarn >= 1 <2 (本项目依赖安装暂时仅支持 yarn, 注意不要使用 yarn2.x)
+- pnpm >= 8 那必须使用pnpm的（
 - VSCode（使用前请安装 Eslint 和 Prettier - Code formatter 扩展）
 
 #### 需要掌握的技能
