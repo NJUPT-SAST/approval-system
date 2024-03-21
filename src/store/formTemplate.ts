@@ -67,6 +67,7 @@ export const tempelate = [
         title: '作品简介',
         format: 'textarea',
         required: true,
+        max: 500,
         order: 7,
       },
     },
