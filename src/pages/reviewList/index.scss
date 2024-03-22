@@ -25,10 +25,19 @@
       margin-right: 1.5vh;
     }
   }
+  .manage-content-statistic {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 15px 0;
+    height: 150px;
+  }
   .manage-content-table-body {
-    margin-left: 1.1vw;
-    margin-right: 0.93vw;
-    padding: 1.8vh 3.6vw 0 3.6vw;
+    margin-left: 0;
+    padding: 0;
+    border-style: solid;
+    border-color: rgb(206, 206, 206);
+    border-radius: 0.5px;
     text-align: center;
     background-color: #fff;
   }

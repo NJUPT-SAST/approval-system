@@ -99,44 +99,7 @@ const ReviewApprover: React.FC = (props) => {
   }
   // 处理提交事件
   const handleSubmit = () => {
-    if (score! >= 0 && score! <= 100) {
-      if (opinion !== null) {
-        uploadWorkScoreInfo(Number(id), score!, opinion!).then(() => {
-          notification.info({
-            message: '✅ 提交成功',
-            description: '自动返回列表',
-            top: 20,
-            placement: 'top',
-          })
-          setTimeout(() => {
-            window.history.back()
-          }, 100)
-
-          //   navigate('/review/detail/' + (current + 1))
-          //   if (current === total) {
-          //     setTimeout(() => {
-          //       notification.info({
-          //         message: '😸️ 审批完成',
-          //         description: '这是最后一个',
-          //         top: 20,
-          //         placement: 'top',
-          //       })
-          //     }, 300)
-          //   } else if (current > total) {
-          //     navigate('/review/detail/' + total)
-          //   }
-        })
-      } else {
-        setTimeout(() => {
-          notification.info({
-            message: 'x 提交失败',
-            description: '评价不能为空',
-            top: 20,
-            placement: 'top',
-          })
-        }, 300)
-      }
-    } else {
+    if (score === null || score === undefined || score <= 0 || score <= 100) {
       setTimeout(() => {
         notification.info({
           message: 'x 提交失败',
@@ -145,7 +108,36 @@ const ReviewApprover: React.FC = (props) => {
           placement: 'top',
         })
       }, 100)
+      return
     }
+    if (opinion === null || opinion === undefined) {
+      setOpinion("")
+    }
+    uploadWorkScoreInfo(Number(id), score, String(opinion)).then(() => {
+      notification.info({
+        message: '✅ 提交成功',
+        description: '自动返回列表',
+        top: 20,
+        placement: 'top',
+      })
+      setTimeout(() => {
+        window.history.back()
+      }, 100)
+
+      //   navigate('/review/detail/' + (current + 1))
+      //   if (current === total) {
+      //     setTimeout(() => {
+      //       notification.info({
+      //         message: '😸️ 审批完成',
+      //         description: '这是最后一个',
+      //         top: 20,
+      //         placement: 'top',
+      //       })
+      //     }, 300)
+      //   } else if (current > total) {
+      //     navigate('/review/detail/' + total)
+      //   }
+    })
   }
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
@@ -313,7 +305,7 @@ const ReviewApprover: React.FC = (props) => {
               />
             </div>
             <div className="inputBox">
-              <span>评价: </span>
+              <span>评语: </span>
               <TextArea
                 className="inputbox"
                 rows={4}
@@ -329,7 +321,7 @@ const ReviewApprover: React.FC = (props) => {
                 <Input placeholder="请输入0-100之间的数字" id="score" />
               </Form.Item>
 
-              <Form.Item label="评价">
+              <Form.Item label="评语">
                 <TextArea rows={3} placeholder="请输入" id="warning" />
               </Form.Item>
             </Form> */}
