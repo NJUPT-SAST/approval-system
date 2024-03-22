@@ -161,10 +161,10 @@ const ReviewJudge: React.FC = (props) => {
               <Anchor
                 // targetOffset={targetOffset}
                 onClick={(e) => e.preventDefault()}
-                // affix={false}
-                // showInkInFixed={true}
-                // onChange={(link) => console.log('Anchor:OnChange', link)}
-                // getContainer={() => document.querySelector('.message')}
+              // affix={false}
+              // showInkInFixed={true}
+              // onChange={(link) => console.log('Anchor:OnChange', link)}
+              // getContainer={() => document.querySelector('.message')}
               >
                 <Link href="#user-information" title="参赛者信息" target="" />
                 <Link href="#show-work" title="作品展示" />
@@ -185,7 +185,7 @@ const ReviewJudge: React.FC = (props) => {
                       <div className="content">{item.code}</div>
                     </div>
                     <div className="list-item">
-                      <div className="title">职务:</div>
+                      <div className="title">备注:</div>
                       <div className="content">{item.isCaptain}</div>
                     </div>
                   </div>

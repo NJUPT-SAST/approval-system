@@ -149,7 +149,7 @@ const ReviewApprover: React.FC = (props) => {
         // console.log(result.memberList)
 
         for (let i = 0; i < res.data.data.memberList.length; i++) {
-          result.memberList[i].isCaptain = i === 0 ? '队长' : '队员'
+          result.memberList[i].isCaptain = i === 0 ? '负责人' : '团队成员'
         }
         setDataList(result)
       } else {
@@ -172,18 +172,18 @@ const ReviewApprover: React.FC = (props) => {
   }
   const columns: ColumnsType<DataType> = [
     {
-      title: '职位',
-      dataIndex: 'isCaptain',
-      key: '1',
-    },
-    {
       title: '姓名',
       dataIndex: 'name',
-      key: '2',
+      key: '1',
     },
     {
       title: '学号',
       dataIndex: 'code',
+      key: '2',
+    },
+    {
+      title: '备注',
+      dataIndex: 'isCaptain',
       key: '3',
     },
   ]
@@ -216,24 +216,24 @@ const ReviewApprover: React.FC = (props) => {
             </div>
             <div className="content">
               <div id="team" className="item">
-                <h1 style={{ fontSize: '25px' }}>队伍名称</h1>
-                <h3>队伍: {dataList.teamName}</h3>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>队伍名称</h1>
+                <h3>{dataList.teamName}</h3>
               </div>
 
               <div id="user-information" className="item">
-                <h1 style={{ fontSize: '25px' }}>参赛者信息</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>参赛者信息</h1>
                 <h3>
-                  <Table<DataType> dataSource={dataList.memberList} columns={columns} />
+                  <Table<DataType> dataSource={dataList.memberList} columns={columns} bordered />
                 </h3>
               </div>
 
               <div id="attach-message" className="item">
-                <h1 style={{ fontSize: '25px' }}>文字展示</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>文字展示</h1>
                 <div className="texts">
                   {dataList.texts.map((item: any, index: number) => {
                     return (
                       <li key={index}>
-                        {item.input}:{item.content}
+                        {item.input}: {item.content}
                       </li>
                     )
                   })}
@@ -241,7 +241,7 @@ const ReviewApprover: React.FC = (props) => {
               </div>
 
               <div id="show-work" className="item">
-                <h1 style={{ fontSize: '25px' }}>作品展示</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>作品展示</h1>
                 <div className="accessorices">
                   {dataList.accessories.map((item: any, index: number) => {
                     return (
