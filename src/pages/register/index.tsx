@@ -323,7 +323,6 @@ function Register() {
                   { label: '材料与工程学院', value: '材料与工程学院' },
                   { label: '化学与生命科学学院', value: '化学与生命科学学院' },
                   { label: '物联网学院', value: '物联网学院' },
-                  { label: '地理与生物信息学院', value: '地理与生物信息学院' },
                   { label: '现代邮政学院', value: '现代邮政学院' },
                   { label: '传媒与艺术学院', value: '传媒与艺术学院' },
                   { label: '管理学院', value: '管理学院' },
