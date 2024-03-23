@@ -51,7 +51,7 @@
       ],
       "order": 1
     },
-    "作品名称": { "type": "string", "props": {}, "title": "项目名称", "required": true, "order": 2 },
+    "项目名称": { "type": "string", "props": {}, "title": "项目名称", "required": true, "order": 2 },
     "项目组别": {
       "enum": [
         "A.科技创新和未来产业",
