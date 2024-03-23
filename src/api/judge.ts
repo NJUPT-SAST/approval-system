@@ -150,7 +150,7 @@ export const getJudgeWorkTotal = (workId: number) => {
  * 提交作品评分信息
  * @param workId 作品 id
  * @param score 评的分 0 ~ 100
- * @param opinion 评价
+ * @param opinion 评语
  * @return axios 对象
  */
 export const uploadWorkScoreInfo = (workId: number, score: number, opinion: string) => {

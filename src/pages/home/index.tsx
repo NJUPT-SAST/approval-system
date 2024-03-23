@@ -80,14 +80,6 @@ const Home = () => {
           }
         })
         switch (res.data.data.role) {
-          case 3:
-            setUserState('admin')
-            localStorage.setItem('userState', 'admin')
-            break
-          case 2:
-            setUserState('approver')
-            localStorage.setItem('userState', 'approver')
-            break
           case 0:
             setUserState('user')
             localStorage.setItem('userState', 'user')
@@ -95,6 +87,14 @@ const Home = () => {
           case 1:
             setUserState('judge')
             localStorage.setItem('userState', 'judge')
+            break
+          case 2:
+            setUserState('approver')
+            localStorage.setItem('userState', 'approver')
+            break
+          case 3:
+            setUserState('admin')
+            localStorage.setItem('userState', 'admin')
             break
           default:
             break

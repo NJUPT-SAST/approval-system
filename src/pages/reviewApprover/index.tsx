@@ -99,44 +99,7 @@ const ReviewApprover: React.FC = (props) => {
   }
   // 处理提交事件
   const handleSubmit = () => {
-    if (score! >= 0 && score! <= 100) {
-      if (opinion !== null) {
-        uploadWorkScoreInfo(Number(id), score!, opinion!).then(() => {
-          notification.info({
-            message: '✅ 提交成功',
-            description: '自动返回列表',
-            top: 20,
-            placement: 'top',
-          })
-          setTimeout(() => {
-            window.history.back()
-          }, 100)
-
-          //   navigate('/review/detail/' + (current + 1))
-          //   if (current === total) {
-          //     setTimeout(() => {
-          //       notification.info({
-          //         message: '😸️ 审批完成',
-          //         description: '这是最后一个',
-          //         top: 20,
-          //         placement: 'top',
-          //       })
-          //     }, 300)
-          //   } else if (current > total) {
-          //     navigate('/review/detail/' + total)
-          //   }
-        })
-      } else {
-        setTimeout(() => {
-          notification.info({
-            message: 'x 提交失败',
-            description: '评价不能为空',
-            top: 20,
-            placement: 'top',
-          })
-        }, 300)
-      }
-    } else {
+    if (score === null || score === undefined || score <= 0 || score <= 100) {
       setTimeout(() => {
         notification.info({
           message: 'x 提交失败',
@@ -145,7 +108,36 @@ const ReviewApprover: React.FC = (props) => {
           placement: 'top',
         })
       }, 100)
+      return
     }
+    if (opinion === null || opinion === undefined) {
+      setOpinion("")
+    }
+    uploadWorkScoreInfo(Number(id), score, String(opinion)).then(() => {
+      notification.info({
+        message: '✅ 提交成功',
+        description: '自动返回列表',
+        top: 20,
+        placement: 'top',
+      })
+      setTimeout(() => {
+        window.history.back()
+      }, 100)
+
+      //   navigate('/review/detail/' + (current + 1))
+      //   if (current === total) {
+      //     setTimeout(() => {
+      //       notification.info({
+      //         message: '😸️ 审批完成',
+      //         description: '这是最后一个',
+      //         top: 20,
+      //         placement: 'top',
+      //       })
+      //     }, 300)
+      //   } else if (current > total) {
+      //     navigate('/review/detail/' + total)
+      //   }
+    })
   }
   useEffect(() => {
     // 请求数据，并把列表中的成员是否为队长布尔型换为字符串
@@ -157,7 +149,7 @@ const ReviewApprover: React.FC = (props) => {
         // console.log(result.memberList)
 
         for (let i = 0; i < res.data.data.memberList.length; i++) {
-          result.memberList[i].isCaptain = i === 0 ? '队长' : '队员'
+          result.memberList[i].isCaptain = i === 0 ? '负责人' : '团队成员'
         }
         setDataList(result)
       } else {
@@ -180,18 +172,18 @@ const ReviewApprover: React.FC = (props) => {
   }
   const columns: ColumnsType<DataType> = [
     {
-      title: '职位',
-      dataIndex: 'isCaptain',
-      key: '1',
-    },
-    {
       title: '姓名',
       dataIndex: 'name',
-      key: '2',
+      key: '1',
     },
     {
       title: '学号',
       dataIndex: 'code',
+      key: '2',
+    },
+    {
+      title: '备注',
+      dataIndex: 'isCaptain',
       key: '3',
     },
   ]
@@ -224,24 +216,24 @@ const ReviewApprover: React.FC = (props) => {
             </div>
             <div className="content">
               <div id="team" className="item">
-                <h1 style={{ fontSize: '25px' }}>队伍名称</h1>
-                <h3>队伍: {dataList.teamName}</h3>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>队伍名称</h1>
+                <h3>{dataList.teamName}</h3>
               </div>
 
               <div id="user-information" className="item">
-                <h1 style={{ fontSize: '25px' }}>参赛者信息</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>参赛者信息</h1>
                 <h3>
-                  <Table<DataType> dataSource={dataList.memberList} columns={columns} />
+                  <Table<DataType> dataSource={dataList.memberList} columns={columns} bordered />
                 </h3>
               </div>
 
               <div id="attach-message" className="item">
-                <h1 style={{ fontSize: '25px' }}>文字展示</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>文字展示</h1>
                 <div className="texts">
                   {dataList.texts.map((item: any, index: number) => {
                     return (
                       <li key={index}>
-                        {item.input}:{item.content}
+                        {item.input}: {item.content}
                       </li>
                     )
                   })}
@@ -249,7 +241,7 @@ const ReviewApprover: React.FC = (props) => {
               </div>
 
               <div id="show-work" className="item">
-                <h1 style={{ fontSize: '25px' }}>作品展示</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>作品展示</h1>
                 <div className="accessorices">
                   {dataList.accessories.map((item: any, index: number) => {
                     return (
@@ -313,7 +305,7 @@ const ReviewApprover: React.FC = (props) => {
               />
             </div>
             <div className="inputBox">
-              <span>评价: </span>
+              <span>评语: </span>
               <TextArea
                 className="inputbox"
                 rows={4}
@@ -329,7 +321,7 @@ const ReviewApprover: React.FC = (props) => {
                 <Input placeholder="请输入0-100之间的数字" id="score" />
               </Form.Item>
 
-              <Form.Item label="评价">
+              <Form.Item label="评语">
                 <TextArea rows={3} placeholder="请输入" id="warning" />
               </Form.Item>
             </Form> */}

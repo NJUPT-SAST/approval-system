@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
-import { Button, notification, Space, Table } from 'antd'
+import { Button, notification, Space, Statistic, Table, Tag } from 'antd'
 import type { ColumnsType } from 'antd/lib/table'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import './index.scss'
 import { getScoreWorkList, getJudgeWorkList } from '../../api/judge'
+import { getCompetitionInfo } from '../../api/user'
 
 // 限制表格数据类型
 interface DataType {
@@ -21,8 +22,10 @@ function ReviewList() {
   // 当前页
   const [pageNum, setPageNum] = useState(1)
   // 页面数据
-  const [dataList, SetDataList] = useState<any>({})
-  console.log(dataList)
+  const [dataList, setDataList] = useState<any>({})
+  const [programList, setProgramList] = useState<any>([])
+  const [isEnd, setIsEnd] = useState(false)
+  const [isApproveCount, setIsApproveCount] = useState(0)
   const userState = localStorage.getItem('userState')
 
   const [loading, setLoading] = useState(true)
@@ -32,57 +35,94 @@ function ReviewList() {
     navigate(`/review/list/${comId}/${current}`)
   }
 
+  function resDataProcessing(res: any) {
+    const result = res.data.data
+    if (result === null) {
+      setTimeout(() => {
+        notification.info({
+          message: '该页面没有数据,返回上一页',
+          top: 20,
+          placement: 'top',
+        })
+      }, 100)
+      navigate('/review')
+    }
+
+    const programList = res.data.data.list
+    console.log(programList);
+
+    let approveCount = 0
+    for (let i = 0; i < programList.length; i++) {
+      const isApprove = programList[i].score !== null || programList[i].score !== undefined
+      programList[i].isApprove = isApprove
+      if (isApprove) {
+        approveCount++
+      }
+      result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
+    }
+    setIsApproveCount(approveCount)
+    setProgramList(programList)
+    setDataList(result)
+    localStorage.setItem('listTotal', res.data.data.total)
+    setLoading(false)
+
+  }
+
   // 获取表格数据
   useEffect(() => {
     setLoading(true)
-    if (userState === 'approver') {
-      getScoreWorkList(Number(comId), Number(page)).then((res) => {
-        const result = res.data.data
-        if (result === null) {
-          setTimeout(() => {
-            notification.info({
-              message: '该页面没有数据,返回上一页',
-              top: 20,
-              placement: 'top',
-            })
-          }, 100)
-          navigate('/review')
-        }
-        SetDataList(res.data.data)
-        localStorage.setItem('listTotal', res.data.data.total)
-        setLoading(false)
-      })
-    } else {
-      getJudgeWorkList(Number(comId), Number(page)).then((res) => {
-        const result = res.data.data
-        if (result === null) {
-          setTimeout(() => {
-            notification.info({
-              message: '该页面没有数据,返回上一页',
-              top: 20,
-              placement: 'top',
-            })
-          }, 100)
-          navigate('/review')
-        }
-        for (let i = 0; i < result.list.length; i++)
-          result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
-        SetDataList(result)
-        localStorage.setItem('listTotal', res.data.data.total)
-        setLoading(false)
-      })
-    }
+    getCompetitionInfo(Number(comId)).then((res) => {
+      const comDetail = res.data.data
+      console.log(comDetail);
+      const currentTime = new Date().getTime()
+      const comDateString = comDetail.reviewEnd;
+      const formattedComDateString = comDateString.replace(/\./g, "/");
+      const comDate = new Date(formattedComDateString);
+      localStorage.setItem("reviewEnd", comDateString)
+      setIsEnd(currentTime > comDate.getTime())
+      if (userState === 'approver') {
+        getScoreWorkList(Number(comId), Number(page)).then((res) => {
+          resDataProcessing(res)
+        })
+      } else {
+        getJudgeWorkList(Number(comId), Number(page)).then((res) => {
+          console.log(res);
+
+          resDataProcessing(res);
+          //   const result = res.data.data
+          //   if (result === null) {
+          //     setTimeout(() => {
+          //       notification.info({
+          //         message: '该页面没有数据,返回上一页',
+          //         top: 20,
+          //         placement: 'top',
+          //       })
+          //     }, 100)
+          //     navigate('/review')
+          //   }
+          //   for (let i = 0; i < result.list.length; i++)
+          //     result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
+          //   setDataList(result)
+          //   setProgramList(result.list)
+          //   localStorage.setItem('listTotal', res.data.data.total)
+          //   setLoading(false)
+        })
+      }
+    })
+
   }, [pageNum])
 
   const table = (
     <ProgramList
       loading={loading}
       role={userState}
-      list={dataList.list}
+      list={programList}
       pageNum={dataList.pageNum}
       total={dataList.total}
       pageSize={dataList.pageSize}
       getPageNum={getpageNum}
+      isEnd={isEnd}
+      isApproveCount={isApproveCount}
     />
   )
   return (
@@ -101,14 +141,16 @@ interface IProgramList {
   pageSize: number
   getPageNum: any
   loading: boolean
+  isEnd: boolean
+  isApproveCount: number
 }
 // 表格内容
 const ProgramList: React.FC<IProgramList> = (props: any) => {
   const [current, setCurrent] = useState(1)
-  const { role, getPageNum, list, pageSize, total, loading } = props
+  const { role, getPageNum, list, pageSize, total, loading, isEnd, isApproveCount } = props
   // const [id, setId] = useState(0)
   const navigate = useNavigate()
-  const rolestate = role === 'approver' ? '评审' : '审批'
+
 
   // 修改页面内容
   const changePageNum = (current: number) => {
@@ -119,34 +161,48 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
   // 表头内容
   const columns: ColumnsType<DataType> = [
     {
+      key: '1',
       title: '序号',
       dataIndex: 'id',
-      key: '1',
     },
     {
+      key: '2',
       title: '项目名称',
       dataIndex: 'title',
-      key: '2',
     },
     {
+      key: '3',
       title: role === 'approver' ? '评分' : '通过与否',
       dataIndex: role === 'approver' ? 'score' : 'isPass',
-      key: '3',
     },
     {
-      title: role === 'approver' ? '评价' : '意见',
-      dataIndex: 'opinion',
       key: '4',
+      title: role === 'approver' ? '评语' : '意见',
+      dataIndex: 'opinion',
     },
     {
       key: '5',
+      title: '状态',
+      dataIndex: 'isApprove',
+      render: (data) => {
+        return <Space>
+          <Tag color={data ? "green" : "red"} key={data}>
+            {data ? "已评审" : "未评审"}
+          </Tag>
+        </Space>
+      }
+    },
+    {
+      key: '6',
       title: '操作',
       render: () => (
         // render 返回一个组件
         <Space size="middle">
           {/* <Link to={`/review/detail/${id}`}> */}
-          <Button className="count" type="primary">
-            {rolestate}
+          <Button className="count" type="primary" disabled={isEnd}>
+            {
+              isEnd ? "已结束" : (role === 'approver' ? '查看' : '审核')
+            }
           </Button>
           {/* </Link> */}
         </Space>
@@ -157,34 +213,36 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
   return (
     <div className="manage-content">
       <div className="manage-content-table">
-        <div>
-          <div className="manage-content-header">
-            <h1 className="manage-content-title">活动项目列表</h1>
-          </div>
-          <div className="manage-content-table-body">
-            <Table
-              columns={columns}
-              dataSource={list}
-              loading={loading}
-              rowKey={(record) => record.id}
-              onRow={(record) => {
-                return {
-                  onClick: () => {
-                    // setId(record.id)
-                    console.log(record.id)
-                    navigate(`/review/detail/${record.id}`)
-                  },
-                }
-              }}
-              pagination={{
-                pageSize: pageSize,
-                total: total,
-                onChange: (current) => {
-                  changePageNum(current)
+        <div className="manage-content-header">
+          <h1 className="manage-content-title">活动项目列表</h1>
+        </div>
+        <div className="manage-content-statistic">
+          <Statistic title="评审数量" value={isApproveCount} suffix={"/ " + list.length} />
+          <Statistic title="评审截至日期" value={String(localStorage.getItem('reviewEnd'))} />
+        </div>
+        <div className="manage-content-table-body">
+          <Table
+            columns={columns}
+            dataSource={list}
+            loading={loading}
+            rowKey={(record) => record.id}
+            onRow={(record) => {
+              return {
+                onClick: () => {
+                  // setId(record.id)
+                  console.log(record.id)
+                  navigate(`/review/detail/${record.id}`)
                 },
-              }}
-            />
-          </div>
+              }
+            }}
+            pagination={{
+              pageSize: pageSize,
+              total: total,
+              onChange: (current) => {
+                changePageNum(current)
+              },
+            }}
+          />
         </div>
       </div>
     </div>
