@@ -178,8 +178,8 @@ function ActivityDetail() {
         navigate('/review/list/' + id + '/1')
       } else {
         notification.warning({
-          message: '当前比赛没有需要审核的作品',
-          description: '请到审核列表查看所有需要审核的作品',
+          message: '当前比赛没有需要审核的项目',
+          description: '请到审核列表查看所有需要审核的项目',
           placement: 'top',
           key: 'no-item',
           btn: btn,
@@ -190,8 +190,8 @@ function ActivityDetail() {
         navigate('/review/list?comId=' + id + '&page=1')
       } else {
         notification.warning({
-          message: '当前比赛没有需要评审的作品',
-          description: '请到评审列表查看所有需要评审的作品',
+          message: '当前比赛没有需要评审的项目',
+          description: '请到评审列表查看所有需要评审的项目',
           placement: 'top',
           key: 'no-item',
           btn: btn,

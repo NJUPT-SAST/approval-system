@@ -2,8 +2,8 @@
   "type": "object",
   "labelWidth": 120,
   "properties": {
-    "作品名称": {
-      "title": "作品名称",
+    "项目名称": {
+      "title": "项目名称",
       "type": "string",
       "required": true,
       "props": {},

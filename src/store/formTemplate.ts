@@ -34,37 +34,37 @@ export const tempelate = [
         },
         order: 3,
       },
-      作品简介书: {
+      项目简介书: {
         type: 'string',
         widget: 'customUpload',
-        title: '作品简介书',
+        title: '项目简介书',
         required: true,
         props: {
-          inputName: '作品简介书',
+          inputName: '项目简介书',
           accept: '.pdf',
         },
         order: 4,
       },
-      作品名称: {
+      项目名称: {
         type: 'string',
         props: {},
-        title: '作品名称',
+        title: '项目名称',
         required: true,
         order: 5,
       },
-      作品类别: {
+      项目类别: {
         enum: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
         type: 'string',
-        title: '作品类别',
+        title: '项目类别',
         widget: 'select',
         required: true,
         enumNames: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
         order: 6,
       },
-      作品简介: {
+      项目简介: {
         type: 'string',
         props: {},
-        title: '作品简介',
+        title: '项目简介',
         format: 'textarea',
         required: true,
         max: 500,
@@ -77,15 +77,15 @@ export const tempelate = [
     type: 'object',
     labelWidth: 120,
     properties: {
-      作品名称: {
-        title: '作品名称',
+      项目名称: {
+        title: '项目名称',
         type: 'string',
         required: true,
         props: {},
         order: 1,
       },
-      作品类型: {
-        title: '作品类型',
+      项目类型: {
+        title: '项目类型',
         type: 'string',
         enum: ['活动策划书', '项目企划书', '数字媒体作品'],
         enumNames: ['活动策划书', '项目企划书', '数字媒体作品'],
@@ -215,7 +215,7 @@ export const tempelate = [
         ],
         order: 1,
       },
-      作品名称: { type: 'string', props: {}, title: '项目名称', required: true, order: 2 },
+      项目名称: { type: 'string', props: {}, title: '项目名称', required: true, order: 2 },
       项目组别: {
         enum: [
           'A.科技创新和未来产业',
