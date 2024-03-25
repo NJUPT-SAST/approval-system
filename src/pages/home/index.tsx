@@ -11,6 +11,7 @@ import menuMap from './components/menu'
 import './index.scss'
 import { login } from '../../api/public'
 import { getUserProfile } from '../../api/user'
+import LogoSvg from "../../assets/Logo.svg"
 
 const { Header, Content, Sider } = Layout
 
@@ -142,11 +143,12 @@ const Home = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header className="header">
+      <Header className="header" style={{ padding: " 0 15px" }}>
         <div className="header-wrap">
           <div className="logo-wrap">
-            <div className="logo"></div>
-            <h1 className="logo-name">通用比赛管理评审系统</h1>
+            {/* <div className="logo"></div> */}
+            {/* <h1 className="logo-name">通用比赛管理评审系统</h1> */}
+            <img src={LogoSvg} alt='Logo' style={{ height: "75%" }} />
           </div>
           <div className="control-wrap">
             {localStorage.getItem('userState') === 'offline' ? (
