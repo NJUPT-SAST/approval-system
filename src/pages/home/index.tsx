@@ -142,8 +142,9 @@ const Home = () => {
   // console.log(validateCodeId)
 
   return (
+
     <Layout style={{ minHeight: '100vh' }}>
-      <Header className="header" style={{ padding: " 0 15px" }}>
+      <Header className="header">
         <div className="header-wrap">
           <div className="logo-wrap">
             {/* <div className="logo"></div> */}
@@ -155,7 +156,8 @@ const Home = () => {
               <></>
             ) : (
               <Fragment>
-                <div className="control-item">
+                {/*注释多余的Icon*/}
+                {/* <div className="control-item">
                   <QuestionCircleOutlined></QuestionCircleOutlined>
                 </div>
                 <div className="control-item">
@@ -163,7 +165,7 @@ const Home = () => {
                 </div>
                 <div className="control-item">
                   <BellOutlined></BellOutlined>
-                </div>
+                </div> */}
                 <div className="user-wrap">
                   <div className="user-img"></div>
                   <div className="username">{userProfile.name}</div>
@@ -181,21 +183,24 @@ const Home = () => {
         </div>
       </Header>
       <Layout>
-        <Sider
-          // collapsible
-          // collapsed={collapsed}
-          // onCollapse={(value) => setCollapsed(value)}
-          width={200}
-          className="site-layout-background sidebar"
-        >
-          {userState === 'offline' ? (
+        {userState === 'offline' ?
+          <Content
+            // width={200}
+            className="new-login"
+          >
             <LoginForm finishCb={onFinish} setCodeId={getValidateId} getValidateCode={getValidateCode}></LoginForm>
-          ) : (
+          </Content> :
+          <Sider
+            // collapsible
+            // collapsed={collapsed}
+            // onCollapse={(value) => setCollapsed(value)}
+            width={200}
+            className="site-layout-background sidebar"
+          >
             <UserProfile code={userProfile.code} name={userProfile.name} logout={logout} />
-          )}
-          <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
-        </Sider>
-        <Layout>
+            <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
+          </Sider>}
+        {userState === 'offline' ? '' : <Layout>
           <Content
             className="site-layout-background"
             style={{
@@ -206,7 +211,7 @@ const Home = () => {
           >
             <Outlet></Outlet>
           </Content>
-        </Layout>
+        </Layout>}
       </Layout>
     </Layout>
   )
