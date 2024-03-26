@@ -252,7 +252,7 @@ export const tempelate = [
         widget: 'customUpload',
         title: '项目申报书',
         required: true,
-        props: { inputName: '项目申报书', accept: '.doc,.docx' },
+        props: { inputName: '项目申报书', accept: '.pdf' },
         order: 7,
       },
       创业计划书: {
@@ -269,6 +269,14 @@ export const tempelate = [
         title: '项目 PPT',
         required: true,
         props: { inputName: '项目 PPT', accept: '.ppt,.pptx' },
+        order: 9,
+      },
+      附件: {
+        type: 'string',
+        widget: 'customUpload',
+        title: '附件',
+        required: false,
+        props: { inputName: '附件', accept: '.zip,.rar' },
         order: 9,
       },
     },
