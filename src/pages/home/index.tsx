@@ -144,7 +144,7 @@ const Home = () => {
   return (
 
     <Layout style={{ minHeight: '100vh' }}>
-      <Header className="header">
+      {userState === 'offline' ? '' : <Header className="header">
         <div className="header-wrap">
           <div className="logo-wrap">
             {/* <div className="logo"></div> */}
@@ -181,11 +181,10 @@ const Home = () => {
             )}
           </div>
         </div>
-      </Header>
+      </Header>}
       <Layout>
         {userState === 'offline' ?
           <Content
-            // width={200}
             className="new-login"
           >
             <LoginForm finishCb={onFinish} setCodeId={getValidateId} getValidateCode={getValidateCode}></LoginForm>

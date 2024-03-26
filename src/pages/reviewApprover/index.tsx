@@ -18,7 +18,7 @@ const ReviewApprover: React.FC = (props) => {
   // 定义显示数据
 
   const { TextArea } = Input
-  // 获取作品id
+  // 获取项目id
   const { id } = useParams()
   console.log(id)
 
@@ -211,7 +211,7 @@ const ReviewApprover: React.FC = (props) => {
                 <Link href="#team" title="队伍名称" />
                 <Link href="#user-information" title="参赛者信息" />
                 <Link href="#attach-message" title="文字展示" />
-                <Link href="#show-work" title="作品展示" />
+                <Link href="#show-work" title="项目展示" />
               </Anchor>
             </div>
             <div className="content">
@@ -241,7 +241,7 @@ const ReviewApprover: React.FC = (props) => {
               </div>
 
               <div id="show-work" className="item">
-                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>作品展示</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>项目展示</h1>
                 <div className="accessorices">
                   {dataList.accessories.map((item: any, index: number) => {
                     return (

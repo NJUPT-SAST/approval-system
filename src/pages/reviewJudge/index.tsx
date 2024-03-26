@@ -11,7 +11,7 @@ import { DownloadOutlined } from '@ant-design/icons'
 const { Link } = Anchor
 
 const ReviewJudge: React.FC = (props) => {
-  // 获取作品id
+  // 获取项目id
   const { id } = useParams()
   console.log(id)
 
@@ -167,7 +167,7 @@ const ReviewJudge: React.FC = (props) => {
               // getContainer={() => document.querySelector('.message')}
               >
                 <Link href="#user-information" title="参赛者信息" target="" />
-                <Link href="#show-work" title="作品展示" />
+                <Link href="#show-work" title="项目展示" />
               </Anchor>
             </div>
             <div className="content">
@@ -193,7 +193,7 @@ const ReviewJudge: React.FC = (props) => {
               </div>
               <div id="show-work" className="item">
                 {/* <h2>指导老师：{dataList.texts}</h2> */}
-                <div className="list-title-h1">作品展示</div>
+                <div className="list-title-h1">项目展示</div>
                 <div className="list">
                   {dataList.texts.map((item: any, index: number) => {
                     return (

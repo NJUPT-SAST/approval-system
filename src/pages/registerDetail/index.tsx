@@ -102,10 +102,10 @@ function RegisterDetail() {
     getWorkInfo(Number(id)).then((res) => {
       // console.log(res)
       setWorkData(res.data.data)
-      if (res.data.errMsg === '您还未上传作品') {
+      if (res.data.errMsg === '您还未上传项目') {
         notification.warning({
-          message: '您还未上传作品',
-          description: '请记得提交您的作品哦，否则无法正常参赛',
+          message: '您还未上传项目',
+          description: '请记得提交您的项目哦，否则无法正常参赛',
           placement: 'topRight',
           top: 150,
           duration: 5,
@@ -317,11 +317,11 @@ function RegisterDetail() {
             修改报名信息
           </Button>
           <div className="space"></div>
-          <div className="list-title-h1">作品提交信息</div>
+          <div className="list-title-h1">项目提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
               {workData?.length === 0 || workData === null || workData === undefined || beforeSubmitTime === true ? (
-                <Empty className="empty" description={beforeSubmitTime ? '还没提交过作品哦' : '还没到作品提交时间哦'} />
+                <Empty className="empty" description={beforeSubmitTime ? '还没提交过项目哦' : '还没到项目提交时间哦'} />
               ) : (
                 workData?.map((item, index) => {
                   if (item.isFile) {
@@ -353,13 +353,13 @@ function RegisterDetail() {
             afterSubmitTime ? (
               <>
                 <Button type="primary" disabled style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
-                  修改作品信息
+                  修改项目信息
                 </Button>
                 <div style={{ color: 'gray', fontSize: '12px', marginTop: '.2rem' }}>&nbsp; &nbsp;已经超过提交时间</div>
               </>
             ) : (
               <Button type="primary" disabled={isLoading} style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
-                修改作品信息
+                修改项目信息
               </Button>
             )
           ) : (

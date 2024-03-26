@@ -102,11 +102,11 @@ export const getTeamInfo = (competitionId: number) => {
 }
 
 /**
- * 上传审批作品
+ * 上传审批项目
  * @param competitionId 比赛 id
  * @param name 输入框名
- * @param introduce 作品介绍
- * @param file 评审作品 仅允许zip格式
+ * @param introduce 项目介绍
+ * @param file 评审项目 仅允许zip格式
  * @returns axios对象
  */
 export const uploadWork = (competitionId: number, input: string, file: File, onProgress: any) => {
@@ -125,7 +125,7 @@ export const uploadWork = (competitionId: number, input: string, file: File, onP
 }
 
 /**
- * 删除评审作品
+ * 删除评审项目
  * @param competitionId 比赛Id
  * @returns axios对象
  */
@@ -140,7 +140,7 @@ export const deleteWork = (competitionId: number) => {
 }
 
 /**
- * 获取已提交作品信息
+ * 获取已提交项目信息
  * @param competitionId 比赛Id
  * @returns axios对象
  */
@@ -152,7 +152,7 @@ export const getWorkInfo = (competitionId: number) => {
 }
 
 /**
- * 获取作品资料表单
+ * 获取项目资料表单
  * @param competitionId 比赛Id
  * @returns axios对象
  */
@@ -164,7 +164,7 @@ export const getWorkSchema = (competitionId: number) => {
 }
 
 /**
- * 提交作品资料表单
+ * 提交项目资料表单
  * @param competitionId 比赛Id
  * @param data 没写描述
  * @returns axios对象
