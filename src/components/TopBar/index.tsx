@@ -13,15 +13,15 @@ function TopBar(props?: { activity?: string }) {
     window.history.back()
   }
   const breadcrumbNameMap: Record<string, string> = {
-    '/activity': '活动广场',
+    '/activity': '比赛入口',
     '/inbox': '收件箱',
-    '/manage': '活动管理',
-    '/create': '创建活动',
+    '/manage': '比赛管理',
+    '/create': '创建比赛',
     '/account': '我的帐号',
-    '/review': '活动评审',
+    '/review': '比赛评审',
     '/list': '比赛',
-    '/detail': '活动列表',
-    '/register': '活动报名',
+    '/detail': '比赛列表',
+    '/register': '比赛报名',
     '/register-detail': '报名参加详情',
     '/notice': '发布公告',
     '/work-detail': '项目提交信息',
