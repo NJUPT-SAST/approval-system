@@ -99,7 +99,9 @@ const ReviewApprover: React.FC = (props) => {
   }
   // 处理提交事件
   const handleSubmit = () => {
-    if (score === null || score === undefined || score <= 0 || score <= 100) {
+    console.log(score);
+
+    if (score === null || score === undefined || score <= 0 || score > 100) {
       setTimeout(() => {
         notification.info({
           message: 'x 提交失败',

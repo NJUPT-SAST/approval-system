@@ -122,6 +122,9 @@ interface IJudgeReview {
 // 身份为审批人员时表格内容
 const JudgeReview: React.FC<IJudgeReview> = (props) => {
   const { getPageNum, list, total, pageSize, loading } = props
+  
+  
+
 
   // 表头内容
   const columns: ColumnsType<DataListType> = [
@@ -140,8 +143,8 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
       title: '待审批数',
       render(value, record, index) {
         return (
-          <td className={list[index].totalNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
-            {list[index].totalNum}
+          <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
+            {list[index].totalNum - list[index].completedNum}
           </td>
         )
       },
@@ -225,6 +228,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
 // 身份为评审人员时表格内容
 const ApproverReview: React.FC<IJudgeReview> = (props) => {
   const { getPageNum, list, total, pageSize, loading } = props
+
   // 表头内容
   const columns: ColumnsType<DataListType> = [
     {

@@ -35,7 +35,7 @@ function ReviewList() {
     navigate(`/review/list/${comId}/${current}`)
   }
 
-  function resDataProcessing(res: any) {
+  function resDataProcessing(res: any, role: string) {
     const result = res.data.data
     if (result === null) {
       setTimeout(() => {
@@ -47,25 +47,46 @@ function ReviewList() {
       }, 100)
       navigate('/review')
     }
+    console.log(res.data.data);
 
     const programList = res.data.data.list
     console.log(programList);
 
-    let approveCount = 0
-    for (let i = 0; i < programList.length; i++) {
-      const isApprove = programList[i].score !== null || programList[i].score !== undefined
-      programList[i].isApprove = isApprove
-      if (isApprove) {
-        approveCount++
+    if (role === 'approver') {
+      let scoreCount = 0
+      let isScore;
+      for (let i = 0; i < programList.length; i++) {
+        programList[i]?.score ? isScore = true : isScore = false
+        // const isApprove = programList[i]?.score !== null || programList[i]?.score !== undefined
+        // console.log(isApprove);
+
+        programList[i].isApprove = isScore
+        if (isScore) {
+          scoreCount++
+        }
       }
-      result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
+
+      setIsApproveCount(scoreCount)
+    } else {
+      let passCount = 0
+      let _isPass;
+      for (let i = 0; i < programList.length; i++) {
+        console.log(programList);
+
+        programList[i]?.isPass ? _isPass = true : _isPass = false
+        programList[i].isPass = _isPass
+        if (_isPass) {
+          passCount++
+        }
+        result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
+        console.log(programList[i].isApprove)
+      }
+      setIsApproveCount(passCount)
     }
-    setIsApproveCount(approveCount)
     setProgramList(programList)
     setDataList(result)
     localStorage.setItem('listTotal', res.data.data.total)
     setLoading(false)
-
   }
 
   // 获取表格数据
@@ -82,13 +103,12 @@ function ReviewList() {
       setIsEnd(currentTime > comDate.getTime())
       if (userState === 'approver') {
         getScoreWorkList(Number(comId), Number(page)).then((res) => {
-          resDataProcessing(res)
+          resDataProcessing(res, 'approver')
         })
       } else {
         getJudgeWorkList(Number(comId), Number(page)).then((res) => {
           console.log(res);
-
-          resDataProcessing(res);
+          resDataProcessing(res, 'judge');
           //   const result = res.data.data
           //   if (result === null) {
           //     setTimeout(() => {
@@ -111,6 +131,8 @@ function ReviewList() {
     })
 
   }, [pageNum])
+
+
 
   const table = (
     <ProgramList
@@ -151,7 +173,6 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
   // const [id, setId] = useState(0)
   const navigate = useNavigate()
 
-
   // 修改页面内容
   const changePageNum = (current: number) => {
     setCurrent(current)
@@ -183,7 +204,7 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
     {
       key: '5',
       title: '状态',
-      dataIndex: 'isApprove',
+      dataIndex: role === 'approver' ? 'isApprove' : 'isJudge',
       render: (data) => {
         return <Space>
           <Tag color={data ? "green" : "red"} key={data}>
