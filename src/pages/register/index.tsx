@@ -21,6 +21,7 @@ function Register() {
   })
   const navigate = useNavigate()
   const [curParti, setCurParti] = useState(1)
+  const [curTeacher, setCurTeacher] = useState(0)
   const [teamInfo, setTeamInfo] = useState({})
   const [formSchema, setFormSchema] = useState<any>({
     type: 'object',
@@ -35,55 +36,77 @@ function Register() {
         labelWidth: 0,
         props: {},
       },
-      select_numOfParti: {
-        title: '参赛人数',
-        type: 'number',
-        widget: 'slider',
-        displayType: 'column',
-        description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
-        required: true,
-        placeholder: '',
-        min: competitionInfo.minParti,
-        max: competitionInfo.maxParti,
-        default: curParti,
-      },
-      leader: {
-        title: '队长信息',
+      listOfTeacher: {
         type: 'object',
-        displayType: 'column',
-        description: '队长信息已自动填写',
         properties: {
-          name: {
-            title: '姓名',
-            type: 'string',
-            readOnly: true,
-            props: {},
+          select_numOfTeacher: {
+            title: '指导老师人数',
+            type: 'number',
+            widget: 'slider',
+            displayType: 'column',
+            description: '最多人数 ' + 5,
+            required: true,
+            placeholder: '',
+            min: 0, // 待改动
+            max: 5, // 待改动
+            default: curTeacher,
           },
-          code: {
-            title: '学号',
-            type: 'string',
-            readOnly: true,
-            props: {},
+        }
+      },
+      listOfParti: {
+        type: 'object',
+        properties: {
+          select_numOfParti: {
+            title: '队员人数',
+            type: 'number',
+            widget: 'slider',
+            displayType: 'column',
+            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
+            required: true,
+            placeholder: '',
+            min: competitionInfo.minParti,
+            max: competitionInfo.maxParti,
+            default: curParti,
           },
-          college: {
-            title: '学院',
-            type: 'string',
-            readOnly: true,
-            props: {},
+          leader: {
+            title: '队长信息',
+            type: 'object',
+            displayType: 'column',
+            description: '队长信息已自动填写',
+            properties: {
+              name: {
+                title: '姓名',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              },
+              code: {
+                title: '学号',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              },
+              college: {
+                title: '学院',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              },
+              major: {
+                title: '专业',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              },
+              contact: {
+                title: '联系方式',
+                type: 'string',
+                readOnly: true,
+                props: {},
+              }
+            },
           },
-          major: {
-            title: '专业',
-            type: 'string',
-            readOnly: true,
-            props: {},
-          },
-          contact: {
-            title: '联系方式',
-            type: 'string',
-            readOnly: true,
-            props: {},
-          }
-        },
+        }
       },
     },
   })
@@ -96,7 +119,7 @@ function Register() {
     })
     getTeamInfo(Number(id)).then((res) => {
       // console.log(res)
-      form.setValueByPath('leader', {
+      form.setValueByPath('listOfParti.leader', {
         name: localStorage.getItem('approval-system-name'),
         code: localStorage.getItem('approval-system-code'),
         college: localStorage.getItem('approval-system-college'),
@@ -107,21 +130,40 @@ function Register() {
         setTeamInfo({
           teamName: res.data.data.teamName,
           teamMember: res.data.data.teamMember,
+          teacherMember: res.data.data.teacherMember,
         })
-        form.setValueByPath('select_numOfParti', res.data.data.teamMember.length)
+        form.setValueByPath('listOfParti.select_numOfParti', res.data.data.teamMember.length)
         setCurParti(res.data.data.teamMember.length)
         const newEle = generateForm(res.data.data.teamMember.length)
         newEle.forEach((element) => {
           setFormSchema((prev: any) => {
-            return { ...prev, properties: { ...prev.properties, ...element } }
+            return { ...prev, properties: { ...prev.properties, listOfParti: { ...prev.properties.listOfParti, properties: { ...prev.properties.listOfParti.properties, ...element } }, listOfTeacher: { ...prev.properties.listOfTeacher } } }
           })
         })
         form.setValueByPath('input_teamName', res.data.data.teamName)
         for (let i = 1; i <= res.data.data.teamMember.length - 1; i++) {
           const formName = 'parti' + i
-          form.setValueByPath(formName, {
+          form.setValueByPath('listOfParti.' + formName, {
             name: res.data.data.teamMember[i].name,
             code: res.data.data.teamMember[i].code,
+            college: res.data.data.teamMember[i].college,
+            major: res.data.data.teamMember[i].major,
+            contact: res.data.data.teamMember[i].contact,
+          })
+        }
+        form.setValueByPath('listOfTeacher.select_numOfTeacher', res.data.data.teacherMember.length)
+        setCurTeacher(res.data.data.teacherMember.length)
+        const newEle2 = generateTeacherForm(res.data.data.teacherMember.length)
+        newEle2.forEach((element) => {
+          setFormSchema((prev: any) => {
+            return { ...prev, properties: { ...prev.properties, listOfParti: { ...prev.properties.listOfParti }, listOfTeacher: { ...prev.properties.listOfTeacher, properties: { ...prev.properties.listOfTeacher.properties, ...element } } } }
+          })
+        })
+        for (let i = 1; i <= res.data.data.teacherMember.length; i++) {
+          const formName = 'teacher' + i
+          form.setValueByPath('listOfTeacher.' + formName, {
+            name: res.data.data.teacherMember[i - 1].name,
+            code: res.data.data.teacherMember[i - 1].code,
           })
         }
         setLoading(false)
@@ -202,6 +244,8 @@ function Register() {
         setCompetitionInfo({
           maxParti: res.data.data.maxTeamMembers,
           minParti: res.data.data.minTeamMembers,
+          // 待改动 maxTeacher
+          // 待改动 minTeacher
           isTeam: true,
         })
         setFormSchema({
@@ -217,55 +261,77 @@ function Register() {
               labelWidth: 0,
               props: {},
             },
-            select_numOfParti: {
-              title: '参赛人数',
-              type: 'number',
-              widget: 'slider',
-              displayType: 'column',
-              description: '最少人数 ' + res.data.data.minTeamMembers + ' ；最多人数 ' + res.data.data.maxTeamMembers,
-              required: true,
-              placeholder: '',
-              min: res.data.data.minTeamMembers,
-              max: res.data.data.maxTeamMembers,
-              default: curParti,
-            },
-            leader: {
-              title: '队长信息',
+            listOfTeacher: {
               type: 'object',
-              displayType: 'column',
-              description: '队长信息已自动填写',
               properties: {
-                name: {
-                  title: '姓名',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
+                select_numOfTeacher: {
+                  title: '指导老师人数',
+                  type: 'number',
+                  widget: 'slider',
+                  displayType: 'column',
+                  description: '最多人数 ' + 5,
+                  required: true,
+                  placeholder: '',
+                  min: 0, // 待改动
+                  max: 5, // 待改动
+                  default: curTeacher,
                 },
-                code: {
-                  title: '学号',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
+              }
+            },
+            listOfParti: {
+              type: 'object',
+              properties: {
+                select_numOfParti: {
+                  title: '队员人数',
+                  type: 'number',
+                  widget: 'slider',
+                  displayType: 'column',
+                  description: '最少人数 ' + res.data.data.minTeamMembers + ' ；最多人数 ' + res.data.data.maxTeamMembers,
+                  required: true,
+                  placeholder: '',
+                  min: res.data.data.minTeamMembers,
+                  max: res.data.data.maxTeamMembers,
+                  default: curParti,
                 },
-                college: {
-                  title: '学院',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
+                leader: {
+                  title: '队长信息',
+                  type: 'object',
+                  displayType: 'column',
+                  description: '队长信息已自动填写',
+                  properties: {
+                    name: {
+                      title: '姓名',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    code: {
+                      title: '学号',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    college: {
+                      title: '学院',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    major: {
+                      title: '专业',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    contact: {
+                      title: '联系方式',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    }
+                  },
                 },
-                major: {
-                  title: '专业',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
-                },
-                contact: {
-                  title: '联系方式',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
-                }
-              },
+              }
             },
           },
         })
@@ -362,6 +428,43 @@ function Register() {
     return participants
   }
 
+  const generateTeacherForm = (number: number) => {
+    const participants: any[] = []
+    for (let i = 1; i <= number; i++) {
+      const formName = 'teacher' + i
+      const inputName = 'name'
+      const inputName2 = 'code'
+      participants.push({
+        [formName]: {
+          title: '指导老师' + i + '信息',
+          type: 'object',
+          displayType: 'column',
+          properties: {
+            [inputName]: {
+              title: '姓名',
+              type: 'string',
+              required: true,
+              props: {},
+            },
+            [inputName2]: {
+              title: '工号',
+              type: 'string',
+              required: true,
+              rules: [
+                {
+                  // pattern: /^([BPQF](1[89]|2[0-6])(0[0-9]|1[0-7])([0-2]\d|3[01])\d{2}|\d{11})/,
+                  message: '请输入正确的工号',
+                },
+              ],
+              props: {},
+            },
+          },
+        },
+      })
+    }
+    return participants
+  }
+
   /**
    * 表单提交的反应
    * @param formData 表单数据
@@ -378,13 +481,18 @@ function Register() {
       })
       const teamName = formData.input_teamName
       const teamMember = []
+      const teacherMember = []
       // teamMember.push(formData.leader)
-      for (let i = 1; i <= Number(formData.select_numOfParti) - 1; i++) {
+      for (let i = 1; i <= Number(formData.listOfParti.select_numOfParti) - 1; i++) {
         const formName = 'parti' + i
-        teamMember.push(formData[formName])
+        teamMember.push(formData.listOfParti[formName])
       }
-      console.log('teamName', teamName, 'teamMember', teamMember)
-      signUp(Number(id), teamName, teamMember).then((res) => {
+      for (let i = 1; i <= Number(formData.listOfTeacher.select_numOfTeacher); i++) {
+        const formName = 'teacher' + i
+        teacherMember.push(formData.listOfTeacher[formName])
+      }
+      console.log('teamName', teamName, 'teamMember', teamMember, 'teacherMember', teacherMember)
+      signUp(Number(id), teamName, teamMember, teacherMember).then((res) => {
         console.log(res)
         setMessageSent(true)
         if (res.data.success === true) {
@@ -412,79 +520,135 @@ function Register() {
    */
   const valueChangeAction = (values: any) => {
     console.log('值更新', values)
-    if (values.select_numOfParti !== undefined) {
-      setFormSchema({
-        type: 'object',
-        labelWidth: 151,
-        displayType: 'column',
-        properties: {
-          input_teamName: {
-            title: '队伍名称',
-            type: 'string',
-            displayType: 'column',
-            required: true,
-            labelWidth: 0,
-            props: {},
-          },
-          select_numOfParti: {
-            title: '参赛人数',
-            type: 'number',
-            widget: 'slider',
-            displayType: 'column',
-            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
-            required: true,
-            placeholder: '',
-            min: competitionInfo.minParti,
-            max: competitionInfo.maxParti,
-            default: curParti,
-          },
-          leader: {
-            title: '队长信息',
-            type: 'object',
-            displayType: 'column',
-            description: '队长信息已自动填写',
-            properties: {
-              name: {
-                title: '姓名',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
-              code: {
-                title: '学号',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
-              college: {
-                title: '学院',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
-              major: {
-                title: '专业',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
-              contact: {
-                title: '联系方式',
-                type: 'string',
-                readOnly: true,
-                props: {},
+    const select_numOfTeacher = 'listOfTeacher.select_numOfTeacher'
+    const select_numOfParti = 'listOfParti.select_numOfParti'
+    if (values[select_numOfParti] !== undefined) {
+      setFormSchema((prev: any) => {
+        return {
+          type: 'object',
+          labelWidth: 151,
+          displayType: 'column',
+          properties: {
+            input_teamName: {
+              title: '队伍名称',
+              type: 'string',
+              displayType: 'column',
+              required: true,
+              labelWidth: 0,
+              props: {},
+            },
+            listOfTeacher: { ...prev.properties.listOfTeacher },
+            listOfParti: {
+              type: 'object',
+              properties: {
+                select_numOfParti: {
+                  title: '队员人数',
+                  type: 'number',
+                  widget: 'slider',
+                  displayType: 'column',
+                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
+                  required: true,
+                  placeholder: '',
+                  min: competitionInfo.minParti,
+                  max: competitionInfo.maxParti,
+                  default: curParti,
+                },
+                leader: {
+                  title: '队长信息',
+                  type: 'object',
+                  displayType: 'column',
+                  description: '队长信息已自动填写',
+                  properties: {
+                    name: {
+                      title: '姓名',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    code: {
+                      title: '学号',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    college: {
+                      title: '学院',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    major: {
+                      title: '专业',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    },
+                    contact: {
+                      title: '联系方式',
+                      type: 'string',
+                      readOnly: true,
+                      props: {},
+                    }
+                  },
+                },
               }
             },
           },
-        },
+        }
       })
-      const number = Number(values.select_numOfParti)
+      const number = Number(values[select_numOfParti])
       setCurParti(number)
-      console.log(number)
+      console.log(number);
       const newEle = generateForm(number)
       newEle.forEach((element) => {
         setFormSchema((prev: any) => {
-          return { ...prev, properties: { ...prev.properties, ...element } }
+          return { ...prev, properties: { ...prev.properties, listOfParti: { ...prev.properties.listOfParti, properties: { ...prev.properties.listOfParti.properties, ...element } }, listOfTeacher: { ...prev.properties.listOfTeacher } } }
+        })
+      })
+    }
+    if (values[select_numOfTeacher] !== undefined) {
+      setFormSchema((prev: any) => {
+        return {
+          type: 'object',
+          labelWidth: 151,
+          displayType: 'column',
+          properties: {
+            input_teamName: {
+              title: '队伍名称',
+              type: 'string',
+              displayType: 'column',
+              required: true,
+              labelWidth: 0,
+              props: {},
+            },
+            listOfTeacher: {
+              type: 'object',
+              properties: {
+                select_numOfTeacher: {
+                  title: '指导老师人数',
+                  type: 'number',
+                  widget: 'slider',
+                  displayType: 'column',
+                  description: '最多人数 ' + 5,
+                  required: true,
+                  placeholder: '',
+                  min: 0, // 待改动
+                  max: 5, // 待改动
+                  default: curTeacher,
+                },
+              }
+            },
+            listOfParti: { ...prev.properties.listOfParti },
+          },
+        }
+      })
+      const number2 = Number(values[select_numOfTeacher])
+      console.log(number2);
+      number2 && setCurTeacher(number2)
+      const newEle2 = generateTeacherForm(number2)
+      number2 && newEle2.forEach((element) => {
+        setFormSchema((prev: any) => {
+          return { ...prev, properties: { ...prev.properties, listOfParti: { ...prev.properties.listOfParti }, listOfTeacher: { ...prev.properties.listOfTeacher, properties: { ...prev.properties.listOfTeacher.properties, ...element } } } }
         })
       })
     }
