@@ -12,6 +12,7 @@ import './index.scss'
 import { login } from '../../api/public'
 import { getUserProfile } from '../../api/user'
 import LogoSvg from "../../assets/Logo.svg"
+import avatar from "../../assets/avatar.jpg"
 
 const { Header, Content, Sider } = Layout
 
@@ -167,7 +168,7 @@ const Home = () => {
                   <BellOutlined></BellOutlined>
                 </div> */}
                 <div className="user-wrap">
-                  <div className="user-img"></div>
+                  <img src={avatar} alt='avatar' style={{ height: "30px", width: "30px", borderRadius: "15px" }}></img>
                   <div className="username">{userProfile.name}</div>
                 </div>
                 <div className="control-item" onClick={logout}>
