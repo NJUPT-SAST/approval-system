@@ -53,7 +53,7 @@ async function downloadExcelFile(data: any) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'template.xlsx';
+    link.download = 'password.xlsx';
 
     // 触发下载
     link.click();
@@ -136,7 +136,7 @@ const Import = () => {
         </Upload>
         <Button style={{ marginTop: "10px" }} onClick={() => generateExcelFile()}>下载模板</Button>
         <br /><br /><br />
-        <Tag color="red" >请即使导出excel，否则表格里面的数据会丢失</Tag>
+        <Tag color="red" >请及时下载并保管好账号数据，页面关闭后将无法再次下载历史数据</Tag>
         <Table dataSource={data} columns={columns} />
         <Button onClick={() => downloadExcelFile(data)} ref={buttonRef}>从表格导出Excel</Button>
     </div></div>
