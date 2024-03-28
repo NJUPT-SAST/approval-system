@@ -339,7 +339,7 @@ function RegisterDetail() {
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
               {workData?.length === 0 || workData === null || workData === undefined || beforeSubmitTime === true ? (
-                <Empty className="empty" description={beforeSubmitTime ? '还没提交过项目哦' : '还没到项目提交时间哦'} />
+                <Empty className="empty" description={!beforeSubmitTime ? '还没提交过项目哦' : '还没到项目提交时间哦'} />
               ) : (
                 workData?.map((item, index) => {
                   if (item.isFile) {
