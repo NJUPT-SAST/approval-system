@@ -1,4 +1,4 @@
-import { DashboardOutlined } from '@ant-design/icons'
+import { DashboardOutlined, MessageOutlined, SendOutlined, SettingOutlined } from '@ant-design/icons'
 import { useRecoilValue } from 'recoil'
 import { userInboxPointState } from '../../../../store/userInboxState'
 import { Menu } from 'antd'
@@ -16,11 +16,11 @@ function UserMenu(props: any) {
       <Menu.Item key="/" icon={<DashboardOutlined />}>
         我的账号
       </Menu.Item>
-      <Menu.Item key="/inbox" icon={<DashboardOutlined />}>
+      <Menu.Item key="/inbox" icon={<MessageOutlined />}>
         收件箱{point === 'on' ? <span className="message-read-or-not"></span> : <></>}
       </Menu.Item>
-      <Menu.Item key="/activity" icon={<DashboardOutlined />}>
-        活动广场
+      <Menu.Item key="/activity" icon={<SettingOutlined />}>
+        比赛入口
       </Menu.Item>
     </Menu>
   )

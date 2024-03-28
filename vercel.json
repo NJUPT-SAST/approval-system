@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:slug*",
+      "destination": "https://approve.sast.fun/api/:slug*"
+    }
+  ]
+}

@@ -2,8 +2,8 @@ import axios from 'axios'
 import { apis } from '.'
 
 /**
- * 提交作品审核列表
- * @param workId 作品 id
+ * 提交项目审核列表
+ * @param workId 项目 id
  * @param accept 是否通过 值为 true 或 false (接口文档里类型标的是integer?
  * @param opinion 对通过情况的说明
  * @return axios 对象
@@ -36,7 +36,7 @@ export const getJudgeCompetitionList = (page: number) => {
 }
 
 /**
- * 获取审核作品列表
+ * 获取审核项目列表
  * @param comId 比赛 id
  * @param page 当前页数
  * @return axios 对象
@@ -53,8 +53,8 @@ export const getJudgeWorkList = (comId: number, page: number) => {
 }
 
 /**
- * 获取审核作品信息
- * @param workId 作品id
+ * 获取审核项目信息
+ * @param workId 项目id
  * @return axios 对象
  */
 export const getJudgeWorkInfo = (workId: number) => {
@@ -83,7 +83,7 @@ export const getScoreCompetitionList = (page: number) => {
 }
 
 /**
- * 获取评分作品列表
+ * 获取评分项目列表
  * @param comId 比赛 id
  * @param page 当前页数
  * @return axios 对象
@@ -100,8 +100,8 @@ export const getScoreWorkList = (comId: number, page: number) => {
 }
 
 /**
- * 获取评分作品信息
- * @param workId 作品id
+ * 获取评分项目信息
+ * @param workId 项目id
  * @return axios 对象
  */
 export const getScoreWork = (workId: number) => {
@@ -117,8 +117,8 @@ export const getScoreWork = (workId: number) => {
   })
 }
 /**
- * 获取评分作品总数
- * @param workId 作品id
+ * 获取评分项目总数
+ * @param workId 项目id
  * @return axios 对象
  */
 export const getScoreWorkTotal = (workId: number) => {
@@ -132,8 +132,8 @@ export const getScoreWorkTotal = (workId: number) => {
 }
 
 /**
- * 获取审批作品总数
- * @param workId 作品id
+ * 获取审批项目总数
+ * @param workId 项目id
  * @return axios 对象
  */
 export const getJudgeWorkTotal = (workId: number) => {
@@ -147,10 +147,10 @@ export const getJudgeWorkTotal = (workId: number) => {
 }
 
 /**
- * 提交作品评分信息
- * @param workId 作品 id
+ * 提交项目评分信息
+ * @param workId 项目 id
  * @param score 评的分 0 ~ 100
- * @param opinion 评价
+ * @param opinion 评语
  * @return axios 对象
  */
 export const uploadWorkScoreInfo = (workId: number, score: number, opinion: string) => {

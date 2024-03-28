@@ -112,8 +112,8 @@ export const assignJudge = (formData: FormData) => {
 }
 
 /**
- * 导出作品（分配评委）
- * 导出作品后用于分配评委 导出的是一个 excel 文件
+ * 导出项目（分配评委）
+ * 导出项目后用于分配评委 导出的是一个 excel 文件
  *  @param competitionId 活动Id
  * @return axios对象
  */

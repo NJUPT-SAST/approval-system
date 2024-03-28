@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu } from 'antd'
-import { DashboardOutlined } from '@ant-design/icons'
+import { DashboardOutlined, SendOutlined } from '@ant-design/icons'
 function UnLoginMenu(props: any) {
   return (
     <Menu
@@ -9,8 +9,8 @@ function UnLoginMenu(props: any) {
       selectedKeys={[props.navigation]}
       defaultSelectedKeys={['/']}
     >
-      <Menu.Item key="/" icon={<DashboardOutlined />}>
-        活动广场
+      <Menu.Item key="/" icon={<SendOutlined />}>
+        比赛入口
       </Menu.Item>
     </Menu>
   )
