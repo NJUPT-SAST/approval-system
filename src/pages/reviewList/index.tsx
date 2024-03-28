@@ -47,10 +47,9 @@ function ReviewList() {
       }, 100)
       navigate('/review')
     }
-    console.log(res.data.data);
+    // console.log(res.data.data);
 
     const programList = res.data.data.list
-    console.log(programList);
 
     if (role === 'approver') {
       let scoreCount = 0
@@ -68,20 +67,23 @@ function ReviewList() {
 
       setIsApproveCount(scoreCount)
     } else {
-      let passCount = 0
-      let _isPass;
+      let judgeCount = 0
       for (let i = 0; i < programList.length; i++) {
-        console.log(programList);
-
-        programList[i]?.isPass ? _isPass = true : _isPass = false
-        programList[i].isPass = _isPass
-        if (_isPass) {
-          passCount++
+        console.log(programList[i]);
+        if (programList[i]?.isPass === true) {
+          judgeCount++;
+          result.list[i].isJudge = true
+          result.list[i].isPass = '通过'
+        } else if (programList[i]?.isPass === false) {
+          judgeCount++;
+          result.list[i].isJudge = true
+          result.list[i].isPass = '未通过'
+        } else {
+          result.list[i].isJudge = false
+          result.list[i].isPass = ''
         }
-        result.list[i].isPass = result.list[i].isPass === true ? '通过' : '未通过'
-        console.log(programList[i].isApprove)
       }
-      setIsApproveCount(passCount)
+      setIsApproveCount(judgeCount)
     }
     setProgramList(programList)
     setDataList(result)
@@ -206,11 +208,19 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
       title: '状态',
       dataIndex: role === 'approver' ? 'isApprove' : 'isJudge',
       render: (data) => {
-        return <Space>
-          <Tag color={data ? "green" : "red"} key={data}>
-            {data ? "已评审" : "未评审"}
-          </Tag>
-        </Space>
+        if (role === 'approver') {
+          return <Space>
+            <Tag color={data ? "green" : "red"} key={data}>
+              {data ? "已评分" : "未评分"}
+            </Tag>
+          </Space>
+        } else {
+          return (<Space>
+            <Tag color={data ? "green" : "red"} key={data}>
+              {data ? "已审核" : "未审核"}
+            </Tag>
+          </Space>)
+        }
       }
     },
     {

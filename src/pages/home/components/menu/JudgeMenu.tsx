@@ -22,7 +22,7 @@ function JudgeMenu(props: any) {
         比赛入口
       </Menu.Item>
       <Menu.Item key="/review" icon={<SettingOutlined />}>
-        比赛评审
+        比赛审核
       </Menu.Item>
     </Menu>
   )
