@@ -70,54 +70,56 @@ function LoginForm(props: loginFormProp) {
 
   return (
     <Form name="normal_login" className="login-form" onFinish={props.finishCb}>
-      <div className="avatar"></div>
-      <div className={'login-title'}>登录 通用比赛管理评审系统</div>
-      <Form.Item
-        className="login-form-body"
-        name="username"
-        rules={[{ required: true, message: '请输入正确的用户名！' }]}
-      >
-        <Input
-          className="login-form-input"
-          prefix={<UserOutlined className="site-form-item-icon" />}
-          placeholder="Username"
-        />
-      </Form.Item>
-      <Form.Item
-        className="login-form-body"
-        name="password"
-        rules={[{ required: false, message: '请输入正确的密码！' }]}
-      >
-        <Input
-          className="login-form-input"
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Item>
-      <div className="validate-part-body">
+      <div className='login-container'>
+        <div className="avatar"></div>
+        <div className={'login-title'}>登录 通用比赛管理评审系统</div>
         <Form.Item
-          name="validate"
-          className="validate-input login-form-body"
-          rules={[{ required: true, message: '验证码错误！' }]}
+          className="login-form-body"
+          name="username"
+          rules={[{ required: false, message: '请输入正确的用户名！' }]}
         >
           <Input
-            className="login-form-input validate"
-            id="validate"
-            prefix={<SafetyOutlined className="site-form-item-icon" />}
-            placeholder="Validate code"
-            // value={validateValue}
-            // onChange={value=>{setValidateValue(value.target.value)}}
-            ref={clearRef}
+            className="login-form-input"
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Username"
           />
         </Form.Item>
-        <img src={validateCodeUrl} alt="validate code" className="validate-img" onClick={refreshCode} />
+        <Form.Item
+          className="login-form-body"
+          name="password"
+          rules={[{ required: false, message: '请输入正确的密码！' }]}
+        >
+          <Input
+            className="login-form-input"
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
+        <div className="validate-part-body">
+          <Form.Item
+            name="validate"
+            className="validate-input login-form-body"
+            rules={[{ required: false, message: '验证码错误！' }]}
+          >
+            <Input
+              className="login-form-input validate"
+              id="validate"
+              prefix={<SafetyOutlined className="site-form-item-icon" />}
+              placeholder="Validate code"
+              // value={validateValue}
+              // onChange={value=>{setValidateValue(value.target.value)}}
+              ref={clearRef}
+            />
+          </Form.Item>
+          <img src={validateCodeUrl} alt="validate code" className="validate-img" onClick={refreshCode} />
+        </div>
+        <Form.Item style={{ width: "100%" }}>
+          <Button type="primary" htmlType="submit" className="login-form-button">
+            登 录
+          </Button>
+        </Form.Item>
       </div>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          登 录
-        </Button>
-      </Form.Item>
     </Form>
   )
 }
