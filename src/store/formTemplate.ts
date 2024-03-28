@@ -34,39 +34,40 @@ export const tempelate = [
         },
         order: 3,
       },
-      作品简介书: {
+      项目简介书: {
         type: 'string',
         widget: 'customUpload',
-        title: '作品简介书',
+        title: '项目简介书',
         required: true,
         props: {
-          inputName: '作品简介书',
+          inputName: '项目简介书',
           accept: '.pdf',
         },
         order: 4,
       },
-      作品名称: {
+      项目名称: {
         type: 'string',
         props: {},
-        title: '作品名称',
+        title: '项目名称',
         required: true,
         order: 5,
       },
-      作品类别: {
+      项目类别: {
         enum: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
         type: 'string',
-        title: '作品类别',
+        title: '项目类别',
         widget: 'select',
         required: true,
         enumNames: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类', '科技发明制作B类'],
         order: 6,
       },
-      作品简介: {
+      项目简介: {
         type: 'string',
         props: {},
-        title: '作品简介',
+        title: '项目简介',
         format: 'textarea',
         required: true,
+        max: 500,
         order: 7,
       },
     },
@@ -76,18 +77,18 @@ export const tempelate = [
     type: 'object',
     labelWidth: 120,
     properties: {
-      作品名称: {
-        title: '作品名称',
+      项目名称: {
+        title: '项目名称',
         type: 'string',
         required: true,
         props: {},
         order: 1,
       },
-      作品类型: {
-        title: '作品类型',
+      项目类型: {
+        title: '项目类型',
         type: 'string',
-        enum: ['活动策划书', '项目企划书', '数字媒体作品'],
-        enumNames: ['活动策划书', '项目企划书', '数字媒体作品'],
+        enum: ['活动策划书', '项目企划书', '数字媒体项目'],
+        enumNames: ['活动策划书', '项目企划书', '数字媒体项目'],
         widget: 'radio',
         required: true,
         order: 2,
@@ -127,35 +128,35 @@ export const tempelate = [
         props: { inputName: '项目企划书现有成果资料附录', accept: '.zip,.rar' },
         order: 5,
       },
-      数字媒体作品: {
-        title: '数字媒体作品',
+      数字媒体项目: {
+        title: '数字媒体项目',
         type: 'string',
         widget: 'customUpload',
         displayType: 'column',
         description: '限制压缩包',
-        props: { inputName: '数字媒体作品', accept: '.zip,.rar' },
+        props: { inputName: '数字媒体项目', accept: '.zip,.rar' },
         order: 6,
       },
-      数字媒体作品说明书: {
-        title: '数字媒体作品说明书',
+      数字媒体项目说明书: {
+        title: '数字媒体项目说明书',
         type: 'string',
         widget: 'customUpload',
         displayType: 'column',
         description: '限制word文档',
         props: {
-          inputName: '数字媒体作品说明书',
+          inputName: '数字媒体项目说明书',
           accept:
             '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         },
         order: 7,
       },
-      数字媒体作品参考资料: {
-        title: '数字媒体作品参考资料',
+      数字媒体项目参考资料: {
+        title: '数字媒体项目参考资料',
         type: 'string',
         widget: 'customUpload',
         displayType: 'column',
         description: '限制压缩包',
-        props: { inputName: '数字媒体作品参考资料', accept: '.zip,.rar' },
+        props: { inputName: '数字媒体项目参考资料', accept: '.zip,.rar' },
         order: 8,
       },
     },
@@ -176,7 +177,6 @@ export const tempelate = [
           '材料与工程学院',
           '化学与生命科学学院',
           '物联网学院',
-          '地理与生物信息学院',
           '现代邮政学院',
           '传媒与艺术学院',
           '管理学院',
@@ -202,7 +202,6 @@ export const tempelate = [
           '材料与工程学院',
           '化学与生命科学学院',
           '物联网学院',
-          '地理与生物信息学院',
           '现代邮政学院',
           '传媒与艺术学院',
           '管理学院',
@@ -216,7 +215,7 @@ export const tempelate = [
         ],
         order: 1,
       },
-      作品名称: { type: 'string', props: {}, title: '项目名称', required: true, order: 2 },
+      项目名称: { type: 'string', props: {}, title: '项目名称', required: true, order: 2 },
       项目组别: {
         enum: [
           'A.科技创新和未来产业',
@@ -253,7 +252,7 @@ export const tempelate = [
         widget: 'customUpload',
         title: '项目申报书',
         required: true,
-        props: { inputName: '项目申报书', accept: '.doc,.docx' },
+        props: { inputName: '项目申报书', accept: '.pdf' },
         order: 7,
       },
       创业计划书: {
@@ -270,6 +269,14 @@ export const tempelate = [
         title: '项目 PPT',
         required: true,
         props: { inputName: '项目 PPT', accept: '.ppt,.pptx' },
+        order: 9,
+      },
+      附件: {
+        type: 'string',
+        widget: 'customUpload',
+        title: '附件',
+        required: false,
+        props: { inputName: '附件', accept: '.zip,.rar' },
         order: 9,
       },
     },

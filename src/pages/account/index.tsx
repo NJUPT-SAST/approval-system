@@ -155,18 +155,18 @@ function Main() {
       title: '姓名',
       content: `${userProfile[0].name}`,
     },
-    grade: {
-      title: '年级',
-      content: `20${userProfile[0].code.charAt(1)}${userProfile[0].code.charAt(2)}级`
-      // },
-      // faculty: {
-      //   title: '学院',
-      //   content: `${userProfile[0].college}`,
-      // },
-      // major: {
-      //   title: '专业',
-      //   content: `${userProfile[0].major}`,
-    },
+    // grade: {
+    //   title: '年级',
+    //   content: `20${userProfile[0].code.charAt(1)}${userProfile[0].code.charAt(2)}级`
+    // },
+    // faculty: {
+    //   title: '学院',
+    //   content: `${userProfile[0].college}`,
+    // },
+    // major: {
+    //   title: '专业',
+    //   content: `${userProfile[0].major}`,
+    // },
   }
 
   // const [accountInfo, setAccountInfo] = useState<Record<string, InfoItem>>({

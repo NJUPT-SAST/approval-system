@@ -81,14 +81,6 @@ const Home = () => {
           }
         })
         switch (res.data.data.role) {
-          case 3:
-            setUserState('admin')
-            localStorage.setItem('userState', 'admin')
-            break
-          case 2:
-            setUserState('approver')
-            localStorage.setItem('userState', 'approver')
-            break
           case 0:
             setUserState('user')
             localStorage.setItem('userState', 'user')
@@ -96,6 +88,14 @@ const Home = () => {
           case 1:
             setUserState('judge')
             localStorage.setItem('userState', 'judge')
+            break
+          case 2:
+            setUserState('approver')
+            localStorage.setItem('userState', 'approver')
+            break
+          case 3:
+            setUserState('admin')
+            localStorage.setItem('userState', 'admin')
             break
           default:
             break
@@ -142,8 +142,9 @@ const Home = () => {
   // console.log(validateCodeId)
 
   return (
+
     <Layout style={{ minHeight: '100vh' }}>
-      <Header className="header" style={{ padding: " 0 15px" }}>
+      {userState === 'offline' ? '' : <Header className="header">
         <div className="header-wrap">
           <div className="logo-wrap">
             {/* <div className="logo"></div> */}
@@ -155,7 +156,8 @@ const Home = () => {
               <></>
             ) : (
               <Fragment>
-                <div className="control-item">
+                {/*注释多余的Icon*/}
+                {/* <div className="control-item">
                   <QuestionCircleOutlined></QuestionCircleOutlined>
                 </div>
                 <div className="control-item">
@@ -163,7 +165,7 @@ const Home = () => {
                 </div>
                 <div className="control-item">
                   <BellOutlined></BellOutlined>
-                </div>
+                </div> */}
                 <div className="user-wrap">
                   <div className="user-img"></div>
                   <div className="username">{userProfile.name}</div>
@@ -179,23 +181,25 @@ const Home = () => {
             )}
           </div>
         </div>
-      </Header>
+      </Header>}
       <Layout>
-        <Sider
-          // collapsible
-          // collapsed={collapsed}
-          // onCollapse={(value) => setCollapsed(value)}
-          width={200}
-          className="site-layout-background sidebar"
-        >
-          {userState === 'offline' ? (
+        {userState === 'offline' ?
+          <Content
+            className="new-login"
+          >
             <LoginForm finishCb={onFinish} setCodeId={getValidateId} getValidateCode={getValidateCode}></LoginForm>
-          ) : (
+          </Content> :
+          <Sider
+            // collapsible
+            // collapsed={collapsed}
+            // onCollapse={(value) => setCollapsed(value)}
+            width={200}
+            className="site-layout-background sidebar"
+          >
             <UserProfile code={userProfile.code} name={userProfile.name} logout={logout} />
-          )}
-          <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
-        </Sider>
-        <Layout>
+            <Menu handleClickMenuItem={handleClickMenuItem} navigation={navigation}></Menu>
+          </Sider>}
+        {userState === 'offline' ? '' : <Layout>
           <Content
             className="site-layout-background"
             style={{
@@ -206,7 +210,7 @@ const Home = () => {
           >
             <Outlet></Outlet>
           </Content>
-        </Layout>
+        </Layout>}
       </Layout>
     </Layout>
   )

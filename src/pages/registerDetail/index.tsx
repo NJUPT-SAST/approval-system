@@ -28,10 +28,12 @@ function RegisterDetail() {
   const [teamInfo, setTeamInfo] = useState<{
     teamName: string
     teamMember: any[]
+    teacherMember?: any[]
     teamNum?: number
   }>({
     teamName: '加载中',
     teamMember: [{ name: '加载中', code: '加载中' }],
+    teacherMember: [{ name: '加载中', code: '加载中' }],
   })
   const [workData, setWorkData] = useState<
     {
@@ -82,6 +84,7 @@ function RegisterDetail() {
         setTeamInfo({
           teamName: res.data.data.teamName,
           teamMember: res.data.data.teamMember,
+          teacherMember: res.data.data.teacherMember,
           teamNum: res.data.data.teamMember.length,
         })
         setIsLoading(false)
@@ -102,10 +105,10 @@ function RegisterDetail() {
     getWorkInfo(Number(id)).then((res) => {
       // console.log(res)
       setWorkData(res.data.data)
-      if (res.data.errMsg === '您还未上传作品') {
+      if (res.data.errMsg === '您还未上传项目') {
         notification.warning({
-          message: '您还未上传作品',
-          description: '请记得提交您的作品哦，否则无法正常参赛',
+          message: '您还未上传项目',
+          description: '请记得提交您的项目哦，否则无法正常参赛',
           placement: 'topRight',
           top: 150,
           duration: 5,
@@ -313,15 +316,30 @@ function RegisterDetail() {
               </div>
             ))}
           </Skeleton>
+          <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
+            {teamInfo.teacherMember && teamInfo.teacherMember.map((item, index) => (
+              <div className="list" key={index}>
+                <div className="list-title-h2">指导老师{index + 1} 信息</div>
+                <div className="list-item">
+                  <div className="title">姓名</div>
+                  <div className="content">{item.name}</div>
+                </div>
+                <div className="list-item">
+                  <div className="title">工号</div>
+                  <div className="content">{item.code}</div>
+                </div>
+              </div>
+            ))}
+          </Skeleton>
           <Button type="primary" disabled={isLoading} style={{ marginTop: '1rem' }} onClick={changeRegisterInfo}>
             修改报名信息
           </Button>
           <div className="space"></div>
-          <div className="list-title-h1">作品提交信息</div>
+          <div className="list-title-h1">项目提交信息</div>
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
               {workData?.length === 0 || workData === null || workData === undefined || beforeSubmitTime === true ? (
-                <Empty className="empty" description={beforeSubmitTime ? '还没提交过作品哦' : '还没到作品提交时间哦'} />
+                <Empty className="empty" description={beforeSubmitTime ? '还没提交过项目哦' : '还没到项目提交时间哦'} />
               ) : (
                 workData?.map((item, index) => {
                   if (item.isFile) {
@@ -353,13 +371,13 @@ function RegisterDetail() {
             afterSubmitTime ? (
               <>
                 <Button type="primary" disabled style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
-                  修改作品信息
+                  修改项目信息
                 </Button>
                 <div style={{ color: 'gray', fontSize: '12px', marginTop: '.2rem' }}>&nbsp; &nbsp;已经超过提交时间</div>
               </>
             ) : (
               <Button type="primary" disabled={isLoading} style={{ marginTop: '1rem' }} onClick={changeWorkDetail}>
-                修改作品信息
+                修改项目信息
               </Button>
             )
           ) : (

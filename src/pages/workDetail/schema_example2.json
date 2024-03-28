@@ -2,18 +2,18 @@
   "type": "object",
   "labelWidth": 120,
   "properties": {
-    "作品名称": {
-      "title": "作品名称",
+    "项目名称": {
+      "title": "项目名称",
       "type": "string",
       "required": true,
       "props": {},
       "order": 1
     },
-    "作品类型": {
-      "title": "作品类型",
+    "项目类型": {
+      "title": "项目类型",
       "type": "string",
-      "enum": ["活动策划书", "项目企划书", "数字媒体作品"],
-      "enumNames": ["活动策划书", "项目企划书", "数字媒体作品"],
+      "enum": ["活动策划书", "项目企划书", "数字媒体项目"],
+      "enumNames": ["活动策划书", "项目企划书", "数字媒体项目"],
       "widget": "radio",
       "required": true,
       "order": 2
@@ -51,34 +51,34 @@
       "props": { "inputName": "项目企划书现有成果资料附录", "accept": ".zip,.rar" },
       "order": 5
     },
-    "数字媒体作品": {
-      "title": "数字媒体作品",
+    "数字媒体项目": {
+      "title": "数字媒体项目",
       "type": "string",
       "widget": "customUpload",
       "displayType": "column",
       "description": "限制压缩包",
-      "props": { "inputName": "数字媒体作品", "accept": ".zip,.rar" },
+      "props": { "inputName": "数字媒体项目", "accept": ".zip,.rar" },
       "order": 6
     },
-    "数字媒体作品说明书": {
-      "title": "数字媒体作品说明书",
+    "数字媒体项目说明书": {
+      "title": "数字媒体项目说明书",
       "type": "string",
       "widget": "customUpload",
       "displayType": "column",
       "description": "限制word文档",
       "props": {
-        "inputName": "数字媒体作品说明书",
+        "inputName": "数字媒体项目说明书",
         "accept": ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       },
       "order": 7
     },
-    "数字媒体作品参考资料": {
-      "title": "数字媒体作品参考资料",
+    "数字媒体项目参考资料": {
+      "title": "数字媒体项目参考资料",
       "type": "string",
       "widget": "customUpload",
       "displayType": "column",
       "description": "限制压缩包",
-      "props": { "inputName": "数字媒体作品参考资料", "accept": ".zip,.rar" },
+      "props": { "inputName": "数字媒体项目参考资料", "accept": ".zip,.rar" },
       "order": 8
     }
   },

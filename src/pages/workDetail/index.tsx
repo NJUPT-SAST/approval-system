@@ -144,7 +144,7 @@ function WorkDetail() {
             key: 'loading',
           })
           setErrCode(3)
-          setErrMsg('该比赛没有作品提交表单')
+          setErrMsg('该比赛没有项目提交表单')
           setMessageSent(true)
           setMessageStatus('error')
         }
@@ -187,12 +187,12 @@ function WorkDetail() {
       console.log(res)
       setWorkData(res.data.data)
       if (res.data.data === null) {
-        if (res.data.errMsg === '您还未上传作品' && JSON.stringify(remoteSchema) !== '{}') {
+        if (res.data.errMsg === '您还未上传项目' && JSON.stringify(remoteSchema) !== '{}') {
           setLoading(false)
           clearTimeout(stillLoading)
           clearTimeout(loadingError)
           message.info({
-            content: '💡 请填写你的作品信息',
+            content: '💡 请填写你的项目信息',
             key: 'loading',
           })
         }
@@ -463,14 +463,14 @@ function WorkDetail() {
     <div>
       <TopBar activity={competitionDetail.name} />
       <div className="work-detail-body">
-        <div className="title">作品提交信息</div>
+        <div className="title">项目提交信息</div>
         <div className="work-detail-box">
           {messageSent === true ? (
             messageStatus === 'success' ? (
               <Result
                 status="success"
                 title="😄️ 信息提交成功"
-                subTitle="你的作品信息已提交，祝你比赛顺利"
+                subTitle="你的项目信息已提交，祝你比赛顺利"
                 extra={[
                   <Button type="primary" key="back" onClick={goBackToActivity}>
                     返回比赛详情
@@ -497,7 +497,7 @@ function WorkDetail() {
             <Fragment>
               <div className="form-notice">
                 红色星号（<span className="red">*</span>
-                ）代表该选项必填，为了保证您顺利参赛，请按照比赛举办方要求仔细填写本表单提交作品信息
+                ）代表该选项必填，为了保证您顺利参赛，请按照比赛举办方要求仔细填写本表单提交项目信息
               </div>
               <FormRender
                 // debug

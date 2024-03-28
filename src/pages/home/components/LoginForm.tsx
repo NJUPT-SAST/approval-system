@@ -71,6 +71,7 @@ function LoginForm(props: loginFormProp) {
   return (
     <Form name="normal_login" className="login-form" onFinish={props.finishCb}>
       <div className="avatar"></div>
+      <div className={'login-title'}>登录 通用比赛管理评审系统</div>
       <Form.Item
         className="login-form-body"
         name="username"

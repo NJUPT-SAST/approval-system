@@ -61,7 +61,7 @@ const DataTable: React.FC<any> = (props) => {
                   setTimeout(() => {
                     notification.success({
                       message: '😸️ 导出成功',
-                      description: '作品已成功导出！',
+                      description: '项目已成功导出！',
                       top: 20,
                       key: 'loading',
                       placement: 'top',
@@ -71,7 +71,7 @@ const DataTable: React.FC<any> = (props) => {
                   setTimeout(() => {
                     notification.error({
                       message: '😭️ 导出失败',
-                      description: '作品导出失败',
+                      description: '项目导出失败',
                       top: 20,
                       key: 'loading',
                       placement: 'top',

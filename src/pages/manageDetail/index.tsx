@@ -446,7 +446,7 @@ function ManageDetail() {
                 style={{ margin: '0 auto' }}
                 status="404"
                 title="没有数据"
-                subTitle="现在好像没有提交的作品，再等等吧！"
+                subTitle="现在好像没有提交的项目，再等等吧！"
               />
             ) : (
               data.map((value, index) => {
