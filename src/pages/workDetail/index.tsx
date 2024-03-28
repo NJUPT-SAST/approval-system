@@ -184,10 +184,9 @@ function WorkDetail() {
       })
     }, 20000)
     getWorkInfo(Number(id)).then((res) => {
-      console.log(res)
       setWorkData(res.data.data)
       if (res.data.data === null) {
-        if (res.data.errMsg === '您还未上传项目' && JSON.stringify(remoteSchema) !== '{}') {
+        if (res.data.errMsg === '您还未上传作品' && JSON.stringify(remoteSchema) !== '{}') {
           setLoading(false)
           clearTimeout(stillLoading)
           clearTimeout(loadingError)

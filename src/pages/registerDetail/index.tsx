@@ -105,7 +105,7 @@ function RegisterDetail() {
     getWorkInfo(Number(id)).then((res) => {
       // console.log(res)
       setWorkData(res.data.data)
-      if (res.data.errMsg === '您还未上传项目') {
+      if (res.data.errMsg === '您还未上传作品' && !beforeSubmitTime && !afterSubmitTime) {
         notification.warning({
           message: '您还未上传项目',
           description: '请记得提交您的项目哦，否则无法正常参赛',
