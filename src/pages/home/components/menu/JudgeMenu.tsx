@@ -1,4 +1,4 @@
-import { DashboardOutlined, MessageOutlined, SendOutlined, SettingOutlined } from '@ant-design/icons'
+import { DashboardOutlined, MessageOutlined, SendOutlined, SettingOutlined ,ImportOutlined} from '@ant-design/icons'
 import { useRecoilValue } from 'recoil'
 import { userInboxPointState } from '../../../../store/userInboxState'
 import { Menu } from 'antd'
@@ -23,6 +23,9 @@ function JudgeMenu(props: any) {
       </Menu.Item>
       <Menu.Item key="/review" icon={<SettingOutlined />}>
         比赛审核
+      </Menu.Item>
+      <Menu.Item key="/import" icon={<ImportOutlined />}>
+        一键导入
       </Menu.Item>
     </Menu>
   )
