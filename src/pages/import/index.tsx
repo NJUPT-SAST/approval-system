@@ -102,12 +102,12 @@ const Import = () => {
 
     const columns = [
         {
-            title: 'Code',
+            title: '账号',
             dataIndex: 'code',
             key: 'code',
         },
         {
-            title: 'Password',
+            title: '密码',
             dataIndex: 'password',
             key: 'password',
         },
@@ -130,15 +130,15 @@ const Import = () => {
 
 
     return <div style={{ display: "flex", justifyContent: "center" }}><div style={{ width: "90%", backgroundColor: "white", marginTop: "5%", padding: "30px" }}>
-        <h1 style={{ fontSize: "24px" }}>Import the account from  your excel</h1>
+        <h1 style={{ fontSize: "24px" }}>一键从Excel导入账号</h1>
         <Upload  {...props} onChange={handleUploadChange} accept={fileTypes.join(',')}>
-            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            <Button icon={<UploadOutlined />}>点击上传</Button>
         </Upload>
-        <Button style={{ marginTop: "10px" }} onClick={() => generateExcelFile()}>Download Template</Button>
+        <Button style={{ marginTop: "10px" }} onClick={() => generateExcelFile()}>下载模板</Button>
         <br /><br /><br />
-        <Tag color="red" >For protection and security, please download this time even if the content, after refreshing the account and password will disappear.</Tag>
+        <Tag color="red" >请即使导出excel，否则表格里面的数据会丢失</Tag>
         <Table dataSource={data} columns={columns} />
-        <Button onClick={() => downloadExcelFile(data)} ref={buttonRef}>Export excel from above table</Button>
+        <Button onClick={() => downloadExcelFile(data)} ref={buttonRef}>从表格导出Excel</Button>
     </div></div>
 }
 
