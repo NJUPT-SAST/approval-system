@@ -1,4 +1,5 @@
 import React from 'react'
+import avatar from "../../../assets/avatar.jpg"
 
 type userProfileType = {
   code: string //学号
@@ -9,7 +10,7 @@ const UserProfile: React.FC<userProfileType> = (props) => {
   const { code, name, logout } = props
   return (
     <div className="user-profile">
-      <div className="avatar"></div>
+      <img src={avatar} alt='avatar' style={{ height: "70px", width: "70px", margin: "50px 20px 30px", borderRadius: "35px" }}></img>
       <div className="user-profile-code">
         <span>{code}</span>
         {name}
