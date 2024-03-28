@@ -10,7 +10,7 @@ async function generateExcelFile() {
     const workbook = XLSX.utils.book_new();
 
     const worksheet = XLSX.utils.aoa_to_sheet([
-        ['学号', '姓名']
+        ['学号', '姓名', "联系方式"]
     ]);
 
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
