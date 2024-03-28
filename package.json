@@ -20,6 +20,8 @@
     "axios": "^0.27.2",
     "craco": "^0.0.3",
     "craco-less": "^2.0.0",
+    "exceljs": "^4.2.0",
+    "file-saver": "^2.0.5",
     "form-render": "1.13.12",
     "http-proxy-middleware": "^2.0.6",
     "inquirer": "^8.2.4",
@@ -35,7 +37,8 @@
     "sass-loader": "^13.0.0",
     "storage-pocket": "^0.2.0",
     "typescript": "^4.6.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -68,6 +71,7 @@
     ]
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/qs": "^6.9.11",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
