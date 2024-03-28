@@ -77,6 +77,7 @@ export const signUp = (
   competitionId: number,
   teamName: string | null,
   teamMember: { name: string; code: string }[],
+  teacherMember: { name: string; code: string}[]
 ) => {
   return apis({
     method: 'POST',
@@ -85,6 +86,7 @@ export const signUp = (
       comId: competitionId,
       teamName: teamName,
       teamMember: [...teamMember],
+      teacherMember: [...teacherMember],
     },
   })
 }

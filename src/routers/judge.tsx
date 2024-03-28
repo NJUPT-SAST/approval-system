@@ -9,6 +9,7 @@ import ReviewJudge from '../pages/reviewJudge'
 import ReviewList from '../pages/reviewList'
 import Activity from '../pages/activity'
 import ActivityDetail from '../pages/activityDetail'
+import Import from '../pages/import'
 
 const judge: RouteObject[] = [
   {
@@ -23,6 +24,7 @@ const judge: RouteObject[] = [
       { path: 'review', element: <Review /> },
       { path: 'review/detail/:id', element: <ReviewJudge /> },
       { path: 'review/list/:comId/:page', element: <ReviewList /> },
+      { path: "/import", element: <Import /> },
       { path: '*', element: <NoMatch /> },
     ],
   },
