@@ -91,7 +91,9 @@ const ReviewJudge: React.FC = (props) => {
       })
   }
   const handleSubmit = () => {
-    if (opinion !== '') {
+    console.log(isPass);
+
+    if (isPass || (!isPass && opinion !== '')) {
       uploadWorkJudgeInfo(Number(id), isPass!, opinion!).then(() => {
         // if (Number(id) === total) {
         //   setTimeout(() => {
