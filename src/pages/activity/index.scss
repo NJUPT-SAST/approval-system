@@ -1,4 +1,4 @@
-.filter-button{
+.filter-button {
   margin-right: 20px;
   margin-bottom: 20px;
 }
@@ -67,7 +67,7 @@
     .filter-cover-item {
       height: 40px;
       width: 300px;
-      background: linear-gradient(to left,rgb(255, 255, 255) 30%,rgba(255, 255, 255, 0));
+      background: linear-gradient(to left, rgb(255, 255, 255) 30%, rgba(255, 255, 255, 0));
       position: absolute;
       z-index: 999;
       right: 0;
@@ -90,14 +90,14 @@
     flex-wrap: wrap;
     gap: 4vw;
     row-gap: 50px;
-    .loading{
+    .loading {
       width: 100%;
       height: 60vh;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      .ant-spin-text{
+      .ant-spin-text {
         font-size: 20px;
         font-weight: 500;
         margin-top: 20px;
@@ -134,4 +134,3 @@
     }
   }
 }
-

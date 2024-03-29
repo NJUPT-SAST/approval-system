@@ -72,7 +72,7 @@ function WorkDetail() {
 
   const getFileName = (url: string) => {
     const nameList = url.split('/')
-    const fileName = nameList[nameList.length - 1]
+    const fileName = nameList[nameList.length - 1].split('-').slice(2).join('-')
     // console.log(fileName)
     return fileName
   }
@@ -312,7 +312,7 @@ function WorkDetail() {
       fileList: localFileList,
       showUploadList: { showDownloadIcon: true },
       onPreview(file: any) {
-        console.log(file)
+        console.log('preview ', file)
         downloadFile(file.url)
       },
       // onRemove: onRemove(props.inputName),

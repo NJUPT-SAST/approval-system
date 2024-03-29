@@ -189,6 +189,7 @@ const Home = () => {
             className="new-login"
           >
             <LoginForm finishCb={onFinish} setCodeId={getValidateId} getValidateCode={getValidateCode}></LoginForm>
+            <div className='copyright'>{`1992 - 2024 Students' Association for Science and Technology · `}<a href='https://github.com/NJUPT-SAST' aria-label='sast github'>Github</a></div>
           </Content> :
           <Sider
             // collapsible
