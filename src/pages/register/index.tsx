@@ -86,18 +86,18 @@ function Register() {
                 readOnly: true,
                 props: {},
               },
-              college: {
-                title: '学院',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
-              major: {
-                title: '专业',
-                type: 'string',
-                readOnly: true,
-                props: {},
-              },
+              // college: {
+              //   title: '学院',
+              //   type: 'string',
+              //   readOnly: true,
+              //   props: {},
+              // },
+              // major: {
+              //   title: '专业',
+              //   type: 'string',
+              //   readOnly: true,
+              //   props: {},
+              // },
               contact: {
                 title: '联系方式',
                 type: 'string',
@@ -218,18 +218,18 @@ function Register() {
                   readOnly: true,
                   props: {},
                 },
-                college: {
-                  title: '学院',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
-                },
-                major: {
-                  title: '专业',
-                  type: 'string',
-                  readOnly: true,
-                  props: {},
-                },
+                // college: {
+                //   title: '学院',
+                //   type: 'string',
+                //   readOnly: true,
+                //   props: {},
+                // },
+                // major: {
+                //   title: '专业',
+                //   type: 'string',
+                //   readOnly: true,
+                //   props: {},
+                // },
                 contact: {
                   title: '联系方式',
                   type: 'string',
@@ -311,18 +311,18 @@ function Register() {
                       readOnly: true,
                       props: {},
                     },
-                    college: {
-                      title: '学院',
-                      type: 'string',
-                      readOnly: true,
-                      props: {},
-                    },
-                    major: {
-                      title: '专业',
-                      type: 'string',
-                      readOnly: true,
-                      props: {},
-                    },
+                    // college: {
+                    //   title: '学院',
+                    //   type: 'string',
+                    //   readOnly: true,
+                    //   props: {},
+                    // },
+                    // major: {
+                    //   title: '专业',
+                    //   type: 'string',
+                    //   readOnly: true,
+                    //   props: {},
+                    // },
                     contact: {
                       title: '联系方式',
                       type: 'string',
@@ -373,41 +373,98 @@ function Register() {
               ],
               props: {},
             },
-            [inputName3]: {
-              title: '学院',
-              type: 'string',
-              widget: 'select',
-              required: true,
-              props: {
-                options: [
-                  { label: '通信与信息工程学院', value: '通信与信息工程学院' },
-                  { label: '电子与光学工程学院、柔性电子 （未来技术）学院', value: '电子与光学工程学院、柔性电子 （未来技术）学院' },
-                  { label: '集成电路科学与工程学院', value: '集成电路科学与工程学院' },
-                  { label: '计算机学院、软件学院、网络空间安全学院', value: '计算机学院、软件学院、网络空间安全学院' },
-                  { label: '信息材料与纳米技术研究院、材料科学与工程学院', value: '信息材料与纳米技术研究院、材料科学与工程学院' },
-                  { label: '自动化学院、人工智能学院', value: '自动化学院、人工智能学院' },
-                  { label: '材料与工程学院', value: '材料与工程学院' },
-                  { label: '化学与生命科学学院', value: '化学与生命科学学院' },
-                  { label: '物联网学院', value: '物联网学院' },
-                  { label: '现代邮政学院', value: '现代邮政学院' },
-                  { label: '传媒与艺术学院', value: '传媒与艺术学院' },
-                  { label: '管理学院', value: '管理学院' },
-                  { label: '经济学院', value: '经济学院' },
-                  { label: '马克思主义学院', value: '马克思主义学院' },
-                  { label: '社会与人口学院', value: '社会与人口学院' },
-                  { label: '外国语学院', value: '外国语学院' },
-                  { label: '教育科学与技术学院', value: '教育科学与技术学院' },
-                  { label: '贝尔英才学院', value: '贝尔英才学院' },
-                  { label: '海外教育学院', value: '海外教育学院' },
-                ]
-              },
-            },
-            [inputName4]: {
-              title: '专业',
-              type: 'string',
-              required: true,
-              props: {},
-            },
+            // [inputName3]: {
+            //   title: '学院',
+            //   type: 'string',
+            //   widget: 'select',
+            //   required: true,
+            //   props: {
+            //     options: [
+            //       {
+            //         "label": "通信与信息工程学院",
+            //         "value": "通信与信息工程学院"
+            //       },
+            //       {
+            //         "label": "电子与光学工程学院、柔性电子（未来技术）学院",
+            //         "value": "电子与光学工程学院、柔性电子（未来技术）学院"
+            //       },
+            //       {
+            //         "label": "集成电路科学与工程学院（产教融合学院）",
+            //         "value": "集成电路科学与工程学院（产教融合学院）"
+            //       },
+            //       {
+            //         "label": "计算机学院、软件学院、网络空间安全学院",
+            //         "value": "计算机学院、软件学院、网络空间安全学院"
+            //       },
+            //       {
+            //         "label": "自动化学院、人工智能学院",
+            //         "value": "自动化学院、人工智能学院"
+            //       },
+            //       {
+            //         "label": "材料科学与工程学院",
+            //         "value": "材料科学与工程学院"
+            //       },
+            //       {
+            //         "label": "化学与生命科学学院",
+            //         "value": "化学与生命科学学院"
+            //       },
+            //       {
+            //         "label": "物联网学院",
+            //         "value": "物联网学院"
+            //       },
+            //       {
+            //         "label": "理学院",
+            //         "value": "理学院"
+            //       },
+            //       {
+            //         "label": "现代邮政学院",
+            //         "value": "现代邮政学院"
+            //       },
+            //       {
+            //         "label": "传媒与艺术学院",
+            //         "value": "传媒与艺术学院"
+            //       },
+            //       {
+            //         "label": "管理学院",
+            //         "value": "管理学院"
+            //       },
+            //       {
+            //         "label": "经济学院",
+            //         "value": "经济学院"
+            //       },
+            //       {
+            //         "label": "社会与人口学院",
+            //         "value": "社会与人口学院"
+            //       },
+            //       {
+            //         "label": "外国语学院",
+            //         "value": "外国语学院"
+            //       },
+            //       {
+            //         "label": "教育科学与技术学院",
+            //         "value": "教育科学与技术学院"
+            //       },
+            //       {
+            //         "label": "贝尔英才学院",
+            //         "value": "贝尔英才学院"
+            //       },
+            //       {
+            //         "label": "波特兰学院",
+            //         "value": "波特兰学院"
+            //       },
+            //       {
+            //         "label": "应用技术学院",
+            //         "value": "应用技术学院"
+            //       }
+            //     ]
+            //   },
+            // },
+            // [inputName4]: {
+            //   title: '专业',
+            //   type: 'string',
+            //   required: true,
+            //   props: {},
+            // },
             [inputName5]: {
               title: '联系方式（手机号码）',
               type: 'string',
@@ -570,18 +627,18 @@ function Register() {
                       readOnly: true,
                       props: {},
                     },
-                    college: {
-                      title: '学院',
-                      type: 'string',
-                      readOnly: true,
-                      props: {},
-                    },
-                    major: {
-                      title: '专业',
-                      type: 'string',
-                      readOnly: true,
-                      props: {},
-                    },
+                    // college: {
+                    //   title: '学院',
+                    //   type: 'string',
+                    //   readOnly: true,
+                    //   props: {},
+                    // },
+                    // major: {
+                    //   title: '专业',
+                    //   type: 'string',
+                    //   readOnly: true,
+                    //   props: {},
+                    // },
                     contact: {
                       title: '联系方式',
                       type: 'string',

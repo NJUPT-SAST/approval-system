@@ -13,6 +13,7 @@ import { login } from '../../api/public'
 import { getUserProfile } from '../../api/user'
 import LogoSvg from "../../assets/Logo.svg"
 import avatar from "../../assets/avatar.jpg"
+import Footer from './components/SASTlogo'
 
 const { Header, Content, Sider } = Layout
 
@@ -211,6 +212,7 @@ const Home = () => {
             }}
           >
             <Outlet></Outlet>
+            <Footer />
           </Content>
         </Layout>}
       </Layout>

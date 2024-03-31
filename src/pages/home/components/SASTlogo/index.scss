@@ -1,0 +1,18 @@
+.globalfooter {
+  //   background-color: #f8f8f8;
+  opacity: 0.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.875rem;
+  .sastlogo {
+    width: 6.25rem;
+    height: 6.25rem;
+    display: block;
+    object-fit: contain;
+  }
+  .info {
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
