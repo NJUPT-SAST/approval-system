@@ -105,7 +105,7 @@ function RegisterDetail() {
     getWorkInfo(Number(id)).then((res) => {
       // console.log(res)
       setWorkData(res.data.data)
-      if (res.data.errMsg === '您还未上传项目') {
+      if (res.data.errMsg === '您还未上传作品' && !beforeSubmitTime && !afterSubmitTime) {
         notification.warning({
           message: '您还未上传项目',
           description: '请记得提交您的项目哦，否则无法正常参赛',
@@ -339,7 +339,7 @@ function RegisterDetail() {
           <Skeleton active loading={isLoading} style={{ width: '200px', marginLeft: '4rem' }}>
             <div className="list">
               {workData?.length === 0 || workData === null || workData === undefined || beforeSubmitTime === true ? (
-                <Empty className="empty" description={beforeSubmitTime ? '还没提交过项目哦' : '还没到项目提交时间哦'} />
+                <Empty className="empty" description={!beforeSubmitTime ? '还没提交过项目哦' : '还没到项目提交时间哦'} />
               ) : (
                 workData?.map((item, index) => {
                   if (item.isFile) {

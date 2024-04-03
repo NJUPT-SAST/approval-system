@@ -136,7 +136,7 @@ function ActivityDetail() {
           return '报名'
         }
       case 'judge':
-        return '审批'
+        return '审核'
       case 'approver':
         return '评审'
       default:

@@ -151,7 +151,7 @@ function ReviewList() {
   )
   return (
     <div className="manage">
-      <TopBar activity="活动项目列表" />
+      <TopBar />
       {table}
     </div>
   )
@@ -245,7 +245,7 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
     <div className="manage-content">
       <div className="manage-content-table">
         <div className="manage-content-header">
-          <h1 className="manage-content-title">活动项目列表</h1>
+          <h1 className="manage-content-title">比赛项目列表</h1>
         </div>
         <div className="manage-content-statistic">
           <Statistic title="评审数量" value={isApproveCount} suffix={"/ " + list.length} />

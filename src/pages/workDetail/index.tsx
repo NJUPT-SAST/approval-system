@@ -72,7 +72,7 @@ function WorkDetail() {
 
   const getFileName = (url: string) => {
     const nameList = url.split('/')
-    const fileName = nameList[nameList.length - 1]
+    const fileName = nameList[nameList.length - 1].split('-').slice(2).join('-')
     // console.log(fileName)
     return fileName
   }
@@ -184,10 +184,9 @@ function WorkDetail() {
       })
     }, 20000)
     getWorkInfo(Number(id)).then((res) => {
-      console.log(res)
       setWorkData(res.data.data)
       if (res.data.data === null) {
-        if (res.data.errMsg === '您还未上传项目' && JSON.stringify(remoteSchema) !== '{}') {
+        if (res.data.errMsg === '您还未上传作品' && JSON.stringify(remoteSchema) !== '{}') {
           setLoading(false)
           clearTimeout(stillLoading)
           clearTimeout(loadingError)
@@ -313,7 +312,7 @@ function WorkDetail() {
       fileList: localFileList,
       showUploadList: { showDownloadIcon: true },
       onPreview(file: any) {
-        console.log(file)
+        console.log('preview ', file)
         downloadFile(file.url)
       },
       // onRemove: onRemove(props.inputName),
