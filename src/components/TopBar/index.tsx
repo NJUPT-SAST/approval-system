@@ -9,6 +9,8 @@ import './index.scss'
  */
 function TopBar(props?: { activity?: string }) {
   // let processedExtraBreadcrumbItems = [<Fragment key="emptyElement"></Fragment>]
+  const role = localStorage.getItem('userState')
+  const reviewValue = role === 'judge' ? '比赛审核' : '比赛评审'
   const handleGoBack = () => {
     window.history.back()
   }
@@ -18,7 +20,7 @@ function TopBar(props?: { activity?: string }) {
     '/manage': '比赛管理',
     '/create': '创建比赛',
     '/account': '我的帐号',
-    '/review': '比赛评审',
+    '/review': reviewValue,
     '/list': '比赛',
     '/detail': '比赛列表',
     '/register': '比赛报名',

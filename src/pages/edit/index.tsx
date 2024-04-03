@@ -560,10 +560,10 @@ const Edit: React.FC<any> = () => {
           <div className="activity-create-reviewer-setting-default">
             {competitionInfo.is_review === 1 ? (
               <div className="activity-create-reviewer-setting-default-code">
-                <span id="activity-create-reviewer-setting-default-code">默认审批者</span>
+                <span id="activity-create-reviewer-setting-default-code">默认审核者</span>
                 <Input
                   className="first"
-                  placeholder="审批者学号"
+                  placeholder="审核者学号"
                   value={reviewSettings ? reviewSettings[0].value : ''}
                   onChange={(e) => {
                     setReviewSettings((pre) => {
@@ -577,7 +577,7 @@ const Edit: React.FC<any> = () => {
               </div>
             ) : (
               <>
-                <div style={{ width: '330px' }}>如需添加审批者请点击左方按钮</div>
+                <div style={{ width: '330px' }}>如需添加审核者请点击左方按钮</div>
               </>
             )}
             <div className="activity-create-reviewer-setting-default-change-number">

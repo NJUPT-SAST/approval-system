@@ -182,11 +182,11 @@ const Manage: React.FC = () => {
             <span style={{ width: '6.8%' }}>开始日期</span>
             <span style={{ width: '6.8%' }}>结束日期</span>
             <span style={{ width: '13.2%' }}>比赛简介</span>
-            <span style={{ width: '9.3%' }}>审批人员</span>
+            <span style={{ width: '9.3%' }}>审核人员</span>
             <span style={{ width: '5%' }}>活动状态</span>
             <span style={{ width: '6.1%' }}>已报名队伍</span>
             <span style={{ width: '7.5%' }}>已提交材料数</span>
-            <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审批完毕数</span>
+            <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审核完毕数</span>
             <span style={{ width: '5.9%' }}>导出Excel</span>
             <span style={{ width: '6.4%' }}>发布公告</span>
             <span style={{ width: '6.4%' }}>管理活动</span>

@@ -230,7 +230,7 @@ function Notice() {
             <Radio value={-1}>公开</Radio>
             <Radio value={0}>选手</Radio>
             <Radio value={1}>评委</Radio>
-            <Radio value={2}>审批人</Radio>
+            <Radio value={2}>审核人</Radio>
           </Radio.Group>
         </div>
         <div className="activity-notice-operation">

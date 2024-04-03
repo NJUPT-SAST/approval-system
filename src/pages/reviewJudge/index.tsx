@@ -147,10 +147,10 @@ const ReviewJudge: React.FC = (props) => {
   // document.querySelector('.navigation').addEventListener('scroll', handleScroll)
   return (
     <div className="reviewJudge-main">
-      <TopBar activity="审批" />
+      <TopBar activity="审核" />
       <div className="manage-content-body">
         <div className="manage-content-header">
-          <h1 className="manage-content-title">审批</h1>
+          <h1 className="manage-content-title">审核</h1>
           <div className="submit">
             <Button type="primary" onClick={handleSubmit}>
               提交
@@ -259,7 +259,7 @@ const ReviewJudge: React.FC = (props) => {
                   setIsPass(e.target.value === 'pass' ? true : false)
                 }}
               >
-                <span style={{ marginRight: '10px', marginLeft: '60px' }}>审批结果: </span>
+                <span style={{ marginRight: '10px', marginLeft: '60px' }}>审核结果: </span>
                 <Radio value="pass">通过</Radio>
                 <Radio value="nopass">未通过</Radio>
               </Radio.Group>

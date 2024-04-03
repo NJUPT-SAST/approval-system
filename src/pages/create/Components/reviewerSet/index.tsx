@@ -34,10 +34,10 @@ const ReviewSet: React.FC<reviewSetPropsType> = (props) => {
   return (
     <div className="activity-create-reviewer-setting">
       <div className="activity-create-reviewer-setting-code">
-        <span id="activity-create-reviewer-setting-code">审批者学号</span>
+        <span id="activity-create-reviewer-setting-code">审核者学号</span>
         <Input
           className="first"
-          placeholder="审批者学号"
+          placeholder="审核者学号"
           value={value.value}
           onChange={(e) => {
             setValue(index, e.target.value)
@@ -46,12 +46,12 @@ const ReviewSet: React.FC<reviewSetPropsType> = (props) => {
         />
       </div>
       <div className="activity-create-reviewer-setting-faculty">
-        <span id="activity-create-reviewer-setting-faculty">审批学院代号</span>
+        <span id="activity-create-reviewer-setting-faculty">审核学院代号</span>
         {value.key === -1 ? (
           <Select
             className="last"
             showSearch
-            placeholder="负责的审批的学院"
+            placeholder="负责的审核的学院"
             onSelect={(value: number) => setKey(index, value)}
             filterOption={(input, option) =>
               (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
@@ -70,7 +70,7 @@ const ReviewSet: React.FC<reviewSetPropsType> = (props) => {
             className="last"
             value={value.key}
             showSearch
-            placeholder="负责的审批的学院"
+            placeholder="负责的审核的学院"
             onSelect={(value: number) => setKey(index, value)}
             filterOption={(input, option) =>
               (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
