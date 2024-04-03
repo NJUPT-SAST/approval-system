@@ -171,7 +171,7 @@ const Manage: React.FC = () => {
       <div className="manage-header">
         {/* <h1 id="manage-header-title">活动管理</h1> */}
         <Button type="primary" onClick={() => Navigate('./create')}>
-          创建活动
+          创建比赛
         </Button>
       </div>
       <div className="manage-body-no-repeat">
@@ -182,14 +182,14 @@ const Manage: React.FC = () => {
             <span style={{ width: '6.8%' }}>开始日期</span>
             <span style={{ width: '6.8%' }}>结束日期</span>
             <span style={{ width: '13.2%' }}>比赛简介</span>
-            <span style={{ width: '9.3%' }}>审批人员</span>
-            <span style={{ width: '5%' }}>活动状态</span>
+            <span style={{ width: '9.3%' }}>审核人员</span>
+            <span style={{ width: '5%' }}>比赛状态</span>
             <span style={{ width: '6.1%' }}>已报名队伍</span>
             <span style={{ width: '7.5%' }}>已提交材料数</span>
-            <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审批完毕数</span>
+            <span style={{ width: '8.2%', margin: '0 70px 0 0' }}>审核完毕数</span>
             <span style={{ width: '5.9%' }}>导出Excel</span>
             <span style={{ width: '6.4%' }}>发布公告</span>
-            <span style={{ width: '6.4%' }}>管理活动</span>
+            <span style={{ width: '6.4%' }}>管理比赛</span>
           </div>
           <div className="manage-body-items">
             {isLoading ? (
@@ -198,8 +198,8 @@ const Manage: React.FC = () => {
               <Result
                 style={{ margin: '0 auto' }}
                 status="404"
-                title="没有活动数据"
-                subTitle="现在好像没有活动,快去创建活动吧！"
+                title="没有比赛数据"
+                subTitle="现在好像没有比萨,快去创建比赛吧！"
               />
             ) : (
               pageState.records.map((value, index) => {

@@ -140,7 +140,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     },
     {
       key: '3',
-      title: '待审批数',
+      title: '待审核数',
       render(value, record, index) {
         return (
           <td className={list[index].totalNum - list[index].completedNum === 0 ? 'tdnum nopoint' : 'tdnum redPoint'}>
@@ -151,17 +151,17 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     },
     {
       key: '4',
-      title: '已审批数',
+      title: '已审核数',
       dataIndex: 'completedNum',
     },
     {
       key: '5',
-      title: '审批开始日期',
+      title: '审核开始日期',
       dataIndex: 'startDate',
     },
     {
       key: '6',
-      title: '审批截止日期',
+      title: '审核截止日期',
       dataIndex: 'endDate',
     },
     {
@@ -172,7 +172,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
         <Space size="middle">
           <Link to={`/review/list/${record.id}/${current}`}>
             <Button className="count" type="primary">
-              审批
+            审核
             </Button>
           </Link>
         </Space>
@@ -191,7 +191,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
     <div className="manage-content">
       <div className="manage-content-table">
         <div>
-          <h1 className="manage-content-table-title">活动审批</h1>
+          <h1 className="manage-content-table-title">活动审核</h1>
           <div className="manage-content-table-body">
             <Table<DataListType>
               columns={columns}
