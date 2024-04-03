@@ -15,7 +15,7 @@ function RegisterRouter() {
   const userEle = useRoutes(user)
   const judgeEle = useRoutes(judge)
   const eleMap = new Map()
-  eleMap.set('offline', unLoginEle)
+  eleMap.set('offline', adminEle)
   eleMap.set('admin', adminEle)
   //评委
   eleMap.set('approver', approverEle)
