@@ -8,8 +8,8 @@ import 'antd/dist/antd.min.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserTracing } from '@sentry/tracing'
-import { LoadingOutlined } from '@ant-design/icons'
-import { Spin } from 'antd'
+// import { LoadingOutlined } from '@ant-design/icons'
+// import { Spin } from 'antd'
 
 Sentry.setContext('用户信息', {
   姓名: '' + localStorage.getItem('approval-system-name'),

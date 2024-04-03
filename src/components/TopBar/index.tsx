@@ -2,6 +2,7 @@ import { RollbackOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button } from 'antd'
 import React, { Fragment } from 'react'
 import { useLocation, Link } from 'react-router-dom'
+
 import './index.scss'
 
 /**
@@ -21,7 +22,7 @@ function TopBar(props?: { activity?: string }) {
     '/create': '创建比赛',
     '/account': '我的帐号',
     '/review': reviewValue,
-    '/list': '比赛',
+    '/list': '项目列表',
     '/detail': '比赛列表',
     '/register': '比赛报名',
     '/register-detail': '报名参加详情',
@@ -34,7 +35,6 @@ function TopBar(props?: { activity?: string }) {
   const pathSnippets = location.pathname.split('/').filter((i) => i)
   const extraBreadcrumbItems = pathSnippets.map((item, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
-    // console.log(url)
     if (!isNaN(Number(pathSnippets[index])) && props?.activity !== undefined) {
       return (
         <Breadcrumb.Item key="current-activity" className="breadCrumbItem">
@@ -49,6 +49,13 @@ function TopBar(props?: { activity?: string }) {
       )
     }
   })
+
+  //筛选出面包屑内容为空的Item (无activity)
+  const filterBreadcrumbItems =
+    extraBreadcrumbItems.filter(item =>
+      item.props.children.props.children !== undefined)
+
+
   // if (props?.activity !== null) {
   //   processedExtraBreadcrumbItems = extraBreadcrumbItems.slice(0, 1)
   //   // console.log(extraBreadcrumbItems.slice(0,1))
@@ -72,7 +79,7 @@ function TopBar(props?: { activity?: string }) {
     <Breadcrumb.Item key="home" className="breadCrumbItem">
       <Link to="/">主页</Link>
     </Breadcrumb.Item>,
-  ].concat(extraBreadcrumbItems)
+  ].concat(filterBreadcrumbItems)
   // .concat(moreExtraBreadcrumbItems())
   return (
     <div className="topBar">
