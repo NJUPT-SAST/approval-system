@@ -5,7 +5,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@craco/craco": "^6.4.3",
-    "@sentry/react": "^7.11.1",
+    "@sentry/cli": "^2.31.0",
+    "@sentry/react": "^7.109.0",
     "@sentry/tracing": "^7.11.1",
     "@sentry/utils": "^7.101.1",
     "@testing-library/jest-dom": "^5.16.4",
@@ -42,14 +43,15 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "start": "set PORT=3006 && craco start",
-    "build": "craco build",
+    "build": "craco build && pnpm sentry:sourcemaps",
     "test": "craco test",
     "eject": "react-scripts eject",
     "commit": "esmo cli/git/commit/index.ts",
     "push": "esmo cli/git/push/index.ts",
     "lint": "esmo cli/lint/eslint.ts",
     "format": "esmo cli/lint/prettier.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sast-an --project javascript-react ./build && sentry-cli sourcemaps upload --org sast-an --project javascript-react ./build"
   },
   "eslintConfig": {
     "extends": [
