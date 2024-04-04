@@ -10,19 +10,19 @@ function Uploader(props: any) {
     onChange(info: any) {
       console.log('onChange', info)
     },
-    customRequest(options: any) {
-      console.log('options', options)
-      const { onSuccess, onError, file, onProgress } = options
-      uploadWork(Number(props.competitionId), props.inputName, file, onProgress).then((res) => {
-        console.log(res)
-        if (res.data.errCode === null) {
-          onSuccess(res, file)
-          message.success({
-            content: file.name + ' 上传成功',
-          })
-        }
-      })
-    },
+    // customRequest(options: any) {
+    //   console.log('options', options)
+    //   const { onSuccess, onError, file, onProgress } = options
+    //   uploadWork(Number(props.competitionId), props.inputName, file, onProgress).then((res) => {
+    //     console.log(res)
+    //     if (res.data.errCode === null) {
+    //       onSuccess(res, file)
+    //       message.success({
+    //         content: file.name + ' 上传成功',
+    //       })
+    //     }
+    //   })
+    // },
     headers: { Token: localStorage.getItem('approval-system-token') },
   }
   return (

@@ -2,11 +2,12 @@ import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button, Input, message, notification, Result, Spin, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import FormRender, { useForm } from 'form-render'
-import React, { Fragment, ReactElement, useLayoutEffect, useState } from 'react'
+import React, { Fragment, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fileDownload } from '../../api/public'
 import {
   getCompetitionInfo,
+  getLicense,
   getTeamInfo,
   getWorkInfo,
   getWorkSchema,
@@ -241,19 +242,6 @@ function WorkDetail() {
         }
       })
     }
-    const onRemove = (inputName: string) => {
-      form.setValueByPath(inputName, null)
-      setFileList((prev) => {
-        return {
-          ...prev,
-          [inputName]: [],
-        }
-      })
-    }
-    const handleDownload = (file: string) => {
-      console.log(file)
-      // downloadFile()
-    }
     const localProps: any = {
       accept: props.accept,
       maxCount: '1',
@@ -288,26 +276,26 @@ function WorkDetail() {
           form.setValueByPath(props.inputName, null)
         }
       },
-      customRequest(options: any) {
-        console.log('options', options)
-        const { onSuccess, onError, file, onProgress } = options
-        uploadWork(Number(id), props.inputName, file, onProgress).then((res) => {
-          console.log('upload res: ', res)
-          if (res.data.errCode === null) {
-            onSuccess(res, file)
-            message.success({
-              content: file.name + ' 上传成功',
-            })
-            setFileList((prev) => {
-              return {
-                ...prev,
-                [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
-              }
-            })
-            form.setValueByPath(props.inputName, res.data.data.url)
-          }
-        })
-      },
+      // customRequest(options: any) {
+      //   console.log('options', options)
+      //   const { onSuccess, onError, file, onProgress } = options
+      //   uploadWork(Number(id), props.inputName, file, onProgress).then((res) => {
+      //     console.log('upload res: ', res)
+      //     if (res.data.errCode === null) {
+      //       onSuccess(res, file)
+      //       message.success({
+      //         content: file.name + ' 上传成功',
+      //       })
+      //       setFileList((prev) => {
+      //         return {
+      //           ...prev,
+      //           [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
+      //         }
+      //       })
+      //       form.setValueByPath(props.inputName, res.data.data.url)
+      //     }
+      //   })
+      // },
       headers: { Token: localStorage.getItem('approval-system-token') },
       fileList: localFileList,
       showUploadList: { showDownloadIcon: true },
@@ -323,25 +311,49 @@ function WorkDetail() {
       <Upload
         {...localProps}
         customRequest={(options) => {
-          console.log('options', options)
-          const { onSuccess, onError, file, onProgress } = options
-          uploadWork(Number(id), props.inputName, file as File, onProgress).then((res) => {
-            console.log('upload res: ', res)
-            if (res.data.errCode === null) {
-              if (onSuccess)
-                onSuccess(res)
+          const temp = options.file as File
+          getLicense(temp.name, props.inputName, id as unknown as number).then(res => {
+            console.log(res);
+            const { onSuccess, file } = options
+            console.log(res.data.data.url);
+            fetch(res.data.data.url, {
+              method: "put",
+              body: temp
+            }).then(_ => {
+              onSuccess && onSuccess(res)
               message.success({
                 content: (file as File).name + ' 上传成功',
               })
+              form.setValueByPath(props.inputName, res)
               setFileList((prev) => {
                 return {
                   ...prev,
                   [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
                 }
               })
-              form.setValueByPath(props.inputName, res.data.data.url)
-            }
+            })
+          }).catch(err => {
+            console.log(err);
           })
+          // console.log('options', options)
+          // const { onSuccess, onError, file, onProgress } = options
+          // uploadWork(Number(id), props.inputName, file as File, onProgress).then((res) => {
+          //   console.log('upload res: ', res)
+          //   if (res.data.errCode === null) {
+          //     if (onSuccess)
+          //       onSuccess(res)
+          //     message.success({
+          //       content: (file as File).name + ' 上传成功',
+          //     })
+          //     setFileList((prev) => {
+          //       return {
+          //         ...prev,
+          //         [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
+          //       }
+          //     })
+          //     form.setValueByPath(props.inputName, res.data.data.url)
+          //   }
+          // })
         }}
         onDownload={(file) => {
           console.log(file)

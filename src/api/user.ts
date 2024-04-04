@@ -77,7 +77,7 @@ export const signUp = (
   competitionId: number,
   teamName: string | null,
   teamMember: { name: string; code: string }[],
-  teacherMember: { name: string; code: string}[]
+  teacherMember: { name: string; code: string }[],
 ) => {
   return apis({
     method: 'POST',
@@ -189,5 +189,18 @@ export const getUserProfile = () => {
   return apis({
     method: 'get',
     url: '/user/profile',
+  })
+}
+
+export const getLicense = (name: string, input: string, id: number) => {
+  return apis({
+    method: 'get',
+    url: `/user/com/uploadCertificate?id=${id}&input=${input}&filename=${name}`,
+  })
+}
+
+export const uploadFile = () => {
+  return apis({
+    method: 'post',
   })
 }
