@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { uploadWorkJudgeInfo } from '../../api/judge'
 import TopBar from '../../components/TopBar'
 import './index.scss'
-import { fileDownload } from '../../api/public'
+import { downloadCertificate } from '../../api/public'
 import { DownloadOutlined } from '@ant-design/icons'
 
 const { Link } = Anchor
@@ -33,62 +33,48 @@ const ReviewJudge: React.FC = (props) => {
 
   // 提交
   const navigate = useNavigate()
+
+  const getFileNameFromUrl = (url: string) => {
+    const urlParts = url.split("/");
+    return urlParts[urlParts.length - 1];
+  };
   /**
    * 文件下载
    * @param url 文件url
    */
-  const downloadFile = (url: string) => {
+  const downloadFile = async (url: string) => {
+    const loadingKey = 'downloading'
     message.loading({
       content: '正在下载文件',
-      duration: 500,
+      duration: 30,
       key: 'downloading',
     })
-    fileDownload(url)
-      .then((res) => {
-        const content = res.headers['content-disposition']
-        console.log('content', res)
-        const fileBlob = new Blob([res.data])
-        const url = window.URL.createObjectURL(fileBlob)
-        let filename = 'no-file'
-        const name1 = content.match(/filename=(.*);/) // 获取filename的值
-        const name2 = content.match(/filename\*=(.*)/) // 获取filename*的值
-        // name1 = decodeURIComponent(name1)
-        // name2 = decodeURIComponent(name2.substring(6)) // 下标6是UTF-8
-        if (name2 !== null) {
-          filename = decodeURIComponent(name2[0].substring(17))
-        } else {
-          if (name1 !== null) {
-            filename = decodeURIComponent(name1[0])
-          } else {
-            filename = 'no-file'
-          }
-        }
-        if (filename !== 'no-file') {
-          const a = document.createElement('a')
-          a.style.display = 'none'
-          a.href = url
-          a.download = filename
-          document.body.appendChild(a)
-          a.click()
-          document.body.removeChild(a)
-          URL.revokeObjectURL(url)
-          message.success({
-            content: '😁 下载成功',
-            key: 'downloading',
-          })
-        } else {
-          message.error({
-            content: '😞 下载发生了错误，请联系管理员',
-            key: 'downloading',
-          })
-        }
+    const res = await downloadCertificate(url)
+    console.log(res.data);
+
+    const response = res.data
+    if (response.success) {
+      const file = await fetch(response.data.url)
+      const fileBlob = await file.blob()
+      const urlvalue = window.URL.createObjectURL(fileBlob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = urlvalue
+      a.download = getFileNameFromUrl(url)
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(urlvalue)
+      message.success({
+        content: '😁下载完成！'
       })
-      .catch((err) => {
-        message.error({
-          content: '😞 下载发生了错误，请联系管理员',
-          key: 'downloading',
-        })
+    } else {
+      message.error({
+        content: '😞 下载发生了错误，请联系管理员',
+        key: 'downloading',
       })
+    }
+    message.destroy(loadingKey)
   }
   const handleSubmit = () => {
     console.log(isPass);

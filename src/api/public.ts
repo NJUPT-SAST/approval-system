@@ -58,3 +58,18 @@ export const fileDownload = (url: string) => {
     responseType: 'blob',
   })
 }
+/**
+ * 下载验证
+ * @param url 需要下载的文件url
+ * @returns axios对象
+ */
+
+export const downloadCertificate = (url: string) => {
+  return apis({
+    method: 'get',
+    url: '/com/file/downloadCertificate',
+    params: {
+      url: url,
+    },
+  })
+}
