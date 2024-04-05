@@ -102,6 +102,9 @@ const Home = () => {
           default:
             break
         }
+        setTimeout(() => {
+          window.location.reload()
+        }, 500)
       } else {
         setTimeout(() => {
           notification.error({
