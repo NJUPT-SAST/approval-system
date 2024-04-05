@@ -73,8 +73,7 @@ function WorkDetail() {
 
   const getFileName = (url: string) => {
     const nameList = url.split('/')
-    const fileName = nameList[nameList.length - 1].split('-').slice(2).join('-')
-    // console.log(fileName)
+    const fileName = decodeURIComponent(nameList[nameList.length - 1].split('-').slice(2).join('-').split("?")[0])
     return fileName
   }
 
@@ -186,6 +185,7 @@ function WorkDetail() {
     }, 20000)
     getWorkInfo(Number(id)).then((res) => {
       setWorkData(res.data.data)
+      console.log("test3", res.data.data);
       if (res.data.data === null) {
         if (res.data.errMsg === '您还未上传作品' && JSON.stringify(remoteSchema) !== '{}') {
           setLoading(false)
@@ -242,6 +242,19 @@ function WorkDetail() {
         }
       })
     }
+    const onRemove = (inputName: string) => {
+      form.setValueByPath(inputName, null)
+      setFileList((prev) => {
+        return {
+          ...prev,
+          [inputName]: [],
+        }
+      })
+    }
+    const handleDownload = (file: string) => {
+      console.log(file)
+      // downloadFile()
+    }
     const localProps: any = {
       accept: props.accept,
       maxCount: '1',
@@ -276,26 +289,32 @@ function WorkDetail() {
           form.setValueByPath(props.inputName, null)
         }
       },
-      // customRequest(options: any) {
-      //   console.log('options', options)
-      //   const { onSuccess, onError, file, onProgress } = options
-      //   uploadWork(Number(id), props.inputName, file, onProgress).then((res) => {
-      //     console.log('upload res: ', res)
-      //     if (res.data.errCode === null) {
-      //       onSuccess(res, file)
-      //       message.success({
-      //         content: file.name + ' 上传成功',
-      //       })
-      //       setFileList((prev) => {
-      //         return {
-      //           ...prev,
-      //           [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
-      //         }
-      //       })
-      //       form.setValueByPath(props.inputName, res.data.data.url)
-      //     }
-      //   })
-      // },
+      customRequest(options: any) {
+        const temp = options.file as File
+        getLicense(temp.name, props.inputName, id as unknown as number).then(res => {
+          console.log(res);
+          const { onSuccess, file } = options
+          console.log(res.data.data.url);
+          fetch(res.data.data.url, {
+            method: "put",
+            body: temp
+          }).then(_ => {
+            onSuccess && onSuccess(res)
+            message.success({
+              content: (file as File).name + ' 上传成功',
+            })
+            form.setValueByPath(props.inputName, res)
+            setFileList((prev) => {
+              return {
+                ...prev,
+                [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
+              }
+            })
+          })
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       headers: { Token: localStorage.getItem('approval-system-token') },
       fileList: localFileList,
       showUploadList: { showDownloadIcon: true },
@@ -331,26 +350,25 @@ function WorkDetail() {
                   [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
                 }
               })
+              console.log("test", res.data.data.url);
+              form.setValueByPath(props.inputName, res.data.data.clearUrl)
             })
           }).catch(err => {
             console.log(err);
           })
-          // console.log('options', options)
           // const { onSuccess, onError, file, onProgress } = options
           // uploadWork(Number(id), props.inputName, file as File, onProgress).then((res) => {
           //   console.log('upload res: ', res)
           //   if (res.data.errCode === null) {
           //     if (onSuccess)
           //       onSuccess(res)
-          //     message.success({
-          //       content: (file as File).name + ' 上传成功',
-          //     })
           //     setFileList((prev) => {
           //       return {
           //         ...prev,
           //         [props.inputName]: [{ ...prev[props.inputName][0], url: res.data.data.url, status: 'done' }],
           //       }
           //     })
+          //     console.log("test2", res.data.data.url);
           //     form.setValueByPath(props.inputName, res.data.data.url)
           //   }
           // })
@@ -358,6 +376,7 @@ function WorkDetail() {
         onDownload={(file) => {
           console.log(file)
           if (file.url !== undefined) {
+            console.log(file.url);
             downloadFile(file.url)
           }
         }}
@@ -417,9 +436,10 @@ function WorkDetail() {
       const formDataList = Object.entries(formData)
       console.log(formDataList)
       for (const [key, value] of formDataList) {
+        const tempValue: string = value as string
         submitReadyData.push({
           input: key,
-          content: value,
+          content: tempValue.split("?")[0],
         })
       }
       uploadWorkSchema(Number(id), submitReadyData).then((res) => {
@@ -511,7 +531,6 @@ function WorkDetail() {
                 ）代表该选项必填，为了保证您顺利参赛，请按照比赛举办方要求仔细填写本表单提交项目信息
               </div>
               <FormRender
-                // debug
                 widgets={{ customUpload: Uploader }}
                 form={form}
                 disabled={loading}
