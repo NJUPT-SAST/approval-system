@@ -46,7 +46,7 @@ const ReviewJudge: React.FC = (props) => {
     const loadingKey = 'downloading'
     message.loading({
       content: '正在下载文件',
-      duration: 30,
+      duration: 300000,
       key: 'downloading',
     })
     const res = await downloadCertificate(url)

@@ -2,7 +2,7 @@ import { CloudDownloadOutlined } from '@ant-design/icons'
 import { Button, Empty, message, notification, Skeleton, Space } from 'antd'
 import React, { Fragment, useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { downloadCertificate} from '../../api/public'
+import { downloadCertificate } from '../../api/public'
 import { getCompetitionInfo, getCompetitionSignInfo, getTeamInfo, getWorkInfo } from '../../api/user'
 import TopBar from '../../components/TopBar'
 import './index.scss'
@@ -197,16 +197,16 @@ function RegisterDetail() {
    * @param url 文件url
    */
   const downloadFile = async (url: string) => {
-    const loadingKey='downloading'
+    const loadingKey = 'downloading'
     message.loading({
       content: '正在下载文件',
-      duration: 30,
+      duration: 300000,
       key: 'downloading',
     })
     const res = await downloadCertificate(url)
     console.log(res.data);
-    
-    const response=res.data
+
+    const response = res.data
     if (response.success) {
       const file = await fetch(response.data.url)
       const fileBlob = await file.blob()
@@ -220,7 +220,7 @@ function RegisterDetail() {
       document.body.removeChild(a)
       URL.revokeObjectURL(urlvalue)
       message.success({
-          content: '😁下载完成！'
+        content: '😁下载完成！'
       })
     } else {
       message.error({
