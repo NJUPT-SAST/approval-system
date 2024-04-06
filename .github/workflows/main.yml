@@ -23,14 +23,13 @@ jobs:
           version: 8
           run_install: true
 
-      - name: pnpm i
-        run: pnpm i
-
       # - name: Install rsync
       #   run: sudo apt-get install rsync -y
 
       - name: Run build task
-        run: set CI=false && npx craco build
+        env:
+           CI: false
+        run: npx craco build
 
       # - name: Deploy to Server
       #   uses: easingthemes/ssh-deploy@v5.0.0
