@@ -32,6 +32,9 @@ jobs:
 
       - name: build
         run: npx craco build
+        env:
+          CI: true
+          ESLINT_NO_DEV_ERRORS: true
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v5.0.0
