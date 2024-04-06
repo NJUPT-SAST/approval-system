@@ -17,23 +17,26 @@ jobs:
         uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.0
         with:
-          node-version: '18.x'
-      - name: Install rsync
-        run: sudo apt-get install rsync -y
-        
-      - name: Install npm dependencies
-        run: npm install pnpm && pnpm i
+          version: 8
+          run_install: true
+
+      - name: pnpm i
+        run: pnpm i
+
+      # - name: Install rsync
+      #   run: sudo apt-get install rsync -y
+
       - name: Run build task
         run: set process.env.CI=false && npx craco build
 
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v5.0.0
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: root
-          SOURCE: /build
-          TARGET: /www/temp
+      # - name: Deploy to Server
+      #   uses: easingthemes/ssh-deploy@v5.0.0
+      #   with:
+      #     SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+      #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+      #     REMOTE_USER: root
+      #     SOURCE: /build
+      #     TARGET: /www/temp
