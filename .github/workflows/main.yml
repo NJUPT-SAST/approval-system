@@ -25,7 +25,7 @@ jobs:
         run: sudo apt-get install rsync -y
         
       - name: Install npm dependencies
-        run: npm install
+        run: npm install --force
       - name: Run build task
         run: set process.env.CI=false && npx craco build
 
