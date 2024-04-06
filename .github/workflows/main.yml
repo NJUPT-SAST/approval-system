@@ -30,8 +30,11 @@ jobs:
       - name: pnpm i
         run: pnpm i
 
+      - name: Set Debug Environment Variable
+        run: echo "ACTIONS_RUNNER_DEBUG=true" >> $GITHUB_ENV
+
       - name: build
-        run: npx craco build --bail=false
+        run: npx craco build
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v5.0.0
