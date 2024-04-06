@@ -33,6 +33,9 @@ jobs:
       - name: build
         run: pnpm build
 
+      - name: Install sentry-cli
+        run: npm install -g @sentry/cli
+
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v5.0.0
         with:
