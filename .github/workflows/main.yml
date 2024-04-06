@@ -30,7 +30,7 @@ jobs:
       #   run: sudo apt-get install rsync -y
 
       - name: Run build task
-        run: set process.env.CI=false && npx craco build
+        run: set CI=false && npx craco build
 
       # - name: Deploy to Server
       #   uses: easingthemes/ssh-deploy@v5.0.0
