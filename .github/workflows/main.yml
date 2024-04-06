@@ -1,14 +1,16 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CICD
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: 
+      - release 
   merge_group:
-    branches: [ "master" ]
+    branches: 
+      - release
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,18 +24,33 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: curl -X POST --fail -F "token=406be436c22d24efed2a9c3920c0a8" -F "ref=master" https://git.qingyou.ren/api/v4/projects/112/trigger/pipeline
+      - name: Install rsync
+        run: sudo apt-get install rsync -y
+        
+      - name: install pnpm
+        uses: pnpm/action-setup@v2.4.0
+        with:
+          version: 8
+          run_install: true 
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: pnpm i
         run: |
-          curl -u pt3m4khhax9k:4ec857f782b29a2a12e752ef01e03273c40e1ba0 \
-           -v -X POST  'https://sast-frontend.coding.net/api/cci/job/1442058/trigger' \
-           -H 'Content-Type: application/json' \
-           -d '{"ref": "master","envs": []}'
+          pnpm i
 
+      - name: build
+        run: |
+          pnpm build
+          
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with: 
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: root
+          SOURCE: /dist
+          TARGET: /www/temp
