@@ -30,11 +30,8 @@ jobs:
       - name: pnpm i
         run: pnpm i
 
-      - name: Install sentry-cli
-        run: pnpm install -g @sentry/cli
-
       - name: build
-        run: pnpm build
+        run: npx craco build
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v5.0.0
