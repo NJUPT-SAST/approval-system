@@ -7,6 +7,7 @@ on:
   merge_group:
     branches:
       - release
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,7 +32,7 @@ jobs:
         env:
           CI: false
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: pnpm sentry
+        run: pnpm build
 
       # - name: Deploy to Server
       #   uses: easingthemes/ssh-deploy@v5.0.0
