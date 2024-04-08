@@ -31,7 +31,6 @@
     "react-dom": "^18.1.0",
     "react-pdf-js": "^5.1.0",
     "react-router-dom": "6",
-    "react-scripts": "5.0.1",
     "recoil": "^0.7.4",
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
@@ -43,7 +42,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "start": "set PORT=3006 && craco start",
-    "build": "craco build && pnpm sentry:sourcemaps",
+    "build": "craco build",
+    "sentry": "run-s build sentry:sourcemaps",
     "test": "craco test",
     "eject": "react-scripts eject",
     "commit": "esmo cli/git/commit/index.ts",
@@ -81,6 +81,8 @@
     "eslint-plugin-react": "^7.30.0",
     "esno": "^0.14.1",
     "husky": "^8.0.1",
-    "prettier": "^2.6.2"
+    "npm-run-all2": "^6.1.2",
+    "prettier": "^2.6.2",
+    "react-scripts": "5.0.1"
   }
 }

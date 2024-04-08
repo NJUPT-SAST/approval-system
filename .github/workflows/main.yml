@@ -13,34 +13,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-
-      - name: Install rsync
-        run: sudo apt-get install rsync -y
-
+      - name: Checkout repo
+        uses: actions/checkout@v4
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.0
+        uses: pnpm/action-setup@v2
         with:
-          version: 8
-          run_install: true
-
-      - name: pnpm i
-        run: pnpm i
-
-      - name: Set Debug Environment Variable
-        run: echo "ACTIONS_RUNNER_DEBUG=true" >> $GITHUB_ENV
-
-      - name: build
-        run: npx craco build
-
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v5.0.0
+          version: latest
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: root
-          SOURCE: /build
-          TARGET: /www/temp
+          node-version: 18
+          cache: pnpm
+      - name: Install dependencies with pnpm
+        run: pnpm install
+
+      - name: Run build task
+        env:
+          CI: false
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: pnpm sentry
+
+      # - name: Deploy to Server
+      #   uses: easingthemes/ssh-deploy@v5.0.0
+      #   with:
+      #     SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+      #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+      #     REMOTE_USER: root
+      #     SOURCE: /build
+      #     TARGET: /www/temp
