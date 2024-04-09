@@ -3,10 +3,7 @@ name: CICD
 on:
   push:
     branches:
-      - release
-  merge_group:
-    branches:
-      - release
+      - master
   workflow_dispatch:
 
 jobs:
@@ -32,6 +29,8 @@ jobs:
         env:
           CI: false
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          GENERATE_SOURCEMAP: false 
+
         run: pnpm build
 
       - name: Generating tarball
@@ -45,4 +44,11 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: artifact.tar.gz
           TARGET: /www/temp
-          SCRIPT_AFTER: tar -xf artifact.tar.gz && ls -l
+          SCRIPT_AFTER: |
+            cd /www/temp
+            tar -xf artifact.tar.gz
+            rm artifact.tar.gz
+            cd ../
+            rm -rf ./approve.sast.fun.backup/*
+            mv ./approve.sast.fun/* ./approve.sast.fun.backup/
+            mv ./temp/* ./approve.sast.fun/
