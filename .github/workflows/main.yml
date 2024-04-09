@@ -51,5 +51,6 @@ jobs:
             tar -xf artifact.tar.gz
             rm artifact.tar.gz
             cd ../
+            rm -rf ./approve.sast.fun.backup/*
             mv ./approve.sast.fun/* ./approve.sast.fun.backup/
             mv ./temp/* ./approve.sast.fun/
