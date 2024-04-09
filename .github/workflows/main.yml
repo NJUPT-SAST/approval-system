@@ -46,4 +46,4 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           SOURCE: artifact.tar.gz
           TARGET: /www/temp
-          SCRIPT_AFTER: tar -xf artifact.tar.gz && ls -l
+          SCRIPT_AFTER: cd /www/temp && tar -xf artifact.tar.gz && ls -l
