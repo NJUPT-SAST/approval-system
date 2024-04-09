@@ -4,7 +4,7 @@
   justify-content: flex-start;
   // margin-left: 1.1vw;
   margin: 35px 57px;
-  min-width: 1200px;
+  // min-width: 1200px;
   .manage-content-header {
     display: flex;
     flex-direction: row;
@@ -57,7 +57,7 @@
         }
       }
       .content::-webkit-scrollbar {
-        width: 0;
+        width: 3px;
       }
       .content {
         display: flex;
