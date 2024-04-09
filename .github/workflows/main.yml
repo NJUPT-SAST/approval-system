@@ -3,10 +3,7 @@ name: CICD
 on:
   push:
     branches:
-      - release
-  merge_group:
-    branches:
-      - release
+      - master
   workflow_dispatch:
 
 jobs:
