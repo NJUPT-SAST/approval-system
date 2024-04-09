@@ -32,6 +32,7 @@ jobs:
         env:
           CI: false
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          GENERATE_SOURCEMAP: false 
         run: pnpm build
 
       - name: Generating tarball
