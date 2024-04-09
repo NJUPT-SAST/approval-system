@@ -35,7 +35,7 @@ jobs:
         run: pnpm build
 
       - name: Generating tarball
-        run: cd build && tar -czf artifact.tar.gz .
+        run: cd build && tar -czf ../artifact.tar.gz .
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v5.0.0
