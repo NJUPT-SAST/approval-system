@@ -83,8 +83,8 @@ function TopBar(props?: { activity?: string }) {
   // .concat(moreExtraBreadcrumbItems())
   return (
     <div className="topBar">
-      <Breadcrumb style={{ marginTop: '5px' }}>{breadcrumbItems}</Breadcrumb>
-
+      {/* <Breadcrumb style={{ marginTop: '5px' }}>{breadcrumbItems}</Breadcrumb> */}
+      <div />
       <Button type="link" onClick={handleGoBack} icon={<RollbackOutlined />}>
         返回上一级
       </Button>
