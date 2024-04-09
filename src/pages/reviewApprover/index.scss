@@ -11,7 +11,8 @@
   justify-content: flex-start;
   // margin-left: 1.1vw;
   // height: 85vh;
-  min-width: 1200px;
+  // min-width: 1200px;
+  // padding-right: 20px;
   .manage-content-header {
     display: flex;
     flex-direction: row;
@@ -65,10 +66,11 @@
         }
       }
       .content::-webkit-scrollbar {
-        width: 0;
+        width: 3px;
       }
       .content {
         overflow: auto;
+        padding-bottom: 1.25rem;
         .item {
           margin-left: 2.6vw;
           margin-top: 2.3vw;
