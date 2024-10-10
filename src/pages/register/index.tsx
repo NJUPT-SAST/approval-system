@@ -44,11 +44,11 @@ function Register() {
             type: 'number',
             widget: 'slider',
             displayType: 'column',
-            description: '最多人数 ' + 5,
+            description: '最多人数 ' + 3,
             required: true,
             placeholder: '',
-            min: 0, // 待改动
-            max: 5, // 待改动
+            min: 0,
+            max: 3,
             default: curTeacher,
           },
         }
@@ -61,11 +61,11 @@ function Register() {
             type: 'number',
             widget: 'slider',
             displayType: 'column',
-            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
+            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 8,
             required: true,
             placeholder: '',
             min: competitionInfo.minParti,
-            max: competitionInfo.maxParti,
+            max: 8,
             default: curParti,
           },
           leader: {
@@ -269,11 +269,11 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最多人数 ' + 5,
+                  description: '最多人数 ' + 3,
                   required: true,
                   placeholder: '',
                   min: 0, // 待改动
-                  max: 5, // 待改动
+                  max: 3, // 待改动
                   default: curTeacher,
                 },
               }
@@ -286,7 +286,7 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最少人数 ' + res.data.data.minTeamMembers + ' ；最多人数 ' + res.data.data.maxTeamMembers,
+                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 8,
                   required: true,
                   placeholder: '',
                   min: res.data.data.minTeamMembers,
@@ -602,11 +602,11 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + competitionInfo.maxParti,
+                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 8,
                   required: true,
                   placeholder: '',
                   min: competitionInfo.minParti,
-                  max: competitionInfo.maxParti,
+                  max: 8,
                   default: curParti,
                 },
                 leader: {
@@ -685,11 +685,11 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最多人数 ' + 5,
+                  description: '最多人数 ' + 3,
                   required: true,
                   placeholder: '',
                   min: 0, // 待改动
-                  max: 5, // 待改动
+                  max: 3, // 待改动
                   default: curTeacher,
                 },
               }
