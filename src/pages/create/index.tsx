@@ -241,6 +241,7 @@ function Create() {
     // -1 表示此时为创建活动
     // if (competitionId === -1) {
     //改成键值对形式
+    competitionInfo.max_team_members = 8
     createCompetitionInfo(competitionInfo, Object.fromEntries(reviewSetting_map.entries()), cover)
       .then((res) => {
         if (res.data.success === true) {
@@ -653,7 +654,7 @@ function Create() {
               {competitionInfo.type === 1 ? (
                 <Select
                   showSearch
-                  defaultValue={competitionInfo.max_team_members.toString()}
+                  defaultValue="8"
                   placeholder="最大人数"
                   optionFilterProp="children"
                   onChange={onTeamMemberNumChange}
@@ -663,8 +664,8 @@ function Create() {
                 >
                   {teamMemberNumArray.map((value) => {
                     return (
-                      <Select.Option value={value} key={value}>
-                        {value}
+                      <Select.Option value="8" key={value}>
+                        8
                       </Select.Option>
                     )
                   })}

@@ -71,7 +71,7 @@ function RegisterDetail() {
         })
       } else {
         setCompetitionInfo({
-          maxParti: res.data.data.maxTeamMembers,
+          maxParti: 8,
           minParti: res.data.data.minTeamMembers,
           isTeam: true,
         })

@@ -501,7 +501,8 @@ const Edit: React.FC<any> = () => {
             {competitionInfo.type === 1 ? (
               <Select
                 showSearch
-                defaultValue={competitionInfo.max_team_members.toString()}
+                // defaultValue={competitionInfo.max_team_members.toString()}
+                defaultValue="8"
                 placeholder="最大人数"
                 optionFilterProp="children"
                 onChange={onTeamMemberNumChange}
@@ -511,8 +512,8 @@ const Edit: React.FC<any> = () => {
               >
                 {teamMemberNumArray.map((value) => {
                   return (
-                    <Select.Option value={value} key={value}>
-                      {value}
+                    <Select.Option value="8" key={value}>
+                      8
                     </Select.Option>
                   )
                 })}
