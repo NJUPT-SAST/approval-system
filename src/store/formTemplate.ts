@@ -50,7 +50,7 @@ export const tempelate = [
         title: '申报书（允许上传格式：.pdf）',
         required: true,
         props: {
-          inputName: '申报书（允许上传格式：.pdf）',
+          inputName: '申报书',
           accept: '.pdf',
         },
         order: 6,
@@ -61,7 +61,7 @@ export const tempelate = [
         title: '研究报告（允许上传格式：.pdf）',
         required: true,
         props: {
-          inputName: '研究报告（允许上传格式：.pdf）',
+          inputName: '研究报告',
           accept: '.pdf',
         },
         order: 7,
@@ -72,7 +72,7 @@ export const tempelate = [
         title: '项目PPT（允许上传格式：.pdf,.pptx）',
         required: true,
         props: {
-          inputName: '项目PPT（允许上传格式：.pdf,.pptx）',
+          inputName: '项目PPT',
           accept: ['.pdf','.pptx'],
         },
         order: 8,
@@ -83,7 +83,7 @@ export const tempelate = [
         title: '视频等附件（允许上传格式：.zip,.rar）',
         requierd:false,
         props:{
-          inputName: '视频等附件（允许上传格式：.zip,.rar）',
+          inputName: '视频等附件',
           accept: ['.zip','.rar'],
         },
         order:9
