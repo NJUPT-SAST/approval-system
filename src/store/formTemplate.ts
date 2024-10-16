@@ -1,65 +1,42 @@
+import { message } from "antd";
+
+const beforeUpload = (file: { size: number; }) => {
+  console.log('文件大：');
+  console.log(file.size);
+  const isLt2M = file.size / 1024;
+  if (!isLt2M) {
+    message.error('文件大小超过1kb限制!');
+  }
+  return isLt2M; // 如果文件大小超过2MB，则返回false阻止上传
+};
+
 export const tempelate = [
   {
     type: 'object',
     labelWidth: 120,
     properties: {
-      是否为STITP项目: {
-        enum: ['是', '否'],
+      学院:{
         type: 'string',
-        title: '是否为STITP项目',
-        widget: 'radio',
+        props: {},
+        title: '学院',
         required: true,
-        enumNames: ['是', '否'],
         order: 1,
-      },
-      申报书: {
-        type: 'string',
-        widget: 'customUpload',
-        title: '申报书',
-        required: true,
-        props: {
-          inputName: '申报书',
-          accept: '.pdf',
-        },
-        order: 2,
-      },
-      研究报告: {
-        type: 'string',
-        widget: 'customUpload',
-        title: '研究报告',
-        required: true,
-        props: {
-          inputName: '研究报告',
-          accept: '.pdf',
-        },
-        order: 3,
-      },
-      项目简介书: {
-        type: 'string',
-        widget: 'customUpload',
-        title: '项目简介书',
-        required: true,
-        props: {
-          inputName: '项目简介书',
-          accept: '.pdf',
-        },
-        order: 4,
       },
       项目名称: {
         type: 'string',
         props: {},
         title: '项目名称',
         required: true,
-        order: 5,
+        order: 2,
       },
       项目类别: {
-        enum: ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作", "红色专项"],
+        enum: ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类/B类", "红色专项"],
         type: 'string',
         title: '项目类别',
         widget: 'select',
         required: true,
-        enumNames: ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作", "红色专项"],
-        order: 6,
+        enumNames: ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类/B类", "红色专项"],
+        order: 3,
       },
       项目简介: {
         type: 'string',
@@ -68,8 +45,62 @@ export const tempelate = [
         format: 'textarea',
         required: true,
         max: 500,
+        order: 4,
+      },
+      是否为STITP项目: {
+        enum: ['是', '否'],
+        type: 'string',
+        title: '是否为STITP项目',
+        widget: 'radio',
+        required: true,
+        enumNames: ['是', '否'],
+        order: 5,
+      },
+      申报书: {
+        type: 'string',
+        widget: 'customUpload',
+        title: '申报书（允许上传格式：.pdf）',
+        required: true,
+        props: {
+          inputName: '申报书',
+          accept: '.pdf',
+        },
+        order: 6,
+      },
+      研究报告: {
+        type: 'string',
+        widget: 'customUpload',
+        title: '研究报告（允许上传格式：.pdf）',
+        required: true,
+        props: {
+          inputName: '研究报告',
+          accept: '.pdf',
+        },
         order: 7,
       },
+      项目PPT: {
+        type: 'string',
+        widget: 'customUpload',
+        title: '项目PPT（允许上传格式：.pdf,.pptx）',
+        required: true,
+        props: {
+          inputName: '项目PPT',
+          accept: ['.pdf','.pptx'],
+        },
+        order: 8,
+      },
+      视频等附件: {
+        type:'string',
+        widget: 'customUpload',
+        title: '视频等附件（允许上传格式：.zip,.rar）',
+        requierd:false,
+        props:{
+          inputName: '视频等附件',
+          accept: ['.zip','.rar'],
+          beforeUpload
+        },
+        order:9
+      }
     },
     displayType: 'column',
   },
