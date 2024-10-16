@@ -1,3 +1,15 @@
+import { message } from "antd";
+
+const beforeUpload = (file: { size: number; }) => {
+  console.log('文件大：');
+  console.log(file.size);
+  const isLt2M = file.size / 1024;
+  if (!isLt2M) {
+    message.error('文件大小超过1kb限制!');
+  }
+  return isLt2M; // 如果文件大小超过2MB，则返回false阻止上传
+};
+
 export const tempelate = [
   {
     type: 'object',
@@ -85,6 +97,7 @@ export const tempelate = [
         props:{
           inputName: '视频等附件',
           accept: ['.zip','.rar'],
+          beforeUpload
         },
         order:9
       }

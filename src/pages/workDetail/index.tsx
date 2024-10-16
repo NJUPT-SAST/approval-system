@@ -82,6 +82,14 @@ function WorkDetail() {
     return urlParts[urlParts.length - 1];
   };
 
+  const beforeUpload = (file: { size: number }) => {
+    const isLt2M = file.size / 1024 < 1024 * 500;
+    if (!isLt2M) {
+      message.error('文件大小超过500MB限制!');
+    }
+    return isLt2M; // 如果文件大小超过500MB，则返回false阻止上传
+  };
+
   /**
    * 文件下载
    * @param url 文件url
@@ -254,32 +262,35 @@ function WorkDetail() {
       onChange(info: infoType) {
         localFileList = fileList[props.inputName]
         console.log('onChange', info)
-        let newFileList = [...info.fileList]
-
-        if (info.fileList.length !== 0) {
-          newFileList = [info.file]
-        }
-
-        // 限制文件上传数量
-        // 只显示最新上传的文件
-        newFileList = newFileList.slice(-2)
-
-        // 从文件链接列表读链接
-        newFileList = newFileList.map((file: any) => {
-          if (file.response) {
-            // 以文件链接作为url
-            file.url = file.response.url
-          }
-          return file
-        })
-        // console.log('new list', newFileList)
-
-        setFileList((prev: any) => {
-          console.log('list updated')
-          return { ...prev, [props.inputName]: newFileList }
-        })
-        if (newFileList.length === 0) {
+        if (info.file.size > 1024*1024*500) {
           form.setValueByPath(props.inputName, null)
+        } else {
+          let newFileList = [...info.fileList]
+
+          if (info.fileList.length !== 0) {
+            newFileList = [info.file]
+          }
+
+          // 限制文件上传数量
+          // 只显示最新上传的文件
+          newFileList = newFileList.slice(-2)
+
+          // 从文件链接列表读链接
+          newFileList = newFileList.map((file: any) => {
+            if (file.response) {
+              // 以文件链接作为url
+              file.url = file.response.url
+            }
+            return file
+          })
+
+          setFileList((prev: any) => {
+            console.log('list updated')
+            return { ...prev, [props.inputName]: newFileList }
+          })
+          if (newFileList.length === 0) {
+            form.setValueByPath(props.inputName, null)
+          }
         }
       },
       customRequest(options: any) {
@@ -321,6 +332,7 @@ function WorkDetail() {
     // console.log('filelist:', fileList)
     return (
       <Upload
+        beforeUpload={beforeUpload}
         {...localProps}
         customRequest={(options) => {
           const temp = options.file as File
