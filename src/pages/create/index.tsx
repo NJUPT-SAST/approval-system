@@ -41,7 +41,7 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 }
 
 //团队比赛人数（最多15人）
-const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
+const teamMemberNumArray = ['2', '3', '4', '5', '6', '7', '8']
 
 function Create() {
   //上传比赛照片
@@ -649,7 +649,7 @@ function Create() {
                 <Radio value={0}>单人</Radio>
                 <Radio value={1}>团队</Radio>
               </Radio.Group>
-              <span id="activity-create-type-tips">（不可超过15人）</span>
+              <span id="activity-create-type-tips">（不可超过8人）</span>
               {/* 当比赛类型选中团队时才出现 */}
               {competitionInfo.type === 1 ? (
                 <Select
@@ -664,8 +664,8 @@ function Create() {
                 >
                   {teamMemberNumArray.map((value) => {
                     return (
-                      <Select.Option value="8" key={value}>
-                        8
+                      <Select.Option value={value} key={value}>
+                        {value}
                       </Select.Option>
                     )
                   })}

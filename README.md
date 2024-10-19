@@ -74,3 +74,8 @@ src/
             ├── Component1.tsx
             └── Component2.tsx
 ```
+
+## 代码修改
+### 后续主要关注点是在表单信息的提交
+对应修改store/formTemplate.ts 每次修改完后需要前往管理端发布新的模版
+对form-render 表单的校验 props 中 inputName 必须与 properties 中对应的属性一致
