@@ -53,7 +53,7 @@ const ReviewApprover: React.FC = (props) => {
     const loadingKey = 'downloading'
     message.loading({
       content: '正在下载文件',
-      duration: 30,
+      duration: 300000,
       key: 'downloading',
     })
     const res = await downloadCertificate(url)
@@ -101,7 +101,7 @@ const ReviewApprover: React.FC = (props) => {
     if (opinion === null || opinion === undefined) {
       setOpinion("")
     }
-    uploadWorkScoreInfo(Number(id), score, String(opinion)).then(() => {
+    uploadWorkScoreInfo(Number(id), score, String(opinion || '')).then(() => {
       notification.info({
         message: '✅ 提交成功',
         description: '自动返回列表',
@@ -190,7 +190,7 @@ const ReviewApprover: React.FC = (props) => {
         </div>
         <div className="manage-content-main">
           <div className="message">
-            <div className="navigation">
+            {/* <div className="navigation">
               <Anchor
                 // target={() => document.getElementById('manage-content-main')}
                 onClick={(e) => e.preventDefault()}
@@ -201,7 +201,7 @@ const ReviewApprover: React.FC = (props) => {
                 <Link href="#attach-message" title="文字展示" />
                 <Link href="#show-work" title="项目展示" />
               </Anchor>
-            </div>
+            </div> */}
             <div className="content">
               <div id="team" className="item">
                 <h1 style={{ fontSize: '25px', fontWeight: 700 }}>队伍名称</h1>
@@ -216,7 +216,7 @@ const ReviewApprover: React.FC = (props) => {
               </div>
 
               <div id="attach-message" className="item">
-                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>文字展示</h1>
+                <h1 style={{ fontSize: '25px', fontWeight: 700 }}>项目信息</h1>
                 <div className="texts">
                   {dataList.texts.map((item: any, index: number) => {
                     return (

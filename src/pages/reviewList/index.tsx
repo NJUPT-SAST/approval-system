@@ -248,7 +248,7 @@ const ProgramList: React.FC<IProgramList> = (props: any) => {
           <h1 className="manage-content-title">比赛项目列表</h1>
         </div>
         <div className="manage-content-statistic">
-          <Statistic title="评审数量" value={isApproveCount} suffix={"/ " + list.length} />
+          <Statistic title="评审数量" value={isApproveCount} suffix={"/ " + total} />
           <Statistic title="评审截至日期" value={String(localStorage.getItem('reviewEnd'))} />
         </div>
         <div className="manage-content-table-body">

@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom'
 import './index.scss'
 import { getJudgeCompetitionList, getScoreCompetitionList } from '../../api/judge'
 import { DataListType } from '../../type/judgeTypes'
+import scoreDetail from '../../assets/scoredetail.webp'
 
 // 获取本地存储数据，判断登陆人员身份
 const userState = localStorage.getItem('userState')
@@ -81,7 +82,7 @@ const Review: React.FC = () => {
   // 渲染子组件
   if (userState === 'approver') {
     return (
-      <div className="manage" style={{ width: 'calc(100vw - 201px)' }}>
+      <div className="manage" >
         <TopBar />
         {dataList === null ? <Empty style={{ height: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }} description='暂时不需要评审哦' /> : <ApproverReview
           loading={loading}
@@ -122,8 +123,8 @@ interface IJudgeReview {
 // 身份为审批人员时表格内容
 const JudgeReview: React.FC<IJudgeReview> = (props) => {
   const { getPageNum, list, total, pageSize, loading } = props
-  
-  
+
+
 
 
   // 表头内容
@@ -172,7 +173,7 @@ const JudgeReview: React.FC<IJudgeReview> = (props) => {
         <Space size="middle">
           <Link to={`/review/list/${record.id}/${current}`}>
             <Button className="count" type="primary">
-            审核
+              审核
             </Button>
           </Link>
         </Space>
@@ -319,6 +320,19 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
               }}
             />
           </div>
+        </div>
+        <div style={{ marginTop: "50px" }}>
+          <h1 className="manage-content-table-title">评分标准</h1>
+          {
+            userState === 'approver' && (
+              <img src={scoreDetail} style={{
+                width: '100%',
+                maxWidth: '800px',
+                height: 'auto',
+                paddingRight: '10px',
+              }} alt='score detail' />
+            )
+          }
         </div>
       </div>
     </div>

@@ -1,39 +1,54 @@
-# This is a basic workflow to help you get started with Actions
+name: CICD
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
-  merge_group:
-    branches: [ "master" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - master
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+      - name: Install dependencies with pnpm
+        run: pnpm install
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: curl -X POST --fail -F "token=406be436c22d24efed2a9c3920c0a8" -F "ref=master" https://git.qingyou.ren/api/v4/projects/112/trigger/pipeline
+      - name: Run build task
+        env:
+          CI: false
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          GENERATE_SOURCEMAP: false 
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          curl -u pt3m4khhax9k:4ec857f782b29a2a12e752ef01e03273c40e1ba0 \
-           -v -X POST  'https://sast-frontend.coding.net/api/cci/job/1442058/trigger' \
-           -H 'Content-Type: application/json' \
-           -d '{"ref": "master","envs": []}'
+        run: pnpm build
 
+      - name: Generating tarball
+        run: cd build && tar -czf ../artifact.tar.gz .
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: artifact.tar.gz
+          TARGET: /www/temp
+          SCRIPT_AFTER: |
+            cd /www/temp
+            tar -xf artifact.tar.gz
+            rm artifact.tar.gz
+            cd ../
+            rm -rf ./approve.sast.fun.backup/*
+            mv ./approve.sast.fun/* ./approve.sast.fun.backup/
+            mv ./temp/* ./approve.sast.fun/

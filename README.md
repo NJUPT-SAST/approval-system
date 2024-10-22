@@ -20,7 +20,7 @@
 
 #### commit
 
-本项目中 `git commit`命令会被拦截，应使用 `yarn commit`进行提交。在根目录执行 `yarn commit`根据提示信息填写便可，同时该命令内置了 `git add .`命令，因此执行前不再需要手动执行 `git add .`（执行一遍也不会出错）。
+本项目中 `git commit`命令会被拦截，应使用 `yarn commit`进行提交。在根目录执行 `yarn commit`根据提示信息填写便可，同时该命令内置了 `git add .`命令，因此执行前不再需要手动执行 `git add .`（执行一遍也不会出错）。 
 
 #### push
 
@@ -74,3 +74,8 @@ src/
             ├── Component1.tsx
             └── Component2.tsx
 ```
+
+## 代码修改
+### 后续主要关注点是在表单信息的提交
+对应修改store/formTemplate.ts 每次修改完后需要前往管理端发布新的模版
+对form-render 表单的校验 props 中 inputName 必须与 properties 中对应的属性一致

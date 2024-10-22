@@ -26,6 +26,7 @@ Sentry.init({
   Sentry.replayIntegration({
     maskAllText: false,
     blockAllMedia: false,
+    networkDetailAllowUrls: [window.location.origin],
   }),],
   beforeSend(event, hint) {
     if (event.exception) {

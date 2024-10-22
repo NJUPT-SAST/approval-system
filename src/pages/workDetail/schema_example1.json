@@ -2,48 +2,55 @@
   "type": "object",
   "labelWidth": 120,
   "properties": {
+    "学院":{
+      "type": "string",
+      "props": {},
+      "title": "学院",
+      "required": true,
+      "order": 1
+    },
     "是否为STITP项目": {
       "enum": ["是", "否"],
       "type": "string",
-      "title": "是否为STITP项目",
+      "title": "是否为STITP项目1",
       "widget": "radio",
       "required": true,
       "enumNames": ["是", "否"],
-      "order": 1
+      "order": 5
     },
     "申报书": {
       "type": "string",
       "widget": "customUpload",
       "title": "申报书",
       "required": true,
-      "props": { "inputName": "申报书", "accept": ".pdf" },
-      "order": 2
+      "props": { "inputName": "申报书（允许上传格式：.pdf）", "accept": ".pdf" },
+      "order": 6
     },
     "研究报告": {
       "type": "string",
       "widget": "customUpload",
       "title": "研究报告",
       "required": true,
-      "props": { "inputName": "研究报告", "accept": ".pdf" },
-      "order": 3
+      "props": { "inputName": "研究报告（允许上传格式：.pdf）", "accept": ".pdf" },
+      "order": 7
     },
-    "项目简介书": {
+    "项目PPT": {
       "type": "string",
       "widget": "customUpload",
       "title": "项目简介书",
       "required": true,
-      "props": { "inputName": "项目简介书", "accept": ".pdf" },
-      "order": 4
+      "props": { "inputName": "项目PPT（允许上传格式：pdf,.pptx）", "accept": [".pdf",".pptx"] },
+      "order": 8
     },
-    "项目名称": { "type": "string", "props": {}, "title": "项目名称", "required": true, "order": 5 },
+    "项目名称": { "type": "string", "props": {}, "title": "项目名称", "required": true, "order": 2 },
     "项目类别": {
-      "enum": ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类", "科技发明制作B类"],
+      "enum": ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类/B类", "红色专项"],
       "type": "string",
       "title": "项目类别",
       "widget": "select",
       "required": true,
-      "enumNames": ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类", "科技发明制作B类"],
-      "order": 6
+      "enumNames": ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类/B类", "红色专项"],
+      "order": 3
     },
     "项目简介": {
       "type": "string",
@@ -51,7 +58,18 @@
       "title": "项目简介",
       "format": "textarea",
       "required": true,
-      "order": 7
+      "order": 4
+    },
+    "视频等附件": {
+      "type":"string",
+      "widget": "customUpload",
+      "title": "视频等附件（允许上传格式：.zip,.rar）",
+      "requierd":false,
+      "props":{
+        "inputName": "视频等附件（允许上传格式：.zip,.rar）",
+        "accept": [".zip",".rar"]
+      },
+      "order":9
     }
   },
   "displayType": "column"
