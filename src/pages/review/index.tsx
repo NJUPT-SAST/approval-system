@@ -321,7 +321,7 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
             />
           </div>
         </div>
-        <div style={{ marginTop: "50px" }}>
+        {/* <div style={{ marginTop: "50px" }}>
           <h1 className="manage-content-table-title">评分标准</h1>
           {
             userState === 'approver' && (
@@ -333,7 +333,7 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
               }} alt='score detail' />
             )
           }
-        </div>
+        </div> */}
       </div>
     </div>
   )
