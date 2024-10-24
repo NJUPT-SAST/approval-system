@@ -321,6 +321,7 @@ const ApproverReview: React.FC<IJudgeReview> = (props) => {
             />
           </div>
         </div>
+        {/*删除评分细则*/}
         {/* <div style={{ marginTop: "50px" }}>
           <h1 className="manage-content-table-title">评分标准</h1>
           {
