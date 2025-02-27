@@ -325,8 +325,7 @@ function Activity() {
         {activities.total !== null ? (
           <Pagination
             showSizeChanger
-            current={1}
-            defaultCurrent={1}
+            current={pageOpt.page}
             defaultPageSize={8}
             pageSizeOptions={[8, 12, 24, 48, 96]}
             total={activities.total}
