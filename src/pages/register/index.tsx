@@ -44,11 +44,11 @@ function Register() {
             type: 'number',
             widget: 'slider',
             displayType: 'column',
-            description: '最多人数 ' + 3,
+            description: '最多人数 ' + 5,
             required: true,
             placeholder: '',
             min: 0,
-            max: 3,
+            max: 5,
             default: curTeacher,
           },
         }
@@ -61,11 +61,11 @@ function Register() {
             type: 'number',
             widget: 'slider',
             displayType: 'column',
-            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 8,
+            description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 15,
             required: true,
             placeholder: '',
             min: competitionInfo.minParti,
-            max: 8,
+            max: 15,
             default: curParti,
           },
           leader: {
@@ -269,11 +269,11 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最多人数 ' + 3,
+                  description: '最多人数 ' + 5,
                   required: true,
                   placeholder: '',
                   min: 0, // 待改动
-                  max: 3, // 待改动
+                  max: 5, // 待改动
                   default: curTeacher,
                 },
               }
@@ -286,7 +286,7 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 8,
+                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 15,
                   required: true,
                   placeholder: '',
                   min: res.data.data.minTeamMembers,
@@ -433,8 +433,8 @@ function Register() {
             //         "value": "经济学院"
             //       },
             //       {
-            //         "label": "社会与人口学院",
-            //         "value": "社会与人口学院"
+            //         "label": "社会与人口学院、社会工作学院",
+            //         "value": "社会与人口学院、社会工作学院"
             //       },
             //       {
             //         "label": "外国语学院",
@@ -602,11 +602,11 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 8,
+                  description: '最少人数 ' + competitionInfo.minParti + ' ；最多人数 ' + 15,
                   required: true,
                   placeholder: '',
                   min: competitionInfo.minParti,
-                  max: 8,
+                  max: 15,
                   default: curParti,
                 },
                 leader: {
@@ -685,11 +685,11 @@ function Register() {
                   type: 'number',
                   widget: 'slider',
                   displayType: 'column',
-                  description: '最多人数 ' + 3,
+                  description: '最多人数 ' + 5,
                   required: true,
                   placeholder: '',
                   min: 0, // 待改动
-                  max: 3, // 待改动
+                  max: 5, // 待改动
                   default: curTeacher,
                 },
               }
