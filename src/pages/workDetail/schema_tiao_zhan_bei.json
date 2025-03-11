@@ -82,7 +82,7 @@
       "maxLength": 500,
       "order": 4
     },
-    "项目申报书": {
+    "项目申报表": {
       "type": "string",
       "widget": "customUpload",
       "title": "项目申报表",
