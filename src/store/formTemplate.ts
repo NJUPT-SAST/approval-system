@@ -1,21 +1,21 @@
-import { message } from "antd";
+import { message } from 'antd'
 
-const beforeUpload = (file: { size: number; }) => {
-  console.log('文件大：');
-  console.log(file.size);
-  const isLt2M = file.size / 1024;
+const beforeUpload = (file: { size: number }) => {
+  console.log('文件大：')
+  console.log(file.size)
+  const isLt2M = file.size / 1024
   if (!isLt2M) {
-    message.error('文件大小超过1kb限制!');
+    message.error('文件大小超过1kb限制!')
   }
-  return isLt2M; // 如果文件大小超过2MB，则返回false阻止上传
-};
+  return isLt2M // 如果文件大小超过2MB，则返回false阻止上传
+}
 
 export const tempelate = [
   {
     type: 'object',
     labelWidth: 120,
     properties: {
-      学院:{
+      学院: {
         type: 'string',
         props: {},
         title: '学院',
@@ -30,12 +30,12 @@ export const tempelate = [
         order: 2,
       },
       项目类别: {
-        enum: ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类/B类", "红色专项"],
+        enum: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类/B类', '红色专项'],
         type: 'string',
         title: '项目类别',
         widget: 'select',
         required: true,
-        enumNames: ["自然科学类学术论文", "哲学社会科学类社会调查报告和学术论文", "科技发明制作A类/B类", "红色专项"],
+        enumNames: ['自然科学类学术论文', '哲学社会科学类社会调查报告和学术论文', '科技发明制作A类/B类', '红色专项'],
         order: 3,
       },
       项目简介: {
@@ -85,22 +85,22 @@ export const tempelate = [
         required: true,
         props: {
           inputName: '项目PPT',
-          accept: ['.pdf','.pptx'],
+          accept: ['.pdf', '.pptx'],
         },
         order: 8,
       },
       视频等附件: {
-        type:'string',
+        type: 'string',
         widget: 'customUpload',
         title: '视频等附件（允许上传格式：.zip,.rar）',
-        requierd:false,
-        props:{
+        requierd: false,
+        props: {
           inputName: '视频等附件',
-          accept: ['.zip','.rar'],
-          beforeUpload
+          accept: ['.zip', '.rar'],
+          beforeUpload,
         },
-        order:9
-      }
+        order: 9,
+      },
     },
     displayType: 'column',
   },
@@ -277,7 +277,7 @@ export const tempelate = [
         maxLength: 500,
         order: 4,
       },
-      项目申报书: {
+      项目申报表: {
         type: 'string',
         widget: 'customUpload',
         title: '项目申报表',
