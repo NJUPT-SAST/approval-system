@@ -190,12 +190,15 @@
   background-image: url(../../assets/login-bg.webp);
   background-size: cover;
   .copyright {
-    position: absolute;
     bottom: 20px;
+    color: rgb(33 33 33 / 80%);
     left: 50%;
+    position: absolute;
+    text-shadow: 0 2px 10px rgba(0, 33, 64, 0.141);
     transform: translateX(-50%);
-    color: rgba(33, 33, 33, 0.5);
-    text-shadow: 0px 2px 10px #00214024;
+    background-color: rgb(255, 255, 255, 0.6);
+    padding: 0 5px 0 5px;
+    border-radius: 5px;
   }
   .login-form {
     display: flex;
