@@ -41,7 +41,7 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "start": "set PORT=3006 && craco start",
+    "start": "craco start",
     "build": "craco build",
     "sentry": "run-s build sentry:sourcemaps",
     "test": "craco test",
