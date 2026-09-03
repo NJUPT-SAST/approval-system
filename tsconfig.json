@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "sourceMap": true,
     "inlineSources": true,
     "sourceRoot": "/",
@@ -17,7 +21,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "ignoreDeprecations": "6.0"
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

@@ -6,6 +6,7 @@ import { uploadWorkJudgeInfo } from '../../api/judge'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 import { downloadCertificate } from '../../api/public'
+import { isNetworkError, showNetworkErrorTip } from '../../util/download'
 import { DownloadOutlined } from '@ant-design/icons'
 
 const { Link } = Anchor
@@ -49,30 +50,41 @@ const ReviewJudge: React.FC = (props) => {
       duration: 300000,
       key: 'downloading',
     })
-    const res = await downloadCertificate(url)
-    console.log(res.data);
+    try {
+      const res = await downloadCertificate(url)
+      console.log(res.data);
 
-    const response = res.data
-    if (response.success) {
-      const file = await fetch(response.data.url)
-      const fileBlob = await file.blob()
-      const urlvalue = window.URL.createObjectURL(fileBlob)
-      const a = document.createElement('a')
-      a.style.display = 'none'
-      a.href = urlvalue
-      a.download = getFileNameFromUrl(url)
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(urlvalue)
-      message.success({
-        content: '😁下载完成！'
-      })
-    } else {
-      message.error({
-        content: '😞 下载发生了错误，请联系管理员',
-        key: 'downloading',
-      })
+      const response = res.data
+      if (response.success) {
+        const file = await fetch(response.data.url)
+        const fileBlob = await file.blob()
+        const urlvalue = window.URL.createObjectURL(fileBlob)
+        const a = document.createElement('a')
+        a.style.display = 'none'
+        a.href = urlvalue
+        a.download = getFileNameFromUrl(url)
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(urlvalue)
+        message.success({
+          content: '😁下载完成！'
+        })
+      } else {
+        message.error({
+          content: '😞 下载发生了错误，请联系管理员',
+          key: 'downloading',
+        })
+      }
+    } catch (error) {
+      if (isNetworkError(error)) {
+        showNetworkErrorTip()
+      } else {
+        message.error({
+          content: '😞 下载发生了错误，请联系管理员',
+          key: 'downloading',
+        })
+      }
     }
     message.destroy(loadingKey)
   }

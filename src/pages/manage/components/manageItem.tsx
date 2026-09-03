@@ -2,6 +2,7 @@ import React from 'react'
 import { notification } from 'antd'
 import ManangeSelect from './manageSelect'
 import { exportWorkFileDataToAssignScorer } from '../../../api/admin'
+import { isNetworkError, showNetworkErrorTip } from '../../../util/download'
 type ManageItemType = {
   index: number
   toPostNotice: (competitionName: string, competitionId: number) => void
@@ -98,12 +99,16 @@ const ManageItem: React.FC<ManageItemType> = (props) => {
 
               },
             ).catch((error) => {
-              notification.error({
-                message: '😭️ 请求失败',
-                top: 20,
-                key: 'loading',
-                placement: 'top',
-              })
+              if (isNetworkError(error)) {
+                showNetworkErrorTip()
+              } else {
+                notification.error({
+                  message: '😭️ 请求失败',
+                  top: 20,
+                  key: 'loading',
+                  placement: 'top',
+                })
+              }
               return
             },)
           }}

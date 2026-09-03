@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import TopBar from '../../components/TopBar'
 import './index.scss'
 import DataTable from './components/dataTable'
+import { isNetworkError, showNetworkErrorTip } from '../../util/download'
 import {
   exportWorkFileDataToAssignScorer,
   exportTeamInfo,
@@ -96,13 +97,17 @@ function ManageDetail() {
         }
       })
       .catch((error) => {
-        notification.error({
-          message: '😭️ 请求失败',
-          top: 20,
-          key: 'loading',
-          placement: 'top',
-        })
-        return;
+        if (isNetworkError(error)) {
+          showNetworkErrorTip()
+        } else {
+          notification.error({
+            message: '😭️ 请求失败',
+            top: 20,
+            key: 'loading',
+            placement: 'top',
+          })
+        }
+        return
       })
   }
 
@@ -145,13 +150,17 @@ function ManageDetail() {
         }
       })
       .catch((error) => {
-        notification.error({
-          message: '😭️ 请求失败',
-          top: 20,
-          key: 'loading',
-          placement: 'top',
-        })
-        return;
+        if (isNetworkError(error)) {
+          showNetworkErrorTip()
+        } else {
+          notification.error({
+            message: '😭️ 请求失败',
+            top: 20,
+            key: 'loading',
+            placement: 'top',
+          })
+        }
+        return
       })
   }
 
@@ -192,12 +201,16 @@ function ManageDetail() {
         }
       })
       .catch((error) => {
-        notification.error({
-          message: '😭️ 请求失败',
-          top: 20,
-          key: 'loading',
-          placement: 'top',
-        })
+        if (isNetworkError(error)) {
+          showNetworkErrorTip()
+        } else {
+          notification.error({
+            message: '😭️ 请求失败',
+            top: 20,
+            key: 'loading',
+            placement: 'top',
+          })
+        }
         return
       })
   }

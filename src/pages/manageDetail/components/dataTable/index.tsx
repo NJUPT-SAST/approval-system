@@ -1,6 +1,7 @@
 import { Dropdown, Menu, message, notification } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { exportWorkFile } from '../../../../api/admin'
+import { isNetworkError, showNetworkErrorTip } from '../../../../util/download'
 import React from 'react'
 
 const DataTable: React.FC<any> = (props) => {
@@ -81,12 +82,16 @@ const DataTable: React.FC<any> = (props) => {
 
               })
               .catch((error) => {
-                notification.error({
-                  message: '😭️ 请求失败',
-                  top: 20,
-                  key: 'loading',
-                  placement: 'top',
-                })
+                if (isNetworkError(error)) {
+                  showNetworkErrorTip()
+                } else {
+                  notification.error({
+                    message: '😭️ 请求失败',
+                    top: 20,
+                    key: 'loading',
+                    placement: 'top',
+                  })
+                }
                 return
               })
           }}
